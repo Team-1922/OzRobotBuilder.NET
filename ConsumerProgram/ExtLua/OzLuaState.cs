@@ -13,13 +13,26 @@ namespace ConsumerProgram.ExtLua
             set
             {
                 base[name] = value;
-                if(value is ILuaSendable)
+
+                ILuaSendable castedValue = value as ILuaSendable;
+                if(castedValue != null)
                 {
-                    /*
-                     * This section is NOT very safe and needs some revision
-                     */
-                    ILuaSendable castedValue = (ILuaSendable)value;
-                    DoString(String.Format(castedValue.GetFormattedExtScriptText(), name));
+                    try
+                    {
+                        DoString(String.Format(castedValue.GetFormattedExtScriptText(), name));
+                    }
+                    catch(FormatException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    catch(NLua.Exceptions.LuaScriptException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    catch(NLua.Exceptions.LuaException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
             }
         }
