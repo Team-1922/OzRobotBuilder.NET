@@ -14,25 +14,25 @@ namespace ConsumerProgram.ExtLua
             {
                 base[name] = value;
 
-                ILuaSendable castedValue = value as ILuaSendable;
-                if(castedValue != null)
+                ILuaExt castedValue = value as ILuaExt;
+                if (null == castedValue)
+                    return;
+
+                try
                 {
-                    try
-                    {
-                        DoString(String.Format(castedValue.GetFormattedExtScriptText(), name));
-                    }
-                    catch(FormatException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    catch(NLua.Exceptions.LuaScriptException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    catch(NLua.Exceptions.LuaException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
+                    DoString(String.Format(castedValue.GetFormattedExtScriptText(), name));
+                }
+                catch(FormatException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                catch(NLua.Exceptions.LuaScriptException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                catch(NLua.Exceptions.LuaException e)
+                {
+                    Console.WriteLine(e.Message);
                 }
             }
         }

@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace ConsumerProgram.ResManager.Loaders
+{
+    class XmlResLoader : IResLoader
+    {
+        public Regex GetFormat()
+        {
+            return new Regex(@"^.*\.(xml)$");
+        }
+
+        public IResData LoadResource(StreamReader streamReader)
+        {
+            Data.XmlResData ret = new Data.XmlResData();
+            ret.LoadXml(streamReader.ReadToEnd());
+            return ret;
+        }
+    }
+}
