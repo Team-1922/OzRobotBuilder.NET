@@ -1,11 +1,20 @@
-﻿using ConsumerProgram.Interfaces;
-using WPILib;
+﻿using System;
 using WPILib.Commands;
 
 namespace ConsumerProgram.Subsystems
 {
-    public class OzSubsystem : Subsystem
+    public class OzSubsystem : Subsystem, ILuaExt
     {
+        public void SetExtScript(string resPath)
+        {
+
+        }
+
+        public string GetFormattedExtScriptText()
+        {
+            return "";
+        }
+
         // Put methods for controlling this subsystem
         // here. Call these from Commands.
 
