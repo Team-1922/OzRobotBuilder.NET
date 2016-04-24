@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace ConsumerProgram.ResManager.Data
+namespace ConsumerProgram.ResourceManager.Data
 {
     class XmlResData : XmlDocument, IResData
     {

@@ -2,16 +2,21 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace ConsumerProgram.ResManager
+namespace ConsumerProgram.ResourceManager
 {
-    class ResManager
+    /*
+     * 
+     * This Resource Manager is used in the "ConsumerProgram" and any other application which deals with the compiled .zip of the resouces
+     * 
+     */
+    class ResourceManager
     {
         public string ArchivePath { get; private set; }
         public Dictionary<string, IResData> ResCache { get; private set; } = new Dictionary<string, IResData>();
 
         protected List<IResLoader> ResLoaders = new List<IResLoader>();
 
-        public ResManager()
+        public ResourceManager()
         {
         }
 

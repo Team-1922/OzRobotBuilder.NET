@@ -48,17 +48,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="ExtLua\OzLuaState.cs" />
     <Compile Include="ExtLua\ScriptOverride.cs" />
+    <Compile Include="Interfaces\IInputDevice.cs" />
     <Compile Include="Interfaces\ILuaExt.cs" />
+    <Compile Include="Interfaces\IOutputDevice.cs" />
     <Compile Include="Interfaces\IResData.cs" />
     <Compile Include="Interfaces\IResLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResManager\Data\XMLResData.cs" />
-    <Compile Include="ResManager\Loaders\XmlResLoader.cs" />
-    <Compile Include="ResManager\ResManager.cs" />
+    <Compile Include="ResourceManager\LoadableTypes\XMLResData.cs" />
+    <Compile Include="ResourceManager\Loaders\XmlResLoader.cs" />
+    <Compile Include="ResourceManager\PrimaryTypes\OzPotentiometer.cs" />
+    <Compile Include="ResourceManager\ResourceManager.cs" />
+    <Compile Include="ResourceManager\RWResourceManager.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
