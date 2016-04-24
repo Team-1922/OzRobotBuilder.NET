@@ -10,9 +10,9 @@ namespace ConsumerProgram.ResManager.Loaders
 {
     class XmlResLoader : IResLoader
     {
-        public Regex GetFormat()
+        public string GetFormat()
         {
-            return new Regex(@"^.*\.(xml)$");
+            return"xml";
         }
 
         public IResData LoadResource(StreamReader streamReader)

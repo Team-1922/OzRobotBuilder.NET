@@ -78,9 +78,25 @@ namespace ConsumerProgram.ResManager
 
         public IResLoader GetLoader(string fileName)
         {
+            //use this so directory names CAN have periods
+            string[] splitFilename = fileName.Split('/');
+            if (splitFilename.Length == 0)
+                return null;
+
+            string nameOnly = splitFilename[splitFilename.Length - 1];
+
+            //split by periods NOW
+            splitFilename = nameOnly.Split(new char[] { '.' }, 2, System.StringSplitOptions.None);
+
+            //the SECOND option is the ENTIRE EXTENDED FILE EXTENTION
+            if (splitFilename.Length != 2)
+                return null;
+
+            string fileExt = splitFilename[1];
+
             foreach(var loader in ResLoaders)
             {
-                if (loader.GetFormat().IsMatch(fileName))
+                if (loader.GetFormat() == fileExt)
                     return loader;
             }
 
