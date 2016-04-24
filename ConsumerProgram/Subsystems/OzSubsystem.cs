@@ -6,7 +6,7 @@ using WPILib.Commands;
 
 namespace ConsumerProgram.Subsystems
 {
-    public class OzSubsystem : Subsystem, ILuaExt
+    public class OzSubsystem : Subsystem, ILuaExt, IResData
     {
         ScriptOverride OverrideMethod;
 
@@ -57,6 +57,18 @@ namespace ConsumerProgram.Subsystems
 
             //remaining code is if the method is NOT overriden
             return "TESTING";
+        }
+
+        public string GetHumanReadable()
+        {
+            //return something JSON-y
+            throw new NotImplementedException();
+        }
+
+        public void CleanUp()
+        {
+            //destroy/unregister WPILib instances
+            throw new NotImplementedException();
         }
     }
 }

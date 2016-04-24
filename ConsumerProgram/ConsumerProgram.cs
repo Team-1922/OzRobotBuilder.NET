@@ -7,6 +7,8 @@ using WPILib.LiveWindow;
 using WPILib.SmartDashboard;
 using ConsumerProgram.Subsystems;
 using ConsumerProgram.Commands;
+using ConsumerProgram.ExtLua;
+using System.IO;
 
 namespace ConsumerProgram
 {
@@ -17,7 +19,10 @@ namespace ConsumerProgram
     /// </summary>
     public class ConsumerProgram : IterativeRobot
     {
-        public static readonly OzSubsystem exampleSubsystem = new OzSubsystem();
+        OzLuaState LuaState = new OzLuaState();
+        ResManager.ResManager ResourceManager = new ResManager.ResManager();
+
+        public static OzSubsystem exampleSubsystem;
         public static OI oi;
 
         Command autonomousCommand;
@@ -28,6 +33,12 @@ namespace ConsumerProgram
         //
         public override void RobotInit()
         {
+            InitLuaState();
+            RegisterResourceLoaders();
+            LoadResourceCache();
+            
+            exampleSubsystem = new OzSubsystem(LuaState);
+
             oi = new OI();
             // instantiate the command used for the autonomous period
             autonomousCommand = new ExampleCommand();
@@ -36,6 +47,43 @@ namespace ConsumerProgram
             //chooser.AddObject("My Auto", new MyAutoCommand);
             SmartDashboard.PutData("Chooser", chooser);
         }
+
+        #region Initialization Methods
+        private bool InitLuaState()
+        {
+            LuaState.LoadCLRPackage();
+
+            return true;//what can go wrong here?
+        }
+        private bool RegisterResourceLoaders()
+        {
+            //possible loaders:
+            /*
+             
+            -XML
+            -Plain text
+            -JSON
+
+
+            */
+
+            return true;
+        }
+        private bool LoadResourceCache()
+        {
+            try
+            {
+                ResourceManager.SetCacheLoc("ResCache.zip");
+                return true;
+            }
+            catch(FileNotFoundException e)
+            {
+                return false;
+            }
+            return false;
+        }
+        #endregion 
+
 
         public override void DisabledPeriodic()
         {

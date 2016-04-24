@@ -69,17 +69,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtLua\OzLuaState.cs" />
-    <Compile Include="ExtLua\ScriptOverride.cs" />
-    <Compile Include="Interfaces\ILuaExt.cs" />
-    <Compile Include="Interfaces\IResData.cs" />
-    <Compile Include="Interfaces\IResLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ConsumerProgram.cs" />
     <Compile Include="OI.cs" />
-    <Compile Include="ResManager\Data\XmlResData.cs" />
-    <Compile Include="ResManager\Loaders\XmlResLoader.cs" />
-    <Compile Include="ResManager\ResManager.cs" />
     <Compile Include="RobotMap.cs" />
     <Compile Include="Subsystems\OzSubsystem.cs" />
     <Compile Include="Commands\ExampleCommand.cs" />
