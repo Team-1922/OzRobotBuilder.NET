@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtLua\OzLuaState.cs" />
+    <Compile Include="ExtLua\ScriptOverride.cs" />
     <Compile Include="Interfaces\ILuaExt.cs" />
     <Compile Include="Interfaces\IResData.cs" />
     <Compile Include="Interfaces\IResLoader.cs" />
