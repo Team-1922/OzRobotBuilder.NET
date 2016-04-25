@@ -20,6 +20,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>CS0649</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +31,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>CS0649</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="KopiLua">
@@ -50,9 +56,7 @@
   <ItemGroup>
     <Compile Include="ExtLua\OzLuaState.cs" />
     <Compile Include="ExtLua\ScriptOverride.cs" />
-    <Compile Include="Interfaces\IInputDevice.cs" />
     <Compile Include="Interfaces\ILuaExt.cs" />
-    <Compile Include="Interfaces\IOutputDevice.cs" />
     <Compile Include="Interfaces\IResData.cs" />
     <Compile Include="Interfaces\IResLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
