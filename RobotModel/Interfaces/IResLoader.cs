@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
 
-namespace ConsumerProgram
+namespace RobotModel.Interfaces
 {
     //this represents a resouce loading class
     public interface IResLoader

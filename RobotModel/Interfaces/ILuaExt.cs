@@ -1,4 +1,4 @@
-﻿namespace ConsumerProgram
+﻿namespace RobotModel.Interfaces
 {
     public interface ILuaExt
     {
