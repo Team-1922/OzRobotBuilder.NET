@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RobotModel.ResourceManager.PrimaryTypes
+{
+    /*
+     * 
+     * This is more complicated than the potentiometer (and the potentiometer might be merged into this) because of polling rates, accumulation, etc.
+     * 
+     */
+    class OzAnalogInputData
+    {
+        public static double GlobalSampleRate;
+
+        public uint AnalogInputId;
+        public int AccumulatorCenter;
+        public int AccumulatorDeadband;
+        public long AccumulatorInitialValue;
+        public int AverageBits;
+        public int OversampleBits;
+
+        //defined as normalized analog units per user-defined units
+        public double ConversionRatio;
+        //in normalized analog units
+        public double SensorOffset;
+    }
+}
