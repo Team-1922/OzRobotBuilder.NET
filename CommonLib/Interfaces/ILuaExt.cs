@@ -1,4 +1,4 @@
-﻿namespace RobotModel.Interfaces
+﻿namespace CommonLib.Interfaces
 {
     public interface ILuaExt
     {

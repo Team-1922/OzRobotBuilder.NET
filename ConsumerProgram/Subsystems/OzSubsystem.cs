@@ -9,6 +9,7 @@ namespace ConsumerProgram.Subsystems
     public class OzSubsystem : Subsystem, ILuaExt, IResData
     {
         ScriptOverride OverrideMethod;
+        WPILib.CANTalon
 
         public OzSubsystem(ref OzLuaState luaState, IResData scriptData)
         {

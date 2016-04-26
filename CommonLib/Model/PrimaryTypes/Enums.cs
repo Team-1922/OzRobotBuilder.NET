@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RobotModel.ResourceManager.PrimaryTypes
+namespace CommonLib.Model.PrimaryTypes
 {       
     //Is there some way to have an equality between these below enums and the ones in the WPI lib without importing the WPIlib?
 

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerProgram", "Consumer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerTests", "ConsumerTests\ConsumerTests.csproj", "{BEFE2679-4CA3-4953-8820-2CAB5B3FF2D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotModel", "RobotModel\RobotModel.csproj", "{BA4049B9-FE98-4748-BE9D-6CAF43F7356E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "CommonLib\CommonLib.csproj", "{BA4049B9-FE98-4748-BE9D-6CAF43F7356E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

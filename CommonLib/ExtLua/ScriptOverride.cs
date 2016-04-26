@@ -1,11 +1,11 @@
-﻿using ConsumerProgram.ExtLua;
+﻿using CommonLib.ExtLua;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsumerProgram.ExtLua
+namespace CommonLib.ExtLua
 {
     class ScriptOverride
     {

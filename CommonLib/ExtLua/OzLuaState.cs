@@ -1,9 +1,10 @@
 ﻿using NLua;
+using CommonLib.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsumerProgram.ExtLua
+namespace CommonLib.ExtLua
 {
     public class OzLuaState : Lua
     {

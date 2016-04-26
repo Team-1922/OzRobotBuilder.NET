@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RobotModel.ResourceManager.PrimaryTypes
+namespace CommonLib.Model.PrimaryTypes
 {
-    class OzMotorControllerData
+    class OzDigitalInputData
     {
-        public uint MotorId;
+        public uint DigitalInputId;
     }
 }

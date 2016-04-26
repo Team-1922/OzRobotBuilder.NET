@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using RobotModel.ResourceManager.PrimaryTypes;
+using CommonLib.Model.PrimaryTypes;
+using CommonLib.Interfaces;
 
-namespace RobotModel.ResourceManager.LoadableTypes
+namespace CommonLib.Model.LoadableTypes
 {
-    class OzSubsystemResData
+    class OzSubsystemDoc : Document
     {
         public List<OzMotorControllerData> PWMMotorControllers;
         //
@@ -22,7 +24,5 @@ namespace RobotModel.ResourceManager.LoadableTypes
 
         public bool SoftwarePIDEnabled;
         public OzPIDControllerData PIDControllerConfig;
-
-        
     }
 }
