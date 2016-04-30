@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CommonLib.Model.PrimaryTypes;
 using CommonLib.Interfaces;
 
-namespace CommonLib.Model.Compositetypes
+namespace CommonLib.Model.CompositeTypes
 {
     public class OzSubsystemData
     {

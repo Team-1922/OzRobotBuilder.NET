@@ -60,6 +60,7 @@
     <Compile Include="ExtLua\ScriptOverride.cs" />
     <Compile Include="Interfaces\IDocumentSerializer.cs" />
     <Compile Include="Interfaces\ILuaExt.cs" />
+    <Compile Include="Model\CompositeTypes\OzCommandData.cs" />
     <Compile Include="Model\Document.cs" />
     <Compile Include="Model\DocumentManager.cs" />
     <Compile Include="Model\CompositeTypes\OzSubsystemData.cs" />

@@ -1,4 +1,5 @@
 ﻿using CommonLib.ExtLua;
+using CommonLib.Model.PrimaryTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +79,7 @@ namespace CommonLib.ExtLua
             if (!OverriddenMethods.ContainsKey(methodName))
                 return false;
 
-            //load up the params into this "chunk"
+            //load up the params
             if (null != param)
             {
                 foreach (var pair in param)
@@ -99,6 +100,10 @@ namespace CommonLib.ExtLua
         {
             object[] dummy;
             return CallOverriddenMethod(methodName, param, out dummy);
+        }
+        public bool CallOverriddenMethod(string methodName)
+        {
+            return CallOverriddenMethod(methodName, null);
         }
     }
 }
