@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Interfaces
 {
-    public interface IDocumentLoader
+    public interface IDocumentSerializer
     {
         //this should a SINGLE file extension which this loader can load (i.e "txt" for .txt files or "rmap.xml" for .rmap.xml files)
         string GetFormat();

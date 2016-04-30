@@ -11,8 +11,8 @@ namespace CommonLib.Model
     public abstract class DocumentManager
     {
         public string ProjectLocation { get; private set; }
-        private List<IDocumentLoader> DocLoaders = new List<IDocumentLoader>();
-        private List<Document> OpenDocuments = new List<Document>();
+        protected List<IDocumentSerializer> DocSerializers = new List<IDocumentSerializer>();
+        protected List<Document> OpenDocuments = new List<Document>();
 
         protected abstract bool LoadProject();
         public abstract bool SaveAll();
@@ -31,11 +31,11 @@ namespace CommonLib.Model
             ProjectLocation = path;
             return LoadProject();
         }
-        public void RegisterDocLoader(IDocumentLoader loader)
+        public void RegisterDocSerializer(IDocumentSerializer loader)
         {
-            DocLoaders.Add(loader);
+            DocSerializers.Add(loader);
         }
-        public IDocumentLoader GetAppropriateDocLoader(string filePath)
+        public IDocumentSerializer GetAppropriateDocSerializer(string filePath)
         {
             //use this so directory names CAN have periods
             string[] splitFilename = filePath.Split('/');
@@ -53,7 +53,7 @@ namespace CommonLib.Model
 
             string fileExt = splitFilename[1];
 
-            foreach (var loader in DocLoaders)
+            foreach (var loader in DocSerializers)
             {
                 if (loader.GetFormat() == fileExt)
                     return loader;
@@ -61,7 +61,7 @@ namespace CommonLib.Model
 
             return null;
         }
-        protected void AddDocument(Document doc)
+        public void AddDocument(Document doc)
         {
             OpenDocuments.Add(doc);
         }

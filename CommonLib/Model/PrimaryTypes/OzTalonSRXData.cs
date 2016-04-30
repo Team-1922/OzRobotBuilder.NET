@@ -11,12 +11,12 @@ namespace CommonLib.Model.PrimaryTypes
      * This is the big kahuna of all of the primary data types;
      * 
      */
-    class OzTalonSRXData : OzMotorControllerData
+    public class OzTalonSRXData : OzMotorControllerData
     {
-        public OzAnalogInputData AnalogInput;
-        public OzQuadEncoderData DigitalInput;
-        public OzSRXPIDControllerData PIDConfig0;
-        public OzSRXPIDControllerData PIDConfig1;
+        public OzAnalogInputData AnalogInput = new OzAnalogInputData();
+        public OzQuadEncoderData DigitalInput = new OzQuadEncoderData();
+        public OzSRXPIDControllerData PIDConfig0 = new OzSRXPIDControllerData();
+        public OzSRXPIDControllerData PIDConfig1 = new OzSRXPIDControllerData();
         public int EnabledPIDProfile;
         public FeedbackDevice SRXFeedbackDevice;
         public ControlMode SRXControlMode;

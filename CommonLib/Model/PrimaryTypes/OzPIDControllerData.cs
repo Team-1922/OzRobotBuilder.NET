@@ -11,7 +11,7 @@ namespace CommonLib.Model.PrimaryTypes
      * PID Configuration for software PID Controller (use OzSRXPIDControllerData for SRX PID configuration)
      * 
      */
-    class OzPIDControllerData
+    public class OzPIDControllerData
     {
         public double P;
         public double I;

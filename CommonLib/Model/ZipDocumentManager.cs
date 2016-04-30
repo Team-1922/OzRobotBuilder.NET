@@ -11,7 +11,7 @@ namespace CommonLib.Model
      * This Document Manager is used in the "RobotModel" and any other application which deals with the compiled .zip of the resouces
      * 
      */
-    class ZipDocumentManager : DocumentManager
+    public class ZipDocumentManager : DocumentManager
     {
 
         protected override bool LoadProject()
@@ -26,7 +26,7 @@ namespace CommonLib.Model
                     //ommit directories
                     if (!s.FullName.EndsWith("/"))
                     {
-                        IDocumentLoader thisLoader = GetAppropriateDocLoader(s.FullName);
+                        IDocumentSerializer thisLoader = GetAppropriateDocSerializer(s.FullName);
                         if (null == thisLoader)
                         {
                             Console.WriteLine(string.Format("File: \"{0}\" Does Not Have Matching Loader", s.FullName));

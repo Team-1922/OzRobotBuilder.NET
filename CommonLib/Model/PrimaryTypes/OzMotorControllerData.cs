@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model.PrimaryTypes
 {
-    class OzMotorControllerData
+    public class OzMotorControllerData
     {
         public uint MotorId;
     }

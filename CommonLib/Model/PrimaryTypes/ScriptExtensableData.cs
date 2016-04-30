@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model.PrimaryTypes
 {
-    public class OzDigitalInputData
+    public class ScriptExtensableData
     {
-        public uint DigitalInputId;
+        public string ScriptExtension;
+        public string OverriddenMethods;
     }
 }

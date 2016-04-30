@@ -11,7 +11,7 @@ namespace CommonLib.Model.PrimaryTypes
 	 * 
 	 * 
 	 */
-    class OzQuadEncoderData
+    public class OzQuadEncoderData
     {
 		//while having a 'UnitsPerRotation' value is nice, this piece of data is usually up to emprical testing, therefore
 		//		a second attribute for 'UnitsPerRotation' would be pointless

@@ -11,7 +11,7 @@ namespace CommonLib.Model.PrimaryTypes
      * All potentiometers will return a value from 0 to 1 (normalized potentiometer units) no matter what
      * 
      */
-    class OzPotentiometerData
+    public class OzPotentiometerData
     {
         //the ratio defined as output units per normalized potentiometer unit
         public double ConversionRatio;

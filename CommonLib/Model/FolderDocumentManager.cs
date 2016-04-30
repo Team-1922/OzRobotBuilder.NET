@@ -8,11 +8,35 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model
 {
-    class FolderDocumentManager : DocumentManager
+    public class FolderDocumentManager : DocumentManager
     {
+        /*
+         * 
+         * TODO: Exception handling here needs to be improved
+         * 
+         */
         public override bool SaveAll()
         {
-            throw new NotImplementedException();
+            foreach(var doc in OpenDocuments)
+            {
+                var serializer = GetAppropriateDocSerializer(doc.Path);
+                if(null == serializer)
+                {
+                    continue;//logging is handled by the "GetAppropriateDocSerializer" method
+                }
+
+                //serialize the data
+                string textData = serializer.Serialize(doc);
+
+                //make sure the whole path exists
+                string path = Path.GetDirectoryName(doc.Path);
+                if("" != path)
+                    Directory.CreateDirectory(Path.GetDirectoryName(doc.Path));
+
+                //create a file and write into this document (this is the most basic way to do it; there are probably better ways)
+                File.WriteAllText(doc.Path, textData);
+            }
+            return true;
         }
 
         static List<string> RecurseLoadFilePaths(string path)
@@ -46,7 +70,7 @@ namespace CommonLib.Model
             //iterate through each entry
             foreach (var s in allFiles)
             {
-                IDocumentLoader thisLoader = GetAppropriateDocLoader(s);
+                IDocumentSerializer thisLoader = GetAppropriateDocSerializer(s);
                 if (null == thisLoader)
                 {
                     Console.WriteLine(string.Format("File: \"{0}\" Does Not Have Matching Loader", s));

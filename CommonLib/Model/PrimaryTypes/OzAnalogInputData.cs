@@ -11,7 +11,7 @@ namespace CommonLib.Model.PrimaryTypes
      * This is more complicated than the potentiometer (and the potentiometer might be merged into this) because of polling rates, accumulation, etc.
      * 
      */
-    class OzAnalogInputData
+    public class OzAnalogInputData
     {
         public static double GlobalSampleRate;
 

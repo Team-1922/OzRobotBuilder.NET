@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CommonLib")]
+[assembly: AssemblyTitle("OzRobotBuilder.NET")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CommonLib")]
+[assembly: AssemblyProduct("OzRobotBuilder.NET")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("73f55dae-c57b-4471-83ac-7cb658aeca92")]
+[assembly: Guid("c1ce448e-f1b0-4d67-b29e-903aebbd5aef")]
 
 // Version information for an assembly consists of the following four values:
 //
