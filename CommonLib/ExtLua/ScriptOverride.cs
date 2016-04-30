@@ -10,7 +10,6 @@ namespace CommonLib.ExtLua
 {
     class ScriptOverride
     {
-        private string OverriddenMethodsHeader = "";
         private Dictionary<string, string> OverriddenMethods = new Dictionary<string, string>();
         private OzLuaState LuaStateRef;
 
@@ -26,11 +25,6 @@ namespace CommonLib.ExtLua
              * Scripts should be in this format:
              * 
               
-             
-             @__ALLMETHODS__
-            luanet.load_assembly 'System'
-            Console = luanet.import_type 'System.Console'
-
             @FunctionName1
             --Parameters:
             --	method
@@ -42,7 +36,6 @@ namespace CommonLib.ExtLua
              *
              * NOTE: the comments below "@Test" are just a reminder of what the parameters are; it doesn't change which parameters are sent
              * 
-             * the @__ALLMETHODS__ does not have to be first, but it is convenient for it to be
              * 
              */
             string[] chunks = script.Split('@');
@@ -52,12 +45,6 @@ namespace CommonLib.ExtLua
             for (int i = 1; i < chunks.Length; ++i)
             {
                 string thisChunk = chunks[i];
-                string test = thisChunk.Substring(0, 14);
-                if (thisChunk.Substring(0, 14) == "__ALLMETHODS__")
-                {
-                    OverriddenMethodsHeader = thisChunk.Substring(14);
-                    continue;
-                }
 
                 //get each method's section
                 string[] lines = thisChunk.Split(new string[] { "\r\n", "\n" }, 2, StringSplitOptions.None);
@@ -69,11 +56,6 @@ namespace CommonLib.ExtLua
                 //the first line is NOT lua script, it is a header for the function
                 OverriddenMethods[lines[0]] = lines[1];
             }
-
-            //since all of these scripts are executing in the same environment, and after testing the "return" keyword does not delete the environment,
-            //      This only needs to be loaded up once when the script is loaded, and even then it may be redundent depending on the initialization of other
-            //          scripts.
-            LuaStateRef.DoString(OverriddenMethodsHeader);
         }
 
         public bool CallOverriddenMethod(string methodName, Dictionary<string, object> param, out object[] returnData)

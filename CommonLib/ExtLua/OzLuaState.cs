@@ -8,6 +8,21 @@ namespace CommonLib.ExtLua
 {
     public class OzLuaState : Lua
     {
+        //
+        //"headerCode" = lua script to be executed automatically
+        //
+        //TODO: handle exceptions better
+        //
+        //This command should be recalled if the lua environment crashes due to an exception
+        public void InitEnvHeader(string headerCode)
+        {
+            //ensure this has already been done
+            LoadCLRPackage();
+
+            //run the header for the entire rest of the environment to use
+            DoString(headerCode);
+        }
+
         //override this so we can inject the custom code to 
         //  extend c# class with extra member functions
         public new object this[string name] 
