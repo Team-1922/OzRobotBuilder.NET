@@ -11,8 +11,6 @@ namespace CommonLib.ExtLua
     {
         private string OverriddenMethodsHeader = "";
         private Dictionary<string, string> OverriddenMethods = new Dictionary<string, string>();
-        private string PrivateChunkName;
-        private string HeaderChunkName;//this is the chunk which the header code was run on; it should usually be "PrivateChunkName"
         private OzLuaState LuaStateRef;
 
         public ScriptOverride(ref OzLuaState luaState)
@@ -70,22 +68,6 @@ namespace CommonLib.ExtLua
                 //the first line is NOT lua script, it is a header for the function
                 OverriddenMethods[lines[0]] = lines[1];
             }
-
-            EnsurePrivateChunk();
-        }
-
-        private void EnsurePrivateChunk()
-        {
-            //make sure we are working in a separate environment
-            if (null == PrivateChunkName || 8 != PrivateChunkName.Length)
-                PrivateChunkName = LuaStateRef.GetUniqueChunkName();
-
-            if(HeaderChunkName != PrivateChunkName)
-            {
-                //run the header code; this only needs to be run once per chunk
-                LuaStateRef.DoString(OverriddenMethodsHeader, PrivateChunkName);
-                HeaderChunkName = PrivateChunkName;
-            }
         }
 
         public bool CallOverriddenMethod(string methodName, Dictionary<string, object> param, out object[] returnData)
@@ -95,9 +77,6 @@ namespace CommonLib.ExtLua
             //make sure this is overriden
             if (!OverriddenMethods.ContainsKey(methodName))
                 return false;
-
-            //make sure we are working in a separate environment
-            EnsurePrivateChunk();
 
             //load up the params into this "chunk"
             if (null != param)
@@ -112,7 +91,7 @@ namespace CommonLib.ExtLua
             string scriptText = OverriddenMethods[methodName];
 
             //run the script
-            returnData = LuaStateRef.DoString(scriptText, PrivateChunkName);
+            returnData = LuaStateRef.DoString(scriptText);
 
             return true;
         }
