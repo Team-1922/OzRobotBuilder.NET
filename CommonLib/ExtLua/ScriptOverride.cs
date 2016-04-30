@@ -69,6 +69,11 @@ namespace CommonLib.ExtLua
                 //the first line is NOT lua script, it is a header for the function
                 OverriddenMethods[lines[0]] = lines[1];
             }
+
+            //since all of these scripts are executing in the same environment, and after testing the "return" keyword does not delete the environment,
+            //      This only needs to be loaded up once when the script is loaded, and even then it may be redundent depending on the initialization of other
+            //          scripts.
+            LuaStateRef.DoString(OverriddenMethodsHeader);
         }
 
         public bool CallOverriddenMethod(string methodName, Dictionary<string, object> param, out object[] returnData)
