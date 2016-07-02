@@ -8,28 +8,30 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model
 {
-    public abstract class DocumentManager
+    public abstract class SDIDocumentManager
     {
-        public string ProjectLocation { get; private set; }
         protected List<IDocumentSerializer> DocSerializers = new List<IDocumentSerializer>();
-        protected List<Document> OpenDocuments = new List<Document>();
+        public Document OpenDoc { get; set; }
 
-        protected abstract bool LoadProject();
-        public abstract bool SaveAll();
+        protected abstract bool LoadDocument(string path);
+        /// <summary>
+        /// Save the Open Document
+        /// </summary>
+        /// <param name="path">The path to save the document to; left blank if saving to {@Link OpenDoc.Path}</param>
+        /// <returns>success of the save</returns>
+        public abstract bool Save(string path);
         //public abstract StreamReader GetFileStream(string filePath);
 
-        public void CloseProject()
+        public void CloseDocument()
         {
-            ProjectLocation = "";
-            OpenDocuments.Clear();
+            OpenDoc = null;
         }
-        public bool OpenProject(string path)
+        public bool OpenDocument(string path)
         {
-            CloseProject();
-            if (!Directory.Exists(path) || File.Exists(path))
+            CloseDocument();
+            if (!File.Exists(path))
                 return false;
-            ProjectLocation = path;
-            return LoadProject();
+            return LoadDocument(path);
         }
         public void RegisterDocSerializer(IDocumentSerializer loader)
         {
@@ -38,7 +40,7 @@ namespace CommonLib.Model
         public IDocumentSerializer GetAppropriateDocSerializer(string filePath)
         {
             //use this so directory names CAN have periods
-            string[] splitFilename = filePath.Split('/');
+            string[] splitFilename = filePath.Split(Path.DirectorySeparatorChar);
             if (splitFilename.Length == 0)
                 return null;
 
@@ -61,10 +63,6 @@ namespace CommonLib.Model
 
             return null;
         }
-        public void AddDocument(Document doc)
-        {
-            OpenDocuments.Add(doc);
-        }
         //this WILL overwrite the zip file
         public bool SaveZip(string zipLoc)
         {
@@ -72,7 +70,7 @@ namespace CommonLib.Model
             if (null == thisZip)
                 return false;
 
-            return thisZip.SaveAll();
+            return thisZip.Save(zipLoc);
         }
         public bool ImportZip(string zipLoc)
         {
@@ -85,15 +83,12 @@ namespace CommonLib.Model
             if (null == thisZip)
                 return false;
 
-            CloseProject();
-            ProjectLocation = zipLoc;
-
             //this may be unsafe: TODO:
-            if (!thisZip.LoadProject())
+            if (!thisZip.LoadDocument(zipLoc))
                 return false;
 
             //Save the project with whichever loader THIS currently is
-            return SaveAll();
+            return Save(zipLoc);
         }
     }
 }

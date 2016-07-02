@@ -14,8 +14,7 @@ namespace CommonLib.Model.Serializers
     {
         public static JsonLoader<RobotDocument> RobotLoader = new JsonLoader<RobotDocument>("robot.json");
 
-
-        public static void RegisterLoaders(DocumentManager manager)
+        public static void RegisterLoaders(SDIDocumentManager manager)
         {
             manager.RegisterDocSerializer(RobotLoader);
         }

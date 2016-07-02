@@ -58,11 +58,10 @@
   <ItemGroup>
     <Compile Include="ExtLua\OzLuaState.cs" />
     <Compile Include="ExtLua\ScriptOverride.cs" />
-    <Compile Include="Interfaces\IDocumentSerializer.cs" />
-    <Compile Include="Interfaces\ILuaExt.cs" />
+    <Compile Include="Interfaces.cs" />
     <Compile Include="Model\CompositeTypes\OzCommandData.cs" />
     <Compile Include="Model\Document.cs" />
-    <Compile Include="Model\DocumentManager.cs" />
+    <Compile Include="Model\SDIDocumentManager.cs" />
     <Compile Include="Model\CompositeTypes\OzSubsystemData.cs" />
     <Compile Include="Model\Documents\RobotDocument.cs" />
     <Compile Include="Model\FolderDocumentManager.cs" />
@@ -79,6 +78,7 @@
     <Compile Include="Model\Serializers\JsonLoader.cs" />
     <Compile Include="Model\ZipDocumentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

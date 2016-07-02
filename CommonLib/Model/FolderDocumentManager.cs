@@ -8,37 +8,37 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model
 {
-    public class FolderDocumentManager : DocumentManager
+    public class FolderDocumentManager : SDIDocumentManager
     {
         /*
          * 
          * TODO: Exception handling here needs to be improved
          * 
          */
-        public override bool SaveAll()
+        public override bool Save(string path)
         {
-            foreach(var doc in OpenDocuments)
+            if (path == "")
+                path = OpenDoc.Path;
+
+            var serializer = GetAppropriateDocSerializer(OpenDoc.Path);
+            if(null == serializer)
             {
-                var serializer = GetAppropriateDocSerializer(doc.Path);
-                if(null == serializer)
-                {
-                    continue;//logging is handled by the "GetAppropriateDocSerializer" method
-                }
-
-                //serialize the data
-                string textData = serializer.Serialize(doc);
-
-                //make sure the whole path exists
-                string path = Path.GetDirectoryName(doc.Path);
-                if("" != path)
-                    Directory.CreateDirectory(Path.GetDirectoryName(doc.Path));
-
-                //create a file and write into this document (this is the most basic way to do it; there are probably better ways)
-                File.WriteAllText(doc.Path, textData);
+                return false;//logging is handled by the "GetAppropriateDocSerializer" method
             }
+
+            //serialize the data
+            string textData = serializer.Serialize(OpenDoc);
+
+            //make sure the whole path exists
+            string wPath = Path.GetDirectoryName(OpenDoc.Path);
+            if("" != wPath)
+                Directory.CreateDirectory(Path.GetDirectoryName(OpenDoc.Path));
+
+            //create a file and write into this document (this is the most basic way to do it; there are probably better ways)
+            File.WriteAllText(OpenDoc.Path, textData);
             return true;
         }
-
+        [Obsolete]
         static List<string> RecurseLoadFilePaths(string path)
         {
             List<string> retVals = new List<string>();
@@ -62,38 +62,34 @@ namespace CommonLib.Model
             return retVals;
         }
 
-        protected override bool LoadProject()
+        protected override bool LoadDocument(string path)
         {
-            bool retVal = true;
-            var allFiles = RecurseLoadFilePaths(ProjectLocation);
+            //standard stuff
 
-            //iterate through each entry
-            foreach (var s in allFiles)
+            IDocumentSerializer thisLoader = GetAppropriateDocSerializer(path);
+            if (null == thisLoader)
             {
-                IDocumentSerializer thisLoader = GetAppropriateDocSerializer(s);
-                if (null == thisLoader)
-                {
-                    Console.WriteLine(string.Format("File: \"{0}\" Does Not Have Matching Loader", s));
-                    continue;
-                }
+                Console.WriteLine(string.Format("File: \"{0}\" Does Not Have Matching Loader", path));
+                return false;
+            }
 
-                //open and read the whole string from the stream
-                using (var stream = File.OpenRead(s))
+            //open and read the whole string from the stream
+            using (var stream = File.OpenRead(path))
+            {
+                //stream.Seek(0, SeekOrigin.Begin);
+                using (var streamreader = new StreamReader(stream))
                 {
-                    //stream.Seek(0, SeekOrigin.Begin);
-                    using (var streamreader = new StreamReader(stream))
+                    Document thisDoc = thisLoader.Deserialize(streamreader);
+                    if (null == thisDoc)
                     {
-                        Document thisDoc = thisLoader.Deserialize(streamreader);
-                        if (null == thisDoc)
-                        {
-                            Console.WriteLine(String.Format("File: \"{0}\" Failed to Load", s));
-                            retVal = false;
-                        }
-                        AddDocument(thisDoc);
+                        Console.WriteLine(String.Format("File: \"{0}\" Failed to Load", path));
+                        return false;
                     }
-                }                
-            }            
-            return retVal;
+                    OpenDoc = thisDoc;
+                }
+            }
+
+            return true;
         }
     }
 }

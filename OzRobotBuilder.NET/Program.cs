@@ -9,13 +9,16 @@ namespace OzRobotBuilder.NET
 {
     static class Program
     {
-        static FolderDocumentManager DocManager = new FolderDocumentManager();
+        public static SDIDocumentManager DocManager = new FolderDocumentManager();
+        public static KeyValueController Controller = new KeyValueController();
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            CommonLib.Model.Serializers.BuiltInLoaders.RegisterLoaders(DocManager);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Views.MainView());

@@ -85,6 +85,5 @@ namespace CommonLib.Model.PrimaryTypes
             public int AllowableCloseLoopError;
             public PIDSourceType SourceType;
         }
-
     }
 }
