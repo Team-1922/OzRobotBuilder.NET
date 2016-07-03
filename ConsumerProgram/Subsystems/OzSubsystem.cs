@@ -21,7 +21,7 @@ namespace ConsumerProgram.Subsystems
 
         public void SetExtScript(string resPath)
         {
-
+            WPILib.CANTalon
         }
 
         public string GetFormattedExtScriptText()

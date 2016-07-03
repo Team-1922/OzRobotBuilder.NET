@@ -10,6 +10,9 @@ using CommonLib.Interfaces;
 
 namespace CommonLib.Model.CompositeTypes
 {
+    /// <summary>
+    /// A subsystem with all of its possible inputs and outputs
+    /// </summary>
     public class OzSubsystemData
     {
         public List<OzMotorControllerData> PWMMotorControllers = new List<OzMotorControllerData>();

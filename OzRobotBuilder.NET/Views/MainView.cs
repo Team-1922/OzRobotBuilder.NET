@@ -15,14 +15,28 @@ using System.Windows.Forms;
 
 namespace OzRobotBuilder.NET.Views
 {
+    /// <summary>
+    /// The main view class 
+    /// </summary>
     public partial class MainView : Form
     {
-        //TODO: relocate somewhere nicer?
-        //credit: http://stackoverflow.com/questions/18769634/creating-tree-view-dynamically-according-to-json-text-in-winforms
+        /// <summary>
+        /// Generate a <see cref="TreeNode"/> from a set of json text
+        /// Credit: http://stackoverflow.com/questions/18769634/creating-tree-view-dynamically-according-to-json-text-in-winforms
+        /// </summary>
+        /// <param name="text">the json serialized text; <see cref="TypeNameHandling"/> must be set to <see cref="TypeNameHandling.All"/></param>
+        /// <returns>the entire tree generated from the json text</returns>
         public static DictTreeNode Json2Tree(string text)
         {
             return Json2Tree(JObject.Parse(text));
         }
+        /// <summary>
+        /// Generate a treeview node tree from a JObject
+        /// Credit: http://stackoverflow.com/questions/18769634/creating-tree-view-dynamically-according-to-json-text-in-winforms
+        /// This is also the function which is called recursively
+        /// </summary>
+        /// <param name="obj">the json object to turn into a tree node</param>
+        /// <returns>the entire tree generated from <paramref name="obj"/></returns>
         public static DictTreeNode Json2Tree(JObject obj)
         {
             //create the parent node
@@ -85,6 +99,11 @@ namespace OzRobotBuilder.NET.Views
             return parent;
 
         }
+        /// <summary>
+        /// parses a <see cref="JObject"/> <code>$type</code> parameter into a string
+        /// </summary>
+        /// <param name="obj">the <see cref="JObject"/> to get the type from</param>
+        /// <returns>the string representation of <paramref name="obj"/> type</returns>
         private static string GetObjectType(JObject obj)
         {
             //now try to get the "type" property.  
@@ -100,6 +119,11 @@ namespace OzRobotBuilder.NET.Views
             }
             return type;
         }
+        /// <summary>
+        /// Gets the name of an object from its <code>Name</code> Attribute
+        /// </summary>
+        /// <param name="obj">the JObject to get the name from</param>
+        /// <returns>the name of the object as loaded from the json <code>Name</code> attribute</returns>
         private static string GetObjectName(JObject obj)
         {
             //hopefully there is a "name" property
@@ -116,13 +140,14 @@ namespace OzRobotBuilder.NET.Views
                 name = "NameError";
             }
             return name;
-        }
-        
+        }        
+        /// <summary>
+        /// Constructor; initializes dialog components
+        /// </summary>
         public MainView()
         {
             InitializeComponent();
         }
-
         /// <summary>
         /// Updates the Tree View with the newly opened Document
         /// </summary>
@@ -151,7 +176,6 @@ namespace OzRobotBuilder.NET.Views
             //expand the tree view
             treeView1.ExpandAll();
         }
-
         /// <summary>
         /// Determines whether or not the tree view will update if this new node is selected
         /// </summary>
@@ -167,7 +191,6 @@ namespace OzRobotBuilder.NET.Views
 
             return true;
         }
-
         /// <summary>
         /// Prompts the user to open a file and opens it
         /// </summary>
@@ -189,8 +212,7 @@ namespace OzRobotBuilder.NET.Views
 
             //finally refresh the grid view and recreate the tree view
             RecreateTreeView();
-        }
-        
+        }        
         /// <summary>
         /// Updates the grid view with the selected tree view item
         /// </summary>
@@ -198,7 +220,6 @@ namespace OzRobotBuilder.NET.Views
         {
             RefreshGridView(treeView1.SelectedNode);
         }
-
         /// <summary>
         /// Updates the grid view with the given tree view item (this does not set this node as active however)
         /// </summary>
