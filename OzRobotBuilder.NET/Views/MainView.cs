@@ -15,11 +15,6 @@ using System.Windows.Forms;
 
 namespace OzRobotBuilder.NET.Views
 {
-    public class DictTreeNode : TreeNode
-    {
-        public string Data { get; set; }
-    }
-
     public partial class MainView : Form
     {
         //TODO: relocate somewhere nicer?
@@ -128,10 +123,6 @@ namespace OzRobotBuilder.NET.Views
             InitializeComponent();
         }
 
-        private void MainView_Load(object sender, EventArgs e)
-        {
-        }
-
         /// <summary>
         /// Updates the Tree View with the newly opened Document
         /// </summary>
@@ -162,12 +153,53 @@ namespace OzRobotBuilder.NET.Views
         }
 
         /// <summary>
-        /// This updates the grid view with the selected tree view item
+        /// Updates the Grid View with the selected tree view node
+        /// </summary>
+        public void UpdateSelection()
+        {
+            //if the new selected node has no children, select its parent instead
+            if (treeView1.SelectedNode.GetNodeCount(false) == 0)
+                treeView1.SelectedNode = treeView1.SelectedNode.Parent;
+
+            //refresh the selection
+            RefreshGridView();
+        }
+
+        /// <summary>
+        /// Prompts the user to open a file and opens it
+        /// </summary>
+        public void OpenFile()
+        {
+
+            //pop open dialog
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            openFileDialog.Filter = "Robot Files (*.robot.json)|*.robot.json";
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Program.DocManager.OpenDocument(openFileDialog.FileName);
+            }
+
+
+            //finally refresh the grid view and recreate the tree view
+            RecreateTreeView();
+        }
+        
+        /// <summary>
+        /// Updates the grid view with the selected tree view item
         /// </summary>
         public void RefreshGridView()
         {
             RefreshGridView(treeView1.SelectedNode);
         }
+
+        /// <summary>
+        /// Updates the grid view with the given tree view item (this does not set this node as active however)
+        /// </summary>
+        /// <param name="activeNode">the tree node to update the grid view with</param>
         public void RefreshGridView(TreeNode activeNode)
         {
             //this might not be right
@@ -185,63 +217,32 @@ namespace OzRobotBuilder.NET.Views
             Invalidate();
         }
 
+        #region Event Handlers
+
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             Program.Controller.UpdateKey(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex - 1].Value as string, dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value as string);
         }
-
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             //get the "name" part
-            /*var name = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            var name = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
 
             //is the "name" a subnode?
-            var activeNode = GetActiveTreeViewNode();
-            var child = activeNode.GetChild(name);
-            if (null == child)
-                return;//do nothing, we can't go deeper
-
-            //find the child node
-            var firstChild = treeView1.SelectedNode.FirstNode;
-            while (null != firstChild)
-            {
-                if(firstChild.Text == name)
-                {
-                    treeView1.SelectedNode = firstChild;
-                }
-                firstChild = firstChild.NextNode;
-            }
-
-            RefreshGridView();*/
-        }
-
-        private void FileOpen(object sender, EventArgs e)
-        {
-            //pop open dialog
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            openFileDialog.Filter = "Robot Files (*.robot.json)|*.robot.json";
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                Program.DocManager.OpenDocument(openFileDialog.FileName);
-            }
+            if (!treeView1.SelectedNode.Nodes.ContainsKey(name))
+                return;
 
 
-            //finally refresh the grid view and recreate the tree view
-            RecreateTreeView();
-        }
-
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            //if the new selected node has no children, select its parent instead
-            if (e.Node.GetNodeCount(false) == 0)
-                treeView1.SelectedNode = e.Node.Parent;
-
-            //refresh the selection
             RefreshGridView();
         }
+        private void FileOpen(object sender, EventArgs e)
+        {
+            OpenFile();
+        }
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            UpdateSelection();
+        }
+        #endregion
     }
 }
