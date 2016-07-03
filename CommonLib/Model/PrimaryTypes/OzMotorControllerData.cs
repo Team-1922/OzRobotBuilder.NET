@@ -8,7 +8,7 @@ namespace CommonLib.Model.PrimaryTypes
 {
     public class OzMotorControllerData : ITreeNodeSerialize
     {
-        public string Name;
+        public string Name = "OzMotorControllerData";
         public uint MotorId;
 
         public virtual DataTreeNode GetTree()

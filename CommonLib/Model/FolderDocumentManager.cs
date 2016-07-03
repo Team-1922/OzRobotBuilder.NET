@@ -20,14 +20,9 @@ namespace CommonLib.Model
             if (path == "")
                 path = OpenDoc.Path;
 
-            var serializer = GetAppropriateDocSerializer(OpenDoc.Path);
-            if(null == serializer)
-            {
-                return false;//logging is handled by the "GetAppropriateDocSerializer" method
-            }
-
-            //serialize the data
-            string textData = serializer.Serialize(OpenDoc);
+            string textData = GetOpenDocJson();
+            if (null == textData)
+                return false;
 
             //make sure the whole path exists
             string wPath = Path.GetDirectoryName(OpenDoc.Path);

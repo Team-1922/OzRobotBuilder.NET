@@ -36,12 +36,36 @@ namespace CommonLib.Model.CompositeTypes
             {
                 root.Add(pwmMotor.GetTree());
             }
+            foreach (var srx in TalonSRXs)
+            {
+                root.Add(srx.GetTree());
+            }
+            foreach (var analogInput in AnalogInputDevices)
+            {
+                root.Add(analogInput.GetTree());
+            }
+            foreach (var quadEncoder in QuadEncoders)
+            {
+                root.Add(quadEncoder.GetTree());
+            }
+            foreach (var digitalInput in DigitalInputs)
+            {
+                root.Add(digitalInput.GetTree());
+            }
+
+            //add non-hierarchal attributes
+            root.Add(new DataTreeNode("SoftwarePIDEnabled", SoftwarePIDEnabled.ToString()));
+            var pidControllerCfgNode = PIDControllerConfig.GetTree();
+            pidControllerCfgNode.Key = "SoftwarePIDControllerConfig";
+            root.Add(pidControllerCfgNode);
 
             return root;
         }
 
         public bool DeserializeTree(DataTreeNode node)
         {
+            if (node.Data != typeof(OzSubsystemData).ToString())
+                return false;
             if (Name != node.Key)
                 return false;
 

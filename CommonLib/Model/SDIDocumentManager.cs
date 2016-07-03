@@ -90,5 +90,10 @@ namespace CommonLib.Model
             //Save the project with whichever loader THIS currently is
             return Save(zipLoc);
         }
+        public string GetOpenDocJson()
+        {
+            //serialize the data
+            return GetAppropriateDocSerializer(OpenDoc.Path)?.Serialize(OpenDoc);
+        }
     }
 }

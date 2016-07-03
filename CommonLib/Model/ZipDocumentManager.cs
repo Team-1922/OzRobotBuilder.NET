@@ -64,20 +64,15 @@ namespace CommonLib.Model
 
         public override bool Save(string path)
         {
-            IDocumentSerializer thisLoader = GetAppropriateDocSerializer(OpenDoc.Path);
-            if (null == thisLoader)
-            {
-                Console.WriteLine(string.Format("File: \"{0}\" Does Not Have Matching Loader", OpenDoc.Path));
-                return false;
-            }
-
             var fileStream = File.Create(path);
             using (ZipArchive archive = new ZipArchive(fileStream, ZipArchiveMode.Create))
             {
                 var entry = archive.CreateEntry("RobotDocument.robot.json", CompressionLevel.Optimal);
                 var entryStream = entry.Open();
 
-                var serializeString = thisLoader.Serialize(OpenDoc);
+                var serializeString = GetOpenDocJson();
+                if (null == serializeString)
+                    return false;
                 var byteArray = Encoding.UTF8.GetBytes(serializeString);
 
                 //save the document in the stream
