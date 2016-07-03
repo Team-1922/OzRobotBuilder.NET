@@ -4,25 +4,39 @@ using System.IO;
 
 namespace CommonLib
 {
+    /// <summary>
+    /// Documents are not responsible for their own loading and saving.
+    /// Separate classes are responsible for serializing each kind of document
+    /// </summary>
     public interface IDocumentSerializer
     {
-        //this should a SINGLE file extension which this loader can load (i.e "txt" for .txt files or "rmap.xml" for .rmap.xml files)
+        /// <summary>
+        /// This should be a single file extention which this loader can load (i.e. "txt" for .txt files or "rmap.xml" for .rmap.xml files)
+        /// </summary>
+        /// <returns>the file extention which this load can load</returns>
         string GetFormat();
+        /// <summary>
+        /// Deserializes a document from a stream of input data
+        /// </summary>
+        /// <param name="inputData">the input stream</param>
+        /// <returns>A initialized document if deserialization was successful; null if not</returns>
         Document Deserialize(StreamReader inputData);
-
-        //returning a string here is OK for small files (which are the only ones we're dealing with)
+        /// <summary>
+        /// Serializes a document into a string
+        /// </summary>
+        /// <param name="doc">the document to serialize</param>
+        /// <returns>a string representation of the document which is compatable with <see cref="Deserialize(StreamReader)"/></returns>
         string Serialize(Document doc);
     }
+    /// <summary>
+    /// Children of this interface can have additional member functions added to each object individually in the lua
+    /// </summary>
     public interface ILuaExt
     {
-        //this should return a formatted script with the extended class
-        //  features (extended features CAN be per-object; that's how they
-        //  are treated anyways)
+        /// <summary>
+        /// Get the formatted script with the extended object's features
+        /// </summary>
+        /// <returns>formatted script with the extended object's methods</returns>
         string GetFormattedExtScriptText();
-    }
-    public interface IDictionarySerialize
-    {
-        void Deserialize(Dictionary<string, string> data);
-        Dictionary<string, string> Serialize();
     }
 }
