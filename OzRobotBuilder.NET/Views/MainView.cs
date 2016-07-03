@@ -35,10 +35,6 @@ namespace OzRobotBuilder.NET.Views
             parent.Text = GetObjectName(obj);
             parent.Data = GetObjectType(obj);
 
-            //if this has no children, this it is NOT considered a valid item in the tree view
-            if (obj.Count == 0)
-                return null;
-
             //loop through the obj. all token should be pair<key, value>
             foreach (var token in obj)
             {
@@ -176,69 +172,6 @@ namespace OzRobotBuilder.NET.Views
                     RecreateTreeViewRecursive(child, viewNode.Nodes.Add(child.Key));
             }
         }
-
-        [Obsolete]
-        public object GetActiveTreeVieObject()
-        {
-            //validate the document type
-            if (!(Program.DocManager.OpenDoc is CommonLib.Model.Documents.RobotDocument))
-                return null;
-
-            //get the active tree view node
-            var node = treeView1.SelectedNode;
-
-            //TODO: eventually will these nodes have some data associated with them?
-            if (node.FullPath == "Subsystems" || node.FullPath == "Commands" || node.FullPath == "OperatorInterface")
-                return null;
-
-            //get the top most node to figure out where to get the data from
-            var topParentNode = node;
-            var tmpParent = topParentNode.Parent;
-            while(tmpParent != null)
-            {
-                topParentNode = tmpParent;
-                tmpParent = tmpParent.Parent;
-            }
-
-            //i wish this was a bit more generic
-            if(topParentNode.Name == "Subsystem")
-            {
-                foreach(var subsystem in (Program.DocManager.OpenDoc as RobotDocument).Subsystems)
-                {
-                    if (subsystem.Name == topParentNode.Name)
-                        return subsystem;
-                }
-            }
-            /*if (topParentNode.Name == "Commands")
-            {
-                foreach (var command in (Program.DocManager.OpenDoc as RobotDocument).Commands)
-                {
-                    if (command.Name == topParentNode.Name)
-                        return command;
-                }
-            }*/
-            /*if (topParentNode.Name == "OperatorInterface")
-            {
-                foreach (var subsystem in (Program.DocManager.OpenDoc as RobotDocument).Subsystems)
-                {
-                    if (subsystem.Name == topParentNode.Name)
-                        return subsystem;
-                }
-            }*/
-
-
-
-            return null;
-        }
-        public TreeNode GetActiveTreeViewNode()
-        {
-            /*var path = treeView1.SelectedNode.FullPath;
-            var openDoc = Program.DocManager.OpenDoc as RobotDocument;
-            var tree = openDoc.GetTree();
-            return tree.GetNodeFromPath(path);*/
-            return null;
-        }
-
 
         /// <summary>
         /// This updates the grid view with the selected tree view item
