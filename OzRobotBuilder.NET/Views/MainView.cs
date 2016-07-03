@@ -153,16 +153,19 @@ namespace OzRobotBuilder.NET.Views
         }
 
         /// <summary>
-        /// Updates the Grid View with the selected tree view node
+        /// Determines whether or not the tree view will update if this new node is selected
         /// </summary>
-        public void UpdateSelection()
+        /// <param name="newNode">the node to update with</param>
+        /// <returns>if the grid view should update with the new tree view selection</returns>
+        public bool WillUpdateSelection(TreeNode newNode)
         {
-            //if the new selected node has no children, select its parent instead
-            if (treeView1.SelectedNode.GetNodeCount(false) == 0)
-                treeView1.SelectedNode = treeView1.SelectedNode.Parent;
+            if (null == newNode)
+                return false;
 
-            //refresh the selection
-            RefreshGridView();
+            if (newNode.GetNodeCount(false) == 0)
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -205,6 +208,12 @@ namespace OzRobotBuilder.NET.Views
             //this might not be right
             dataGridView1.Rows.Clear();
 
+            if (null == activeNode)
+            {
+                Invalidate();
+                return;
+            }
+
             //add all of the children to the grid view but DO NOT recurse
             foreach(TreeNode node in activeNode.Nodes)
             {
@@ -239,9 +248,14 @@ namespace OzRobotBuilder.NET.Views
         {
             OpenFile();
         }
+        private void treeView1_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            if (!WillUpdateSelection(e.Node))
+                e.Cancel = true;
+        }
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            UpdateSelection();
+            RefreshGridView();
         }
         #endregion
     }
