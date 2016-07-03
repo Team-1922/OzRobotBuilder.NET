@@ -161,18 +161,6 @@ namespace OzRobotBuilder.NET.Views
             treeView1.ExpandAll();
         }
 
-        internal void RecreateTreeViewRecursive(DataTreeNode node, TreeNode viewNode)
-        {
-            if (null == node)
-                return;
-            
-            foreach(var child in node)
-            {
-                if(child.Count != 0)
-                    RecreateTreeViewRecursive(child, viewNode.Nodes.Add(child.Key));
-            }
-        }
-
         /// <summary>
         /// This updates the grid view with the selected tree view item
         /// </summary>
@@ -248,6 +236,10 @@ namespace OzRobotBuilder.NET.Views
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            //if the new selected node has no children, select its parent instead
+            if (e.Node.GetNodeCount(false) == 0)
+                treeView1.SelectedNode = e.Node.Parent;
+
             //refresh the selection
             RefreshGridView();
         }
