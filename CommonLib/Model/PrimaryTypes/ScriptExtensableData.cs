@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model.PrimaryTypes
 {
-    public class ScriptExtensableData : ITreeNodeSerialize
+    public class ScriptExtensableData //: ITreeNodeSerialize
     {
         public string ScriptExtension;
         public string OverriddenMethods;
 
-        public DataTreeNode GetTree()
+       /* public DataTreeNode GetTree()
         {
             var root = new DataTreeNode("ScriptExtensableData", typeof(ScriptExtensableData).ToString(), true, true);
             root.Add(new DataTreeNode("ScriptExtension", ScriptExtension));
@@ -39,6 +39,6 @@ namespace CommonLib.Model.PrimaryTypes
                 return false;
             }
             return true;
-        }
+        }*/
     }
 }

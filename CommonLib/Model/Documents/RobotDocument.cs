@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model.Documents
 {
-    public class RobotDocument : Document, ITreeNodeSerialize
+    public class RobotDocument : Document//, ITreeNodeSerialize
     {
+        public string Name { get; private set; } = "RobotDocument";
         public List<OzSubsystemData> Subsystems = new List<OzSubsystemData>();
-        List<OzCommandData> Commands = new List<OzCommandData>();
+        public List<OzCommandData> Commands = new List<OzCommandData>();
 
-        public bool DeserializeTree(DataTreeNode node)
+        /*public bool DeserializeTree(DataTreeNode node)
         {
             //this should be the parent of the whole tree
             if (node.Key != "RobotDocument" || node.Data != "RobotDocument")
@@ -49,6 +50,6 @@ namespace CommonLib.Model.Documents
             //add the commands (eventually)
 
             return root;
-        }
+        }*/
     }
 }

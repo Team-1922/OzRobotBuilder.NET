@@ -85,5 +85,17 @@ namespace CommonLib.Model.PrimaryTypes
             public int AllowableCloseLoopError;
             public PIDSourceType SourceType;
         }
+
+
+       /* public virtual DataTreeNode GetTree()
+        {
+            var root = new DataTreeNode(Name, )
+            var momtorControllerNode = base.GetTree();
+        }
+
+        public virtual bool UpdateValue(string path, string value)
+        {
+
+        }*/
     }
 }

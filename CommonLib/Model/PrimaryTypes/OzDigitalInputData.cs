@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model.PrimaryTypes
 {
-    public class OzDigitalInputData : ITreeNodeSerialize
+    public class OzDigitalInputData
     {
         public uint DigitalInputId;
 
         public string Name = "OzDigitalInputData";
 
-        public bool DeserializeTree(DataTreeNode node)
+        /*public bool DeserializeTree(DataTreeNode node)
         {
             if (typeof(OzDigitalInputData).ToString() != node.Data)
                 return false;
@@ -40,6 +40,6 @@ namespace CommonLib.Model.PrimaryTypes
             var root = new DataTreeNode(Name, typeof(OzDigitalInputData).ToString(), true, true);
             root.Add(new DataTreeNode("DigitalInputId", DigitalInputId.ToString()));
             return root;
-        }
+        }*/
     }
 }

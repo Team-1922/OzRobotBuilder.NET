@@ -11,7 +11,7 @@ namespace CommonLib.Model.PrimaryTypes
 	 * 
 	 * 
 	 */
-    public class OzQuadEncoderData : ITreeNodeSerialize
+    public class OzQuadEncoderData //: ITreeNodeSerialize
     {
 		//while having a 'UnitsPerRotation' value is nice, this piece of data is usually up to emprical testing, therefore
 		//		a second attribute for 'UnitsPerRotation' would be pointless
@@ -28,7 +28,7 @@ namespace CommonLib.Model.PrimaryTypes
 
         public string Name = "OzQuadEncoderData";
 
-        public bool DeserializeTree(DataTreeNode node)
+        /*public bool DeserializeTree(DataTreeNode node)
         {
             if (typeof(OzQuadEncoderData).ToString() != node.Data)
                 return false;
@@ -60,6 +60,6 @@ namespace CommonLib.Model.PrimaryTypes
             root.Add(new DataTreeNode("DigitalIn0", DigitalIn0.ToString()));
             root.Add(new DataTreeNode("DigitalIn1", DigitalIn1.ToString()));
             return root;
-        }
+        }*/
     }
 }

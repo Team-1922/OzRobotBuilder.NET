@@ -13,16 +13,14 @@ namespace CommonLib
         private readonly Dictionary<string, DataTreeNode> _children =
                                             new Dictionary<string, DataTreeNode>();
 
-        public string Key { get; set; }
+        public string Key { get; private set; }
         public string Data { get; set; }
-        public bool KeyReadOnly = true;//this and the value below it represent whether they can be modified by the USER
         public bool DataReadOnly = false;
         public DataTreeNode Parent { get; private set; }
-        public DataTreeNode(string key, string data, bool keyReadOnly = true, bool dataReadOnly = false)
+        public DataTreeNode(string key, string data, bool dataReadOnly = false)
         {
             this.Key = key;
             this.Data = data;
-            KeyReadOnly = keyReadOnly;
             DataReadOnly = dataReadOnly;
         }
         public DataTreeNode GetChild(string key)

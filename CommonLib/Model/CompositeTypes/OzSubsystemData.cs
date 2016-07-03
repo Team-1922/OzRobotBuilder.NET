@@ -10,7 +10,7 @@ using CommonLib.Interfaces;
 
 namespace CommonLib.Model.CompositeTypes
 {
-    public class OzSubsystemData : ITreeNodeSerialize
+    public class OzSubsystemData //: ITreeNodeSerialize
     {
         public List<OzMotorControllerData> PWMMotorControllers = new List<OzMotorControllerData>();
         //
@@ -28,10 +28,17 @@ namespace CommonLib.Model.CompositeTypes
         public ScriptExtensableData ScriptExtData = new ScriptExtensableData();
 
         public string Name = "SubsystemName";
-        
+
+        /*
         public DataTreeNode GetTree()
         {
-            DataTreeNode root = new DataTreeNode(Name, typeof(OzSubsystemData).ToString(), true, true);
+            //make sure none of the children have the same name
+            if(!AssertUniqueChildNames())
+            {
+
+            }
+
+            DataTreeNode root = new DataTreeNode(Name, GetType().ToString(), true, true);
             foreach(var pwmMotor in PWMMotorControllers)
             {
                 root.Add(pwmMotor.GetTree());
@@ -62,9 +69,44 @@ namespace CommonLib.Model.CompositeTypes
             return root;
         }
 
-        public bool DeserializeTree(DataTreeNode node)
+        private bool AssertUniqueChildNames()
         {
-            if (node.Data != typeof(OzSubsystemData).ToString())
+            Dictionary<string, int> usedNames = new Dictionary<string, int>();
+            try
+            {
+                foreach (var pwmMotor in PWMMotorControllers)
+                {
+                    usedNames.Add(pwmMotor.Name, 0);
+                }
+                foreach (var srx in TalonSRXs)
+                {
+                    usedNames.Add(srx.Name, 0);
+                }
+                foreach (var analogInput in AnalogInputDevices)
+                {
+                    usedNames.Add(analogInput.Name, 0);
+                }
+                foreach (var quadEncoder in QuadEncoders)
+                {
+                    usedNames.Add(quadEncoder.Name, 0);
+                }
+                foreach (var digitalInput in DigitalInputs)
+                {
+                    usedNames.Add(digitalInput.Name, 0);
+                }
+            }
+            catch
+            {
+                //there were two children with the same name
+                return false;
+            }
+
+            return true;
+        }
+
+        /*public bool DeserializeTree(DataTreeNode node)
+        {
+            if (node.Data != GetType().ToString() && node.KeyReadOnly && node.DataReadOnly)
                 return false;
             if (Name != node.Key)
                 return false;
@@ -79,5 +121,46 @@ namespace CommonLib.Model.CompositeTypes
 
             return true;
         }
+
+        public bool UpdateValue(string path, string value)
+        {
+            var strings = path.Split(new char[] { Path.DirectorySeparatorChar }, 2, StringSplitOptions.None);
+            if (strings.Length != 2)
+                return false;
+            if (strings[0] != Name)
+                return false;
+
+            foreach(var pwm in PWMMotorControllers)
+            {
+                if (pwm.UpdateValue(strings[1], value))
+                    return true;
+            }
+            foreach (var pwm in TalonSRXs)
+            {
+                if (pwm.UpdateValue(strings[1], value))
+                    return true;
+            }
+
+            foreach (var pwm in AnalogInputDevices)
+            {
+                if (pwm.UpdateValue(strings[1], value))
+                    return true;
+            }
+
+            foreach (var pwm in QuadEncoders)
+            {
+                if (pwm.UpdateValue(strings[1], value))
+                    return true;
+            }
+
+            foreach (var pwm in DigitalInputs)
+            {
+                if (pwm.UpdateValue(strings[1], value))
+                    return true;
+            }
+
+            return false;
+        }
+        */
     }
 }

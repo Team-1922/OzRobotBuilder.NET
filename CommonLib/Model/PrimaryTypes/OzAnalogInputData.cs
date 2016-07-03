@@ -11,7 +11,7 @@ namespace CommonLib.Model.PrimaryTypes
      * This is more complicated than the potentiometer (and the potentiometer might be merged into this) because of polling rates, accumulation, etc.
      * 
      */
-    public class OzAnalogInputData : ITreeNodeSerialize
+    public class OzAnalogInputData// : ITreeNodeSerialize
     {
         public static double GlobalSampleRate;
 
@@ -28,7 +28,7 @@ namespace CommonLib.Model.PrimaryTypes
         //in normalized analog units
         public double SensorOffset;
 
-        public virtual DataTreeNode GetTree()
+        /*public virtual DataTreeNode GetTree()
         {
             var root = new DataTreeNode(Name, typeof(OzAnalogInputData).ToString(), true, true);
             root.Add(new DataTreeNode("AnalogInputId", AnalogInputId.ToString()));
@@ -69,6 +69,6 @@ namespace CommonLib.Model.PrimaryTypes
                 return false;
             }
             return true;
-        }
+        }*/
     }
 }

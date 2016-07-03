@@ -11,7 +11,7 @@ namespace CommonLib.Model.PrimaryTypes
      * PID Configuration for software PID Controller (use OzSRXPIDControllerData for SRX PID configuration)
      * 
      */
-    public class OzPIDControllerData : ITreeNodeSerialize
+    public class OzPIDControllerData //: ITreeNodeSerialize
     {
         public double P;
         public double I;
@@ -23,7 +23,7 @@ namespace CommonLib.Model.PrimaryTypes
         //for use with continuous rotation potentiometers        
         public bool Continuous;
 
-        public DataTreeNode GetTree()
+        /*public DataTreeNode GetTree()
         {
             var root = new DataTreeNode("OzPIDControllerData", typeof(OzPIDControllerData).ToString(), true, true);
             root.Add(new DataTreeNode("P", P.ToString()));
@@ -59,6 +59,6 @@ namespace CommonLib.Model.PrimaryTypes
                 return false;
             }
             return true;
-        }
+        }*/
     }
 }

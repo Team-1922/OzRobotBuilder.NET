@@ -1,27 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CommonLib.Model.PrimaryTypes
 {
-    public class OzMotorControllerData : ITreeNodeSerialize
+    public class OzMotorControllerData //: ITreeNodeSerialize
     {
         public string Name = "OzMotorControllerData";
         public uint MotorId;
 
-        public virtual DataTreeNode GetTree()
+        /*public virtual DataTreeNode GetTree()
         {
-            return new DataTreeNode(Name, MotorId.ToString());
+            var root = new DataTreeNode(Name, GetType().ToString());
+            root.Add(new DataTreeNode("MotorId", MotorId.ToString()));
+            return root;
         }
-        public virtual bool DeserializeTree(DataTreeNode node)
+
+        public virtual bool UpdateValue(string path, string value)
         {
-            if (node.Key != Name)
+            var strings = path.Split(new char[] { Path.DirectorySeparatorChar }, 2, StringSplitOptions.None);
+            if (strings.Length != 2)
+                return false;
+            if (strings[0] != Name)
+                return false;
+            if (path != "MotorId")
                 return false;
 
-            bool success = uint.TryParse(node.Data, out MotorId);
-            return success;
-        }
+            return uint.TryParse(value, out MotorId);
+        }*/
     }
 }

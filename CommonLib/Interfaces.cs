@@ -25,9 +25,19 @@ namespace CommonLib
         void Deserialize(Dictionary<string, string> data);
         Dictionary<string, string> Serialize();
     }
-    public interface ITreeNodeSerialize
-    {
-        DataTreeNode GetTree();
-        bool DeserializeTree(DataTreeNode node);
-    }
+    //public interface ITreeNodeSerialize
+    //{
+        /// <summary>
+        /// Gets a tree of the implementor; used recursively; implementor responsible for creating its own node
+        /// </summary>
+        /// <returns>The tree of the implementor</returns>
+        //DataTreeNode GetTree();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path">The directory-style path of the item in the tree to update, the implementer of this interface is responsible for stripping off its own layer</param>
+        /// <param name="value">The Value to update @path with</param>
+        /// <returns>whether or not a valid item was found at @path</returns>
+        //bool UpdateValue(string path, string value);
+    //}
 }
