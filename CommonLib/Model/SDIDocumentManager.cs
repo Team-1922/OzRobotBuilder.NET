@@ -8,24 +8,43 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model
 {
+    /// <summary>
+    /// A Single Document manager
+    /// </summary>
     public abstract class SDIDocumentManager
     {
-        protected List<IDocumentSerializer> DocSerializers = new List<IDocumentSerializer>();
+        /// <summary>
+        /// The document serializers
+        /// </summary>
+        public List<IDocumentSerializer> DocSerializers { get; private set; } = new List<IDocumentSerializer>();
+        /// <summary>
+        /// The single open document
+        /// </summary>
         public Document OpenDoc { get; set; }
-
+        /// <summary>
+        /// Loads a document from a given file path
+        /// </summary>
+        /// <param name="path">the location of the document to load</param>
+        /// <returns>whether or not the document loaded successfully</returns>
         protected abstract bool LoadDocument(string path);
         /// <summary>
         /// Save the Open Document
         /// </summary>
-        /// <param name="path">The path to save the document to; left blank if saving to {@Link OpenDoc.Path}</param>
+        /// <param name="path">The path to save the document to; left blank if saving to <see cref="Document.Path"/></param>
         /// <returns>success of the save</returns>
         public abstract bool Save(string path);
-        //public abstract StreamReader GetFileStream(string filePath);
-
+        /// <summary>
+        /// Close the Open document
+        /// </summary>
         public void CloseDocument()
         {
             OpenDoc = null;
         }
+        /// <summary>
+        /// Open a document at a given path
+        /// </summary>
+        /// <param name="path">The path of the document to open</param>
+        /// <returns>whether or not the document opened successfully</returns>
         public bool OpenDocument(string path)
         {
             CloseDocument();
@@ -33,10 +52,11 @@ namespace CommonLib.Model
                 return false;
             return LoadDocument(path);
         }
-        public void RegisterDocSerializer(IDocumentSerializer loader)
-        {
-            DocSerializers.Add(loader);
-        }
+        /// <summary>
+        /// Get the document serializer for the file extention given
+        /// </summary>
+        /// <param name="filePath">the path to the file to find the loader for</param>
+        /// <returns>the document serializer needed to load a document</returns>
         public IDocumentSerializer GetAppropriateDocSerializer(string filePath)
         {
             //use this so directory names CAN have periods
@@ -63,7 +83,11 @@ namespace CommonLib.Model
 
             return null;
         }
-        //this WILL overwrite the zip file
+        /// <summary>
+        /// Save whatever document manager is being used into a zip file
+        /// </summary>
+        /// <param name="zipLoc">the location of the zip file to save to</param>
+        /// <returns>the success of the save</returns>
         public bool SaveZip(string zipLoc)
         {
             ZipDocumentManager thisZip = this as ZipDocumentManager;
@@ -72,6 +96,11 @@ namespace CommonLib.Model
 
             return thisZip.Save(zipLoc);
         }
+        /// <summary>
+        /// Imports a zip file into whatever document manager this is
+        /// </summary>
+        /// <param name="zipLoc">the location of the zip file to load from</param>
+        /// <returns>the success of the import</returns>
         public bool ImportZip(string zipLoc)
         {
             //if THIS is already a zip doc manager, then do nothing, becuase we are only in zip mode on the deployed bot
@@ -90,6 +119,10 @@ namespace CommonLib.Model
             //Save the project with whichever loader THIS currently is
             return Save(zipLoc);
         }
+        /// <summary>
+        /// Serializes the open document into a json format
+        /// </summary>
+        /// <returns>the json representation of the open document</returns>
         public string GetOpenDocJson()
         {
             //serialize the data

@@ -7,14 +7,18 @@ using System.Text;
 
 namespace CommonLib.Model
 {
-    /*
-     * 
-     * This Document Manager is used in the "RobotModel" and any other application which deals with the compiled .zip of the resouces
-     * 
-     */
+    /// <summary>
+    /// Document manager to be used with zip compressed situations
+    /// </summary>
     public class ZipDocumentManager : SDIDocumentManager
     {
-
+        /// <summary>
+        /// Loads the document from the given zip file
+        /// NOTE: this does not allow the searching for a file within a zip archive.  
+        /// It requires the zip archive to have a file named "RobotDocument.robot.json" in the root of the archive
+        /// </summary>
+        /// <param name="path">the path to load the zip file from</param>
+        /// <returns>the success of the load</returns>
         protected override bool LoadDocument(string path)
         {
             bool retVal = true;
@@ -61,7 +65,11 @@ namespace CommonLib.Model
 
             return retVal;
         }
-
+        /// <summary>
+        /// saves the open document into the root of a new zip archive
+        /// </summary>
+        /// <param name="path">the location to save the zip archive</param>
+        /// <returns>the success of the save</returns>
         public override bool Save(string path)
         {
             var fileStream = File.Create(path);

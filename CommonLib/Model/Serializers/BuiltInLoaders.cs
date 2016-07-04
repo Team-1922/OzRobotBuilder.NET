@@ -16,7 +16,7 @@ namespace CommonLib.Model.Serializers
 
         public static void RegisterLoaders(SDIDocumentManager manager)
         {
-            manager.RegisterDocSerializer(RobotLoader);
+            manager.DocSerializers.Add(RobotLoader);
         }
     }
 }

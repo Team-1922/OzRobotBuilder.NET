@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model
 {
+    /// <summary>
+    /// A document manager for uncompressed folers
+    /// </summary>
     public class FolderDocumentManager : SDIDocumentManager
     {
-        /*
-         * 
-         * TODO: Exception handling here needs to be improved
-         * 
-         */
+        // TODO: Exception handling here needs to be improved
+        /// <summary>
+        /// Saves the open document
+        /// </summary>
+        /// <param name="path">the path to save the document to</param>
+        /// <returns>the success of the save</returns>
         public override bool Save(string path)
         {
             if (path == "")
@@ -56,7 +60,11 @@ namespace CommonLib.Model
             }
             return retVals;
         }
-
+        /// <summary>
+        /// Load the document from the specified path
+        /// </summary>
+        /// <param name="path">the path to load from</param>
+        /// <returns>the success of the loading</returns>
         protected override bool LoadDocument(string path)
         {
             //standard stuff
