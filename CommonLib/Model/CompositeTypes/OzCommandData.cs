@@ -9,16 +9,73 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model.CompositeTypes
 {
-    /*
-     * 
-     * NOTE: any extra member variables the script needs as part of the command should be stored in the <CommandName>_ext table
-     * 
-     */
-    public class OzCommandData : ILuaExt
+    /// <summary>
+    /// The data to create a dynamically loaded command
+    /// </summary>
+    public class OzCommandData
     {
+        /// <summary>
+        /// The name of the command
+        /// </summary>
+        public string Name;
+        /// <summary>
+        /// The lua script for the command constructor
+        /// </summary>
+        public string Construct;
+        /// <summary>
+        /// The lua script for the command Init
+        /// </summary>
+        public string Init;
+        /// <summary>
+        /// The lua script for the command Execute
+        /// </summary>
+        public string Execute;
+        /// <summary>
+        /// The lua script for the command IsFinished
+        /// </summary>
+        public string IsFinished;
+        /// <summary>
+        /// The lua script for the command End
+        /// </summary>
+        public string End;
+        /// <summary>
+        /// The lua script for the command Interrupted
+        /// </summary>
+        public string Interrupted;
+        /// <summary>
+        /// The lua script for the commands additional methods not specified above
+        /// </summary>
+        public string AddedMethods;
+        //TODO: should we be using this?
+        //public ScriptExtensableData ExtensableScriptData; 
+    }
+
+    /// <summary>
+    /// The data to create a dynamically loaded command.
+    /// Any extra member variables the script needs as part of the command should be stored in the <see cref="Name"/>_ext table.
+    /// This also contains the methods of using the command.  This goes beyond just the raw data, however it does not include any robot-specific code so it is fine.
+    /// </summary>
+    /* public class OzCommand : ILuaExt
+    {
+        /// <summary>
+        /// The data for the script override
+        /// </summary>
         ScriptOverride Override;
+        /// <summary>
+        /// The data for the extra methods added to this command
+        /// </summary>
         private string ExtraMethods = "";
+        /// <summary>
+        /// The name of this command
+        /// </summary>
+        public string Name = "OzCommandData";
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="luaState"></param>
+        /// <param name="overrideMethodsScript"></param>
+        /// <param name="extraMethodsScript"></param>
         public OzCommandData(ref OzLuaState luaState, string overrideMethodsScript, string extraMethodsScript)
         {
             Override = new ScriptOverride(ref luaState);
@@ -82,5 +139,5 @@ namespace CommonLib.Model.CompositeTypes
         {
             return ExtraMethods;
         }
-    }
+    }*/
 }
