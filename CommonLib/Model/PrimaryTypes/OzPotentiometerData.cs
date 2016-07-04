@@ -6,20 +6,23 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model.PrimaryTypes
 {
-    /*
-     * 
-     * All potentiometers will return a value from 0 to 1 (normalized potentiometer units) no matter what
-     * 
-     */
+    /// <summary>
+    /// The data for a potentiometer
+    /// All potentiometers will return a value between 0 and 1 (normalized potentiometer units)
+    /// </summary>
     public class OzPotentiometerData
     {
-        //the ratio defined as output units per normalized potentiometer unit
+        /// <summary>
+        /// The ratio defined as output units per normalized potentiometer unit
+        /// </summary>
         public double ConversionRatio;
-
-        //the sensor offset (in normalized potentiometer units); the new "zero point" of the sensor
+        /// <summary>
+        /// The sensor offset (in normalized potentiometer units); the new "zero point" of the sensor
+        /// </summary>
         public double OffsetValue;
-
-        //the Analog In which this potentiometer is plugged into (this is always -1 if plugged into TalonSRX)
+        /// <summary>
+        /// The analog input this potentiometer is plugged into (this is always -1 if plugged into a TalonSRX)
+        /// </summary>
         public int AnalogInID;
     }
 }

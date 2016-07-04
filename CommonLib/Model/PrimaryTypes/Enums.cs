@@ -7,98 +7,97 @@ using System.Threading.Tasks;
 namespace CommonLib.Model.PrimaryTypes
 {       
     //Is there some way to have an equality between these below enums and the ones in the WPI lib without importing the WPIlib?
-
-    //
-    // Summary:
-    //     Mode for determining how the WPILib.Interfaces.ICANSpeedController is controlled,
-    //     used internally.
+    
+    /// <summary>
+    /// Mode for determining how the WPILib.Interfaces.ICANSpeedController is controlled,
+    /// used internally.
+    /// </summary>
     public enum ControlMode
     {
-        //
-        // Summary:
-        //     Percent Vbus Mode (Similar to PWM).
+        /// <summary>
+        /// Percent Vbus Mode (Similar to PWM).
+        /// </summary>
         PercentVbus = 0,
-        //
-        // Summary:
-        //     Runs the controller in Closed Loop Position mode.
+        /// <summary>
+        /// Runs the controller in Closed Loop Position mode.
+        /// </summary>
         Position = 1,
-        //
-        // Summary:
-        //     Runs the controller in Closed Loop Speed mode.
+        /// <summary>
+        /// Runs the controller in Closed Loop Speed mode.
+        /// </summary>
         Speed = 2,
-        //
-        // Summary:
-        //     Runs the controller in Closed Loop Current mode.
+        /// <summary>
+        /// Runs the controller in Closed Loop Current mode.
+        /// </summary>
         Current = 3,
-        //
-        // Summary:
-        //     Runs the controller by directly setting the output voltage.
+        /// <summary>
+        /// Runs the controller by directly setting the output voltage.
+        /// </summary>
         Voltage = 4,
-        //
-        // Summary:
-        //     Follower Mode (sets the controller to follow another controller).
+        /// <summary>
+        /// Follower Mode (sets the controller to follow another controller).
+        /// </summary>
         Follower = 5,
-        //
-        // Summary:
-        //     Runs the controller in Motion Profile mode.
+        /// <summary>
+        /// Runs the controller in Motion Profile mode.
+        /// </summary>
         MotionProfile = 6,
-        //
-        // Summary:
-        //     If this mode is set, the controller is disabled.
+        /// <summary>
+        /// If this mode is set, the controller is disabled.
+        /// </summary>
         Disabled = 15
     }
-    //
-    // Summary:
-    //     Determines how the WPILib.Interfaces.ICANSpeedController behaves when sending
-    //     a zero signal.
+    /// <summary>
+    /// Determines how the WPILib.Interfaces.ICANSpeedController behaves when sending
+    /// a zero signal.
+    /// </summary>
     public enum NeutralMode
     {
-        //
-        // Summary:
-        //     Use the WPILib.Interfaces.NeutralMode that is set by the jumper wire on the CAN
-        //     device.
+        /// <summary>
+        /// Use the WPILib.Interfaces.NeutralMode that is set by the jumper wire on the CAN
+        /// </summary>
         Jumper = 0,
-        //
-        // Summary:
-        //     Stop the motor's rotation by applying a force.
+        /// <summary>
+        /// Stop the motor's rotation by applying a force.
+        /// </summary>
         Brake = 1,
-        //
-        // Summary:
-        //     Do not attempt to stop the motor. Instead allow it to coast to a stop without
-        //     applying resistance.
+        /// <summary>
+        /// Do not attempt to stop the motor.  Instead allow it to coast to a stop without
+        /// applying resistance.
+        /// </summary>
         Coast = 2
     }
-    //
-    // Summary:
-    //     The PID source type for this PID source.
+    /// <summary>
+    /// The PID source type for this PID source.
+    /// </summary>
     public enum PIDSourceType
     {
-        //
-        // Summary:
-        //     Use displacement as the source.
+        /// <summary>
+        /// Use displacement as the source.
+        /// </summary>
         Displacement = 0,
-        //
-        // Summary:
-        //     Use rate as the source
+        /// <summary>
+        /// Use rate as the source.
+        /// </summary>
         Rate = 1
     }
-    //
-    // Summary:
-    //     Determines which sensor to use for position reference.
+    /// <summary>
+    /// Determines which sensor to use for position reference.
+    /// </summary>
     public enum LimitMode
     {
-        //
-        // Summary:
-        //     Only use switches for limits
+        /// <summary>
+        /// Only use switchces for limits
+        /// </summary>
         SwitchInputsOnly = 0,
-        //
-        // Summary:
-        //     Use both switches and soft limits
+        /// <summary>
+        /// Use both switches and soft limits
+        /// </summary>
         SoftPositionLimits = 1,
-        //
-        // Summary:
-        //     Disable switches and disable soft limits. Only valid for methods on WPILib.CANTalon
-        //     objects.
+        /// <summary>
+        /// Disable switches and disable soft limits.  Only valid for methods on WPILib.CANTalon
+        /// objects.
+        /// </summary>
         SrxDisableSwitchInputs = 2
     }
 }

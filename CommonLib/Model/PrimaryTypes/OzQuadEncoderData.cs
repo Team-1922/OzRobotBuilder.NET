@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Model.PrimaryTypes
 {
-	/*
-	 * 
-	 * 
-	 * 
-	 */
+    /// <summary>
+    /// The data for a quadrature encoder
+    /// </summary>
     public class OzQuadEncoderData
     {
-		//while having a 'UnitsPerRotation' value is nice, this piece of data is usually up to emprical testing, therefore
-		//		a second attribute for 'UnitsPerRotation' would be pointless
+        /// <summary>
+        /// The ratio defined as output units per encoder unit
+        /// </summary>
         public double ConversionRatio;
-
-		//This value could exist, but in the context encoders are usually used, it would be pointless
-        //public double InitialOffset;
-
-		//the digital in location of the first three encoder wires (this is -1 on TalonSRX)
+        /// <summary>
+        /// The first digital input used (where the three wires are plugged into; -1 on TalonSRX)
+        /// </summary>
         public uint DigitalIn0;
-
-		//the digital in location of the final encoder wire (this is -1 on TalonSRX)
+        /// <summary>
+        /// The second digital input used (where the one wire is plugged into; -1 on TalonSRX)
+        /// </summary>
         public uint DigitalIn1;
-
+        /// <summary>
+        /// The name of this encoder
+        /// </summary>
         public string Name = "OzQuadEncoderData";
     }
 }

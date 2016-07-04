@@ -2,14 +2,15 @@
 
 namespace CommonLib.Interfaces
 {
-    /*
-     * 
-     * The Document in the MVC framework
-     * 
-     */
+    /// <summary>
+    /// The base document class in the MVC framework
+    /// </summary>
     public abstract class Document
     {
-        //the relative path from within the parent directory
+        /// <summary>
+        /// the path of this file in the directory structure
+        /// TODO: this is kind of weird in compressed document managers
+        /// </summary>
         public string Path;
     }
 }

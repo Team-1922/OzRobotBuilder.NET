@@ -50,12 +50,13 @@ namespace CommonLib.Model.CompositeTypes
         //public ScriptExtensableData ExtensableScriptData; 
     }
 
+    /*
     /// <summary>
     /// The data to create a dynamically loaded command.
     /// Any extra member variables the script needs as part of the command should be stored in the <see cref="Name"/>_ext table.
     /// This also contains the methods of using the command.  This goes beyond just the raw data, however it does not include any robot-specific code so it is fine.
     /// </summary>
-    /* public class OzCommand : ILuaExt
+    public class OzCommand : ILuaExt
     {
         /// <summary>
         /// The data for the script override
