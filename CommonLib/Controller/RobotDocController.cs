@@ -1,6 +1,7 @@
 ﻿using CommonLib.Interfaces;
 using CommonLib.Model;
 using CommonLib.Model.Documents;
+using CommonLib.Model.Serializers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -35,7 +36,6 @@ namespace CommonLib.Controller
         public abstract void OpenFile();
         /// <summary>
         /// Updates the open document with the given path and value
-        /// TODO: test this becuase it is quite a large piece of code
         /// </summary>
         /// <param name="path">the path to the value to update; (bypasses container types with a "name" attribute of each object within it)</param>
         /// <param name="value">the value to update the variable at "path" with</param>
@@ -72,9 +72,12 @@ namespace CommonLib.Controller
             {
                 //TODO: log something
             }
+            //now update the document
+            var serializer = App.DocumentManager.GetAppropriateDocSerializer("blah.robot.json") as JsonLoader;
+            App.DocumentManager.OpenDoc = serializer.Deserialize(obj.ToString());
         }
         /// <summary>
-        /// TODO: test this becuase it is quite a large piece of code
+        /// recursive portion of <see cref="UpdateDocument(string, string)"/>
         /// </summary>
         /// <param name="obj">the next object to look down the tree of</param>
         /// <param name="path">the path with <paramref name="obj"/>'s name already stripped off</param>
@@ -111,6 +114,7 @@ namespace CommonLib.Controller
                             if (subToken.Key == "Name")
                             {
                                 name = subToken.Value.ToString();
+                                break;
                             }
                         }
                         //if this name is the object name we are looking for, then use it
@@ -127,8 +131,11 @@ namespace CommonLib.Controller
                     //if token.Value is not nested
                     if(objName == token.Key)
                     {
-                        var writer = ((JObject)token.Value).CreateWriter();
-                        writer.WriteValue(value);
+                        if (!token.Value.HasValues)
+                        {
+                            obj[token.Key] = value;
+                            return true;
+                        }
                     }
                 }
 
