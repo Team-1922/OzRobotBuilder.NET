@@ -73,7 +73,7 @@ namespace CommonLib.Controller
                 //TODO: log something
             }
             //now update the document
-            var serializer = App.DocumentManager.GetAppropriateDocSerializer("blah.robot.json") as JsonLoader;
+            var serializer = App.DocumentManager.GetAppropriateDocSerializer("blah.robot.json") as JsonLoader<RobotDocument>;
             App.DocumentManager.OpenDoc = serializer.Deserialize(obj.ToString());
         }
         /// <summary>
