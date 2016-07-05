@@ -24,7 +24,7 @@ namespace OzRobotBuilder.NET.Views
         /// <summary>
         /// Reference to Application
         /// </summary>
-        protected CommonLib.Application AppReference;
+        protected CommonLib.Application App;
         /// <summary>
         /// Constructor; initializes dialog components
         /// </summary>
@@ -121,7 +121,7 @@ namespace OzRobotBuilder.NET.Views
         /// <param name="app">application reference</param>
         public void Init(CommonLib.Application app)
         {
-            AppReference = app;
+            App = app;
         }
         /// <summary>
         /// does not need to do anything yet
@@ -156,7 +156,7 @@ namespace OzRobotBuilder.NET.Views
             }
             if (null == fullPath)
                 return;
-            AppReference.Controller.UpdateDocument(fullPath, newValue);
+            App.Controller.UpdateDocument(fullPath, newValue);
         }
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -172,7 +172,7 @@ namespace OzRobotBuilder.NET.Views
         }
         private void FileOpen(object sender, EventArgs e)
         {
-            AppReference.Controller.OpenFile();
+            App.Controller.OpenFile();
         }
         private void treeView1_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
@@ -184,5 +184,10 @@ namespace OzRobotBuilder.NET.Views
             RefreshGridView();
         }
         #endregion
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (App.Controller as KeyValueController).SaveDocument();
+        }
     }
 }

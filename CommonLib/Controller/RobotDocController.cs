@@ -35,7 +35,7 @@ namespace CommonLib.Controller
         /// </summary>
         public abstract void OpenFile();
         /// <summary>
-        /// Updates the open document with the given path and value
+        /// Updates the open document with the given tree path and value
         /// </summary>
         /// <param name="path">the path to the value to update; (bypasses container types with a "name" attribute of each object within it)</param>
         /// <param name="value">the value to update the variable at "path" with</param>

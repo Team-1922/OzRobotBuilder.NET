@@ -48,6 +48,15 @@ namespace OzRobotBuilder.NET
             //finally refresh the grid view and recreate the tree view
             (App.ViewManager.Views["MainView"] as MainView).RecreateTreeView(JsonToDictionaryTree(App.DocumentManager.GetOpenDocJson()));
         }
+
+        public void SaveDocument()
+        {
+            App.DocumentManager.Save("");
+        }
+        public void SaveDocumentAs()
+        {
+
+        }
     }
 }
  
