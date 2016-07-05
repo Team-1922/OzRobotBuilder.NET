@@ -42,7 +42,16 @@ namespace CommonLib.Model.Serializers
         /// <returns>the loaded document; null if failed</returns>
         public Document Deserialize(StreamReader inputData)
         {
-            DocumentName retData = JsonConvert.DeserializeObject<DocumentName>(inputData.ReadToEnd(), SerializerSettings);
+            return Deserialize(inputData.ReadToEnd());
+        }
+        /// <summary>
+        /// load the document from the given string
+        /// </summary>
+        /// <param name="inputData">the string to load the document from</param>
+        /// <returns>the loaded document; null if failed</returns>
+        public Document Deserialize(string inputData)
+        {
+            DocumentName retData = JsonConvert.DeserializeObject<DocumentName>(inputData, SerializerSettings);
 
             Document retDoc = retData as Document;
 
