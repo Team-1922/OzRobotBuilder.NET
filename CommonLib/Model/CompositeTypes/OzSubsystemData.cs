@@ -16,6 +16,10 @@ namespace CommonLib.Model.CompositeTypes
     public class OzSubsystemData
     {
         /// <summary>
+        /// The Name of the subsystem
+        /// </summary>
+        public string Name = "SubsystemName";
+        /// <summary>
         /// A List of Motor Controller Datas for PWM motor controllers
         /// </summary>
         public List<OzMotorControllerData> PWMMotorControllers = new List<OzMotorControllerData>();
@@ -47,10 +51,6 @@ namespace CommonLib.Model.CompositeTypes
         /// The data for overriding default methods of a subsystem and adding new ones
         /// </summary>
         public ScriptExtensableData ScriptExtData = new ScriptExtensableData();
-        /// <summary>
-        /// The Name of the subsystem
-        /// </summary>
-        public string Name = "SubsystemName";
         
     }
 }

@@ -12,6 +12,10 @@ namespace CommonLib.Model.PrimaryTypes
     public class OzQuadEncoderData
     {
         /// <summary>
+        /// The name of this encoder
+        /// </summary>
+        public string Name = "OzQuadEncoderData";
+        /// <summary>
         /// The ratio defined as output units per encoder unit
         /// </summary>
         public double ConversionRatio;
@@ -23,9 +27,5 @@ namespace CommonLib.Model.PrimaryTypes
         /// The second digital input used (where the one wire is plugged into; -1 on TalonSRX)
         /// </summary>
         public uint DigitalIn1;
-        /// <summary>
-        /// The name of this encoder
-        /// </summary>
-        public string Name = "OzQuadEncoderData";
     }
 }
