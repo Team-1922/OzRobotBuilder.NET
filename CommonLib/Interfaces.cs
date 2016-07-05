@@ -1,4 +1,5 @@
 ﻿using CommonLib.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -38,5 +39,25 @@ namespace CommonLib
         /// </summary>
         /// <returns>formatted script with the extended object's methods</returns>
         string GetFormattedExtScriptText();
+    }
+    /// <summary>
+    /// All views of an application must override this and be registered into the view manager
+    /// </summary>
+    public interface IView
+    {
+        /// <summary>
+        /// Call any initialization code here (also access to an <see cref="Application"/> reference is available)
+        /// </summary>
+        /// <param name="app">the reference to the application</param>
+        void Init(Application app);
+        /// <summary>
+        /// Called every update cycle;  do rendering and periodic updates here
+        /// </summary>
+        /// <param name="deltaTime">the time since the program started</param>
+        void Update(TimeSpan deltaTime);
+        /// <summary>
+        /// Cleanup any nonmanaged resources here or other things
+        /// </summary>
+        void Destroy();
     }
 }

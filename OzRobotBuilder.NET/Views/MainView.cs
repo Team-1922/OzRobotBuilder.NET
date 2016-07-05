@@ -151,7 +151,7 @@ namespace OzRobotBuilder.NET.Views
         /// <summary>
         /// Updates the Tree View with the newly opened Document
         /// </summary>
-        private void RecreateTreeView()
+        public void RecreateTreeView()
         {
 
             treeView1.Nodes.Clear();
@@ -191,28 +191,6 @@ namespace OzRobotBuilder.NET.Views
 
             return true;
         }
-        /// <summary>
-        /// Prompts the user to open a file and opens it
-        /// </summary>
-        public void OpenFile()
-        {
-
-            //pop open dialog
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            openFileDialog.Filter = "Robot Files (*.robot.json)|*.robot.json";
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                Program.DocManager.OpenDocument(openFileDialog.FileName);
-            }
-
-
-            //finally refresh the grid view and recreate the tree view
-            RecreateTreeView();
-        }        
         /// <summary>
         /// Updates the grid view with the selected tree view item
         /// </summary>
@@ -267,7 +245,7 @@ namespace OzRobotBuilder.NET.Views
         }
         private void FileOpen(object sender, EventArgs e)
         {
-            OpenFile();
+            Program.Controller.OpenFile();
         }
         private void treeView1_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {

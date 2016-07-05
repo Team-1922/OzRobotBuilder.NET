@@ -11,6 +11,7 @@ namespace OzRobotBuilder.NET
     {
         public static SDIDocumentManager DocManager = new FolderDocumentManager();
         public static KeyValueController Controller = new KeyValueController();
+        public static Views.MainView View;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -21,7 +22,8 @@ namespace OzRobotBuilder.NET
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Views.MainView());
+            View = new Views.MainView();
+            Application.Run(View);
         }
     }
 }
