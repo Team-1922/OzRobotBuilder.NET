@@ -68,7 +68,7 @@ namespace CommonLib.Controller
                 return;
 
 
-            if (!UpdateDocumentRecursive(obj, path, value))
+            if (!UpdateDocumentRecursive(obj, split[1], value))
             {
                 //TODO: log something
             }
@@ -109,7 +109,9 @@ namespace CommonLib.Controller
                         foreach(var subToken in subObject)
                         {
                             if (subToken.Key == "Name")
+                            {
                                 name = subToken.Value.ToString();
+                            }
                         }
                         //if this name is the object name we are looking for, then use it
                         if (name == objName)

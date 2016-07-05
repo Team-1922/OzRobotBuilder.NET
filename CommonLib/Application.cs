@@ -107,6 +107,9 @@ namespace CommonLib
                 Update(sw.Elapsed);
                 //TODO: something else?
             }
+
+            //loop over
+            ViewManager.Destroy();
         }
 
     }

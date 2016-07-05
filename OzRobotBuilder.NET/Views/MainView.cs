@@ -1,4 +1,5 @@
 ﻿using CommonLib;
+using CommonLib.Model;
 using CommonLib.Model.Documents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,8 +19,12 @@ namespace OzRobotBuilder.NET.Views
     /// <summary>
     /// The main view class 
     /// </summary>
-    public partial class MainView : Form
+    public partial class MainView : Form, IView
     {
+        /// <summary>
+        /// Reference to Application
+        /// </summary>
+        protected CommonLib.Application AppReference;
         /// <summary>
         /// Generate a <see cref="TreeNode"/> from a set of json text
         /// Credit: http://stackoverflow.com/questions/18769634/creating-tree-view-dynamically-according-to-json-text-in-winforms
@@ -151,21 +156,15 @@ namespace OzRobotBuilder.NET.Views
         /// <summary>
         /// Updates the Tree View with the newly opened Document
         /// </summary>
-        public void RecreateTreeView()
+        public void RecreateTreeView(KeyValueTreeNode rootNode)
         {
-
             treeView1.Nodes.Clear();
-
-            //get the tree from the document
-            var doc = Program.DocManager.OpenDoc as RobotDocument;
-            if (null == doc)
-                return;//we have an issue
 
             //var tree = doc.GetTree();
 
             //RecreateTreeViewRecursive(tree, treeView1.Nodes.Add(tree.Key));
 
-            treeView1.Nodes.Add(Json2Tree(Program.DocManager.GetOpenDocJson()));
+            treeView1.Nodes.Add(RecreateTreeViewRecurse(rootNode));
 
             //set the active node
             treeView1.SelectedNode = treeView1.Nodes[0];
@@ -175,6 +174,17 @@ namespace OzRobotBuilder.NET.Views
 
             //expand the tree view
             treeView1.ExpandAll();
+        }
+        private DictTreeNode RecreateTreeViewRecurse(KeyValueTreeNode node)
+        {
+            DictTreeNode parent = new DictTreeNode();
+            parent.Text = node.Key;
+            parent.Data = node.Value;
+            foreach(var child in node)
+            {
+                parent.Nodes.Add(RecreateTreeViewRecurse(child));
+            }
+            return parent;
         }
         /// <summary>
         /// Determines whether or not the tree view will update if this new node is selected
@@ -225,11 +235,49 @@ namespace OzRobotBuilder.NET.Views
             Invalidate();
         }
 
+        #region Interited From IView
+        /// <summary>
+        /// Just needs to configure the application reference
+        /// </summary>
+        /// <param name="app">application reference</param>
+        public void Init(CommonLib.Application app)
+        {
+            AppReference = app;
+        }
+        /// <summary>
+        /// does not need to do anything yet
+        /// </summary>
+        /// <param name="deltaTime">time since the program began</param>
+        public void Update(TimeSpan deltaTime)
+        {
+            //nothing
+        }
+        /// <summary>
+        /// Does not need to do anything
+        /// </summary>
+        public void Destroy()
+        {
+            //nothing
+        }
+        #endregion
+
         #region Event Handlers
 
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            Program.Controller.UpdateKey(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex - 1].Value as string, dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value as string);
+            string gridName = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex - 1].Value as string;
+            string newValue = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value as string;
+            string fullPath = null;
+            foreach(TreeNode node in treeView1.SelectedNode.Nodes)
+            {
+                if(node.Text == gridName)
+                {
+                    fullPath = node.FullPath;
+                }
+            }
+            if (null == fullPath)
+                return;
+            AppReference.Controller.UpdateDocument(fullPath, newValue);
         }
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -245,7 +293,7 @@ namespace OzRobotBuilder.NET.Views
         }
         private void FileOpen(object sender, EventArgs e)
         {
-            Program.Controller.OpenFile();
+            AppReference.Controller.OpenFile();
         }
         private void treeView1_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {

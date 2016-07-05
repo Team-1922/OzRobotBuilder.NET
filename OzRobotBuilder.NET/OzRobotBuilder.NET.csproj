@@ -69,6 +69,7 @@
     <Compile Include="KeyValueController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RobotBuilderApplication.cs" />
     <Compile Include="Views\DictTreeNode.cs" />
     <Compile Include="Views\MainView.cs">
       <SubType>Form</SubType>

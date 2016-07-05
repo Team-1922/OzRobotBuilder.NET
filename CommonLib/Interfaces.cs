@@ -53,8 +53,8 @@ namespace CommonLib
         /// <summary>
         /// Called every update cycle;  do rendering and periodic updates here
         /// </summary>
-        /// <param name="deltaTime">the time since the program started</param>
-        void Update(TimeSpan deltaTime);
+        /// <param name="time">the time since the program started</param>
+        void Update(TimeSpan time);
         /// <summary>
         /// Cleanup any nonmanaged resources here or other things
         /// </summary>

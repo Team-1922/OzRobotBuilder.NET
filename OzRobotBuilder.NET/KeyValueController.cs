@@ -7,54 +7,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CommonLib;
+using OzRobotBuilder.NET.Views;
 
 namespace OzRobotBuilder.NET
 {
-    class KeyValueController : RobotDocController
+    /// <summary>
+    /// The overriden controller for OzRobotBuilder.NET
+    /// </summary>
+    public class KeyValueController : RobotDocController
     {
         /// <summary>
-        /// Update the document with the given data path and string value
+        /// Constructor to give <see cref="RobotDocController"/> the application reference
         /// </summary>
-        /// <param name="path">the treeview path to the data</param>
-        /// <param name="value">the value to update the data with</param>
-        public void UpdateData(string path, string value)
+        /// <param name="app"></param>
+        public KeyValueController(CommonLib.Application app) : base(app)
         {
-            //good ole null checks
-            if (null == path || null == value)
-                return;
-
-            var robotDoc = Program.DocManager.OpenDoc as RobotDocument;
-            if (null == robotDoc)
-                return;
-
-            //generate json text of the currently open document
-            var jsonText = Program.DocManager.GetOpenDocJson();
         }
-        private void UpdateJsonText(string text, string path, string value)
-        {
-            var jObject = JObject.Parse(text);
-        }
+
         /// <summary>
         /// Prompts the user to open a file and opens it
         /// </summary>
         public override void OpenFile()
         {
-
             //pop open dialog
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            openFileDialog.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            openFileDialog.Filter = "Robot Files (*.robot.json)|*.robot.json";
-            openFileDialog.RestoreDirectory = true;
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                Program.DocManager.OpenDocument(openFileDialog.FileName);
+
+                openFileDialog.InitialDirectory = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                openFileDialog.Filter = "Robot Files (*.robot.json)|*.robot.json";
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    App.DocumentManager.OpenDocument(openFileDialog.FileName);
+                }
+
             }
 
-
             //finally refresh the grid view and recreate the tree view
-            Program.View.RecreateTreeView();
+            (App.ViewManager.Views["MainView"] as MainView).RecreateTreeView(JsonToDictionaryTree(App.DocumentManager.GetOpenDocJson()));
         }
     }
 }

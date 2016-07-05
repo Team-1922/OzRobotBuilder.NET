@@ -14,7 +14,7 @@ namespace CommonLib.View
         /// <summary>
         /// A lookup table for the views
         /// </summary>
-        public Dictionary<string, IView> Views = new Dictionary<string, IView>();
+        public Dictionary<string, IView> Views { get; protected set; } = new Dictionary<string, IView>();
         /// <summary>
         /// The application reference
         /// </summary>
@@ -22,12 +22,12 @@ namespace CommonLib.View
         /// <summary>
         /// Called every update cycle; updates all views
         /// </summary>
-        /// <param name="deltaTime">the time since the program started</param>
-        public void Update(TimeSpan deltaTime)
+        /// <param name="time">the time since the program started</param>
+        public void Update(TimeSpan time)
         {
             foreach(var view in Views)
             {
-                view.Value.Update(deltaTime);
+                view.Value.Update(time);
             }
         }
         /// <summary>
