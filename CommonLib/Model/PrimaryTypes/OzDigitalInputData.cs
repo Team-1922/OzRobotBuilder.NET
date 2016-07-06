@@ -14,22 +14,10 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// The name for this particular digital input
         /// </summary>
-        public string Name = "OzDigitalInputData";
+        public string Name { get; set; } = "OzDigitalInputData";
         /// <summary>
         /// The input id of the digital device
         /// </summary>
-        public uint DigitalInputId;
-        #region INamedClass Interface
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public string GetName()
-        {
-            return Name;
-        }
-        public void SetName(string name)
-        {
-            Name = name;
-        }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-        #endregion
+        public uint DigitalInputId { get; set; }
     }
 }

@@ -14,11 +14,11 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// The additional methods added to this object
         /// </summary>
-        public string ScriptExtension;
+        public string ScriptExtension { get; set; }
         /// <summary>
         /// The existing methods which are overidden 
         /// TODO: get a good example of this
         /// </summary>
-        public string OverriddenMethods;
+        public string OverriddenMethods { get; set; }
     }
 }

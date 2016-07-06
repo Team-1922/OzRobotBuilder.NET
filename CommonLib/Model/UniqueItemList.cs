@@ -12,14 +12,9 @@ namespace CommonLib.Model
     public interface INamedClass
     {
         /// <summary>
+        /// The name of this instance
         /// </summary>
-        /// <returns>The name of the class</returns>
-        string GetName();
-        /// <summary>
-        /// set the name of the instance
-        /// </summary>
-        /// <param name="name">the name to set</param>
-        void SetName(string name);
+        string Name { get; set; }
     }
     /// <summary>
     /// An extension to the <see cref="List{T}"/> class enforcing each item to have a unique "name" attribute
@@ -35,7 +30,7 @@ namespace CommonLib.Model
         {
             foreach(var itm in this)
             {
-                if (newItem.GetName() == itm.GetName())
+                if (newItem.Name == itm.Name)
                 {
                     for(int appendCount = 0; appendCount < 100; appendCount++)
                     {
@@ -43,14 +38,14 @@ namespace CommonLib.Model
                         foreach(var itm0 in this)
                         {
                             //if any of the items have this name, do continue
-                            if(itm0.GetName() == newItem.GetName() + appendCount)
+                            if(itm0.Name == newItem.Name + appendCount)
                             {
                                 shouldContinue = true;
                             }
                         }
                         if (!shouldContinue)
                         {
-                            newItem.SetName(newItem.GetName() + appendCount);
+                            newItem.Name = newItem.Name + appendCount;
                             base.Add(newItem);
                             break;
                         }

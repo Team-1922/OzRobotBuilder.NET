@@ -21,18 +21,18 @@ namespace CommonLib.Model.Documents
         /// <summary>
         /// A list of all of the subsystems on this robot
         /// </summary>
-        public UniqueItemList<OzSubsystemData> Subsystems = new UniqueItemList<OzSubsystemData>();
+        public UniqueItemList<OzSubsystemData> Subsystems { get; set; } = new UniqueItemList<OzSubsystemData>();
         /// <summary>
         /// A list of all of the commands on this robot
         /// </summary>
-        public UniqueItemList<OzCommandData> Commands = new UniqueItemList<OzCommandData>();
+        public UniqueItemList<OzCommandData> Commands { get; set; } = new UniqueItemList<OzCommandData>();
         /// <summary>
         /// A list of all of the joysticks configured for this program
         /// </summary>
-        public UniqueItemList<OzJoystickData> Joysticks = new UniqueItemList<OzJoystickData>();
+        public UniqueItemList<OzJoystickData> Joysticks { get; set; } = new UniqueItemList<OzJoystickData>();
         /// <summary>
         /// A list of all of the triggers configured for this operator control
         /// </summary>
-        public UniqueItemList<OzTriggerDataBase> Triggers = new UniqueItemList<OzTriggerDataBase>();
+        public UniqueItemList<OzTriggerDataBase> Triggers { get; set; } = new UniqueItemList<OzTriggerDataBase>();
     }
 }

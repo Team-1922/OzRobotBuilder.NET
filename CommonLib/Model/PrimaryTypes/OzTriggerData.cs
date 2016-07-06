@@ -14,27 +14,15 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// the name of this trigger
         /// </summary>
-        public string Name = "OzTriggerData";
+        public string Name { get; set; } = "OzTriggerData";
         /// <summary>
         /// the command to run when the trigger condition is met
         /// </summary>
-        public string CommandName;
+        public string CommandName { get; set; }
         /// <summary>
         /// the parameters to the command name
         /// </summary>
-        public List<string> CommandParameters;
-        #region INamedClass Interface
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public string GetName()
-        {
-            return Name;
-        }
-        public void SetName(string name)
-        {
-            Name = name;
-        }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-        #endregion
+        public List<string> CommandParameters { get; set; }
     }
     /// <summary>
     /// A trigger which is called when a particular joystick button is pressed
@@ -62,15 +50,15 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// The name of the joystick this is mapped to
         /// </summary>
-        public string JoystickName;
+        public string JoystickName { get; set; }
         /// <summary>
         /// the button on the joystick this is mapped to
         /// </summary>
-        public int JoystickButton;
+        public int JoystickButton { get; set; }
         /// <summary>
         /// The condition this trigger is called under
         /// </summary>
-        public OzTriggerType TriggerType;
+        public OzTriggerType TriggerType { get; set; }
     }
     /// <summary>
     /// This class represents a command that does not explicitly require any particular 

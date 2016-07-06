@@ -17,47 +17,35 @@ namespace CommonLib.Model.CompositeTypes
         /// <summary>
         /// The name of the command
         /// </summary>
-        public string Name;
+        public string Name { get; set; } = "OzCommandData";
         /// <summary>
         /// The lua script for the command constructor
         /// </summary>
-        public string Construct;
+        public string Construct { get; set; } = "";
         /// <summary>
         /// The lua script for the command Init
         /// </summary>
-        public string Init;
+        public string Init { get; set; } = "";
         /// <summary>
         /// The lua script for the command Execute
         /// </summary>
-        public string Execute;
+        public string Execute { get; set; } = "";
         /// <summary>
         /// The lua script for the command IsFinished
         /// </summary>
-        public string IsFinished;
+        public string IsFinished { get; set; } = "";
         /// <summary>
         /// The lua script for the command End
         /// </summary>
-        public string End;
+        public string End { get; set; } = "";
         /// <summary>
         /// The lua script for the command Interrupted
         /// </summary>
-        public string Interrupted;
+        public string Interrupted { get; set; } = "";
         /// <summary>
         /// The lua script for the commands additional methods not specified above
         /// </summary>
-        public string AddedMethods;
-        #region INamedClass Interface
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public string GetName()
-        {
-            return Name;
-        }
-        public void SetName(string name)
-        {
-            Name = name;
-        }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-        #endregion
+        public string AddedMethods { get; set; } = "";
         //TODO: should we be using this?
         //public ScriptExtensableData ExtensableScriptData; 
     }

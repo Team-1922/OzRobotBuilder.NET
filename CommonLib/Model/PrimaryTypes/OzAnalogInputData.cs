@@ -18,50 +18,38 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// The name of this particular analog input
         /// </summary>
-        public string Name = "OzAnalogInputData";
+        public string Name { get; set; } = "OzAnalogInputData";
         /// <summary>
         /// The input id
         /// </summary>
-        public uint AnalogInputId;
+        public uint AnalogInputId { get; set; }
         /// <summary>
         /// TODO: documentation (what does this do anyways?)
         /// </summary>
-        public int AccumulatorCenter;
+        public int AccumulatorCenter { get; set; }
         /// <summary>
         /// TODO: documentation (what does this do anyways?)
         /// </summary>
-        public int AccumulatorDeadband;
+        public int AccumulatorDeadband { get; set; }
         /// <summary>
         /// TODO: documentation (what does this do anyways?)
         /// </summary>
-        public long AccumulatorInitialValue;
+        public long AccumulatorInitialValue { get; set; }
         /// <summary>
         /// TODO: documentation (what does this do anyways?)
         /// </summary>
-        public int AverageBits;
+        public int AverageBits { get; set; }
         /// <summary>
         /// TODO: documentation (what does this do anyways?)
         /// </summary>
-        public int OversampleBits;
+        public int OversampleBits { get; set; }
         /// <summary>
         /// The conversion ratio defined as normalized analog units per user-defined units
         /// </summary>
-        public double ConversionRatio;
+        public double ConversionRatio { get; set; }
         /// <summary>
         /// The offset in normalized analog units
         /// </summary>
-        public double SensorOffset;
-        #region INamedClass Interface
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public string GetName()
-        {
-            return Name;
-        }
-        public void SetName(string name)
-        {
-            Name = name;
-        }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-        #endregion
+        public double SensorOffset { get; set; }
     }
 }
