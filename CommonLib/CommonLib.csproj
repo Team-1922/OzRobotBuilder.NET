@@ -65,6 +65,8 @@
     <Compile Include="Model\CompositeTypes\OzCommandData.cs" />
     <Compile Include="Model\Document.cs" />
     <Compile Include="Model\KeyValueTreeNode.cs" />
+    <Compile Include="Model\PrimaryTypes\OzJoystickData.cs" />
+    <Compile Include="Model\PrimaryTypes\OzTriggerData.cs" />
     <Compile Include="Model\SDIDocumentManager.cs" />
     <Compile Include="Model\CompositeTypes\OzSubsystemData.cs" />
     <Compile Include="Model\Documents\RobotDocument.cs" />

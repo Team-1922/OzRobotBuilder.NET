@@ -1,5 +1,6 @@
 ﻿using CommonLib.Interfaces;
 using CommonLib.Model.CompositeTypes;
+using CommonLib.Model.PrimaryTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,13 @@ namespace CommonLib.Model.Documents
         /// A list of all of the commands on this robot
         /// </summary>
         public UniqueItemList<OzCommandData> Commands = new UniqueItemList<OzCommandData>();
-        // TODO: Operator Interface and Triggers
+        /// <summary>
+        /// A list of all of the joysticks configured for this program
+        /// </summary>
+        public UniqueItemList<OzJoystickData> Joysticks = new UniqueItemList<OzJoystickData>();
+        /// <summary>
+        /// A list of all of the triggers configured for this operator control
+        /// </summary>
+        public UniqueItemList<OzTriggerDataBase> Triggers = new UniqueItemList<OzTriggerDataBase>();
     }
 }

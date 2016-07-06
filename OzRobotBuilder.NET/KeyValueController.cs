@@ -70,7 +70,8 @@ namespace OzRobotBuilder.NET
         }
         public void SaveDocumentAs()
         {
-
+            //pop the save as dialog
+            MessageBox.Show("You have found an unimplemented Feature");
         }
         public void AddSubsystem()
         {
@@ -90,12 +91,27 @@ namespace OzRobotBuilder.NET
         }
         public void AddJoystick()
         {
-            //var doc = App.DocumentManager.OpenDoc as RobotDocument;
-            //if (null == doc)
-            //    return;
-            //doc.Subsystems.Add(new CommonLib.Model.CompositeTypes.OzSubsystemData());
-            //UpdateViewFromDocument();
-            MessageBox.Show("You have found an unimplemented Feature");
+            var doc = App.DocumentManager.OpenDoc as RobotDocument;
+            if (null == doc)
+                return;
+            doc.Joysticks.Add(new OzJoystickData());
+            UpdateViewFromDocument();
+        }
+        public void AddJoystickTrigger()
+        {
+            var doc = App.DocumentManager.OpenDoc as RobotDocument;
+            if (null == doc)
+                return;
+            doc.Triggers.Add(new OzJoystickTriggerData());
+            UpdateViewFromDocument();
+        }
+        public void AddContinuousTrigger()
+        {
+            var doc = App.DocumentManager.OpenDoc as RobotDocument;
+            if (null == doc)
+                return;
+            doc.Triggers.Add(new OzContinuousTriggerData());
+            UpdateViewFromDocument();
         }
         public void NewDocument()
         {
@@ -134,7 +150,7 @@ namespace OzRobotBuilder.NET
                 return null;
             if (pathSplit[0] != robotDoc.Name)
                 return null;
-            if (pathSplit[1] == "Subsystems")
+            if (pathSplit[1] != "Subsystems")
                 return null;
 
             //find the correct subsystem
@@ -151,7 +167,7 @@ namespace OzRobotBuilder.NET
             var subsystem = GetSubsystemFromPath(selectedNodePath);
             if (null == subsystem)
                 return;
-            subsystem.PWMMotorControllers.Add(new OzTalonSRXData());
+            subsystem.PWMMotorControllers.Add(new OzMotorControllerData());
             UpdateViewFromDocument();
         }
         public void AddTalonSRX(string selectedNodePath)
