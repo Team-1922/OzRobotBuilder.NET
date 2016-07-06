@@ -9,7 +9,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// The data for a quadrature encoder
     /// </summary>
-    public class OzQuadEncoderData
+    public class OzQuadEncoderData : INamedClass
     {
         /// <summary>
         /// The name of this encoder
@@ -27,5 +27,17 @@ namespace CommonLib.Model.PrimaryTypes
         /// The second digital input used (where the one wire is plugged into; -1 on TalonSRX)
         /// </summary>
         public uint DigitalIn1;
+        #region INamedClass Interface
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        public string GetName()
+        {
+            return Name;
+        }
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+        #endregion
     }
 }

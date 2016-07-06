@@ -12,7 +12,7 @@ namespace CommonLib.Model.CompositeTypes
     /// <summary>
     /// The data to create a dynamically loaded command
     /// </summary>
-    public class OzCommandData
+    public class OzCommandData : INamedClass
     {
         /// <summary>
         /// The name of the command
@@ -46,6 +46,18 @@ namespace CommonLib.Model.CompositeTypes
         /// The lua script for the commands additional methods not specified above
         /// </summary>
         public string AddedMethods;
+        #region INamedClass Interface
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        public string GetName()
+        {
+            return Name;
+        }
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+        #endregion
         //TODO: should we be using this?
         //public ScriptExtensableData ExtensableScriptData; 
     }

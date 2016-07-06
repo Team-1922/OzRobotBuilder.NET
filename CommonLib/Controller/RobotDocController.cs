@@ -39,7 +39,7 @@ namespace CommonLib.Controller
         /// </summary>
         /// <param name="path">the path to the value to update; (bypasses container types with a "name" attribute of each object within it)</param>
         /// <param name="value">the value to update the variable at "path" with</param>
-        public void UpdateDocument(string path, string value)
+        public virtual void UpdateDocument(string path, string value)
         {
             //at some point this json should be cached somewhere
             string jsonText = App.DocumentManager.GetOpenDocJson();

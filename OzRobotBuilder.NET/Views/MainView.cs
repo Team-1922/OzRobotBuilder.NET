@@ -1,5 +1,6 @@
 ﻿using CommonLib;
 using CommonLib.Model;
+using CommonLib.Model.CompositeTypes;
 using CommonLib.Model.Documents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -37,22 +38,22 @@ namespace OzRobotBuilder.NET.Views
         /// </summary>
         public void RecreateTreeView(KeyValueTreeNode rootNode)
         {
-            treeView1.Nodes.Clear();
+            HierarchialView.Nodes.Clear();
 
             //var tree = doc.GetTree();
 
             //RecreateTreeViewRecursive(tree, treeView1.Nodes.Add(tree.Key));
 
-            treeView1.Nodes.Add(RecreateTreeViewRecurse(rootNode));
+            HierarchialView.Nodes.Add(RecreateTreeViewRecurse(rootNode));
 
             //set the active node
-            treeView1.SelectedNode = treeView1.Nodes[0];
+            HierarchialView.SelectedNode = HierarchialView.Nodes[0];
 
             //finally refresh the grid view (this usually just clears it)
             RefreshGridView(/*tree*/);
 
             //expand the tree view
-            treeView1.ExpandAll();
+            HierarchialView.ExpandAll();
         }
         private DictTreeNode RecreateTreeViewRecurse(KeyValueTreeNode node)
         {
@@ -85,7 +86,7 @@ namespace OzRobotBuilder.NET.Views
         /// </summary>
         public void RefreshGridView()
         {
-            RefreshGridView(treeView1.SelectedNode);
+            RefreshGridView(HierarchialView.SelectedNode);
         }
         /// <summary>
         /// Updates the grid view with the given tree view item (this does not set this node as active however)
@@ -94,7 +95,7 @@ namespace OzRobotBuilder.NET.Views
         public void RefreshGridView(TreeNode activeNode)
         {
             //this might not be right
-            dataGridView1.Rows.Clear();
+            SelectedNodeEditor.Rows.Clear();
 
             if (null == activeNode)
             {
@@ -108,7 +109,7 @@ namespace OzRobotBuilder.NET.Views
                 var nodeData = node as DictTreeNode;
                 if (null == nodeData)
                     continue;
-                dataGridView1.Rows.Add(nodeData.Text, nodeData.Data);
+                SelectedNodeEditor.Rows.Add(nodeData.Text, nodeData.Data);
             }
 
             Invalidate();
@@ -142,12 +143,12 @@ namespace OzRobotBuilder.NET.Views
 
         #region Event Handlers
 
-        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void SelectedNodeEditor_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            string gridName = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex - 1].Value as string;
-            string newValue = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value as string;
+            string gridName = SelectedNodeEditor.Rows[e.RowIndex].Cells[e.ColumnIndex - 1].Value as string;
+            string newValue = SelectedNodeEditor.Rows[e.RowIndex].Cells[e.ColumnIndex].Value as string;
             string fullPath = null;
-            foreach(TreeNode node in treeView1.SelectedNode.Nodes)
+            foreach(TreeNode node in HierarchialView.SelectedNode.Nodes)
             {
                 if(node.Text == gridName)
                 {
@@ -156,38 +157,183 @@ namespace OzRobotBuilder.NET.Views
             }
             if (null == fullPath)
                 return;
+            if (null == App.Controller)
+                return;
             App.Controller.UpdateDocument(fullPath, newValue);
         }
-        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void SelectedNodeEditor_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             //get the "name" part
-            var name = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            var name = SelectedNodeEditor.Rows[e.RowIndex].Cells[0].Value.ToString();
 
             //is the "name" a subnode?
-            if (!treeView1.SelectedNode.Nodes.ContainsKey(name))
+            if (!HierarchialView.SelectedNode.Nodes.ContainsKey(name))
                 return;
 
 
             RefreshGridView();
         }
-        private void FileOpen(object sender, EventArgs e)
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (null == App.Controller)
+                return;
             App.Controller.OpenFile();
         }
-        private void treeView1_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        private void HierarchialView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
             if (!WillUpdateSelection(e.Node))
                 e.Cancel = true;
         }
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        private void HierarchialView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             RefreshGridView();
         }
-        #endregion
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            (App.Controller as KeyValueController).SaveDocument();
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            controller.SaveDocument();
         }
+
+        private void subsystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            controller.AddSubsystem();
+        }
+
+        private void commandToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            controller.AddCommand();
+        }
+
+        private void joystickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            controller.AddJoystick();
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void HierarchialView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                //open the appropriate context menu
+
+                //the root node
+                if (HierarchialView.Nodes.Count == 0)
+                    return;
+                if(e.Node == HierarchialView.Nodes[0])
+                {
+                    HierarchialView.SelectedNode = e.Node;
+                    RobotContextMenu.Show(MousePosition);
+                }
+                var nodeAsDataNode = e.Node as DictTreeNode;
+                if(null != nodeAsDataNode)
+                {
+                    if (nodeAsDataNode.Data == typeof(OzSubsystemData).ToString())
+                    {
+                        HierarchialView.SelectedNode = e.Node;
+                        SubsystemContextMenu.Show(MousePosition);
+                    }
+                }
+            }
+        }
+
+        private OzSubsystemData GetSelectedNodeSubsystem()
+        {
+            var robotDoc = App.DocumentManager.OpenDoc as RobotDocument;
+            if (null == robotDoc)
+                return null;
+
+            //find the correct subsystem
+            var name = HierarchialView.SelectedNode.Text;
+            foreach (var subsystem in robotDoc.Subsystems)
+            {
+                if (subsystem.Name == name)
+                    return subsystem;
+            }
+            return null;
+        }
+
+        private void addPWMMotorControllerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            if (HierarchialView.SelectedNode == null)
+                return;
+            controller.AddPWMMotorController(HierarchialView.SelectedNode.FullPath);
+        }
+
+        private void addTalonSRXToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            controller.AddTalonSRX(HierarchialView.SelectedNode.FullPath);
+        }
+
+        private void addAnalogInputToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            controller.AddAnalogInput(HierarchialView.SelectedNode.FullPath);
+        }
+
+        private void addQuadratureEncoderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            controller.AddQuadratureEncoder(HierarchialView.SelectedNode.FullPath);
+        }
+
+        private void addDigitalInputToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var controller = App.Controller as KeyValueController;
+            if (null == controller)
+                return;
+            controller.AddDigitalInput(HierarchialView.SelectedNode.FullPath);
+        }
+        #endregion
     }
 }

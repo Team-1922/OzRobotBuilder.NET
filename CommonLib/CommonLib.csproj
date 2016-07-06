@@ -80,6 +80,7 @@
     <Compile Include="Model\PrimaryTypes\ScriptExtensableData.cs" />
     <Compile Include="Model\Serializers\BuiltInLoaders.cs" />
     <Compile Include="Model\Serializers\JsonLoader.cs" />
+    <Compile Include="Model\UniqueItemList.cs" />
     <Compile Include="Model\ZipDocumentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\ViewManager.cs" />

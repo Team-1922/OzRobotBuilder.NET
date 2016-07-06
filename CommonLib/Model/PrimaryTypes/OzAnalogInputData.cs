@@ -9,7 +9,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// This is more complicated than the potentiometer (and the potentiometer might be merged into this) because of polling rates, accumulation, etc.
     /// </summary>
-    public class OzAnalogInputData
+    public class OzAnalogInputData : INamedClass
     {
         /// <summary>
         /// the polling rate for ALL analog inputs
@@ -51,5 +51,17 @@ namespace CommonLib.Model.PrimaryTypes
         /// The offset in normalized analog units
         /// </summary>
         public double SensorOffset;
+        #region INamedClass Interface
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        public string GetName()
+        {
+            return Name;
+        }
+        public void SetName(string name)
+        {
+            Name = name;
+        }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+        #endregion
     }
 }

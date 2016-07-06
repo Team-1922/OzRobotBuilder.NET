@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CommonLib;
 using OzRobotBuilder.NET.Views;
+using System.IO;
+using CommonLib.Model.CompositeTypes;
+using CommonLib.Model.PrimaryTypes;
 
 namespace OzRobotBuilder.NET
 {
@@ -46,7 +49,19 @@ namespace OzRobotBuilder.NET
             }
 
             //finally refresh the grid view and recreate the tree view
-            (App.ViewManager.Views["MainView"] as MainView).RecreateTreeView(JsonToDictionaryTree(App.DocumentManager.GetOpenDocJson()));
+            UpdateViewFromDocument();
+        }
+        public override void UpdateDocument(string path, string value)
+        {
+            base.UpdateDocument(path, value);
+            UpdateViewFromDocument();
+        }
+        public void UpdateViewFromDocument()
+        {
+            var mainView = App.ViewManager.Views["MainView"] as MainView;
+            if (null == mainView)
+                return;
+            mainView.RecreateTreeView(JsonToDictionaryTree(App.DocumentManager.GetOpenDocJson()));
         }
 
         public void SaveDocument()
@@ -56,6 +71,120 @@ namespace OzRobotBuilder.NET
         public void SaveDocumentAs()
         {
 
+        }
+        public void AddSubsystem()
+        {
+            var doc = App.DocumentManager.OpenDoc as RobotDocument;
+            if (null == doc)
+                return;
+            doc.Subsystems.Add(new OzSubsystemData());
+            UpdateViewFromDocument();
+        }
+        public void AddCommand()
+        {
+            var doc = App.DocumentManager.OpenDoc as RobotDocument;
+            if (null == doc)
+                return;
+            doc.Commands.Add(new OzCommandData());
+            UpdateViewFromDocument();
+        }
+        public void AddJoystick()
+        {
+            //var doc = App.DocumentManager.OpenDoc as RobotDocument;
+            //if (null == doc)
+            //    return;
+            //doc.Subsystems.Add(new CommonLib.Model.CompositeTypes.OzSubsystemData());
+            //UpdateViewFromDocument();
+            MessageBox.Show("You have found an unimplemented Feature");
+        }
+        public void NewDocument()
+        {
+            MessageBox.Show("You have found an unimplemented Feature");
+        }
+        public void ImportDocument()
+        {
+            MessageBox.Show("You have found an unimplemented Feature");
+        }
+        public void Copy(string selectedNodePath)
+        {
+            MessageBox.Show("You have found an unimplemented Feature");
+        }
+        public void Cut(string selectedNodePath)
+        {
+            MessageBox.Show("You have found an unimplemented Feature");
+        }
+        public void Paste(string selectedNodePath)
+        {
+            MessageBox.Show("You have found an unimplemented Feature");
+        }
+        public void Delete(string selectedNodePath)
+        {
+            MessageBox.Show("You have found an unimplemented Feature");
+        }
+        private OzSubsystemData GetSubsystemFromPath(string path)
+        {
+            var robotDoc = App.DocumentManager.OpenDoc as RobotDocument;
+            if (null == robotDoc)
+                return null;
+
+            var pathSplit = path.Split(Path.DirectorySeparatorChar);
+            if (null == pathSplit)
+                return null;
+            if (pathSplit.Length < 3)
+                return null;
+            if (pathSplit[0] != robotDoc.Name)
+                return null;
+            if (pathSplit[1] == "Subsystems")
+                return null;
+
+            //find the correct subsystem
+            var name = pathSplit[pathSplit.Length - 1];
+            foreach (var subsystem in robotDoc.Subsystems)
+            {
+                if (subsystem.Name == name)
+                    return subsystem;
+            }
+            return null;
+        }
+        public void AddPWMMotorController(string selectedNodePath)
+        {
+            var subsystem = GetSubsystemFromPath(selectedNodePath);
+            if (null == subsystem)
+                return;
+            subsystem.PWMMotorControllers.Add(new OzTalonSRXData());
+            UpdateViewFromDocument();
+        }
+        public void AddTalonSRX(string selectedNodePath)
+        {
+            var subsystem = GetSubsystemFromPath(selectedNodePath);
+            if (null == subsystem)
+                return;
+            subsystem.TalonSRXs.Add(new OzTalonSRXData());
+            UpdateViewFromDocument();
+        }
+        public void AddAnalogInput(string selectedNodePath)
+        {
+            var subsystem = GetSubsystemFromPath(selectedNodePath);
+            if (null == subsystem)
+                return;
+            subsystem.AnalogInputDevices.Add(new OzAnalogInputData());
+            UpdateViewFromDocument();
+        }
+        public void AddQuadratureEncoder(string selectedNodePath)
+        {
+            var subsystem = GetSubsystemFromPath(selectedNodePath);
+            if (null == subsystem)
+                return;
+            subsystem.QuadEncoders.Add(new OzQuadEncoderData());
+            UpdateViewFromDocument();
+        }
+        public void AddDigitalInput(string selectedNodePath)
+        {
+            var subsystem = GetSubsystemFromPath(selectedNodePath);
+            if (null == subsystem)
+                return;
+            subsystem.DigitalInputs.Add(new OzDigitalInputData());
+            UpdateViewFromDocument();
         }
     }
 }

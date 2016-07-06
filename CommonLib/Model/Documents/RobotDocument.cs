@@ -20,11 +20,11 @@ namespace CommonLib.Model.Documents
         /// <summary>
         /// A list of all of the subsystems on this robot
         /// </summary>
-        public List<OzSubsystemData> Subsystems = new List<OzSubsystemData>();
+        public UniqueItemList<OzSubsystemData> Subsystems = new UniqueItemList<OzSubsystemData>();
         /// <summary>
         /// A list of all of the commands on this robot
         /// </summary>
-        public List<OzCommandData> Commands = new List<OzCommandData>();
+        public UniqueItemList<OzCommandData> Commands = new UniqueItemList<OzCommandData>();
         // TODO: Operator Interface and Triggers
     }
 }
