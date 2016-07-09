@@ -40,9 +40,11 @@ namespace CommonLib.Validation
             return string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, nextLocation);
         }
 
-        private void GetNamesOfId<T>(List<T> items, string workingPath, ref Dictionary<uint, List<string>> output) where T : INamedClass, IIdentificationNumber
+        public static void GetNamesOfId<T>(List<T> items, string workingPath, ref Dictionary<uint, List<string>> output) where T : INamedClass, IIdentificationNumber
         {
             if (output == null)
+                return;
+            if (items == null)
                 return;
             foreach (var item in items)
             {
@@ -53,6 +55,24 @@ namespace CommonLib.Validation
                     output[item.ID].Add(workingItemPath);
                 else
                     output.Add(item.ID, new List<string>() { workingItemPath });
+            }
+        }
+        public static void GetNamesCount<T>(List<T> items, string workingPath, ref Dictionary<string, int> output) where T : INamedClass
+        {
+            if (output == null)
+                return;
+            if (items == null)
+                return;
+            foreach(var item in items)
+            {
+                if (item == null)
+                    continue;
+
+                string workingItemPath = ExtendWorkingPath(workingPath, item.Name);
+                if (output.ContainsKey(workingItemPath))
+                    output[workingItemPath]++;
+                else
+                    output.Add(workingItemPath, 1);
             }
         }
         private List<ReusedIdValidationIssue> GetIssuesFromIdMap(Dictionary<uint, List<string>> map)
@@ -88,23 +108,19 @@ namespace CommonLib.Validation
             //group validation (name validation)
             if (settings.Contains(ValidationSetting.ReusedNames))
             {
-                HashSet<string> reusedNames = new HashSet<string>();
-                foreach(var subsystem in obj.Subsystems)
+                //a map for each name used
+                var usedNames = new Dictionary<string, int>();
+
+                //names for subsystems
+                GetNamesCount(obj.Subsystems, workingPath, ref usedNames);
+
+                //get the issues from these names
+                foreach(var name in usedNames)
                 {
-                    foreach(var subsystem0 in obj.Subsystems)
-                    {
-                        if (subsystem == subsystem0)
-                            continue;
-                        if (subsystem.Name == subsystem0.Name)
-                            reusedNames.Add(subsystem.Name);
-                    }
-                }
-                foreach(var name in reusedNames)
-                {
-                    ret.ValidationIssues.Add(new ReusedNameValidationIssue(ExtendWorkingPath(workingPath, name)));
+                    if (name.Value > 1)
+                        ret.ValidationIssues.Add(new ReusedNameValidationIssue(name.Key));
                 }
             }
-            //TODO; name validation also has to be done on a inter and intra-subsystem basis for subcomponents of the subsystem (i.e. invidual motor controllers/analog inputs/etc.)
             #endregion
 
             #region Reused ID Validation
@@ -162,7 +178,8 @@ namespace CommonLib.Validation
                 ret.ValidationIssues.AddRange(GetIssuesFromIdMap(usedDigitalInputs));
             }
             #endregion
-            //IllogicalValues and DefaultValues are handled by the individual handlers
+
+            //IllogicalValues, ReusedNames, and DefaultValues are handled by the individual handlers
 
             //TODO: UnusedElements
 
