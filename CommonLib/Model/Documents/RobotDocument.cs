@@ -15,6 +15,10 @@ namespace CommonLib.Model.Documents
     public class RobotDocument : Document
     {
         /// <summary>
+        /// the path of this file in the directory structure
+        /// </summary>
+        public string Path { get; set; }
+        /// <summary>
         /// The name of the robot document; this is always the same becuase only one document can be opened at once
         /// </summary>
         public string Name { get; private set; } = "RobotDocument";

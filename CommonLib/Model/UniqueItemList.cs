@@ -17,6 +17,17 @@ namespace CommonLib.Model
         string Name { get; set; }
     }
     /// <summary>
+    /// used to generalize all classes which have a kind of ID
+    /// TODO: find a better place for this
+    /// </summary>
+    public interface IIdentificationNumber
+    {
+        /// <summary>
+        /// The ID of this instance
+        /// </summary>
+        uint ID { get; set; }
+    }
+    /// <summary>
     /// An extension to the <see cref="List{T}"/> class enforcing each item to have a unique "name" attribute
     /// </summary>
     /// <typeparam name="T">type of object</typeparam>

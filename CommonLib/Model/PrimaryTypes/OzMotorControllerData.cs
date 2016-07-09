@@ -10,7 +10,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// Data for a simple PWM motor controller
     /// </summary>
-    public class OzMotorControllerData : INamedClass
+    public class OzMotorControllerData : INamedClass, IIdentificationNumber
     {
         /// <summary>
         /// The name of this motor controller
@@ -19,6 +19,6 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// The pwm ID of the motor on the RoboRIO
         /// </summary>
-        public uint MotorId { get; set; } 
+        public uint ID { get; set; }
     }
 }

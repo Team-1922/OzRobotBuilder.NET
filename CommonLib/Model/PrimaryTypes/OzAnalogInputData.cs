@@ -9,7 +9,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// This is more complicated than the potentiometer (and the potentiometer might be merged into this) because of polling rates, accumulation, etc.
     /// </summary>
-    public class OzAnalogInputData : INamedClass
+    public class OzAnalogInputData : INamedClass, IIdentificationNumber
     {
         /// <summary>
         /// the polling rate for ALL analog inputs
@@ -22,7 +22,7 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// The input id
         /// </summary>
-        public uint AnalogInputId { get; set; }
+        public uint ID { get; set; }
         /// <summary>
         /// TODO: documentation (what does this do anyways?)
         /// </summary>

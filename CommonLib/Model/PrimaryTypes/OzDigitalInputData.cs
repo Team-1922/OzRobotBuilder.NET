@@ -9,7 +9,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// Construction Data for a digital input
     /// </summary>
-    public class OzDigitalInputData : INamedClass
+    public class OzDigitalInputData : INamedClass, IIdentificationNumber
     {
         /// <summary>
         /// The name for this particular digital input
@@ -18,6 +18,6 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// The input id of the digital device
         /// </summary>
-        public uint DigitalInputId { get; set; }
+        public uint ID { get; set; }
     }
 }

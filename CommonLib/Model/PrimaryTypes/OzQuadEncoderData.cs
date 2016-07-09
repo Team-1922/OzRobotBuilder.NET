@@ -9,7 +9,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// The data for a quadrature encoder
     /// </summary>
-    public class OzQuadEncoderData : INamedClass
+    public class OzQuadEncoderData : INamedClass, IIdentificationNumber
     {
         /// <summary>
         /// The name of this encoder
@@ -20,12 +20,12 @@ namespace CommonLib.Model.PrimaryTypes
         /// </summary>
         public double ConversionRatio { get; set; } 
         /// <summary>
-        /// The first digital input used (where the three wires are plugged into; -1 on TalonSRX)
+        /// The first digital input used (where the three wires are plugged into)
         /// </summary>
-        public uint DigitalIn0 { get; set; } 
+        public uint ID { get; set; } 
         /// <summary>
-        /// The second digital input used (where the one wire is plugged into; -1 on TalonSRX)
+        /// The second digital input used (where the one wire is plugged into)
         /// </summary>
-        public uint DigitalIn1 { get; set; } 
+        public uint ID1 { get; set; } 
     }
 }

@@ -85,6 +85,16 @@
     <Compile Include="Model\UniqueItemList.cs" />
     <Compile Include="Model\ZipDocumentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\CommandChecker.cs" />
+    <Compile Include="Validation\IObjectChecker.cs" />
+    <Compile Include="Validation\JoystickChecker.cs" />
+    <Compile Include="Validation\JsonChecker.cs" />
+    <Compile Include="Validation\RobotDocumentChecker.cs" />
+    <Compile Include="Validation\SubsystemChecker.cs" />
+    <Compile Include="Validation\TriggerChecker.cs" />
+    <Compile Include="Validation\ValidationIssue.cs" />
+    <Compile Include="Validation\ValidationReport.cs" />
+    <Compile Include="Validation\ValidationSettings.cs" />
     <Compile Include="View\ViewManager.cs" />
   </ItemGroup>
   <ItemGroup>
