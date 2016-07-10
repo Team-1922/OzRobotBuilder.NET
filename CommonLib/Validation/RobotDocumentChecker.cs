@@ -50,11 +50,24 @@ namespace CommonLib.Validation
         }
 
         #region Static Helper Methods
-        private static string ExtendWorkingPath(string path, string nextLocation)
+        /// <summary>
+        /// Extends the working path with given path and next sublevel
+        /// </summary>
+        /// <param name="path">the path to extend</param>
+        /// <param name="nextLocation">the name of the next sublevel to extend to</param>
+        /// <returns></returns>
+        protected static string ExtendWorkingPath(string path, string nextLocation)
         {
             return string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, nextLocation);
         }
-        private static void GetNamesOfId<T>(List<T> items, string workingPath, ref Dictionary<uint, List<string>> output) where T : INamedClass, IIdentificationNumber
+        /// <summary>
+        /// Gets the names of the objects in <paramref name="items"/> with each id; used to get which id's have overlap
+        /// </summary>
+        /// <typeparam name="T">Adds generalization to this method so any type with a name and ID can be used</typeparam>
+        /// <param name="items">the items to process</param>
+        /// <param name="workingPath">the current working path to prepend each name in <paramref name="items"/> with in <paramref name="output"/></param>
+        /// <param name="output">a map of each used ID and the path to which item is using it</param>
+        protected static void GetNamesOfId<T>(List<T> items, string workingPath, ref Dictionary<uint, List<string>> output) where T : INamedClass, IIdentificationNumber
         {
             if (output == null)
                 return;
@@ -71,7 +84,14 @@ namespace CommonLib.Validation
                     output.Add(item.ID, new List<string>() { workingItemPath });
             }
         }
-        private static void GetNamesCount<T>(List<T> items, string workingPath, ref Dictionary<string, int> output) where T : INamedClass
+        /// <summary>
+        /// Gets the number of different items with the same path
+        /// </summary>
+        /// <typeparam name="T">adds generalization to this method so any type with a name can be used</typeparam>
+        /// <param name="items">the items to get the name from</param>
+        /// <param name="workingPath">the current working path to prepend each name in <paramref name="items"/> with in <paramref name="output"/></param>
+        /// <param name="output">a map of each name used and the number of times each is used</param>
+        protected static void GetNamesCount<T>(List<T> items, string workingPath, ref Dictionary<string, int> output) where T : INamedClass
         {
             if (output == null)
                 return;
@@ -89,7 +109,12 @@ namespace CommonLib.Validation
                     output.Add(workingItemPath, 1);
             }
         }
-        private static List<ReusedIdValidationIssue> GetIssuesFromIdMap(Dictionary<uint, List<string>> map)
+        /// <summary>
+        /// Converts the output of <see cref="GetNamesOfId{T}(List{T}, string, ref Dictionary{uint, List{string}})"/> to a list of <see cref="ReusedIdValidationIssue"/>
+        /// </summary>
+        /// <param name="map">the output to <see cref="GetNamesOfId{T}(List{T}, string, ref Dictionary{uint, List{string}})"/></param>
+        /// <returns>a list of <see cref="ReusedIdValidationIssue"/></returns>
+        protected static List<ReusedIdValidationIssue> GetIssuesFromIdMap(Dictionary<uint, List<string>> map)
         {
             List<ReusedIdValidationIssue> ret = new List<ReusedIdValidationIssue>();
             foreach(var mapItem in map)
