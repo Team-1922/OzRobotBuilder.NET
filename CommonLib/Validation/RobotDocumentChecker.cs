@@ -11,13 +11,26 @@ using System.Threading.Tasks;
 
 namespace CommonLib.Validation
 {
-    //TODO: encapsulate individual operations better to clean up code
+    /// <summary>
+    /// Validates a robot document
+    /// TODO: encapsulate individual operations better to clean up code
+    /// </summary>
     public class RobotDocumentChecker : IObjectChecker<RobotDocument>
     {
-        public SubsystemChecker SubsystemCheckerInst { get; } = new SubsystemChecker();
-        public CommandChecker CommandCheckerInst { get; } = new CommandChecker();
-        public JoystickChecker JoystickCheckerInst { get; } = new JoystickChecker();
-        public TriggerChecker TriggerCheckerInst { get; } = new TriggerChecker();
+        #region Subobject Checkers
+        private SubsystemChecker SubsystemCheckerInst { get; } = new SubsystemChecker();
+        private CommandChecker CommandCheckerInst { get; } = new CommandChecker();
+        private JoystickChecker JoystickCheckerInst { get; } = new JoystickChecker();
+        private TriggerChecker TriggerCheckerInst { get; } = new TriggerChecker();
+        #endregion
+
+        /// <summary>
+        /// Takes a robot document and returns any issues the document has
+        /// </summary>
+        /// <param name="obj">the document to validate</param>
+        /// <param name="settings">the types of validation issues to handle</param>
+        /// <param name="workingPath">unused; this is for recursion of subobjects</param>
+        /// <returns>a report of any issues <paramref name="obj"/> has</returns>
         public ValidationReport ValidateObject(RobotDocument obj, ValidationSettings settings, string workingPath = "")
         {
             ValidationReport ret = new ValidationReport(settings);
@@ -35,12 +48,13 @@ namespace CommonLib.Validation
 
             return ret;
         }
-        public static string ExtendWorkingPath(string path, string nextLocation)
+
+        #region Static Helper Methods
+        private static string ExtendWorkingPath(string path, string nextLocation)
         {
             return string.Format("{0}{1}{2}", path, Path.DirectorySeparatorChar, nextLocation);
         }
-
-        public static void GetNamesOfId<T>(List<T> items, string workingPath, ref Dictionary<uint, List<string>> output) where T : INamedClass, IIdentificationNumber
+        private static void GetNamesOfId<T>(List<T> items, string workingPath, ref Dictionary<uint, List<string>> output) where T : INamedClass, IIdentificationNumber
         {
             if (output == null)
                 return;
@@ -57,7 +71,7 @@ namespace CommonLib.Validation
                     output.Add(item.ID, new List<string>() { workingItemPath });
             }
         }
-        public static void GetNamesCount<T>(List<T> items, string workingPath, ref Dictionary<string, int> output) where T : INamedClass
+        private static void GetNamesCount<T>(List<T> items, string workingPath, ref Dictionary<string, int> output) where T : INamedClass
         {
             if (output == null)
                 return;
@@ -75,7 +89,7 @@ namespace CommonLib.Validation
                     output.Add(workingItemPath, 1);
             }
         }
-        private List<ReusedIdValidationIssue> GetIssuesFromIdMap(Dictionary<uint, List<string>> map)
+        private static List<ReusedIdValidationIssue> GetIssuesFromIdMap(Dictionary<uint, List<string>> map)
         {
             List<ReusedIdValidationIssue> ret = new List<ReusedIdValidationIssue>();
             foreach(var mapItem in map)
@@ -85,6 +99,9 @@ namespace CommonLib.Validation
             }
             return ret;
         }
+        #endregion
+
+        #region Subobject Validation
         private ValidationReport ValidateSubsystems(RobotDocument obj, ValidationSettings settings, string workingPath)
         {
             ValidationReport ret = new ValidationReport(settings);
@@ -235,5 +252,6 @@ namespace CommonLib.Validation
 
             return ret;
         }
+        #endregion
     }
 }
