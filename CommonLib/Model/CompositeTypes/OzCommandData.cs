@@ -1,6 +1,7 @@
 ﻿using CommonLib.ExtLua;
 using CommonLib.Interfaces;
 using CommonLib.Model.PrimaryTypes;
+using CommonLib.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace CommonLib.Model.CompositeTypes
     /// <summary>
     /// The data to create a dynamically loaded command
     /// </summary>
-    public class OzCommandData : INamedClass
+    public class OzCommandData : INamedClass, IValidatable
     {
         /// <summary>
         /// The name of the command
@@ -46,6 +47,11 @@ namespace CommonLib.Model.CompositeTypes
         /// The lua script for the commands additional methods not specified above
         /// </summary>
         public string AddedMethods { get; set; } = "";
+
+        public ValidationReport Validate(ValidationSettings settings, string workingPath)
+        {
+            throw new NotImplementedException();
+        }
         //TODO: should we be using this?
         //public ScriptExtensableData ExtensableScriptData; 
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonLib.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// The information needed for a simple joystick
     /// </summary>
-    public class OzJoystickData : INamedClass
+    public class OzJoystickData : INamedClass, IValidatable
     {
         /// <summary>
         /// The name of this joystick
@@ -19,5 +20,10 @@ namespace CommonLib.Model.PrimaryTypes
         /// The id of this joystick on the driver station
         /// </summary>
         public int JoystickId { get; set; }
+
+        public ValidationReport Validate(ValidationSettings settings, string workingPath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

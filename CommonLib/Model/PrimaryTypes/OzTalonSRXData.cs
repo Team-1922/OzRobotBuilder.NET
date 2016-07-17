@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonLib.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -147,6 +148,7 @@ namespace CommonLib.Model.PrimaryTypes
 
         /// <summary>
         /// The additional PID controller data specific for the CAN Talon
+        /// TODO: override <see cref="OzPIDControllerData.Validate(ValidationSettings, string)"/>
         /// </summary>
         public class OzSRXPIDControllerData : OzPIDControllerData
         {
@@ -170,6 +172,52 @@ namespace CommonLib.Model.PrimaryTypes
             /// </summary>
             public PIDSourceType SourceType { get; set; }
         }
-        
+
+        /// <summary>
+        /// Goes through each validation setting and member 
+        /// </summary>
+        /// <param name="settings">the active settings for validation</param>
+        /// <param name="workingPath">the path for instance; used for traversal of hierarchial data types</param>
+        /// <returns>a report of the validation issues</returns>
+        public new ValidationReport Validate(ValidationSettings settings, string workingPath)
+        {
+            ValidationReport ret = new ValidationReport(settings);
+            workingPath = ValidationUtils.ExtendWorkingPath(workingPath, Name);
+
+            if(settings.Contains(ValidationSetting.NullValues))
+            {
+                if (null == AnalogInput)
+                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "AnalogInput")));
+                if (null == DigitalInput)
+                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "DigitalInput")));
+                if (null == PIDConfig0)
+                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "PIDConfig0")));
+                if (null == PIDConfig1)
+                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "PIDConfig1")));
+            }
+            if (null != PIDConfig0)
+                ret.Augment(PIDConfig0.Validate(settings, workingPath));
+            if (null != PIDConfig1)
+                ret.Augment(PIDConfig1.Validate(settings, workingPath));
+
+            if (settings.Contains(ValidationSetting.IllogicalValues))
+            {
+                // TODO: is there any theoretical limit to the number of talonSRX's (because of can bus limitations)?
+                //if (ID > 9)
+                //    ret.ValidationIssues.Add(new IllogicalValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "ID"), ID.ToString()));
+                if (EnabledPIDProfile < 0 || EnabledPIDProfile > 1)
+                    ret.ValidationIssues.Add(new IllogicalValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "EnabledPIDProfile"), EnabledPIDProfile.ToString()));
+                if (PeakForwardVoltage > 12)
+                    ret.ValidationIssues.Add(new IllogicalValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "PeakForwardVoltage"), PeakForwardVoltage.ToString()));
+                if (PeakReverseVoltage < -12)
+                    ret.ValidationIssues.Add(new IllogicalValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "PeakReverseVoltage"), PeakReverseVoltage.ToString()));
+                if (NominalForwardVoltage != 0)
+                    ret.ValidationIssues.Add(new IllogicalValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "NominalForwardVoltage"), NominalForwardVoltage.ToString()));
+                if (NominalReverseVoltage != 0)
+                    ret.ValidationIssues.Add(new IllogicalValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "NominalReverseVoltage"), NominalReverseVoltage.ToString()));
+            }
+
+            return ret;
+        }
     }
 }

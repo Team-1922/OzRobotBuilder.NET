@@ -86,7 +86,7 @@
     <Compile Include="Model\ZipDocumentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\CommandChecker.cs" />
-    <Compile Include="Validation\IObjectChecker.cs" />
+    <Compile Include="Validation\IValidatable.cs" />
     <Compile Include="Validation\JoystickChecker.cs" />
     <Compile Include="Validation\JsonChecker.cs" />
     <Compile Include="Validation\RobotDocumentChecker.cs" />
@@ -95,6 +95,7 @@
     <Compile Include="Validation\ValidationIssue.cs" />
     <Compile Include="Validation\ValidationReport.cs" />
     <Compile Include="Validation\ValidationSettings.cs" />
+    <Compile Include="Validation\ValidationUtils.cs" />
     <Compile Include="View\ViewManager.cs" />
   </ItemGroup>
   <ItemGroup>

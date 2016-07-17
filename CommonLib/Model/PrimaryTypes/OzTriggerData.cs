@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonLib.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// The base trigger data which contains information about the command which is called
     /// </summary>
-    public class OzTriggerDataBase : INamedClass
+    public class OzTriggerDataBase : INamedClass, IValidatable
     {
         /// <summary>
         /// the name of this trigger
@@ -23,6 +24,11 @@ namespace CommonLib.Model.PrimaryTypes
         /// the parameters to the command name
         /// </summary>
         public List<string> CommandParameters { get; set; }
+
+        public ValidationReport Validate(ValidationSettings settings, string workingPath)
+        {
+            throw new NotImplementedException();
+        }
     }
     /// <summary>
     /// A trigger which is called when a particular joystick button is pressed
@@ -59,6 +65,11 @@ namespace CommonLib.Model.PrimaryTypes
         /// The condition this trigger is called under
         /// </summary>
         public OzTriggerType TriggerType { get; set; }
+
+        public ValidationReport Validate(ValidationSetting settings, string workingPath)
+        {
+            throw new NotImplementedException();
+        }
     }
     /// <summary>
     /// This class represents a command that does not explicitly require any particular 

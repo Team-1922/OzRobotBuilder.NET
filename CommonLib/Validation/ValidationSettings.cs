@@ -35,6 +35,7 @@ namespace CommonLib.Validation
         IllogicalValues,
         /// <summary>
         /// Only checks if all values are deafults
+        /// TODO: do we even need this?
         /// </summary>
         DefaultValues
     }
