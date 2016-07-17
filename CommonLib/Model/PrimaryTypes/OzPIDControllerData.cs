@@ -25,7 +25,7 @@ namespace CommonLib.Model.PrimaryTypes
         /// </summary>
         public double D { get; set; }
         /// <summary>
-        /// The Fixed Constant
+        /// The Feed-Forward Constant
         /// </summary>
         public double F { get; set; }
         /// <summary>
