@@ -45,6 +45,8 @@ namespace CommonLib.Model.PrimaryTypes
             {
                 if (!ValidationUtils.CheckName(Name))
                     ret.ValidationIssues.Add(new IllogicalValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "Name"), Name));
+                // TODO: validate the CommandParameters
+                // TODO: validate the CommandName
             }
 
             return ret;
@@ -53,7 +55,7 @@ namespace CommonLib.Model.PrimaryTypes
     /// <summary>
     /// A trigger which is called when a particular joystick button is pressed
     /// </summary>
-    public class OzJoystickTriggerData : OzTriggerDataBase
+    public class OzJoystickTriggerData : OzTriggerDataBase, IIdentificationNumber
     {
         /// <summary>
         /// Under what button state is this command run?
@@ -80,7 +82,7 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// the button on the joystick this is mapped to
         /// </summary>
-        public int JoystickButton { get; set; }
+        public uint ID { get; set; }
         /// <summary>
         /// The condition this trigger is called under
         /// </summary>
@@ -99,6 +101,7 @@ namespace CommonLib.Model.PrimaryTypes
             if (settings.Contains(ValidationSetting.IllogicalValues))
             {
                 //joystick button is not limited, becuase that depends on which joystick is being used
+                // TODO: validate JoystickName, JoystickButton
             }
 
             return ret;

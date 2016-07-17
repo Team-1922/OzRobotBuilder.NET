@@ -55,6 +55,8 @@ namespace CommonLib.Model.Documents
             ret.Augment(ValidateJoysticks(settings, workingPath));
             ret.Augment(ValidateTriggers(settings, workingPath));
 
+            //TODO: UnusedElements
+
             return ret;
         }
 
@@ -146,8 +148,6 @@ namespace CommonLib.Model.Documents
 
             //IllogicalValues, ReusedNames, and DefaultValues are handled by the individual handlers
 
-            //TODO: UnusedElements
-
             return ret;
         }
         private ValidationReport ValidateCommands(ValidationSettings settings, string workingPath)
@@ -155,6 +155,7 @@ namespace CommonLib.Model.Documents
             ValidationReport ret = new ValidationReport(settings);
             workingPath = ValidationUtils.ExtendWorkingPath(workingPath, "Commands");
 
+            #region Null Validation
             if (null == Commands)//container null-check
                 ret.ValidationIssues.Add(new NullValueValidationIssue(workingPath));
             else
@@ -163,6 +164,17 @@ namespace CommonLib.Model.Documents
                         ret.ValidationIssues.Add(new NullValueValidationIssue(string.Format("{0}[{1}]", workingPath, i)));
                     else
                         ret.Augment(Commands[i].Validate(settings, workingPath));//individual validation
+            #endregion
+
+            #region Name Validation
+            //group validation (name validation)
+            if (settings.Contains(ValidationSetting.ReusedNames))
+            {
+                var nameIssues = ValidationUtils.ReusedNamesValidation(Commands, workingPath);
+                if (null != nameIssues)
+                    ret.ValidationIssues.AddRange(nameIssues);
+            }
+            #endregion
 
             return ret;
         }
@@ -171,6 +183,7 @@ namespace CommonLib.Model.Documents
             ValidationReport ret = new ValidationReport(settings);
             workingPath = ValidationUtils.ExtendWorkingPath(workingPath, "Joysticks");
 
+            #region Null Validation
             if (null == Joysticks)//container null-check
                 ret.ValidationIssues.Add(new NullValueValidationIssue(workingPath));
             else
@@ -179,6 +192,26 @@ namespace CommonLib.Model.Documents
                         ret.ValidationIssues.Add(new NullValueValidationIssue(string.Format("{0}[{1}]", workingPath, i)));
                     else
                         ret.Augment(Joysticks[i].Validate(settings, workingPath));//individual validation
+            #endregion
+
+            #region Name Validation
+            //group validation (name validation)
+            if (settings.Contains(ValidationSetting.ReusedNames))
+            {
+                var nameIssues = ValidationUtils.ReusedNamesValidation(Joysticks, workingPath);
+                if (null != nameIssues)
+                    ret.ValidationIssues.AddRange(nameIssues);
+            }
+            #endregion
+
+            #region Reused ID Validation
+            if (settings.Contains(ValidationSetting.ReusedIds))
+            {
+                var nameMap = new Dictionary<uint, List<string>>();
+                ValidationUtils.GetNamesOfId(Joysticks, workingPath, ref nameMap);
+                ret.ValidationIssues.AddRange(ValidationUtils.GetIssuesFromIdMap(nameMap));
+            }
+            #endregion
 
             return ret;
         }
@@ -187,6 +220,7 @@ namespace CommonLib.Model.Documents
             ValidationReport ret = new ValidationReport(settings);
             workingPath = ValidationUtils.ExtendWorkingPath(workingPath, "Triggers");
 
+            #region Null Validation
             if (null == Triggers)//container null-check
                 ret.ValidationIssues.Add(new NullValueValidationIssue(workingPath));
             else
@@ -195,8 +229,28 @@ namespace CommonLib.Model.Documents
                         ret.ValidationIssues.Add(new NullValueValidationIssue(string.Format("{0}[{1}]", workingPath, i)));
                     else
                         ret.Augment(Triggers[i].Validate(settings, workingPath));//individual validation
+            #endregion
+            
+            #region Name Validation
+            //group validation (name validation)
+            if (settings.Contains(ValidationSetting.ReusedNames))
+            {
+                var nameIssues = ValidationUtils.ReusedNamesValidation(Triggers, workingPath);
+                if (null != nameIssues)
+                    ret.ValidationIssues.AddRange(nameIssues);
+            }
+            #endregion
 
-            //group validation
+            #region Reused Id Validation
+            //this validates the reuse of joystick buttons; use command groups if multiple things happen on a button press
+            if (settings.Contains(ValidationSetting.ReusedIds))
+            {
+                var joystickTriggers = Triggers.OfType<OzJoystickTriggerData>().ToList();
+                var idMap = new Dictionary<uint, List<string>>();
+                ValidationUtils.GetNamesOfId(joystickTriggers, workingPath, ref idMap);
+                ret.ValidationIssues.AddRange(ValidationUtils.GetIssuesFromIdMap(idMap));
+            }
+            #endregion
 
             return ret;
         }

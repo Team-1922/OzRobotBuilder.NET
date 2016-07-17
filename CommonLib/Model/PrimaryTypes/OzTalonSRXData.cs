@@ -183,21 +183,18 @@ namespace CommonLib.Model.PrimaryTypes
         {
             ValidationReport ret = new ValidationReport(settings);
             workingPath = ValidationUtils.ExtendWorkingPath(workingPath, Name);
-
-            if(settings.Contains(ValidationSetting.NullValues))
-            {
-                if (null == AnalogInput)
-                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "AnalogInput")));
-                if (null == DigitalInput)
-                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "DigitalInput")));
-                if (null == PIDConfig0)
-                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "PIDConfig0")));
-                if (null == PIDConfig1)
-                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "PIDConfig1")));
-            }
-            if (null != PIDConfig0)
+            
+            if (null == AnalogInput)
+                ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "AnalogInput")));
+            if (null == DigitalInput)
+                ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "DigitalInput")));
+            if (null == PIDConfig0)
+                ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "PIDConfig0")));
+            else
                 ret.Augment(PIDConfig0.Validate(settings, workingPath));
-            if (null != PIDConfig1)
+            if (null == PIDConfig1)
+                ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "PIDConfig1")));
+            else
                 ret.Augment(PIDConfig1.Validate(settings, workingPath));
 
             if (settings.Contains(ValidationSetting.IllogicalValues))
