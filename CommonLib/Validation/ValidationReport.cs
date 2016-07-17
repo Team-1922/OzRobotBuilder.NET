@@ -13,12 +13,26 @@ namespace CommonLib.Validation
     /// </summary>
     public class ValidationReport
     {
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="settings">the settings used in this validation report</param>
         public ValidationReport(ValidationSettings settings)
         {
             SettingsUsed = settings;
         }
+        /// <summary>
+        /// the settings used in this validation report
+        /// </summary>
         public readonly ValidationSettings SettingsUsed;
+        /// <summary>
+        /// A running list of validation issues
+        /// </summary>
         public List<IValidationIssue> ValidationIssues { get; } = new List<IValidationIssue>();
+        /// <summary>
+        /// Adds all of the validation issues from another report but also all of the settings
+        /// </summary>
+        /// <param name="other">the report to merge from</param>
         public void Augment(ValidationReport other)
         {
             if (null == other)

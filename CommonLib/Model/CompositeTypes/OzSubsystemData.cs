@@ -53,6 +53,12 @@ namespace CommonLib.Model.CompositeTypes
         /// </summary>
         public ScriptExtensableData ScriptExtData { get; set; } = new ScriptExtensableData();
 
+        /// <summary>
+        /// Goes through each validation setting and member 
+        /// </summary>
+        /// <param name="settings">the active settings for validation</param>
+        /// <param name="workingPath">the path for instance; used for traversal of hierarchial data types</param>
+        /// <returns>a report of the validation issues</returns>
         public ValidationReport Validate(ValidationSettings settings, string workingPath)
         {
             ValidationReport ret = new ValidationReport(settings);
@@ -72,24 +78,24 @@ namespace CommonLib.Model.CompositeTypes
         #region Subobject Validation
         private static List<IValidationIssue> ValidateList<T>(List<T> items, ValidationSettings settings, string workingPath) where T : IValidatable, INamedClass
         {
-            ValidationReport ret = new ValidationReport(settings);
+            List<IValidationIssue> ret = new List<IValidationIssue>();
             workingPath = ValidationUtils.ExtendWorkingPath(workingPath, "DigitalInputs");
 
             if (null == items)//container null-check
-                ret.ValidationIssues.Add(new NullValueValidationIssue(workingPath));
+                ret.Add(new NullValueValidationIssue(workingPath));
             else
                 for (int i = 0; i < items.Count; ++i)
                     if (null == items[i])//individual null-check
-                        ret.ValidationIssues.Add(new NullValueValidationIssue(string.Format("{0}[{1}]", workingPath, i)));
+                        ret.Add(new NullValueValidationIssue(string.Format("{0}[{1}]", workingPath, i)));
                     else
-                        ret.Augment(items[i].Validate(settings, workingPath));//individual validation
+                        ret.AddRange(items[i].Validate(settings, workingPath).ValidationIssues);//individual validation
 
             #region Reused Name Validation
             if (settings.Contains(ValidationSetting.ReusedNames))
             {
                 var nameIssues = ValidationUtils.ReusedNamesValidation(items, workingPath);
                 if (null != nameIssues)
-                    ret.ValidationIssues.AddRange(nameIssues);
+                    ret.AddRange(nameIssues);
             }
             #endregion
 

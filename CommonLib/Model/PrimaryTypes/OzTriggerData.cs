@@ -23,11 +23,31 @@ namespace CommonLib.Model.PrimaryTypes
         /// <summary>
         /// the parameters to the command name
         /// </summary>
-        public List<string> CommandParameters { get; set; }
-
+        public List<string> CommandParameters { get; set; } = new List<string>();
+        /// <summary>
+        /// Goes through each validation setting and member 
+        /// </summary>
+        /// <param name="settings">the active settings for validation</param>
+        /// <param name="workingPath">the path for instance; used for traversal of hierarchial data types</param>
+        /// <returns>a report of the validation issues</returns>
         public ValidationReport Validate(ValidationSettings settings, string workingPath)
         {
-            throw new NotImplementedException();
+            ValidationReport ret = new ValidationReport(settings);
+            workingPath = ValidationUtils.ExtendWorkingPath(workingPath, Name);
+
+            if(settings.Contains(ValidationSetting.NullValues))
+            {
+                if (null == CommandParameters)
+                    ret.ValidationIssues.Add(new NullValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "CommandParameters")));
+            }
+
+            if (settings.Contains(ValidationSetting.IllogicalValues))
+            {
+                if (!ValidationUtils.CheckName(Name))
+                    ret.ValidationIssues.Add(new IllogicalValueValidationIssue(ValidationUtils.ExtendWorkingPath(workingPath, "Name"), Name));
+            }
+
+            return ret;
         }
     }
     /// <summary>
@@ -65,10 +85,23 @@ namespace CommonLib.Model.PrimaryTypes
         /// The condition this trigger is called under
         /// </summary>
         public OzTriggerType TriggerType { get; set; }
-
-        public ValidationReport Validate(ValidationSetting settings, string workingPath)
+        /// <summary>
+        /// Goes through each validation setting and member 
+        /// </summary>
+        /// <param name="settings">the active settings for validation</param>
+        /// <param name="workingPath">the path for instance; used for traversal of hierarchial data types</param>
+        /// <returns>a report of the validation issues</returns>
+        public new ValidationReport Validate(ValidationSettings settings, string workingPath)
         {
-            throw new NotImplementedException();
+            ValidationReport ret = base.Validate(settings, workingPath);
+            workingPath = ValidationUtils.ExtendWorkingPath(workingPath, Name);
+
+            if (settings.Contains(ValidationSetting.IllogicalValues))
+            {
+                //joystick button is not limited, becuase that depends on which joystick is being used
+            }
+
+            return ret;
         }
     }
     /// <summary>

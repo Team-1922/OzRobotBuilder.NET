@@ -39,6 +39,9 @@ namespace CommonLib.Validation
         /// </summary>
         DefaultValues
     }
+    /// <summary>
+    /// An alias for a set of validation settings
+    /// </summary>
     public class ValidationSettings : HashSet<ValidationSetting>
     { }
 }
