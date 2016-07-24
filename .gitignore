@@ -3,6 +3,10 @@
 
 # Don't commit testing files
 TestApp/
+TestApp_/
+
+# Don't commit the nuget packages
+localPackages/
 
 # User-specific files
 *.suo

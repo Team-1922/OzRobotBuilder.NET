@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
-using JsonPrettyPrinterPlus;
 
 namespace CommonLib.Model.Serializers
 {
@@ -75,10 +74,7 @@ namespace CommonLib.Model.Serializers
         /// <returns>the json string</returns>
         public string Serialize(Document doc)
         {
-            //create the printer for this object
-            JsonPrettyPrinter printer = new JsonPrettyPrinter(new JsonPrettyPrinterPlus.JsonPrettyPrinterInternals.JsonPPStrategyContext());
-            
-            return printer.PrettyPrint(JsonConvert.SerializeObject(doc, SerializerSettings));
+            return JsonConvert.SerializeObject(doc, Formatting.Indented, SerializerSettings);
         }
     }
 }

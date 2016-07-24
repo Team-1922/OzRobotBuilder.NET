@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonLib.Model.PrimaryTypes
-{       
-    
+namespace Team1922.MVVM.Models
+{
+    //Is there some way to have an equality between these below enums and the ones in the WPI lib without importing the WPIlib?
+
     /// <summary>
     /// Mode for determining how the WPILib.Interfaces.ICANSpeedController is controlled,
     /// used internally.
