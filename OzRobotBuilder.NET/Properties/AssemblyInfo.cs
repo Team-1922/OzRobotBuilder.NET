@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VsTemplateDesigner")]
+[assembly: AssemblyTitle("OzRobotBuilder.NET")]
 [assembly: AssemblyDescription("Display a WPF designer when viewing xml files")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("VsTemplateDesigner")]
-[assembly: AssemblyCopyright("Copyright © Microsoft")]
+[assembly: AssemblyCompany("Team1922 OzRam")]
+[assembly: AssemblyProduct("OzRobotBuilder.NET")]
+[assembly: AssemblyCopyright("Copyright © TODO")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.VsTemplateDesigner {
+namespace Team1922.OzRobotBuilder.NET {
     using System;
     
     
