@@ -1,39 +1,68 @@
-﻿using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.XmlEditor;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Team1922.MVVM.Framework;
-using Microsoft.VisualStudio.Package;
-using System.Xml.Serialization;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using System.Xml;
-using Team1922.MVVM.Models;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using EnvDTE;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using System.Xml.Linq;
-using System.Reflection;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.XmlEditor;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
+using VSLangProj;
+using System.Text.RegularExpressions;
+using System.Text;
 
-namespace Team1922.OzRobotBuilder.NET
+namespace Microsoft.VsTemplateDesigner
 {
     public class ResourceInfo
     {
-        public static string ErrorMessageBoxTitle = "RobotBuilder Designer";
+        public static string ErrorMessageBoxTitle = "VsTemplateDesigner";
         public static string FieldNameDescription = "Description";
-        public static string InvalidRobotData = "The robot file you are attempting to load is invalid or corrupt";
         public static string FieldNameId = "ID";
+        public static string InvalidVsTemplateData = "The vstemplate file you are attempting to load is missing TemplateData";
         public static string SynchronizeBuffer = "Synchronize XML file with view";
         public static string ReformatBuffer = "Reformat";
+        public static string ValidationFieldMaxLength = "{0} must be {1} characters or less.";
+        public static string ValidationRequiredField = "{0} is a required value.";
     }
 
-    public class RobotEditorViewModel : ViewModelBase
+    /// <summary>
+    /// ViewModel is where the interesting portion of the VsTemplate Designer lives. The View binds to an instance of this class.
+    /// 
+    /// The View binds the various designer controls to the methods derived from IViewModel that get and set values in the XmlModel.
+    /// The ViewModel and an underlying XmlModel manage how an IVsTextBuffer is shared between the designer and the XML editor (if opened).
+    /// </summary>
+    public class ViewModel : IViewModel, IDataErrorInfo, INotifyPropertyChanged
     {
+        const int MaxIdLength = 100;
+        const int MaxProductNameLength = 60;
+        const int MaxDescriptionLength = 1024;
+
         XmlModel _xmlModel;
         XmlStore _xmlStore;
-        Robot _robotModel;
+        VSTemplate _vstemplateModel;
 
         IServiceProvider _serviceProvider;
         IVsTextLines _buffer;
@@ -46,7 +75,7 @@ namespace Team1922.OzRobotBuilder.NET
 
         LanguageService _xmlLanguageService;
 
-        public RobotEditorViewModel(XmlStore xmlStore, XmlModel xmlModel, IServiceProvider provider, IVsTextLines buffer)
+        public ViewModel(XmlStore xmlStore, XmlModel xmlModel, IServiceProvider provider, IVsTextLines buffer)
         {
             if (xmlModel == null)
                 throw new ArgumentNullException("xmlModel");
@@ -171,23 +200,23 @@ namespace Team1922.OzRobotBuilder.NET
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Robot));
+                XmlSerializer serializer = new XmlSerializer(typeof(VSTemplate));
 
                 using (XmlReader reader = GetParseTree().CreateReader())
                 {
-                    _robotModel = (Robot)serializer.Deserialize(reader);
+                    _vstemplateModel = (VSTemplate)serializer.Deserialize(reader);
                 }
 
-                if (_robotModel == null)
+                if (_vstemplateModel == null || _vstemplateModel.TemplateData == null)
                 {
-                    throw new Exception(ResourceInfo.InvalidRobotData);
+                    throw new Exception(ResourceInfo.InvalidVsTemplateData);
                 }
             }
             catch (Exception e)
             {
                 //Display error message
                 ErrorHandler.ThrowOnFailure(VsShellUtilities.ShowMessageBox(_serviceProvider,
-                    ResourceInfo.InvalidRobotData + e.Message,
+                    ResourceInfo.InvalidVsTemplateData + e.Message,
                     ResourceInfo.ErrorMessageBoxTitle,
                     OLEMSGICON.OLEMSGICON_CRITICAL,
                     OLEMSGBUTTON.OLEMSGBUTTON_OK,
@@ -303,11 +332,11 @@ namespace Team1922.OzRobotBuilder.NET
                 //PopulateModelFromReferencesBindingList();
                 //PopulateModelFromContentBindingList();
 
-                XmlSerializer serializer = new XmlSerializer(typeof(Robot));
+                XmlSerializer serializer = new XmlSerializer(typeof(VSTemplate));
                 XDocument documentFromDesignerState = new XDocument();
                 using (XmlWriter w = documentFromDesignerState.CreateWriter())
                 {
-                    serializer.Serialize(w, _robotModel);
+                    serializer.Serialize(w, _vstemplateModel);
                 }
 
                 _synchronizing = true;
@@ -984,6 +1013,48 @@ namespace Team1922.OzRobotBuilder.NET
 
 
         #endregion
-        
-    }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+
+        #region TreeView SelectionChanged
+
+        private ITrackSelection trackSel;
+        private ITrackSelection TrackSelection
+        {
+            get
+            {
+                if (trackSel == null)
+                    trackSel = _serviceProvider.GetService(typeof(STrackSelection)) as ITrackSelection;
+                return trackSel;
+            }
+        }
+
+        private Microsoft.VisualStudio.Shell.SelectionContainer selContainer;
+        public void OnSelectChanged(object p)
+        {
+            selContainer = new VisualStudio.Shell.SelectionContainer(true, false);
+            ArrayList items = new ArrayList();
+            items.Add(p);
+            selContainer.SelectableObjects = items;
+            selContainer.SelectedObjects = items;
+
+            ITrackSelection track = TrackSelection;
+            if (track != null)
+                track.OnSelectChange(selContainer);
+        }
+
+        #endregion
+    }    
 }

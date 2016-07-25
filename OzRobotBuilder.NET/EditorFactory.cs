@@ -1,4 +1,14 @@
-﻿using System;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -9,18 +19,23 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 
-namespace Team1922.OzRobotBuilder.NET
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+
+namespace Microsoft.VsTemplateDesigner
 {
-    [Guid(GuidList.guidRobotBuilderEditorFactoryString)]
+    /// <summary>
+    /// Factory for creating our editor object. Extends from the IVsEditoryFactory interface
+    /// </summary>
+    [Guid(GuidList.guidVsTemplateDesignerEditorFactoryString)]
     public sealed class EditorFactory : IVsEditorFactory, IDisposable
     {
-        public const string Extension = ".robot";
+        public const string Extension = ".vstemplate";
 
-        private RobotBuilderPackage editorPackage;
+        private VsTemplateDesignerPackage editorPackage;
         private ServiceProvider vsServiceProvider;
 
 
-        public EditorFactory(RobotBuilderPackage package)
+        public EditorFactory(VsTemplateDesignerPackage package)
         {
             editorPackage = package;
         }
@@ -33,7 +48,7 @@ namespace Team1922.OzRobotBuilder.NET
         /// <param name="psp">pointer to the service provider. Can be used to obtain instances of other interfaces
         /// </param>
         /// <returns></returns>
-        public int SetSite(Microsoft.VisualStudio.OLE.Interop.IServiceProvider psp)
+        public int SetSite(IOleServiceProvider psp)
         {
             vsServiceProvider = new ServiceProvider(psp);
             return VSConstants.S_OK;
@@ -136,7 +151,7 @@ namespace Team1922.OzRobotBuilder.NET
             // Initialize to null
             ppunkDocView = IntPtr.Zero;
             ppunkDocData = IntPtr.Zero;
-            pguidCmdUI = GuidList.guidRobotBuilderEditorFactory;
+            pguidCmdUI = GuidList.guidVsTemplateDesignerEditorFactory;
             pgrfCDW = 0;
             pbstrEditorCaption = null;
 
@@ -177,7 +192,7 @@ namespace Team1922.OzRobotBuilder.NET
                         IObjectWithSite objWSite = (IObjectWithSite)textBuffer;
                         if (objWSite != null)
                         {
-                            Microsoft.VisualStudio.OLE.Interop.IServiceProvider oleServiceProvider = (Microsoft.VisualStudio.OLE.Interop.IServiceProvider)GetService(typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider));
+                            IOleServiceProvider oleServiceProvider = (IOleServiceProvider)GetService(typeof(IOleServiceProvider));
                             objWSite.SetSite(oleServiceProvider);
                         }
                     }
@@ -215,7 +230,7 @@ namespace Team1922.OzRobotBuilder.NET
         #endregion
 
         #region IDisposable Members
-
+     
         public void Dispose()
         {
             Dispose(true);

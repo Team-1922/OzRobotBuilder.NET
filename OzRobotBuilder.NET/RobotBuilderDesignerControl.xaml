@@ -19,7 +19,6 @@
                   VerticalAlignment="Top"
                   HorizontalAlignment="Stretch"
                   ItemsSource="{Binding ViewModel.Subsystems }"  SelectedItem="{Binding ViewModel.SelectedElement, Mode=TwoWay}">
-            <TreeViewItem Header="Subsystem"/>
         </ListBox>
 
         <GridSplitter Background="DarkGray"

@@ -1,4 +1,14 @@
-﻿using System;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -9,7 +19,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 
-namespace Team1922.OzRobotBuilder.NET
+namespace Microsoft.VsTemplateDesigner
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -26,11 +36,10 @@ namespace Team1922.OzRobotBuilder.NET
     [PackageRegistration(UseManagedResourcesOnly = true)]
 
     // Register the class as a Designer View in cooperation with the Xml Editor
-    //[ProvideXmlEditorChooserDesignerView("VSTemplate", "vstemplate", LogicalViewID.Designer, 0x60,
-    //    DesignerLogicalViewEditor = typeof(EditorFactory),
-    //    Namespace = "http://schemas.microsoft.com/developer/vstemplate/2005",
-    //    MatchExtensionAndNamespace = false)]
-
+    [ProvideXmlEditorChooserDesignerView("VSTemplate", "vstemplate", LogicalViewID.Designer, 0x60,
+        DesignerLogicalViewEditor = typeof(EditorFactory),
+        Namespace = "http://schemas.microsoft.com/developer/vstemplate/2005",
+        MatchExtensionAndNamespace = false)]
     // And which type of files we want to handle
     [ProvideEditorExtension(typeof(EditorFactory), EditorFactory.Extension, 0x40, NameResourceID = 106)]
     // We register that our editor supports LOGVIEWID_Designer logical view
@@ -39,17 +48,17 @@ namespace Team1922.OzRobotBuilder.NET
     // We register the XML Editor ("{FA3CD31E-987B-443A-9B81-186104E8DAC1}") as an EditorFactoryNotify
     // object to handle our ".vstemplate" file extension for the following projects:
     // Microsoft Visual Basic Project
-    //[EditorFactoryNotifyForProject("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
+    [EditorFactoryNotifyForProject("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
     // Microsoft Visual C# Project
-    //[EditorFactoryNotifyForProject("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
+    [EditorFactoryNotifyForProject("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
 
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
-    [InstalledProductRegistration("Visual Studio Plugin for OzRobotBuilder.NET", "Used to design dynamic robot applications running on the NI RoboRIO", "1.0", IconResourceID = 400)]
+    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(GuidList.guidRobotBuilderPkgString)]
-    public sealed class RobotBuilderPackage : Package
+    [Guid(GuidList.guidVsTemplateDesignerPkgString)]
+    public sealed class VsTemplateDesignerPackage : Package
     {
         /// <summary>
         /// Default constructor of the package.
@@ -58,9 +67,9 @@ namespace Team1922.OzRobotBuilder.NET
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
-        public RobotBuilderPackage()
+        public VsTemplateDesignerPackage()
         {
-
+            
         }
 
 
