@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="RobotSchema"
+    targetNamespace="http://tempuri.org/RobotSchema.xsd"
+    xmlns:tns="http://tempuri.org/RobotSchema.xsd"
+    xmlns="http://tempuri.org/RobotSchema.xsd"
+    xmlns:mstns="http://tempuri.org/RobotSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+>
+  <!-- All Ids that are -1 are considered invalid" -->
+  
+  <xs:simpleType name="itemName">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="^([0-9]|[a-z]|[A-Z]|_)+$"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="analogInputId">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="digitalInputId">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="9"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pwmOutputId">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="9"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="relayOutputId">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:element name="robot" type="tns:robotType"/>
+  
+  <xs:complexType name="robotType">
+    <xs:sequence maxOccurs="unbounded">
+      <xs:element name="subsystem" type="tns:subsystemType" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="TeamNumber" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:positiveInteger">
+          <xs:totalDigits value="4"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute> 
+    <xs:attribute name="analogInputSampleRate" default="62500">
+      <xs:simpleType>
+        <xs:restriction base="xs:positiveInteger">
+          <xs:maxInclusive value="62500"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+  
+  <xs:complexType name="subsystemType">
+    <xs:sequence>
+      <xs:element name="pwmMotorController" type="tns:pwmMotorControllerType" maxOccurs="10"/>
+      <xs:element name="analogInput" type="tns:analogInputType" maxOccurs="10"/>
+    </xs:sequence>
+  </xs:complexType>
+    
+  <xs:complexType name="analogInputType">
+    <xs:attribute name="id" type="tns:analogInputId" default="-1"/>
+    <xs:attribute name="name" type="tns:itemName"/>
+    <xs:attribute name="accumulatorCenter" type="xs:int"/>
+    <xs:attribute name="accumulatorDeadBand" type="xs:int"/>
+    <xs:attribute name="accumulatorInitialValue" type="xs:long"/>
+    <xs:attribute name="averageBits" type="xs:int"/>
+    <xs:attribute name="oversampleBits" type="xs:int"/>
+    <xs:attribute name="conversionRatio" type="xs:double"/>
+    <xs:attribute name="sensorOffset" type="xs:double"/>
+  </xs:complexType>
+
+  <xs:complexType name="pwmMotorControllerType">
+    <xs:attribute name="id" type="tns:pwmOutputId"/>
+    <xs:attribute name="name" type="tns:itemName"/>
+  </xs:complexType>
+ 
+</xs:schema>
