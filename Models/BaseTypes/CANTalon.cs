@@ -243,8 +243,8 @@ namespace Team1922.MVVM.Models.BaseTypes
         public class CANTalonPIDController : PIDController
         {
             /// <summary>
-            /// The integration accumulation zone
-            /// TODO: what is this?
+            /// When an error is larger than this, the accumulated intration error is cleared so that high
+            ///     errors aren't racked up when at high errors
             /// </summary>
             public int IZone
             {

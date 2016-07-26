@@ -11,6 +11,10 @@ namespace Contracts
     public interface IRobotIOService
     {
         IDictionary<uint, IIOService> PWMOutputs { get; }
+        /// <summary>
+        /// In data, analog inputs and potentioemters are used differently,
+        ///     however they both use the same id's & accessed similarly from hardware
+        /// </summary>
         IDictionary<uint, IIOService> AnalogInputs { get; }
         IDictionary<uint, IIOService> RelayOutputs { get; }
         IDictionary<uint, IIOService> DigitalInputs { get; }
