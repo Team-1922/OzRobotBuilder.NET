@@ -122,35 +122,7 @@
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts 12 bit input to usable output-->
     <xs:attribute name="SensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
   </xs:complexType>
-  
-  <xs:complexType name="PIDControllerSoftware">
-    <xs:attribute name="P" type="xs:double"/>
-    <xs:attribute name="I" type="xs:double"/>
-    <xs:attribute name="D" type="xs:double"/>
-    <xs:attribute name="F" type="xs:double"/>
-    <xs:attribute name="Tolerance" type="xs:double"/>
-    <xs:attribute name="CycleDuration" type="xs:double"/>
-    <xs:attribute name="Continuous" type="xs:boolean"/>
-  </xs:complexType>
-  
-  <xs:simpleType name="PIDSource">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Displacement"/>
-      <xs:enumeration value="Speed"/>
-    </xs:restriction>
-  </xs:simpleType>
-    
-  <xs:complexType name="PIDControllerSRX">
-    <xs:attribute name="P" type="xs:double"/>
-    <xs:attribute name="I" type="xs:double"/>
-    <xs:attribute name="D" type="xs:double"/>
-    <xs:attribute name="F" type="xs:double"/>    
-    <xs:attribute name="IZone" type="xs:int"/>
-    <xs:attribute name="CloseLoopRampRate" type="xs:double"/>
-    <xs:attribute name="AllowableCloseLoopError" type="tns:RawSRXInput"/>
-    <xs:attribute name="Source" type="tns:PIDSource"/>
-  </xs:complexType>
-    
+      
   <xs:complexType name="PWMOutput">
     <xs:attribute name="ID" type="tns:PWMOutputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName"/>
@@ -173,6 +145,28 @@
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts encoder units to usable ones-->
   </xs:complexType>
   
+  
+  <xs:complexType name="PIDControllerSoftware">
+    <xs:attribute name="P" type="xs:double"/>
+    <xs:attribute name="I" type="xs:double"/>
+    <xs:attribute name="D" type="xs:double"/>
+    <xs:attribute name="F" type="xs:double"/>
+    <xs:attribute name="Tolerance" type="xs:double"/>
+    <xs:attribute name="CycleDuration" type="xs:double"/>
+    <xs:attribute name="Continuous" type="xs:boolean"/>
+  </xs:complexType>
+      
+  
+  <xs:complexType name="PIDControllerSRX">
+    <xs:attribute name="P" type="xs:double"/>
+    <xs:attribute name="I" type="xs:double"/>
+    <xs:attribute name="D" type="xs:double"/>
+    <xs:attribute name="F" type="xs:double"/>    
+    <xs:attribute name="IZone" type="xs:int"/>
+    <xs:attribute name="CloseLoopRampRate" type="xs:double"/>
+    <xs:attribute name="AllowableCloseLoopError" type="tns:RawSRXInput"/>
+    <xs:attribute name="Source" type="tns:PIDSource"/>
+  </xs:complexType>
   <xs:simpleType name="CANTalonFeedbackDevice">
     <xs:restriction base="xs:string">
       <xs:enumeration value="QuadEncoder"/>
@@ -210,6 +204,12 @@
       <xs:enumeration value="SoftPositionLimits"/>
       <xs:enumeration value="SrxDisableSwitchInputs"/>
     </xs:restriction>    
+  </xs:simpleType>
+  <xs:simpleType name="PIDSource">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Displacement"/>
+      <xs:enumeration value="Speed"/>
+    </xs:restriction>
   </xs:simpleType>
     
   <xs:complexType name="CANTalon">
