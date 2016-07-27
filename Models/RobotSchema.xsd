@@ -46,6 +46,19 @@
   <xs:simpleType name="JoystickId">
     <xs:restriction base="xs:integer">
       <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="5"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="JoystickButtonId">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
+      <xs:pattern value="^[^0].*"/><!--DO NOT match the number zero-->
+      <xs:maxInclusive value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="JoystickAxisId">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
       <xs:maxInclusive value="4"/>
     </xs:restriction>
   </xs:simpleType>
@@ -91,8 +104,20 @@
     </xs:attribute>
   </xs:complexType>
     
-  
+  <!-- TODO: finish doing the IO parts of the schema (parts that map to physical device states)-->
+  <xs:complexType name="JoystickAxis">
+    <xs:attribute name="ID" type="tns:JoystickAxisId" use="required"/>
+    <xs:attribute name="Value" type="xs:double" default="0"/>
+  </xs:complexType>
+  <xs:complexType name="JoystickButton">
+    <xs:attribute name="ID" type="tns:JoystickButtonId" use="required"/>
+    <xs:attribute name="Value" type="xs:boolean" default="false"/>
+  </xs:complexType>
   <xs:complexType name="Joystick">
+    <xs:sequence>
+      <xs:element name="Axis" type="tns:JoystickAxis" maxOccurs="5"/>
+      <xs:element name="Button" type="tns:JoystickButton" maxOccurs="12"/>
+    </xs:sequence>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="ID" type="tns:JoystickId" default="-1"/>
   </xs:complexType>
