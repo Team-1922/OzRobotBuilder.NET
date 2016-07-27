@@ -99,14 +99,22 @@
   <!-- Note that this is non less efficient than continuously updating a motor with say a joystick input -->
   <xs:complexType name="OnChangeEventHandler">
     <xs:choice>        
+      <!--The full name and parameters of a C# method to call-->
       <xs:element name="Body" type="xs:string"/>
-      <xs:element name="ModifyValue" type="xs:string"/>
+      <!--A simpler way to just modify a value-->
+      <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
     </xs:choice>
     <xs:attribute name="Name" type="xs:string" use="required"/>
     <xs:attribute name="WatchPath" type="tns:XPath" use="required"/>
     <xs:attribute name="MinDelta" type="xs:double" default="0"/><!--Triggers at ANY change; this could be slow-->
   </xs:complexType>
   <xs:complexType name="OnWithinRangeEventHandler">
+    <xs:choice>        
+      <!--The full name and parameters of a C# method to call-->
+      <xs:element name="Body" type="xs:string"/>
+      <!--A simpler way to just modify a value-->
+      <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
+    </xs:choice>
     <xs:attribute name="Name" type="xs:string" use="required"/>
     <xs:attribute name="WatchPath" type="tns:XPath" use="required"/>
     <xs:attribute name="Min" type="xs:double" use="required"/>
