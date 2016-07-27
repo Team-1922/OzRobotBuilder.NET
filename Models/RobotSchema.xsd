@@ -74,6 +74,12 @@
       <xs:maxInclusive value="1023"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="NormalizedDouble">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="XPath">
     <xs:restriction base="xs:string"/>
   </xs:simpleType>
@@ -107,7 +113,7 @@
   <!-- TODO: finish doing the IO parts of the schema (parts that map to physical device states)-->
   <xs:complexType name="JoystickAxis">
     <xs:attribute name="ID" type="tns:JoystickAxisId" use="required"/>
-    <xs:attribute name="Value" type="xs:double" default="0"/>
+    <xs:attribute name="Value" type="tns:NormalizedDouble" default="0"/>
   </xs:complexType>
   <xs:complexType name="JoystickButton">
     <xs:attribute name="ID" type="tns:JoystickButtonId" use="required"/>
@@ -115,6 +121,7 @@
   </xs:complexType>
   <xs:complexType name="Joystick">
     <xs:sequence>
+      <!--State Values-->
       <xs:element name="Axis" type="tns:JoystickAxis" maxOccurs="5"/>
       <xs:element name="Button" type="tns:JoystickButton" maxOccurs="12"/>
     </xs:sequence>
@@ -204,29 +211,58 @@
     <xs:attribute name="AverageBits" type="xs:int" use="required"/> <!--What are the limitations on this and the one below it-->
     <xs:attribute name="OversampleBits" type="xs:int" use="required"/>
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts 12 bit input to usable output-->
-    <xs:attribute name="CensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
+    <xs:attribute name="SensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
+    <!--State Values-->
+    <xs:attribute name="RawInput" type="tns:RawAnalogInput" default="0"/>
+    <xs:attribute name="ConvertedInput" type="xs:double" default="0"/>
   </xs:complexType>
   
+  <!--TODO: this should be somehow merged with AnalogInput eventually-->
   <xs:complexType name="Potentiometer">
     <xs:attribute name="ID" type="tns:AnalogInputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts 12 bit input to usable output-->
     <xs:attribute name="SensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
+    <!--State Values-->
+    <xs:attribute name="RawValue" type="tns:RawAnalogInput" default="0"/>
+    <xs:attribute name="Value" type="xs:double" default="0"/>
   </xs:complexType>
       
   <xs:complexType name="PWMOutput">
     <xs:attribute name="ID" type="tns:PWMOutputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName"/>
+    <!--State Values-->
+    <xs:attribute name="Value" type="tns:NormalizedDouble" default="0"/>
   </xs:complexType>
   
+  <xs:simpleType name="RelayDirection">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ForwardOnly"/>
+      <xs:enumeration value="ReverseOnly"/>
+      <xs:enumeration value="Both"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="RelayValue">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Off"/>
+      <xs:enumeration value="Forward"/>
+      <xs:enumeration value="Reverse"/>
+      <xs:enumeration value="On"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="RelayOutput">
     <xs:attribute name="ID" type="tns:RelayOutputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
+    <!--State Values-->
+    <xs:attribute name="Direction" type="tns:RelayDirection" default="ForwardOnly"/>
+    <xs:attribute name="Value" type="tns:RelayValue" default="Off"/>
   </xs:complexType>
   
   <xs:complexType name="DigitalInput">
     <xs:attribute name="ID" type="tns:DigitalInputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName"/>
+    <!--State Values-->
+    <xs:attribute name="Value" type="xs:boolean" default="false"/>
   </xs:complexType>
   
   <xs:complexType name="QuadEncoder">
@@ -234,6 +270,11 @@
     <xs:attribute name="ID1" type="tns:DigitalInputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName"/>
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts encoder units to usable ones-->
+    <!--State Values-->
+    <xs:attribute name="RawValue" type="xs:long" default="0"/>
+    <xs:attribute name="Value" type="xs:double" default="0"/>
+    <xs:attribute name="RawVelocity" type="xs:double" default="0"/>
+    <xs:attribute name="Velocity" type="xs:double" default="0"/>
   </xs:complexType>
   
   
@@ -256,7 +297,7 @@
     <xs:attribute name="IZone" type="xs:int"/>
     <xs:attribute name="CloseLoopRampRate" type="xs:double"/>
     <xs:attribute name="AllowableCloseLoopError" type="tns:RawSRXInput"/>
-    <xs:attribute name="Source" type="tns:PIDSource"/>
+    <xs:attribute name="SourceType" type="tns:CANTalonDifferentiationLevel"/>
   </xs:complexType>
   <xs:simpleType name="CANTalonFeedbackDevice">
     <xs:restriction base="xs:string">
@@ -296,7 +337,7 @@
       <xs:enumeration value="SrxDisableSwitchInputs"/>
     </xs:restriction>    
   </xs:simpleType>
-  <xs:simpleType name="PIDSource">
+  <xs:simpleType name="CANTalonDifferentiationLevel">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Displacement"/>
       <xs:enumeration value="Speed"/>
@@ -333,7 +374,9 @@
     <xs:attribute name="NominalForwardVoltage" type="xs:double" default="0"/>
     <xs:attribute name="NominalReverseVoltage" type="xs:double" default="0"/>
     <xs:attribute name="PeakForwardVoltage" type="xs:double"  default="12"/>
-    <xs:attribute name="PeakReverseVoltage" type="xs:double" default="-12"/>  
+    <xs:attribute name="PeakReverseVoltage" type="xs:double" default="-12"/>
+    <!--State Values-->
+    <xs:attribute name="Value" type="xs:double" default="0"/>
   </xs:complexType>
  
 </xs:schema>
