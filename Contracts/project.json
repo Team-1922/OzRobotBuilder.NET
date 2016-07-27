@@ -1,15 +1,11 @@
 {
   "version": "1.0.0-*",
-
   "dependencies": {
-    "Models": "1.0.0-*",
     "MVVMFramework": "1.0.0-*",
     "NETStandard.Library": "1.5.0-rc2-24027"
   },
-
   "frameworks": {
     "net461": {
-
     },
     "netstandard1.5": {
       "imports": "dnxcore50"
@@ -19,5 +15,8 @@
     "postcompile": [
       "dotnet pack --no-build --configuration Debug -o %project:Directory%/../localPackages"
     ]
+  },
+  "buildOptions": {
+    "xmlDoc": true
   }
 }
