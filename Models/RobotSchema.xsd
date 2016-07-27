@@ -62,11 +62,12 @@
   <xs:element name="Robot" type="tns:Robot"/>
   
   <xs:complexType name="Robot">
-    <xs:sequence maxOccurs="unbounded">
-      <xs:element name="Subsystem" type="tns:Subsystem" maxOccurs="unbounded"/>
-      <!--<xs:element name="EventHandler" type="tns:EventHandler" maxOccurs="unbounded"/>
-      <xs:element name="ContinuousCommand" type="tns:ContinuousCommand" maxOccurs="unbounded"/>-->
-    </xs:sequence>
+    <xs:choice maxOccurs="unbounded">
+      <xs:element name="Subsystem" type="tns:Subsystem"/>
+      <xs:element name="OnChangeEventHandler" type="tns:OnChangeEventHandler"/>
+      <xs:element name="OnWithinRangeEventHandler" type="tns:OnWithinRangeEventHandler"/>
+      <xs:element name="ContinuousCommand" type="tns:ContinuousCommand"/>
+    </xs:choice>
     <xs:attribute name="TeamNumber" use="required">
       <xs:simpleType>
         <xs:restriction base="xs:positiveInteger">
@@ -122,7 +123,18 @@
     <xs:attribute name="Invert" type="xs:boolean" default="false"/>
   </xs:complexType>
   
-    
+  <!--The only difference between this and the OnChangeEventHandler is this one is guaranteed to be called every update cycle-->
+  <xs:complexType name="ContinuousCommand">
+    <xs:choice>        
+      <!--The full name and parameters of a C# method to call-->
+      <xs:element name="Body" type="xs:string"/>
+      <!--A simpler way to just modify a value-->
+      <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
+    </xs:choice>
+    <xs:attribute name="Name" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  
   <xs:complexType name="Subsystem">
     <xs:sequence>
       <xs:element name="PWMOutput" type="tns:PWMOutput" minOccurs="0" maxOccurs="10"/>
