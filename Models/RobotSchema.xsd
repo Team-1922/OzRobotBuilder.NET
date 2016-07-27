@@ -43,6 +43,12 @@
       <xs:minInclusive value="-1"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="JoystickId">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
+      <xs:maxInclusive value="4"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="RawAnalogInput">
     <xs:restriction base="xs:int">
       <xs:minInclusive value="0"/>
@@ -67,6 +73,7 @@
       <xs:element name="OnChangeEventHandler" type="tns:OnChangeEventHandler"/>
       <xs:element name="OnWithinRangeEventHandler" type="tns:OnWithinRangeEventHandler"/>
       <xs:element name="ContinuousCommand" type="tns:ContinuousCommand"/>
+      <xs:element name="Joystick" type="tns:Joystick"/>
     </xs:choice>
     <xs:attribute name="TeamNumber" use="required">
       <xs:simpleType>
@@ -84,6 +91,13 @@
     </xs:attribute>
   </xs:complexType>
     
+  
+  <xs:complexType name="Joystick">
+    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
+    <xs:attribute name="ID" type="tns:JoystickId" default="-1"/>
+  </xs:complexType>
+  
+  
   
   <xs:simpleType name="ArithOp">
     <xs:restriction base="xs:string"/>
@@ -134,6 +148,8 @@
     <xs:attribute name="Name" type="xs:string" use="required"/>
   </xs:complexType>
 
+  
+  
   
   <xs:complexType name="Subsystem">
     <xs:sequence>
