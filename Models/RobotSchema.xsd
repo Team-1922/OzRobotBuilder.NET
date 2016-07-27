@@ -101,7 +101,7 @@
   <xs:complexType name="OnChangeEventHandler">
     <xs:choice>        
       <!--The full name and parameters of a C# method to call-->
-      <xs:element name="Body" type="xs:string"/>
+      <xs:element name="FullCSMethod" type="xs:string"/>
       <!--A simpler way to just modify a value-->
       <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
     </xs:choice>
@@ -112,7 +112,7 @@
   <xs:complexType name="OnWithinRangeEventHandler">
     <xs:choice>        
       <!--The full name and parameters of a C# method to call-->
-      <xs:element name="Body" type="xs:string"/>
+      <xs:element name="FullCSMethod" type="xs:string"/>
       <!--A simpler way to just modify a value-->
       <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
     </xs:choice>
@@ -127,7 +127,7 @@
   <xs:complexType name="ContinuousCommand">
     <xs:choice>        
       <!--The full name and parameters of a C# method to call-->
-      <xs:element name="Body" type="xs:string"/>
+      <xs:element name="FullCSMethod" type="xs:string"/>
       <!--A simpler way to just modify a value-->
       <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
     </xs:choice>
