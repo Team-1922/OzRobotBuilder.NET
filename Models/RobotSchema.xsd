@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema ID="RobotSchema"
+<xs:schema
     targetNamespace="http://tempuri.org/RobotSchema.xsd"
     xmlns:tns="http://tempuri.org/RobotSchema.xsd"
     xmlns="http://tempuri.org/RobotSchema.xsd"
@@ -56,11 +56,13 @@
     </xs:restriction>
   </xs:simpleType>
   
-  <xs:element name="Robot" type="tns:RobotType"/>
+  <xs:element name="Robot" type="tns:Robot"/>
   
-  <xs:complexType name="RobotType">
+  <xs:complexType name="Robot">
     <xs:sequence maxOccurs="unbounded">
-      <xs:element name="Subsystem" type="tns:SubsystemType" maxOccurs="unbounded"/>
+      <xs:element name="Subsystem" type="tns:Subsystem" maxOccurs="unbounded"/>
+      <!--<xs:element name="EventHandler" type="tns:EventHandler" maxOccurs="unbounded"/>
+      <xs:element name="ContinuousCommand" type="tns:ContinuousCommand" maxOccurs="unbounded"/>-->
     </xs:sequence>
     <xs:attribute name="TeamNumber" use="required">
       <xs:simpleType>
@@ -78,62 +80,67 @@
     </xs:attribute>
   </xs:complexType>
   
-  <xs:complexType name="SubsystemType">
+  <xs:complexType name="EventHandler">
+    <xs:attribute name="Name" type="xs:string" use="required"/>
+  </xs:complexType>
+  
+    
+  <xs:complexType name="Subsystem">
     <xs:sequence>
       <xs:element name="PWMOutput" type="tns:PWMOutput" minOccurs="0" maxOccurs="10"/>
       <xs:choice minOccurs="0" maxOccurs="10">
-        <xs:element name="AnalogInput" type="tns:AnalogInputType"/>     
-        <xs:element name="Potentiometer" type="tns:PotentiometerType"/>
+        <xs:element name="AnalogInput" type="tns:AnalogInput"/>     
+        <xs:element name="Potentiometer" type="tns:Potentiometer"/>
       </xs:choice>
       <xs:choice minOccurs="0" maxOccurs="5">
-        <xs:element name="QuadEncoder" type="tns:QuadEncoderType" minOccurs="1" maxOccurs="1"/>
-        <xs:element name="DigitalInput" type="tns:DigitalInputType" minOccurs="1" maxOccurs="2"/>
+        <xs:element name="QuadEncoder" type="tns:QuadEncoder" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="DigitalInput" type="tns:DigitalInput" minOccurs="1" maxOccurs="2"/>
       </xs:choice>
-      <xs:element name="RelayOutput" type="tns:RelayOutputType" minOccurs="0" maxOccurs="4"/>
-      <xs:element name="CANTalons" type="tns:CANTalonType" minOccurs="0" maxOccurs="unbounded"/><!--realistically this won't be that large-->
-      <xs:element name="PIDController" type="tns:PIDControllerSoftwareType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="RelayOutput" type="tns:RelayOutput" minOccurs="0" maxOccurs="4"/>
+      <xs:element name="CANTalons" type="tns:CANTalon" minOccurs="0" maxOccurs="unbounded"/><!--realistically this won't be that large-->
+      <xs:element name="PIDController" type="tns:PIDControllerSoftware" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
-    <xs:attribute use="required" name="Name" type="tns:ItemName"/>
+    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="SoftwarePIDEnabled" type="xs:boolean" default="false"/>
   </xs:complexType>
     
-  <xs:complexType name="AnalogInputType">
+  <xs:complexType name="AnalogInput">
     <xs:attribute name="ID" type="tns:AnalogInputId" default="-1"/>
-    <xs:attribute use="required" name="Name" type="tns:ItemName"/>
+    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="AccumulatorCenter" type="tns:RawAnalogInput" default="2048"/>
-    <xs:attribute use="required" name="accumulatorDeadBand" type="tns:RawAnalogInput"/>
+    <xs:attribute name="accumulatorDeadBand" type="tns:RawAnalogInput" use="required"/>
     <xs:attribute name="AccumulatorInitialValue" type="tns:RawAnalogInput" default="0"/>
-    <xs:attribute use="required" name="AverageBits" type="xs:int"/> <!--What are the limitations on this and the one below it-->
-    <xs:attribute use="required" name="OversampleBits" type="xs:int"/>
+    <xs:attribute name="AverageBits" type="xs:int" use="required"/> <!--What are the limitations on this and the one below it-->
+    <xs:attribute name="OversampleBits" type="xs:int" use="required"/>
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts 12 bit input to usable output-->
     <xs:attribute name="CensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
   </xs:complexType>
   
-  <xs:complexType name="PotentiometerType">
+  <xs:complexType name="Potentiometer">
     <xs:attribute name="ID" type="tns:AnalogInputId" default="-1"/>
-    <xs:attribute use="required" name="Name" type="tns:ItemName"/>
+    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts 12 bit input to usable output-->
     <xs:attribute name="SensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
   </xs:complexType>
   
-  <xs:complexType name="PIDControllerSoftwareType">
+  <xs:complexType name="PIDControllerSoftware">
     <xs:attribute name="P" type="xs:double"/>
     <xs:attribute name="I" type="xs:double"/>
     <xs:attribute name="D" type="xs:double"/>
     <xs:attribute name="F" type="xs:double"/>
     <xs:attribute name="Tolerance" type="xs:double"/>
     <xs:attribute name="CycleDuration" type="xs:double"/>
-    <xs:attribute name="Continuous" type="xs:bool"/>
+    <xs:attribute name="Continuous" type="xs:boolean"/>
   </xs:complexType>
   
-  <xs:simpleType name="PIDSourceType">
+  <xs:simpleType name="PIDSource">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Position"/>
+      <xs:enumeration value="Displacement"/>
       <xs:enumeration value="Speed"/>
     </xs:restriction>
   </xs:simpleType>
     
-  <xs:complexType name="PIDControllerSRXType">
+  <xs:complexType name="PIDControllerSRX">
     <xs:attribute name="P" type="xs:double"/>
     <xs:attribute name="I" type="xs:double"/>
     <xs:attribute name="D" type="xs:double"/>
@@ -141,20 +148,25 @@
     <xs:attribute name="IZone" type="xs:int"/>
     <xs:attribute name="CloseLoopRampRate" type="xs:double"/>
     <xs:attribute name="AllowableCloseLoopError" type="tns:RawSRXInput"/>
-    <xs:attribute name="SourceType" type="tns:PIDSourceType"/>
+    <xs:attribute name="Source" type="tns:PIDSource"/>
   </xs:complexType>
     
   <xs:complexType name="PWMOutput">
-    <xs:attribute name="ID" type="tns:PwmOutputId" default="-1"/>
+    <xs:attribute name="ID" type="tns:PWMOutputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName"/>
   </xs:complexType>
   
-  <xs:complexType name="DigitalInputType">
+  <xs:complexType name="RelayOutput">
+    <xs:attribute name="ID" type="tns:RelayOutputId" default="-1"/>
+    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
+  </xs:complexType>
+  
+  <xs:complexType name="DigitalInput">
     <xs:attribute name="ID" type="tns:DigitalInputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName"/>
   </xs:complexType>
   
-  <xs:complexType name="quadEncoderType">
+  <xs:complexType name="QuadEncoder">
     <xs:attribute name="ID" type="tns:DigitalInputId" default="-1"/>
     <xs:attribute name="ID1" type="tns:DigitalInputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName"/>
@@ -200,21 +212,21 @@
     </xs:restriction>    
   </xs:simpleType>
     
-  <xs:complexType name="CANTalonType">
+  <xs:complexType name="CANTalon">
     <xs:sequence>
       <xs:choice>
-        <xs:element name="AnalogInput" type="tns:AnalogInputType"/>
-        <xs:element name="Potentiometer" type="tns:PotentiometerType"/>
+        <xs:element name="AnalogInput" type="tns:AnalogInput"/>
+        <xs:element name="Potentiometer" type="tns:Potentiometer"/>
       </xs:choice>
-      <xs:element name="QuadEncoder" type="tns:quadEncoderType" maxOccurs="1"/>
-      <xs:element name="PIDConfig0" type="tns:PIDControllerSRXType" maxOccurs="1"/>
-      <xs:element name="PIDConfig1" type="tns:PIDControllerSRXType" maxOccurs="1"/>
+      <xs:element name="QuadEncoder" type="tns:QuadEncoder" maxOccurs="1"/>
+      <xs:element name="PIDConfig0" type="tns:PIDControllerSRX" maxOccurs="1"/>
+      <xs:element name="PIDConfig1" type="tns:PIDControllerSRX" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="ID" type="tns:CANId" default="-1"/>
-    <xs:attribute use="required" name="Name" type="tns:ItemName"/>
+    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="EnabledPIDProfile" type="xs:boolean" default="0"/>
     <xs:attribute name="FeedbackDevice" type="tns:CANTalonFeedbackDevice" default="QuadEncoder"/>
-    <xs:attribute name="ControlMode" type="tns:CANTalonControlMode" default="PercentVBus"/>
+    <xs:attribute name="ControlMode" type="tns:CANTalonControlMode" default="PercentVbus"/>
     <xs:attribute name="NeutralMode" type="tns:CANTalonNeutralMode" default="Coast"/>
     <xs:attribute name="ZeroSensorPositionOnIndexEnabled" type="xs:boolean" default="false"/>
     <xs:attribute name="ZeroSensorPositionOnRisingEdge" type="xs:boolean" default="false"/>
