@@ -55,6 +55,9 @@
       <xs:maxInclusive value="1023"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="XPath">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
   
   <xs:element name="Robot" type="tns:Robot"/>
   
@@ -79,9 +82,36 @@
       </xs:simpleType>
     </xs:attribute>
   </xs:complexType>
+    
   
-  <xs:complexType name="EventHandler">
+  <xs:simpleType name="ArithOp">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="ModifyValueHandler">
+    <xs:sequence>
+      <!-- This is a arithmetic expression which is calculated at runtime, but validated on startup
+      Note that this can contain XPaths to other numerical values -->
+      <xs:element name="ArithOp" type="tns:ArithOp" minOccurs="1" maxOccurs="1"/>      
+    </xs:sequence>
+    <xs:attribute name="ModifyPath" type="tns:XPath"/>
+  </xs:complexType>
+    
+  <!-- Note that this is non less efficient than continuously updating a motor with say a joystick input -->
+  <xs:complexType name="OnChangeEventHandler">
+    <xs:choice>        
+      <xs:element name="Body" type="xs:string"/>
+      <xs:element name="ModifyValue" type="xs:string"/>
+    </xs:choice>
     <xs:attribute name="Name" type="xs:string" use="required"/>
+    <xs:attribute name="WatchPath" type="tns:XPath" use="required"/>
+    <xs:attribute name="MinDelta" type="xs:double" default="0"/><!--Triggers at ANY change; this could be slow-->
+  </xs:complexType>
+  <xs:complexType name="OnWithinRangeEventHandler">
+    <xs:attribute name="Name" type="xs:string" use="required"/>
+    <xs:attribute name="WatchPath" type="tns:XPath" use="required"/>
+    <xs:attribute name="Min" type="xs:double" use="required"/>
+    <xs:attribute name="Max" type="xs:double" use="required"/>
+    <xs:attribute name="Invert" type="xs:boolean" default="false"/>
   </xs:complexType>
   
     
