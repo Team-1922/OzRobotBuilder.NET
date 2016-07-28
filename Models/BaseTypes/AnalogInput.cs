@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Framework;
 
-namespace Team1922.MVVM.Models.BaseTypes
+namespace Team1922.MVVM.Models.Deprecated.BaseTypes
 {
     /// <summary>
     /// This is more complicated than the potentiometer (and the potentiometer might be merged into this) because of polling rates, accumulation, etc.

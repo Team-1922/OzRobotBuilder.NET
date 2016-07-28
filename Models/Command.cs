@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models.DynamicParams;
 
-namespace Team1922.MVVM.Models
+namespace Team1922.MVVM.Models.Deprecated
 {
     /// <summary>
     /// The data to create a dynamically loaded command

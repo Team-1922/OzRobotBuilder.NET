@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models.DynamicParams;
 
-namespace Team1922.MVVM.Models
+namespace Team1922.MVVM.Models.Deprecated
 {
     /// <summary>
     /// The base trigger data which contains information about the command which is called

@@ -16,7 +16,7 @@ namespace Team1922.Contracts
         IDictionary<uint, IIOService> PWMOutputs { get; }
         /// <summary>
         /// In data, analog inputs and potentioemters are used differently,
-        ///     however they both use the same id's & accessed similarly from hardware
+        /// however they both use the same id's & accessed similarly from hardware
         /// </summary>
         IDictionary<uint, IIOService> AnalogInputs { get; }
         /// <summary>

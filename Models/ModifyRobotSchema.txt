@@ -1,0 +1,4 @@
+﻿This is a list of things to do after regernerating the RobotSchema.cs
+
+-add namespace
+-Remove [System.Serializable] attribute

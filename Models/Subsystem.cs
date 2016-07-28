@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Framework;
-using Team1922.MVVM.Models.BaseTypes;
+using Team1922.MVVM.Models.Deprecated.BaseTypes;
 
-namespace Team1922.MVVM.Models
+namespace Team1922.MVVM.Models.Deprecated
 {
     /// <summary>
     /// A subsystem with all of its possible inputs and outputs
