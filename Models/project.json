@@ -8,9 +8,7 @@
   },
   "frameworks": {
     "net461": {
-      "dependencies": {
-        "Microsoft.Composition": "1.0.27"
-      }
+
     },
     "netstandard1.5": {
       "imports": "dnxcore50"
