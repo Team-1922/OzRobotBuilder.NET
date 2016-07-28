@@ -87,13 +87,13 @@
   <xs:element name="Robot" type="tns:Robot"/>
   
   <xs:complexType name="Robot">
-    <xs:choice maxOccurs="unbounded">
-      <xs:element name="Subsystem" type="tns:Subsystem"/>
-      <xs:element name="OnChangeEventHandler" type="tns:OnChangeEventHandler"/>
-      <xs:element name="OnWithinRangeEventHandler" type="tns:OnWithinRangeEventHandler"/>
-      <xs:element name="ContinuousCommand" type="tns:ContinuousCommand"/>
-      <xs:element name="Joystick" type="tns:Joystick"/>
-    </xs:choice>
+    <xs:sequence>
+      <xs:element name="Subsystem" type="tns:Subsystem" maxOccurs="unbounded"/>
+      <xs:element name="Joystick" type="tns:Joystick" maxOccurs="unbounded"/>
+      <xs:element name="OnChangeEventHandler" type="tns:OnChangeEventHandler" maxOccurs="unbounded"/>
+      <xs:element name="OnWithinRangeEventHandler" type="tns:OnWithinRangeEventHandler" maxOccurs="unbounded"/>
+      <xs:element name="ContinuousCommand" type="tns:ContinuousCommand" maxOccurs="unbounded"/>
+    </xs:sequence>
     <xs:attribute name="TeamNumber" use="required">
       <xs:simpleType>
         <xs:restriction base="xs:positiveInteger">
@@ -131,37 +131,34 @@
   
   
   
-  <xs:simpleType name="ArithOp">
-    <xs:restriction base="xs:string"/>
-  </xs:simpleType>
-  <xs:complexType name="ModifyValueHandler">
-    <xs:sequence>
+  <xs:simpleType name="EventTargetType">
+    <xs:restriction base="xs:string">
       <!-- This is a arithmetic expression which is calculated at runtime, but validated on startup
-      Note that this can contain XPaths to other numerical values -->
-      <xs:element name="ArithOp" type="tns:ArithOp" minOccurs="1" maxOccurs="1"/>      
-    </xs:sequence>
-    <xs:attribute name="ModifyPath" type="tns:XPath"/>
+        Note that this can contain XPaths to other numerical values -->
+      <xs:enumeration value="ModifyValue"/>
+      <!--The full name and parameters of a C# method to call-->
+      <xs:enumeration value="FullCSMethod"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="EventTarget">
+    <xs:attribute name="Type" type="tns:EventTargetType"/>
+    <xs:attribute name="Path" type="tns:XPath"/>
+    <xs:attribute name="Value" type="xs:string"/>
   </xs:complexType>
-    
+  
   <!-- Note that this is non less efficient than continuously updating a motor with say a joystick input -->
   <xs:complexType name="OnChangeEventHandler">
-    <xs:choice>        
-      <!--The full name and parameters of a C# method to call-->
-      <xs:element name="FullCSMethod" type="xs:string"/>
-      <!--A simpler way to just modify a value-->
-      <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
-    </xs:choice>
+    <xs:all minOccurs="1">
+      <xs:element  name="EventTarget" type="tns:EventTarget"/>
+    </xs:all>
     <xs:attribute name="Name" type="xs:string" use="required"/>
     <xs:attribute name="WatchPath" type="tns:XPath" use="required"/>
     <xs:attribute name="MinDelta" type="xs:double" default="0"/><!--Triggers at ANY change; this could be slow-->
   </xs:complexType>
   <xs:complexType name="OnWithinRangeEventHandler">
-    <xs:choice>        
-      <!--The full name and parameters of a C# method to call-->
-      <xs:element name="FullCSMethod" type="xs:string"/>
-      <!--A simpler way to just modify a value-->
-      <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
-    </xs:choice>
+    <xs:all minOccurs="1">
+      <xs:element  name="EventTarget" type="tns:EventTarget"/>
+    </xs:all>
     <xs:attribute name="Name" type="xs:string" use="required"/>
     <xs:attribute name="WatchPath" type="tns:XPath" use="required"/>
     <xs:attribute name="Min" type="xs:double" use="required"/>
@@ -171,12 +168,9 @@
   
   <!--The only difference between this and the OnChangeEventHandler is this one is guaranteed to be called every update cycle-->
   <xs:complexType name="ContinuousCommand">
-    <xs:choice>        
-      <!--The full name and parameters of a C# method to call-->
-      <xs:element name="FullCSMethod" type="xs:string"/>
-      <!--A simpler way to just modify a value-->
-      <xs:element name="ModifyValue" type="tns:ModifyValueHandler"/>
-    </xs:choice>
+    <xs:all minOccurs="1">
+      <xs:element  name="EventTarget" type="tns:EventTarget"/>
+    </xs:all>
     <xs:attribute name="Name" type="xs:string" use="required"/>
   </xs:complexType>
 
@@ -186,14 +180,9 @@
   <xs:complexType name="Subsystem">
     <xs:sequence>
       <xs:element name="PWMOutput" type="tns:PWMOutput" minOccurs="0" maxOccurs="10"/>
-      <xs:choice minOccurs="0" maxOccurs="10">
-        <xs:element name="AnalogInput" type="tns:AnalogInput"/>     
-        <xs:element name="Potentiometer" type="tns:Potentiometer"/>
-      </xs:choice>
-      <xs:choice minOccurs="0" maxOccurs="5">
-        <xs:element name="QuadEncoder" type="tns:QuadEncoder" minOccurs="1" maxOccurs="1"/>
-        <xs:element name="DigitalInput" type="tns:DigitalInput" minOccurs="1" maxOccurs="2"/>
-      </xs:choice>
+      <xs:element name="AnalogInput" type="tns:AnalogInput" minOccurs="0" maxOccurs="4"/>     
+      <xs:element name="QuadEncoder" type="tns:QuadEncoder" minOccurs="0" maxOccurs="5"/>
+      <xs:element name="DigitalInput" type="tns:DigitalInput" minOccurs="0" maxOccurs="10"/>
       <xs:element name="RelayOutput" type="tns:RelayOutput" minOccurs="0" maxOccurs="4"/>
       <xs:element name="CANTalons" type="tns:CANTalon" minOccurs="0" maxOccurs="unbounded"/><!--realistically this won't be that large-->
       <xs:element name="PIDController" type="tns:PIDControllerSoftware" minOccurs="0" maxOccurs="1"/>
@@ -202,6 +191,7 @@
     <xs:attribute name="SoftwarePIDEnabled" type="xs:boolean" default="false"/>
   </xs:complexType>
     
+  <!--This is for all analog inputs-->
   <xs:complexType name="AnalogInput">
     <xs:attribute name="ID" type="tns:AnalogInputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
@@ -215,17 +205,8 @@
     <!--State Values-->
     <xs:attribute name="RawInput" type="tns:RawAnalogInput" default="0"/>
     <xs:attribute name="ConvertedInput" type="xs:double" default="0"/>
-  </xs:complexType>
-  
-  <!--TODO: this should be somehow merged with AnalogInput eventually-->
-  <xs:complexType name="Potentiometer">
-    <xs:attribute name="ID" type="tns:AnalogInputId" default="-1"/>
-    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
-    <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts 12 bit input to usable output-->
-    <xs:attribute name="SensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
-    <!--State Values-->
-    <xs:attribute name="RawValue" type="tns:RawAnalogInput" default="0"/>
-    <xs:attribute name="Value" type="xs:double" default="0"/>
+    <xs:attribute name="AccumulatorCount" type="xs:long" default="0"/>
+    <xs:attribute name="AccumulatorValue" type="xs:long" default="0"/>
   </xs:complexType>
       
   <xs:complexType name="PWMOutput">
@@ -346,10 +327,7 @@
     
   <xs:complexType name="CANTalon">
     <xs:sequence>
-      <xs:choice>
-        <xs:element name="AnalogInput" type="tns:AnalogInput"/>
-        <xs:element name="Potentiometer" type="tns:Potentiometer"/>
-      </xs:choice>
+      <xs:element name="AnalogInput" type="tns:AnalogInput"/>
       <xs:element name="QuadEncoder" type="tns:QuadEncoder" maxOccurs="1"/>
       <xs:element name="PIDConfig0" type="tns:PIDControllerSRX" maxOccurs="1"/>
       <xs:element name="PIDConfig1" type="tns:PIDControllerSRX" maxOccurs="1"/>
