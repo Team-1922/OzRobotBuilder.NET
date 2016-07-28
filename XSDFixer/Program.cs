@@ -73,7 +73,7 @@ namespace XSDFixer
                             }
                         }
                         //after the last line close the namespace definition
-                        outFile.WriteLine("}");
+                        //outFile.WriteLine("}");
                     }
                 }
                 //delete the original
