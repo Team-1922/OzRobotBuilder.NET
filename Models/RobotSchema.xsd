@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Generate using "xsd /c /edb /n:"Team1922.MVVM.Models" RobotSchema.xsd"-->
 <xs:schema
     targetNamespace="http://tempuri.org/RobotSchema.xsd"
     xmlns:tns="http://tempuri.org/RobotSchema.xsd"

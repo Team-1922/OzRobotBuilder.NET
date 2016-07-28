@@ -57,7 +57,7 @@ namespace XSDFixer
                                 abort = true;
                                 break;
                             }
-                            if (line.Contains("[System.ComponentModel.DesignerCategoryAttribute(\"code\")]"))
+                            else if (line.Contains("[System.ComponentModel.DesignerCategoryAttribute(\"code\")]"))
                             {
                                 outFile.WriteLine($"#if {args[1]}");
                                 WriteLine(line);
@@ -66,14 +66,6 @@ namespace XSDFixer
                             else if(line.Contains("[System.SerializableAttribute()]"))
                             {
                                 //skip this line
-                            }
-                            else if(line.Contains("using System.Xml.Serialization;"))
-                            {
-                                WriteLine(line);
-                                WriteLine("");
-                                WriteLine($"namespace {args[2]}");
-                                WriteLine("{");
-                                startTabbing = true;
                             }
                             else
                             {
