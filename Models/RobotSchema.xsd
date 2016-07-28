@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--Generate using "xsd /c /edb /n:"Team1922.MVVM.Models" RobotSchema.xsd"-->
 <xs:schema
-    targetNamespace="http://tempuri.org/RobotSchema.xsd"
-    xmlns:tns="http://tempuri.org/RobotSchema.xsd"
-    xmlns="http://tempuri.org/RobotSchema.xsd"
-    xmlns:mstns="http://tempuri.org/RobotSchema.xsd"
+    targetNamespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd"
+    xmlns:tns="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd"
+    xmlns="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd"
+    xmlns:mstns="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
 >
