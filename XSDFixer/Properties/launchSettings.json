@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XSDFixer": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\kjmac\\Documents\\GitHub\\OzRobotBuilder.NET\\Models\\RobotSchema.cs NET461 Team1922.MVVM.Models"
+    }
+  }
+}
