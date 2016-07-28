@@ -88,12 +88,12 @@
   <xs:element name="Robot" type="tns:Robot"/>
   
   <xs:complexType name="Robot">
-    <xs:sequence>
-      <xs:element name="Subsystem" type="tns:Subsystem" maxOccurs="unbounded"/>
-      <xs:element name="Joystick" type="tns:Joystick" maxOccurs="unbounded"/>
-      <xs:element name="OnChangeEventHandler" type="tns:OnChangeEventHandler" maxOccurs="unbounded"/>
-      <xs:element name="OnWithinRangeEventHandler" type="tns:OnWithinRangeEventHandler" maxOccurs="unbounded"/>
-      <xs:element name="ContinuousCommand" type="tns:ContinuousCommand" maxOccurs="unbounded"/>
+    <xs:sequence minOccurs="0">
+      <xs:element name="Subsystem" type="tns:Subsystem" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Joystick" type="tns:Joystick" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="OnChangeEventHandler" type="tns:OnChangeEventHandler" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="OnWithinRangeEventHandler" type="tns:OnWithinRangeEventHandler" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ContinuousCommand" type="tns:ContinuousCommand" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="TeamNumber" use="required">
       <xs:simpleType>
@@ -111,7 +111,6 @@
     </xs:attribute>
   </xs:complexType>
     
-  <!-- TODO: finish doing the IO parts of the schema (parts that map to physical device states)-->
   <xs:complexType name="JoystickAxis">
     <xs:attribute name="ID" type="tns:JoystickAxisId" use="required"/>
     <xs:attribute name="Value" type="tns:NormalizedDouble" default="0"/>
@@ -121,10 +120,10 @@
     <xs:attribute name="Value" type="xs:boolean" default="false"/>
   </xs:complexType>
   <xs:complexType name="Joystick">
-    <xs:sequence>
+    <xs:sequence minOccurs="0">
       <!--State Values-->
-      <xs:element name="Axis" type="tns:JoystickAxis" maxOccurs="5"/>
-      <xs:element name="Button" type="tns:JoystickButton" maxOccurs="12"/>
+      <xs:element name="Axis" type="tns:JoystickAxis" minOccurs="0" maxOccurs="5"/>
+      <xs:element name="Button" type="tns:JoystickButton" minOccurs="0" maxOccurs="12"/>
     </xs:sequence>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="ID" type="tns:JoystickId" default="-1"/>
@@ -142,9 +141,9 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="EventTarget">
-    <xs:attribute name="Type" type="tns:EventTargetType"/>
-    <xs:attribute name="Path" type="tns:XPath"/>
-    <xs:attribute name="Value" type="xs:string"/>
+    <xs:attribute name="Type" type="tns:EventTargetType" use="required"/>
+    <xs:attribute name="Path" type="tns:XPath"/><!--if this is empty and Type=ModifyValue; then this command will never run-->
+    <xs:attribute name="Value" type="xs:string" use="required"/>
   </xs:complexType>
   
   <!-- Note that this is non less efficient than continuously updating a motor with say a joystick input -->
@@ -179,7 +178,7 @@
   
   
   <xs:complexType name="Subsystem">
-    <xs:sequence>
+    <xs:sequence minOccurs="0">
       <xs:element name="PWMOutput" type="tns:PWMOutput" minOccurs="0" maxOccurs="10"/>
       <xs:element name="AnalogInput" type="tns:AnalogInput" minOccurs="0" maxOccurs="4"/>     
       <xs:element name="QuadEncoder" type="tns:QuadEncoder" minOccurs="0" maxOccurs="5"/>
@@ -327,12 +326,12 @@
   </xs:simpleType>
     
   <xs:complexType name="CANTalon">
-    <xs:sequence>
-      <xs:element name="AnalogInput" type="tns:AnalogInput"/>
-      <xs:element name="QuadEncoder" type="tns:QuadEncoder" maxOccurs="1"/>
-      <xs:element name="PIDConfig0" type="tns:PIDControllerSRX" maxOccurs="1"/>
-      <xs:element name="PIDConfig1" type="tns:PIDControllerSRX" maxOccurs="1"/>
-    </xs:sequence>
+    <xs:all>
+      <xs:element name="AnalogInput" type="tns:AnalogInput" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="QuadEncoder" type="tns:QuadEncoder" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PIDConfig0" type="tns:PIDControllerSRX" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PIDConfig1" type="tns:PIDControllerSRX" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
     <xs:attribute name="ID" type="tns:CANId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="EnabledPIDProfile" type="xs:boolean" default="0"/>
