@@ -28,6 +28,8 @@ namespace XSDConstantsFileGen
 //      Below is a class hierarchy of the 
 //      schema types and means of validating
 //      them
+
+using Team1922.MVVM.Models.XML;
 ";
         //delegate void WL(string line);
         //delegate void GenerateSourceRecursive(Dictionary<string, FacetCollection> sub);
@@ -73,7 +75,7 @@ namespace XSDConstantsFileGen
             outputString.WriteLine(Header);
             outputString.WriteLine($"namespace {namespaceName}");
             outputString.WriteLine("{");
-            MakeLine("public static class GeneratedAttributes", tabCount, ref outputString);
+            MakeLine("public static class TypeRestrictions", tabCount, ref outputString);
             MakeLine("{", tabCount, ref outputString);
 
             //this is the meat of it

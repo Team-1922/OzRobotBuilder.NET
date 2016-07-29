@@ -14,7 +14,7 @@ namespace Team1922.MVVM.Models.XML
         }
         public string GetConstructionString()
         {
-            return $"new EnumerationFacet(\"{_value}\")";
+            return $"new {GetType().ToString()}(\"{_value}\")";
         }
         public string Stringify()
         {

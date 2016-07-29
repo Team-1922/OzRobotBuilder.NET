@@ -15,7 +15,7 @@ namespace Team1922.MVVM.Models.XML
         }
         public string GetConstructionString()
         {
-            return $"new PatternFacet(\"{_pattern.ToString()}\")";
+            return $"new {GetType().ToString()}(\"{_pattern.ToString()}\")";
         }
         public string Stringify()
         {

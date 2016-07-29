@@ -47,7 +47,7 @@ namespace Team1922.MVVM.Models.XML
         public string GetConstructionString()
         {
             StringWriter ret = new StringWriter();
-            ret.Write("new FacetCollection(");
+            ret.Write("new FacetCollection(new IFacet[]{");
             string orFacetText = _orFacets.GetConstructionString();
             string andFacetText = _andFacet.GetConstructionString();
 
@@ -62,7 +62,7 @@ namespace Team1922.MVVM.Models.XML
                 if (andFacetText != "")
                     ret.Write($"{andFacetText}");
             }
-            ret.Write(")");
+            ret.Write("})");
             return ret.ToString();
         }
         public string Stringify()
