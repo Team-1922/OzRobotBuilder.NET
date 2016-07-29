@@ -97,15 +97,16 @@
     </xs:sequence>
     <xs:attribute name="TeamNumber" use="required">
       <xs:simpleType>
-        <xs:restriction base="xs:positiveInteger">
-          <xs:totalDigits value="4"/>
+        <xs:restriction base="xs:integer">
+          <xs:minInclusive value="1"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute> 
     <xs:attribute name="AnalogInputSampleRate" default="62500">
       <xs:simpleType>
-        <xs:restriction base="xs:positiveInteger">
+        <xs:restriction base="xs:integer">
           <xs:maxInclusive value="62500"/>
+          <xs:minInclusive value="1"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
