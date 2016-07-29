@@ -31,6 +31,21 @@ namespace XSDConstantsFileGen
 
 using Team1922.MVVM.Models.XML;
 ";
+        static string LookupMethod =
+@"
+        public static IFacet GetValidationObject(string attributeName)
+        {
+            if(_attributeTypeDictionary.ContainsKey(attributeName))
+            {
+                string key = _attributeTypeDictionary[attributeName];
+                if(_typeFacetDictionary.ContainsKey(key))
+                {
+                    return _typeFacetDictionary[key];
+                }
+            }
+            return _alwaysTrueFacet;
+        }
+";
         //delegate void WL(string line);
         //delegate void GenerateSourceRecursive(Dictionary<string, FacetCollection> sub);
         static void MakeLine(string line, int tabCount, ref StringWriter writer)
@@ -41,51 +56,56 @@ using Team1922.MVVM.Models.XML;
                 writer.Write("\t");
             writer.WriteLine(line);
         }
-        static string GenerateSourceFromAttributes(Dictionary<string, FacetCollection> attributes, string namespaceName)
+        //
+        //Generates the entire source code file from the collected dinformation
+        static string GenerateSourceFromAttributes(Dictionary<string, FacetCollection> attributes, Dictionary<string, string> attributeTypes, string namespaceName)
         {
             int tabCount = 1;
             StringWriter outputString = new StringWriter();
-            /*GenerateSourceRecursive Recurse = (Dictionary<string, FacetCollection> atbs) => 
-            {
-                Dictionary<string, Dictionary<string, FacetCollection>> toRecurse = new Dictionary<string, Dictionary<string, FacetCollection>>();
-                foreach(var attribute in atbs)
-                {
-                    var splitName = attribute.Key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
-                    if (null == splitName)
-                        continue;
-                    if (splitName.Length == 0)
-                        continue;
-                    if(splitName.Length == 1)
-                        WriteLine($"public static FacetCollection {attribute.Key} = {attribute.Value.GetConstructionString()};");
-                    else
-                    {
-                        if (toRecurse[splitName[0]] == null)
-                            toRecurse[splitName[0]] = new Dictionary<string, FacetCollection>();
-                        toRecurse[splitName[0]].Add(splitName[1], attribute.Value);
-                    }
-                }
-                foreach(var next in toRecurse)
-                {
-                    if (next.Value == null)
-                        continue;
-                    Recurse(next.Value);
-                }
-            };*/
 
+            //write the header to the beginning of the file
             outputString.WriteLine(Header);
+
+            //write the namespace declaration
             outputString.WriteLine($"namespace {namespaceName}");
             outputString.WriteLine("{");
+
+            //write the class declaration
             MakeLine("public static class TypeRestrictions", tabCount, ref outputString);
-            MakeLine("{", tabCount, ref outputString);
+            MakeLine("{", tabCount++, ref outputString);
 
-            //this is the meat of it
-            outputString.WriteLine(Recurse(attributes, tabCount + 1));
+            //generate the Type Facet Dictionary
+            MakeLine("private static System.Collections.Generic.Dictionary<string, IFacet> _typeFacetDictionary = new System.Collections.Generic.Dictionary<string, IFacet>()", tabCount, ref outputString);
 
-            MakeLine("}", tabCount, ref outputString);
+            StringWriter dictionaryLine = new StringWriter();
+            dictionaryLine.Write("{");
+            bool isFirst = true;
+            foreach (var element in attributes)
+            {
+                if (!isFirst)
+                    dictionaryLine.Write(", ");
+                if (isFirst)
+                    isFirst = false;
+                dictionaryLine.Write($"{{ \"{element.Key}\",{element.Value.GetConstructionString()} }}");
+            }
+            dictionaryLine.Write("};");
+            MakeLine(dictionaryLine.ToString(), tabCount + 3, ref outputString);
+        
+            //generate the attribute type dictionary
+            MakeLine(GenerateAttributeTypeDictionaryConstructor(attributeTypes), tabCount, ref outputString);
+            
+            //generate the always true facet
+            MakeLine("private static IFacet _alwaysTrueFacet = new FacetCollection(new IFacet[]{ new PatternFacet(\"^.*$\") });", tabCount, ref outputString);
+            
+            //finally write the lookup method into the class
+            outputString.WriteLine(LookupMethod);
+
+            MakeLine("}", --tabCount, ref outputString);
 
             outputString.WriteLine("}");
             return outputString.ToString();
         }
+        [Obsolete]
         static string Recurse(Dictionary<string, FacetCollection> atbs, int tabCount)
         {
             StringWriter outputString = new StringWriter();
@@ -176,7 +196,31 @@ using Team1922.MVVM.Models.XML;
             }
             return ret;
         }
-        static void IterateTypes(XmlSchemaObjectTable schemaTypes, Dictionary<string, FacetCollection> testDictionary)
+        //
+        // Generates a the attribute type dictionary member definition from a dictionary
+        static string GenerateAttributeTypeDictionaryConstructor(Dictionary<string, string> attributeTypeDictionary)
+        {
+            StringWriter outputString = new StringWriter();
+            Dictionary<string, string> test = new Dictionary<string, string>() { { "me", "you" }, { "foo", "bar" } };
+
+            //write the constant definition
+            outputString.Write("private static System.Collections.Generic.Dictionary<string,string> _attributeTypeDictionary = new System.Collections.Generic.Dictionary<string,string>()");
+            
+            //generate the elements
+            outputString.Write("{");
+            bool isFirst = true;
+            foreach (var element in attributeTypeDictionary)
+            {
+                if (!isFirst)
+                    outputString.Write(", ");
+                if (isFirst)
+                    isFirst = false;
+                outputString.Write($"{{ \"{element.Key}\",\"{element.Value}\" }}");
+            }
+            outputString.Write("};");
+            return outputString.ToString();
+        }
+        static void IterateTypes(XmlSchemaObjectTable schemaTypes, Dictionary<string, FacetCollection> testDictionary, Dictionary<string, string> attributeTypeMap)
         {
             // First iterate through all of the simple types
             foreach (XmlSchemaType schemaObject in schemaTypes.Values)
@@ -203,6 +247,23 @@ using Team1922.MVVM.Models.XML;
                     // iterate through each attribute 
                     foreach (XmlSchemaAttribute attribute in complexType.Attributes)
                     {
+
+                        //also generate a dictionary of attribute names and their types
+                        string schemaTypeName = attribute.SchemaTypeName.ToString();
+                        if (schemaTypeName.Length == 0)
+                            attributeTypeMap.Add($"{schemaObject.Name}.{attribute.Name}", $"{schemaObject.Name}.{attribute.Name}");
+                        else
+                        {
+                            //only get what's after the ':'
+                            var splitSchemaTypeName = schemaTypeName.Split(':');
+                            if (splitSchemaTypeName.Length >= 2)
+                            {
+                                schemaTypeName = splitSchemaTypeName.Last();
+                            }
+                            attributeTypeMap.Add($"{schemaObject.Name}.{attribute.Name}", $"{schemaTypeName}");
+                        }
+
+
                         var schemaType = attribute.SchemaType;
                         if (null == schemaType)
                             continue;
@@ -251,10 +312,11 @@ using Team1922.MVVM.Models.XML;
             }
 
             var testDictionary = new Dictionary<string, FacetCollection>();
+            var attributeTypeMap = new Dictionary<string, string>();
             using (var outFile = new StreamWriter(File.Open(args[1], FileMode.Create)))
             {
-                IterateTypes(schema.SchemaTypes, testDictionary);
-                outFile.Write(GenerateSourceFromAttributes(testDictionary, args[2]));
+                IterateTypes(schema.SchemaTypes, testDictionary, attributeTypeMap);
+                outFile.Write(GenerateSourceFromAttributes(testDictionary, attributeTypeMap, args[2]));
             }
         }
 
