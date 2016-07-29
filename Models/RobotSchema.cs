@@ -2394,4 +2394,3 @@ namespace Team1922.MVVM.Models {
         }
     }
 }
-}
