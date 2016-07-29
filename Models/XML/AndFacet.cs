@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Team1922.MVVM.Models.XML
 {
-    internal class AndFacet : IFacet
+    internal class AndFacetBase<FacetType1, FacetType2> : IFacet where FacetType1 : IFacet where FacetType2 :IFacet
     {
-        public IFacet Facet1 { get; set; }
-        public IFacet Facet2 { get; set; }
-        public AndFacet(IFacet facet1, IFacet facet2)
+        public FacetType1 Facet1 { get; set; }
+        public FacetType2 Facet2 { get; set; }
+        public AndFacetBase(FacetType1 facet1, FacetType2 facet2)
         {
             Facet1 = facet1;
             Facet2 = facet2;
@@ -17,18 +17,48 @@ namespace Team1922.MVVM.Models.XML
 
         public string Stringify()
         {
-            if (null == Facet1)
+            string facet1String = Facet1 == null ? "" : Facet1.GetConstructionString();
+            string facet2String = Facet2 == null ? "" : Facet2.GetConstructionString();
+            if (facet1String == "")
             {
-                if (null == Facet2)
+                if (facet2String == "")
                     return "";
                 else
-                    return Facet2.ToString();
+                    return facet2String;
             }
-            else if (null == Facet2)
+            else
             {
-                return Facet1.ToString();
+                if (facet2String == "")
+                    return facet1String;
+                else
+                {
+                    //neither are null AND neither are blank
+                    return $"{facet1String} AND {facet2String}";
+                }
             }
-            return $"{Facet1.ToString()} AND {Facet2.ToString()}";
+        }
+
+        public string GetConstructionString()
+        {
+            string facet1String = Facet1 == null ? "" : Facet1.GetConstructionString();
+            string facet2String = Facet2 == null ? "" : Facet2.GetConstructionString();
+            if (facet1String == "")
+            {
+                if (facet2String == "")
+                    return "";
+                else
+                    return facet2String;
+            }
+            else
+            {
+                if (facet2String == "")
+                    return facet1String;
+                else
+                {
+                    //neither are null AND neither are blank
+                    return $"{facet1String},{facet2String}";
+                }
+            }
         }
 
         public bool TestValue(object value)
@@ -36,7 +66,7 @@ namespace Team1922.MVVM.Models.XML
             if (null == Facet1)
             {
                 if (null == Facet2)
-                    return false;
+                    throw new NullReferenceException("Facets");
                 else
                     return Facet2.TestValue(value);
             }
@@ -47,5 +77,9 @@ namespace Team1922.MVVM.Models.XML
 
             return Facet1.TestValue(value) && Facet2.TestValue(value);
         }
+    }
+    internal class AndFacet : AndFacetBase<IFacet, IFacet>
+    {
+        public AndFacet(IFacet facet1, IFacet facet2) : base(facet1, facet2) { }
     }
 }

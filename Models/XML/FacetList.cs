@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,9 +15,25 @@ namespace Team1922.MVVM.Models.XML
             {
                 if (facet == null)
                     continue;
-                ret += $"OR {facet.Stringify()}\n";
+                if (ret == "")
+                    ret = $"{facet.Stringify()}\n";
+                else
+                    ret += $"OR {facet.Stringify()}\n";
             }
             return ret.Substring(0, ret.Length - 1);
+        }
+        public string GetConstructionString()
+        {
+            StringWriter ret = new StringWriter();
+            foreach (var facet in this)
+            {
+                if (facet == null)
+                    continue;
+                ret.Write(facet.GetConstructionString());
+                ret.Write(",");
+            }
+            string retString = ret.ToString();
+            return retString.Substring(0, retString.Length > 0 ? retString.Length - 1 : 0);
         }
         public bool TestValue(object value)
         {

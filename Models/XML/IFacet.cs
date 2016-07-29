@@ -24,5 +24,10 @@ namespace Team1922.MVVM.Models.XML
         /// </summary>
         /// <returns>the string representation of this facet</returns>
         string Stringify();
+        /// <summary>
+        /// In order to generate code; there has to be some sort of serialization
+        /// </summary>
+        /// <returns>a c# statement to construct a new instance (i.e. "new MyFacet(...)"</returns>
+        string GetConstructionString();
     }
 }

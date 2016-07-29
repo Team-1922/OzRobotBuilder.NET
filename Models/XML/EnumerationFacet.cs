@@ -12,6 +12,10 @@ namespace Team1922.MVVM.Models.XML
         {
             _value = value;
         }
+        public string GetConstructionString()
+        {
+            return $"new EnumerationFacet(\"{_value}\")";
+        }
         public string Stringify()
         {
             return $"value=={_value}";

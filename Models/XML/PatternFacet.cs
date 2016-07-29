@@ -13,6 +13,10 @@ namespace Team1922.MVVM.Models.XML
         {
             _pattern = new Regex(value);
         }
+        public string GetConstructionString()
+        {
+            return $"new PatternFacet(\"{_pattern.ToString()}\")";
+        }
         public string Stringify()
         {
             return $"matches pattern \"{_pattern.ToString()}\"";

@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace Team1922.MVVM.Models.XML
 {
-    public class MaxExclusiveFacet : NumericComparisonFacet
+    public class MaxExclusiveFacet : DoubleNumericFacet
     {
         public MaxExclusiveFacet(string value) : base(value)
+        {
+        }
+        public MaxExclusiveFacet(double value) : base(value)
         {
         }
         protected override string Stringify(double testAgainst)

@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace Team1922.MVVM.Models.XML
 {
-    public class MinInclusiveFacet : NumericComparisonFacet
+    public class MinInclusiveFacet : DoubleNumericFacet
     {
         public MinInclusiveFacet(string value) : base(value)
+        {
+        }
+        public MinInclusiveFacet(double value) : base(value)
         {
         }
         protected override string Stringify(double testAgainst)

@@ -5,17 +5,25 @@ using System.Threading.Tasks;
 
 namespace Team1922.MVVM.Models.XML
 {
-    public abstract class NumericComparisonFacet : IFacet
+    public abstract class DoubleNumericFacet : IFacet
     {
         //assume that double-precision is enough
         private double _value;
-        public NumericComparisonFacet(string value)
+        public DoubleNumericFacet(string value)
         {
             _value = double.Parse(value);
+        }
+        public DoubleNumericFacet(double value)
+        {
+            _value = value;
         }
         public string Stringify()
         {
             return Stringify(_value);
+        }
+        public string GetConstructionString()
+        {
+            return $"new {GetType().ToString()}({_value.ToString()})";
         }
         public bool TestValue(object value)
         {
