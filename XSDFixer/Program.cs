@@ -49,9 +49,22 @@ namespace XSDFixer
 
                         //start by writing our signature
                         WriteLine("//This File Has Been Modified by XSDFixer");
+
+                        //the class we are currently in
+                        string thisClass = "";
                         while ((line = file.ReadLine()) != null)
                         {
-                            if(line.Contains("//This File Has Been Modified by XSDFixer"))
+                            //keep track of what class we are currently in
+                            if(line.Contains("public partial class"))
+                            {
+                                var splitLine = line.Split(' ');
+                                for(int i = 0; i < splitLine.Length; ++i)
+                                {
+                                    if (splitLine[i] == "class" && i + 1 < splitLine.Length)
+                                        thisClass = splitLine[i + 1];
+                                }
+                            }
+                            if (line.Contains("//This File Has Been Modified by XSDFixer"))
                             {
                                 //STOP; the work has already been done
                                 abort = true;
@@ -63,14 +76,40 @@ namespace XSDFixer
                                 WriteLine(line);
                                 outFile.WriteLine("#endif");
                             }
-                            else if(line.Contains("[System.SerializableAttribute()]"))
+                            else if (line.Contains("[System.SerializableAttribute()]"))
                             {
                                 //skip this line
+                            }
+                            //look for attributes
+                            else if (line.Contains("System.Xml.Serialization.XmlAttributeAttribute"))
+                            {
+                                WriteLine(line);
+                                string thisProperty = "";
+                                //look for the next line with a "set" attribute
+                                while ((line = file.ReadLine()) != null)
+                                {
+                                    WriteLine(line);
+                                    if (line.Contains("public"))
+                                    {
+                                        var splitLine = line.Split(' ');
+                                        for (int i = 0; i < splitLine.Length; ++i)
+                                        {
+                                            if (splitLine[i] == "{" && i-1 > 0)
+                                                thisProperty = splitLine[i-1];
+                                        }
+                                    }
+                                    if (line.Contains("set {"))
+                                    {
+                                        WriteLine($"\t\t\t\tTypeRestrictions.Validate(\"{thisClass}.{thisProperty}\", value);");
+                                        break;
+                                    }
+                                }
                             }
                             else
                             {
                                 WriteLine(line);
                             }
+
                         }
                         //after the last line close the namespace definition
                         //outFile.WriteLine("}");
