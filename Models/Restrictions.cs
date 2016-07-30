@@ -37,5 +37,21 @@ namespace Team1922.MVVM.Models
             return _alwaysTrueFacet;
         }
 
+
+        // NOTE: this throws and exception when validation fails
+        public static void Validate(string attributeName, object value)
+        {
+            var facet = GetValidationObject(attributeName);
+            if(!facet.TestValue(value))
+            {
+                throw new System.ArgumentException(facet.Stringify());
+            }
+        }
+
+        public static double Clamp(string attributeName, double value)
+        {
+            var facet = GetValidationObject(attributeName);
+            return facet.ClampValue(value);
+        }
 	}
 }
