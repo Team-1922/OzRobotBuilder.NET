@@ -107,25 +107,27 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="positiveInteger")]
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         public string TeamNumber {
             get {
                 return this.teamNumberField;
             }
             set {
+				TypeRestrictions.Validate("Robot.TeamNumber", value);
                 this.teamNumberField = value;
                 this.RaisePropertyChanged("TeamNumber");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="positiveInteger")]
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
         [System.ComponentModel.DefaultValueAttribute("62500")]
         public string AnalogInputSampleRate {
             get {
                 return this.analogInputSampleRateField;
             }
             set {
+				TypeRestrictions.Validate("Robot.AnalogInputSampleRate", value);
                 this.analogInputSampleRateField = value;
                 this.RaisePropertyChanged("AnalogInputSampleRate");
             }
@@ -263,6 +265,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("Subsystem.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -276,6 +279,7 @@ namespace Team1922.MVVM.Models {
                 return this.softwarePIDEnabledField;
             }
             set {
+				TypeRestrictions.Validate("Subsystem.SoftwarePIDEnabled", value);
                 this.softwarePIDEnabledField = value;
                 this.RaisePropertyChanged("SoftwarePIDEnabled");
             }
@@ -320,6 +324,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("PWMOutput.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -332,6 +337,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("PWMOutput.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -345,6 +351,7 @@ namespace Team1922.MVVM.Models {
                 return this.valueField;
             }
             set {
+				TypeRestrictions.Validate("PWMOutput.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
             }
@@ -392,6 +399,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("ContinuousCommand.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -430,6 +438,7 @@ namespace Team1922.MVVM.Models {
                 return this.typeField;
             }
             set {
+				TypeRestrictions.Validate("EventTarget.Type", value);
                 this.typeField = value;
                 this.RaisePropertyChanged("Type");
             }
@@ -442,6 +451,7 @@ namespace Team1922.MVVM.Models {
                 return this.pathField;
             }
             set {
+				TypeRestrictions.Validate("EventTarget.Path", value);
                 this.pathField = value;
                 this.RaisePropertyChanged("Path");
             }
@@ -454,6 +464,7 @@ namespace Team1922.MVVM.Models {
                 return this.valueField;
             }
             set {
+				TypeRestrictions.Validate("EventTarget.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
             }
@@ -526,6 +537,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("OnWithinRangeEventHandler.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -538,6 +550,7 @@ namespace Team1922.MVVM.Models {
                 return this.watchPathField;
             }
             set {
+				TypeRestrictions.Validate("OnWithinRangeEventHandler.WatchPath", value);
                 this.watchPathField = value;
                 this.RaisePropertyChanged("WatchPath");
             }
@@ -550,6 +563,7 @@ namespace Team1922.MVVM.Models {
                 return this.minField;
             }
             set {
+				TypeRestrictions.Validate("OnWithinRangeEventHandler.Min", value);
                 this.minField = value;
                 this.RaisePropertyChanged("Min");
             }
@@ -562,6 +576,7 @@ namespace Team1922.MVVM.Models {
                 return this.maxField;
             }
             set {
+				TypeRestrictions.Validate("OnWithinRangeEventHandler.Max", value);
                 this.maxField = value;
                 this.RaisePropertyChanged("Max");
             }
@@ -575,6 +590,7 @@ namespace Team1922.MVVM.Models {
                 return this.invertField;
             }
             set {
+				TypeRestrictions.Validate("OnWithinRangeEventHandler.Invert", value);
                 this.invertField = value;
                 this.RaisePropertyChanged("Invert");
             }
@@ -630,6 +646,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("OnChangeEventHandler.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -642,6 +659,7 @@ namespace Team1922.MVVM.Models {
                 return this.watchPathField;
             }
             set {
+				TypeRestrictions.Validate("OnChangeEventHandler.WatchPath", value);
                 this.watchPathField = value;
                 this.RaisePropertyChanged("WatchPath");
             }
@@ -655,6 +673,7 @@ namespace Team1922.MVVM.Models {
                 return this.minDeltaField;
             }
             set {
+				TypeRestrictions.Validate("OnChangeEventHandler.MinDelta", value);
                 this.minDeltaField = value;
                 this.RaisePropertyChanged("MinDelta");
             }
@@ -695,6 +714,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("JoystickButton.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -708,6 +728,7 @@ namespace Team1922.MVVM.Models {
                 return this.valueField;
             }
             set {
+				TypeRestrictions.Validate("JoystickButton.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
             }
@@ -748,6 +769,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("JoystickAxis.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -761,6 +783,7 @@ namespace Team1922.MVVM.Models {
                 return this.valueField;
             }
             set {
+				TypeRestrictions.Validate("JoystickAxis.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
             }
@@ -829,6 +852,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("Joystick.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -842,6 +866,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("Joystick.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -869,31 +894,23 @@ namespace Team1922.MVVM.Models {
         
         private double pField;
         
-        private bool pFieldSpecified;
-        
         private double iField;
-        
-        private bool iFieldSpecified;
         
         private double dField;
         
-        private bool dFieldSpecified;
-        
         private double fField;
-        
-        private bool fFieldSpecified;
         
         private double toleranceField;
         
-        private bool toleranceFieldSpecified;
-        
         private double cycleDurationField;
-        
-        private bool cycleDurationFieldSpecified;
         
         private bool continuousField;
         
-        private bool continuousFieldSpecified;
+        public PIDControllerSoftware() {
+            this.fField = 0D;
+            this.cycleDurationField = 0.02D;
+            this.continuousField = false;
+        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -902,20 +919,9 @@ namespace Team1922.MVVM.Models {
                 return this.pField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSoftware.P", value);
                 this.pField = value;
                 this.RaisePropertyChanged("P");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PSpecified {
-            get {
-                return this.pFieldSpecified;
-            }
-            set {
-                this.pFieldSpecified = value;
-                this.RaisePropertyChanged("PSpecified");
             }
         }
         
@@ -926,20 +932,9 @@ namespace Team1922.MVVM.Models {
                 return this.iField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSoftware.I", value);
                 this.iField = value;
                 this.RaisePropertyChanged("I");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ISpecified {
-            get {
-                return this.iFieldSpecified;
-            }
-            set {
-                this.iFieldSpecified = value;
-                this.RaisePropertyChanged("ISpecified");
             }
         }
         
@@ -950,44 +945,23 @@ namespace Team1922.MVVM.Models {
                 return this.dField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSoftware.D", value);
                 this.dField = value;
                 this.RaisePropertyChanged("D");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DSpecified {
-            get {
-                return this.dFieldSpecified;
-            }
-            set {
-                this.dFieldSpecified = value;
-                this.RaisePropertyChanged("DSpecified");
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
         public double F {
             get {
                 return this.fField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSoftware.F", value);
                 this.fField = value;
                 this.RaisePropertyChanged("F");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FSpecified {
-            get {
-                return this.fFieldSpecified;
-            }
-            set {
-                this.fFieldSpecified = value;
-                this.RaisePropertyChanged("FSpecified");
             }
         }
         
@@ -998,68 +972,37 @@ namespace Team1922.MVVM.Models {
                 return this.toleranceField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSoftware.Tolerance", value);
                 this.toleranceField = value;
                 this.RaisePropertyChanged("Tolerance");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ToleranceSpecified {
-            get {
-                return this.toleranceFieldSpecified;
-            }
-            set {
-                this.toleranceFieldSpecified = value;
-                this.RaisePropertyChanged("ToleranceSpecified");
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0.02D)]
         public double CycleDuration {
             get {
                 return this.cycleDurationField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSoftware.CycleDuration", value);
                 this.cycleDurationField = value;
                 this.RaisePropertyChanged("CycleDuration");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CycleDurationSpecified {
-            get {
-                return this.cycleDurationFieldSpecified;
-            }
-            set {
-                this.cycleDurationFieldSpecified = value;
-                this.RaisePropertyChanged("CycleDurationSpecified");
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(false)]
         public bool Continuous {
             get {
                 return this.continuousField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSoftware.Continuous", value);
                 this.continuousField = value;
                 this.RaisePropertyChanged("Continuous");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ContinuousSpecified {
-            get {
-                return this.continuousFieldSpecified;
-            }
-            set {
-                this.continuousFieldSpecified = value;
-                this.RaisePropertyChanged("ContinuousSpecified");
             }
         }
         
@@ -1085,35 +1028,25 @@ namespace Team1922.MVVM.Models {
         
         private double pField;
         
-        private bool pFieldSpecified;
-        
         private double iField;
-        
-        private bool iFieldSpecified;
         
         private double dField;
         
-        private bool dFieldSpecified;
-        
         private double fField;
-        
-        private bool fFieldSpecified;
         
         private int iZoneField;
         
-        private bool iZoneFieldSpecified;
-        
         private double closeLoopRampRateField;
-        
-        private bool closeLoopRampRateFieldSpecified;
         
         private int allowableCloseLoopErrorField;
         
-        private bool allowableCloseLoopErrorFieldSpecified;
-        
         private CANTalonDifferentiationLevel sourceTypeField;
         
-        private bool sourceTypeFieldSpecified;
+        public PIDControllerSRX() {
+            this.fField = 0D;
+            this.iZoneField = 0;
+            this.closeLoopRampRateField = 9001D;
+        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -1122,20 +1055,9 @@ namespace Team1922.MVVM.Models {
                 return this.pField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSRX.P", value);
                 this.pField = value;
                 this.RaisePropertyChanged("P");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PSpecified {
-            get {
-                return this.pFieldSpecified;
-            }
-            set {
-                this.pFieldSpecified = value;
-                this.RaisePropertyChanged("PSpecified");
             }
         }
         
@@ -1146,20 +1068,9 @@ namespace Team1922.MVVM.Models {
                 return this.iField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSRX.I", value);
                 this.iField = value;
                 this.RaisePropertyChanged("I");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ISpecified {
-            get {
-                return this.iFieldSpecified;
-            }
-            set {
-                this.iFieldSpecified = value;
-                this.RaisePropertyChanged("ISpecified");
             }
         }
         
@@ -1170,92 +1081,51 @@ namespace Team1922.MVVM.Models {
                 return this.dField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSRX.D", value);
                 this.dField = value;
                 this.RaisePropertyChanged("D");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DSpecified {
-            get {
-                return this.dFieldSpecified;
-            }
-            set {
-                this.dFieldSpecified = value;
-                this.RaisePropertyChanged("DSpecified");
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
         public double F {
             get {
                 return this.fField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSRX.F", value);
                 this.fField = value;
                 this.RaisePropertyChanged("F");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FSpecified {
-            get {
-                return this.fFieldSpecified;
-            }
-            set {
-                this.fFieldSpecified = value;
-                this.RaisePropertyChanged("FSpecified");
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0)]
         public int IZone {
             get {
                 return this.iZoneField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSRX.IZone", value);
                 this.iZoneField = value;
                 this.RaisePropertyChanged("IZone");
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IZoneSpecified {
-            get {
-                return this.iZoneFieldSpecified;
-            }
-            set {
-                this.iZoneFieldSpecified = value;
-                this.RaisePropertyChanged("IZoneSpecified");
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(9001D)]
         public double CloseLoopRampRate {
             get {
                 return this.closeLoopRampRateField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSRX.CloseLoopRampRate", value);
                 this.closeLoopRampRateField = value;
                 this.RaisePropertyChanged("CloseLoopRampRate");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CloseLoopRampRateSpecified {
-            get {
-                return this.closeLoopRampRateFieldSpecified;
-            }
-            set {
-                this.closeLoopRampRateFieldSpecified = value;
-                this.RaisePropertyChanged("CloseLoopRampRateSpecified");
             }
         }
         
@@ -1266,20 +1136,9 @@ namespace Team1922.MVVM.Models {
                 return this.allowableCloseLoopErrorField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSRX.AllowableCloseLoopError", value);
                 this.allowableCloseLoopErrorField = value;
                 this.RaisePropertyChanged("AllowableCloseLoopError");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AllowableCloseLoopErrorSpecified {
-            get {
-                return this.allowableCloseLoopErrorFieldSpecified;
-            }
-            set {
-                this.allowableCloseLoopErrorFieldSpecified = value;
-                this.RaisePropertyChanged("AllowableCloseLoopErrorSpecified");
             }
         }
         
@@ -1290,20 +1149,9 @@ namespace Team1922.MVVM.Models {
                 return this.sourceTypeField;
             }
             set {
+				TypeRestrictions.Validate("PIDControllerSRX.SourceType", value);
                 this.sourceTypeField = value;
                 this.RaisePropertyChanged("SourceType");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SourceTypeSpecified {
-            get {
-                return this.sourceTypeFieldSpecified;
-            }
-            set {
-                this.sourceTypeFieldSpecified = value;
-                this.RaisePropertyChanged("SourceTypeSpecified");
             }
         }
         
@@ -1468,6 +1316,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -1480,6 +1329,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -1493,6 +1343,7 @@ namespace Team1922.MVVM.Models {
                 return this.enabledPIDProfileField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.EnabledPIDProfile", value);
                 this.enabledPIDProfileField = value;
                 this.RaisePropertyChanged("EnabledPIDProfile");
             }
@@ -1506,6 +1357,7 @@ namespace Team1922.MVVM.Models {
                 return this.feedbackDeviceField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.FeedbackDevice", value);
                 this.feedbackDeviceField = value;
                 this.RaisePropertyChanged("FeedbackDevice");
             }
@@ -1519,6 +1371,7 @@ namespace Team1922.MVVM.Models {
                 return this.controlModeField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ControlMode", value);
                 this.controlModeField = value;
                 this.RaisePropertyChanged("ControlMode");
             }
@@ -1532,6 +1385,7 @@ namespace Team1922.MVVM.Models {
                 return this.neutralModeField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.NeutralMode", value);
                 this.neutralModeField = value;
                 this.RaisePropertyChanged("NeutralMode");
             }
@@ -1545,6 +1399,7 @@ namespace Team1922.MVVM.Models {
                 return this.zeroSensorPositionOnIndexEnabledField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ZeroSensorPositionOnIndexEnabled", value);
                 this.zeroSensorPositionOnIndexEnabledField = value;
                 this.RaisePropertyChanged("ZeroSensorPositionOnIndexEnabled");
             }
@@ -1558,6 +1413,7 @@ namespace Team1922.MVVM.Models {
                 return this.zeroSensorPositionOnRisingEdgeField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ZeroSensorPositionOnRisingEdge", value);
                 this.zeroSensorPositionOnRisingEdgeField = value;
                 this.RaisePropertyChanged("ZeroSensorPositionOnRisingEdge");
             }
@@ -1571,6 +1427,7 @@ namespace Team1922.MVVM.Models {
                 return this.reverseSensorField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ReverseSensor", value);
                 this.reverseSensorField = value;
                 this.RaisePropertyChanged("ReverseSensor");
             }
@@ -1584,6 +1441,7 @@ namespace Team1922.MVVM.Models {
                 return this.reverseClosedLoopOutputField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ReverseClosedLoopOutput", value);
                 this.reverseClosedLoopOutputField = value;
                 this.RaisePropertyChanged("ReverseClosedLoopOutput");
             }
@@ -1597,6 +1455,7 @@ namespace Team1922.MVVM.Models {
                 return this.reversePercentVBusOutputField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ReversePercentVBusOutput", value);
                 this.reversePercentVBusOutputField = value;
                 this.RaisePropertyChanged("ReversePercentVBusOutput");
             }
@@ -1610,6 +1469,7 @@ namespace Team1922.MVVM.Models {
                 return this.forwardLimitSwitchEnabledField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ForwardLimitSwitchEnabled", value);
                 this.forwardLimitSwitchEnabledField = value;
                 this.RaisePropertyChanged("ForwardLimitSwitchEnabled");
             }
@@ -1623,6 +1483,7 @@ namespace Team1922.MVVM.Models {
                 return this.reverseLimitSwitchEnabledField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ReverseLimitSwitchEnabled", value);
                 this.reverseLimitSwitchEnabledField = value;
                 this.RaisePropertyChanged("ReverseLimitSwitchEnabled");
             }
@@ -1636,6 +1497,7 @@ namespace Team1922.MVVM.Models {
                 return this.forwardSoftLimitEnabledField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ForwardSoftLimitEnabled", value);
                 this.forwardSoftLimitEnabledField = value;
                 this.RaisePropertyChanged("ForwardSoftLimitEnabled");
             }
@@ -1649,6 +1511,7 @@ namespace Team1922.MVVM.Models {
                 return this.reverseSoftLimitEnabledField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ReverseSoftLimitEnabled", value);
                 this.reverseSoftLimitEnabledField = value;
                 this.RaisePropertyChanged("ReverseSoftLimitEnabled");
             }
@@ -1662,6 +1525,7 @@ namespace Team1922.MVVM.Models {
                 return this.forwardSoftLimitField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ForwardSoftLimit", value);
                 this.forwardSoftLimitField = value;
                 this.RaisePropertyChanged("ForwardSoftLimit");
             }
@@ -1675,6 +1539,7 @@ namespace Team1922.MVVM.Models {
                 return this.reverseSoftLimitField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.ReverseSoftLimit", value);
                 this.reverseSoftLimitField = value;
                 this.RaisePropertyChanged("ReverseSoftLimit");
             }
@@ -1688,6 +1553,7 @@ namespace Team1922.MVVM.Models {
                 return this.nominalForwardVoltageField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.NominalForwardVoltage", value);
                 this.nominalForwardVoltageField = value;
                 this.RaisePropertyChanged("NominalForwardVoltage");
             }
@@ -1701,6 +1567,7 @@ namespace Team1922.MVVM.Models {
                 return this.nominalReverseVoltageField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.NominalReverseVoltage", value);
                 this.nominalReverseVoltageField = value;
                 this.RaisePropertyChanged("NominalReverseVoltage");
             }
@@ -1714,6 +1581,7 @@ namespace Team1922.MVVM.Models {
                 return this.peakForwardVoltageField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.PeakForwardVoltage", value);
                 this.peakForwardVoltageField = value;
                 this.RaisePropertyChanged("PeakForwardVoltage");
             }
@@ -1727,6 +1595,7 @@ namespace Team1922.MVVM.Models {
                 return this.peakReverseVoltageField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.PeakReverseVoltage", value);
                 this.peakReverseVoltageField = value;
                 this.RaisePropertyChanged("PeakReverseVoltage");
             }
@@ -1740,6 +1609,7 @@ namespace Team1922.MVVM.Models {
                 return this.valueField;
             }
             set {
+				TypeRestrictions.Validate("CANTalon.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
             }
@@ -1811,6 +1681,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -1823,6 +1694,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -1836,6 +1708,7 @@ namespace Team1922.MVVM.Models {
                 return this.accumulatorCenterField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorCenter", value);
                 this.accumulatorCenterField = value;
                 this.RaisePropertyChanged("AccumulatorCenter");
             }
@@ -1848,6 +1721,7 @@ namespace Team1922.MVVM.Models {
                 return this.accumulatorDeadBandField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.accumulatorDeadBand", value);
                 this.accumulatorDeadBandField = value;
                 this.RaisePropertyChanged("accumulatorDeadBand");
             }
@@ -1861,6 +1735,7 @@ namespace Team1922.MVVM.Models {
                 return this.accumulatorInitialValueField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorInitialValue", value);
                 this.accumulatorInitialValueField = value;
                 this.RaisePropertyChanged("AccumulatorInitialValue");
             }
@@ -1873,6 +1748,7 @@ namespace Team1922.MVVM.Models {
                 return this.averageBitsField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.AverageBits", value);
                 this.averageBitsField = value;
                 this.RaisePropertyChanged("AverageBits");
             }
@@ -1885,6 +1761,7 @@ namespace Team1922.MVVM.Models {
                 return this.oversampleBitsField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.OversampleBits", value);
                 this.oversampleBitsField = value;
                 this.RaisePropertyChanged("OversampleBits");
             }
@@ -1898,6 +1775,7 @@ namespace Team1922.MVVM.Models {
                 return this.conversionRatioField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.ConversionRatio", value);
                 this.conversionRatioField = value;
                 this.RaisePropertyChanged("ConversionRatio");
             }
@@ -1907,6 +1785,7 @@ namespace Team1922.MVVM.Models {
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(0D)]
         public double SensorOffset {
+				TypeRestrictions.Validate("AnalogInput.SensorOffset", value);
             get {
                 return this.sensorOffsetField;
             }
@@ -1924,6 +1803,7 @@ namespace Team1922.MVVM.Models {
                 return this.rawInputField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.RawInput", value);
                 this.rawInputField = value;
                 this.RaisePropertyChanged("RawInput");
             }
@@ -1937,6 +1817,7 @@ namespace Team1922.MVVM.Models {
                 return this.convertedInputField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.ConvertedInput", value);
                 this.convertedInputField = value;
                 this.RaisePropertyChanged("ConvertedInput");
             }
@@ -1950,6 +1831,7 @@ namespace Team1922.MVVM.Models {
                 return this.accumulatorCountField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorCount", value);
                 this.accumulatorCountField = value;
                 this.RaisePropertyChanged("AccumulatorCount");
             }
@@ -1963,6 +1845,7 @@ namespace Team1922.MVVM.Models {
                 return this.accumulatorValueField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorValue", value);
                 this.accumulatorValueField = value;
                 this.RaisePropertyChanged("AccumulatorValue");
             }
@@ -2022,6 +1905,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("QuadEncoder.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -2035,6 +1919,7 @@ namespace Team1922.MVVM.Models {
                 return this.iD1Field;
             }
             set {
+				TypeRestrictions.Validate("QuadEncoder.ID1", value);
                 this.iD1Field = value;
                 this.RaisePropertyChanged("ID1");
             }
@@ -2047,6 +1932,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("QuadEncoder.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -2060,6 +1946,7 @@ namespace Team1922.MVVM.Models {
                 return this.conversionRatioField;
             }
             set {
+				TypeRestrictions.Validate("QuadEncoder.ConversionRatio", value);
                 this.conversionRatioField = value;
                 this.RaisePropertyChanged("ConversionRatio");
             }
@@ -2073,6 +1960,7 @@ namespace Team1922.MVVM.Models {
                 return this.rawValueField;
             }
             set {
+				TypeRestrictions.Validate("QuadEncoder.RawValue", value);
                 this.rawValueField = value;
                 this.RaisePropertyChanged("RawValue");
             }
@@ -2086,6 +1974,7 @@ namespace Team1922.MVVM.Models {
                 return this.valueField;
             }
             set {
+				TypeRestrictions.Validate("QuadEncoder.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
             }
@@ -2099,6 +1988,7 @@ namespace Team1922.MVVM.Models {
                 return this.rawVelocityField;
             }
             set {
+				TypeRestrictions.Validate("QuadEncoder.RawVelocity", value);
                 this.rawVelocityField = value;
                 this.RaisePropertyChanged("RawVelocity");
             }
@@ -2112,6 +2002,7 @@ namespace Team1922.MVVM.Models {
                 return this.velocityField;
             }
             set {
+				TypeRestrictions.Validate("QuadEncoder.Velocity", value);
                 this.velocityField = value;
                 this.RaisePropertyChanged("Velocity");
             }
@@ -2237,6 +2128,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("RelayOutput.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -2249,6 +2141,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("RelayOutput.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -2262,6 +2155,7 @@ namespace Team1922.MVVM.Models {
                 return this.directionField;
             }
             set {
+				TypeRestrictions.Validate("RelayOutput.Direction", value);
                 this.directionField = value;
                 this.RaisePropertyChanged("Direction");
             }
@@ -2275,6 +2169,7 @@ namespace Team1922.MVVM.Models {
                 return this.valueField;
             }
             set {
+				TypeRestrictions.Validate("RelayOutput.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
             }
@@ -2354,6 +2249,7 @@ namespace Team1922.MVVM.Models {
                 return this.idField;
             }
             set {
+				TypeRestrictions.Validate("DigitalInput.ID", value);
                 this.idField = value;
                 this.RaisePropertyChanged("ID");
             }
@@ -2366,6 +2262,7 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
+				TypeRestrictions.Validate("DigitalInput.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
             }
@@ -2379,6 +2276,7 @@ namespace Team1922.MVVM.Models {
                 return this.valueField;
             }
             set {
+				TypeRestrictions.Validate("DigitalInput.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
             }
