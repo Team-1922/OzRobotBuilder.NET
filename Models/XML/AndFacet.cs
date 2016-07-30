@@ -77,6 +77,22 @@ namespace Team1922.MVVM.Models.XML
 
             return Facet1.TestValue(value) && Facet2.TestValue(value);
         }
+
+        public double ClampValue(double input)
+        {
+            if (null == Facet1)
+            {
+                if (null != Facet2)
+                {
+                    return Facet2.ClampValue(input);
+                }
+            }
+            else
+            {
+                return Facet1.ClampValue(Facet2.ClampValue(input));
+            }
+            return input;
+        }
     }
     internal class AndFacet : AndFacetBase<IFacet, IFacet>
     {

@@ -29,5 +29,12 @@ namespace Team1922.MVVM.Models.XML
         /// </summary>
         /// <returns>a c# statement to construct a new instance (i.e. "new MyFacet(...)"</returns>
         string GetConstructionString();
+        /// <summary>
+        /// mostly used for numerical mins and maxes;
+        /// returns the closest value to <paramref name="input"/> which passes the facet
+        /// </summary>
+        /// <param name="input">the input to clamp</param>
+        /// <returns>a value which is guaranteed to pass <see cref="TestValue(object)"/> ONLY on numeric constraints</returns>
+        double ClampValue(double input);
     }
 }

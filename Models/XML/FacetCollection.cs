@@ -44,6 +44,16 @@ namespace Team1922.MVVM.Models.XML
             else if (facet is MaxLengthFacet)
                 _andFacet.Facet1.Facet2 = facet;
         }
+        public double ClampValue(double item)
+        {
+            // clamp length first
+            double ret = _andFacet.Facet1.ClampValue(item);
+
+            //then clamp the value
+            ret = _andFacet.Facet2.ClampValue(ret);
+
+            return ret;
+        }
         public string GetConstructionString()
         {
             StringWriter ret = new StringWriter();

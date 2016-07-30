@@ -26,5 +26,9 @@ namespace Team1922.MVVM.Models.XML
                 return false;
             return value.ToString() == _value;
         }
+        public double ClampValue(double item)
+        {
+            return item;
+        }
     }
 }

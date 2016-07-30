@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,7 +33,12 @@ namespace Team1922.MVVM.Models.XML
                 return false;
             return TestValue(tmp, _value);
         }
+        public double ClampValue(double input)
+        {
+            return ClampValue(input, _value);
+        }
         protected abstract bool TestValue(double test, double testAgainst);
         protected abstract string Stringify(double testAgainst);
+        protected abstract double ClampValue(double test, double testAgainst);
     }
 }

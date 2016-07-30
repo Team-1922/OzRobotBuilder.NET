@@ -38,6 +38,24 @@ namespace Team1922.MVVM.Models.XML
             return false;
         }
 
+        protected override double ClampValue(double test, int testAgainst)
+        {
+            var str = test.ToString();
+            var splitStr = str.Split('.');
+            if (splitStr.Length > 2)
+                return test;
+            if (splitStr.Length == 1 || splitStr.Length == 0)
+                return test;
+            if(splitStr.Length == 2)
+            {
+                double result;
+                bool success = double.TryParse($"{splitStr[0]}.{splitStr[1].Substring(0, testAgainst)}", out result);
+                if (success)
+                    return result;
+            }
+            return test;
+        }
+
         protected override string Stringify(int testAgainst)
         {
             return $"Decimal Places <= {testAgainst}";

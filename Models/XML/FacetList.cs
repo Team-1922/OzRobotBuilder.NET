@@ -46,5 +46,13 @@ namespace Team1922.MVVM.Models.XML
             }
             return false;
         }
+        public T ClampValue<T>(T item)
+        {
+            return item;
+        }
+        public double ClampValue(double item)
+        {
+            return item;
+        }
     }
 }
