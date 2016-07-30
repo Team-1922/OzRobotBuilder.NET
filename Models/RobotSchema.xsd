@@ -261,25 +261,25 @@
   
   
   <xs:complexType name="PIDControllerSoftware">
-    <xs:attribute name="P" type="xs:double"/>
-    <xs:attribute name="I" type="xs:double"/>
-    <xs:attribute name="D" type="xs:double"/>
-    <xs:attribute name="F" type="xs:double"/>
-    <xs:attribute name="Tolerance" type="xs:double"/>
-    <xs:attribute name="CycleDuration" type="xs:double"/>
-    <xs:attribute name="Continuous" type="xs:boolean"/>
+    <xs:attribute name="P" type="xs:double" use="required"/>
+    <xs:attribute name="I" type="xs:double" use="required"/>
+    <xs:attribute name="D" type="xs:double" use="required"/>
+    <xs:attribute name="F" type="xs:double" default="0"/>
+    <xs:attribute name="Tolerance" type="xs:double" use="required"/>
+    <xs:attribute name="CycleDuration" type="xs:double" default=".02"/>
+    <xs:attribute name="Continuous" type="xs:boolean" default="false"/>
   </xs:complexType>
       
   
   <xs:complexType name="PIDControllerSRX">
-    <xs:attribute name="P" type="xs:double"/>
-    <xs:attribute name="I" type="xs:double"/>
-    <xs:attribute name="D" type="xs:double"/>
-    <xs:attribute name="F" type="xs:double"/>    
-    <xs:attribute name="IZone" type="xs:int"/>
-    <xs:attribute name="CloseLoopRampRate" type="xs:double"/>
-    <xs:attribute name="AllowableCloseLoopError" type="tns:RawSRXInput"/>
-    <xs:attribute name="SourceType" type="tns:CANTalonDifferentiationLevel"/>
+    <xs:attribute name="P" type="xs:double" use="required"/>
+    <xs:attribute name="I" type="xs:double" use="required"/>
+    <xs:attribute name="D" type="xs:double" use="required"/>
+    <xs:attribute name="F" type="xs:double" default="0"/>    
+    <xs:attribute name="IZone" type="xs:int" default="0"/>
+    <xs:attribute name="CloseLoopRampRate" type="xs:double" default="9001"/><!--note: this value is in V/S and defaults to something rediculous intentionally-->
+    <xs:attribute name="AllowableCloseLoopError" type="tns:RawSRXInput" use="required"/>
+    <xs:attribute name="SourceType" type="tns:CANTalonDifferentiationLevel" use="required"/>
   </xs:complexType>
   <xs:simpleType name="CANTalonFeedbackDevice">
     <xs:restriction base="xs:string">
