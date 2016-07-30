@@ -46,6 +46,19 @@ using Team1922.MVVM.Models.XML;
             return _alwaysTrueFacet;
         }
 ";
+
+        static string ValidateMethod =
+@"
+        // NOTE: this throws and exception when validation fails
+        public static void Validate(string attributeName, object value)
+        {
+            var facet = GetValidationObject(attributeName);
+            if(!facet.TestValue(value))
+            {
+                throw new System.ArgumentException(facet.Stringify());
+            }
+        }
+";
         //delegate void WL(string line);
         //delegate void GenerateSourceRecursive(Dictionary<string, FacetCollection> sub);
         static void MakeLine(string line, int tabCount, ref StringWriter writer)
@@ -99,6 +112,7 @@ using Team1922.MVVM.Models.XML;
             
             //finally write the lookup method into the class
             outputString.WriteLine(LookupMethod);
+            outputString.WriteLine(ValidateMethod);
 
             MakeLine("}", --tabCount, ref outputString);
 
