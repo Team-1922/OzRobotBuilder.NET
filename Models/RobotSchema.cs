@@ -38,12 +38,12 @@ namespace Team1922.MVVM.Models {
         
         private ContinuousCommand[] continuousCommandField;
         
-        private string teamNumberField;
+        private int teamNumberField;
         
-        private string analogInputSampleRateField;
+        private int analogInputSampleRateField;
         
         public Robot() {
-            this.analogInputSampleRateField = "62500";
+            this.analogInputSampleRateField = 62500;
         }
         
         /// <remarks/>
@@ -107,8 +107,8 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        public string TeamNumber {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int TeamNumber {
             get {
                 return this.teamNumberField;
             }
@@ -120,9 +120,9 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("62500")]
-        public string AnalogInputSampleRate {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(62500)]
+        public int AnalogInputSampleRate {
             get {
                 return this.analogInputSampleRateField;
             }
@@ -305,21 +305,21 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class PWMOutput : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string idField;
+        private int idField;
         
         private string nameField;
         
         private double valueField;
         
         public PWMOutput() {
-            this.idField = "-1";
+            this.idField = -1;
             this.valueField = 0D;
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("-1")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
             get {
                 return this.idField;
             }
@@ -699,7 +699,7 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class JoystickButton : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string idField;
+        private int idField;
         
         private bool valueField;
         
@@ -708,8 +708,8 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int ID {
             get {
                 return this.idField;
             }
@@ -754,7 +754,7 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class JoystickAxis : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string idField;
+        private int idField;
         
         private double valueField;
         
@@ -763,8 +763,8 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int ID {
             get {
                 return this.idField;
             }
@@ -815,10 +815,10 @@ namespace Team1922.MVVM.Models {
         
         private string nameField;
         
-        private string idField;
+        private int idField;
         
         public Joystick() {
-            this.idField = "-1";
+            this.idField = -1;
         }
         
         /// <remarks/>
@@ -859,9 +859,9 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("-1")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
             get {
                 return this.idField;
             }
@@ -1196,7 +1196,7 @@ namespace Team1922.MVVM.Models {
         
         private PIDControllerSRX pIDConfig1Field;
         
-        private string idField;
+        private int idField;
         
         private string nameField;
         
@@ -1241,7 +1241,7 @@ namespace Team1922.MVVM.Models {
         private double valueField;
         
         public CANTalon() {
-            this.idField = "-1";
+            this.idField = -1;
             this.enabledPIDProfileField = false;
             this.feedbackDeviceField = CANTalonFeedbackDevice.QuadEncoder;
             this.controlModeField = CANTalonControlMode.PercentVbus;
@@ -1309,9 +1309,9 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("-1")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
             get {
                 return this.idField;
             }
@@ -1635,7 +1635,7 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class AnalogInput : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string idField;
+        private int idField;
         
         private string nameField;
         
@@ -1662,7 +1662,7 @@ namespace Team1922.MVVM.Models {
         private long accumulatorValueField;
         
         public AnalogInput() {
-            this.idField = "-1";
+            this.idField = -1;
             this.accumulatorCenterField = 2048;
             this.accumulatorInitialValueField = 0;
             this.conversionRatioField = 1D;
@@ -1674,9 +1674,9 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("-1")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
             get {
                 return this.idField;
             }
@@ -1871,9 +1871,9 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class QuadEncoder : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string idField;
+        private int idField;
         
-        private string iD1Field;
+        private int iD1Field;
         
         private string nameField;
         
@@ -1888,8 +1888,8 @@ namespace Team1922.MVVM.Models {
         private double velocityField;
         
         public QuadEncoder() {
-            this.idField = "-1";
-            this.iD1Field = "-1";
+            this.idField = -1;
+            this.iD1Field = -1;
             this.conversionRatioField = 1D;
             this.rawValueField = ((long)(0));
             this.valueField = 0D;
@@ -1898,9 +1898,9 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("-1")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
             get {
                 return this.idField;
             }
@@ -1912,9 +1912,9 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("-1")]
-        public string ID1 {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID1 {
             get {
                 return this.iD1Field;
             }
@@ -2106,7 +2106,7 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class RelayOutput : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string idField;
+        private int idField;
         
         private string nameField;
         
@@ -2115,15 +2115,15 @@ namespace Team1922.MVVM.Models {
         private RelayValue valueField;
         
         public RelayOutput() {
-            this.idField = "-1";
+            this.idField = -1;
             this.directionField = RelayDirection.ForwardOnly;
             this.valueField = RelayValue.Off;
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("-1")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
             get {
                 return this.idField;
             }
@@ -2230,21 +2230,21 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class DigitalInput : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private string idField;
+        private int idField;
         
         private string nameField;
         
         private bool valueField;
         
         public DigitalInput() {
-            this.idField = "-1";
+            this.idField = -1;
             this.valueField = false;
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
-        [System.ComponentModel.DefaultValueAttribute("-1")]
-        public string ID {
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
             get {
                 return this.idField;
             }

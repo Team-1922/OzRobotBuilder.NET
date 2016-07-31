@@ -59,6 +59,14 @@ using Team1922.MVVM.Models.XML;
             }
         }
 ";
+        static string ClampMethod =
+@"
+        public static double Clamp(string attributeName, double value)
+        {
+            var facet = GetValidationObject(attributeName);
+            return facet.ClampValue(value);
+        }
+";
         //delegate void WL(string line);
         //delegate void GenerateSourceRecursive(Dictionary<string, FacetCollection> sub);
         static void MakeLine(string line, int tabCount, ref StringWriter writer)
@@ -113,6 +121,7 @@ using Team1922.MVVM.Models.XML;
             //finally write the lookup method into the class
             outputString.WriteLine(LookupMethod);
             outputString.WriteLine(ValidateMethod);
+            outputString.WriteLine(ClampMethod);
 
             MakeLine("}", --tabCount, ref outputString);
 

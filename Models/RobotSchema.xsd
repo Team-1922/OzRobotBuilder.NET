@@ -16,49 +16,49 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="AnalogInputId">
-    <xs:restriction base="xs:integer">
+    <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
       <xs:maxInclusive value="3"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="DigitalInputId">
-    <xs:restriction base="xs:integer">
+    <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
       <xs:maxInclusive value="9"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="PWMOutputId">
-    <xs:restriction base="xs:integer">
+    <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
       <xs:maxInclusive value="9"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="RelayOutputId">
-    <xs:restriction base="xs:integer">
+    <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
       <xs:maxInclusive value="3"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="CANId">
-    <xs:restriction base="xs:integer">
+    <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="JoystickId">
-    <xs:restriction base="xs:integer">
+    <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
       <xs:maxInclusive value="5"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="JoystickButtonId">
-    <xs:restriction base="xs:integer">
+    <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
       <xs:pattern value="^[^0].*"/><!--DO NOT match the number zero-->
       <xs:maxInclusive value="12"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="JoystickAxisId">
-    <xs:restriction base="xs:integer">
+    <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
       <xs:maxInclusive value="4"/>
     </xs:restriction>
@@ -84,6 +84,17 @@
   <xs:simpleType name="XPath">
     <xs:restriction base="xs:string"/>
   </xs:simpleType>
+  <xs:simpleType name="TeamNumber">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="AnalogInputSampleRate">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="62500"/>
+    </xs:restriction>
+  </xs:simpleType>
   
   <xs:element name="Robot" type="tns:Robot"/>
   
@@ -95,21 +106,8 @@
       <xs:element name="OnWithinRangeEventHandler" type="tns:OnWithinRangeEventHandler" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="ContinuousCommand" type="tns:ContinuousCommand" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="TeamNumber" use="required">
-      <xs:simpleType>
-        <xs:restriction base="xs:integer">
-          <xs:minInclusive value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute> 
-    <xs:attribute name="AnalogInputSampleRate" default="62500">
-      <xs:simpleType>
-        <xs:restriction base="xs:integer">
-          <xs:maxInclusive value="62500"/>
-          <xs:minInclusive value="1"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="TeamNumber" type="tns:TeamNumber" use="required"/>
+    <xs:attribute name="AnalogInputSampleRate" type="tns:AnalogInputSampleRate" default="62500"/>
   </xs:complexType>
     
   <xs:complexType name="JoystickAxis">
