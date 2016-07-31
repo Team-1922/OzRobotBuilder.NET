@@ -1785,11 +1785,11 @@ namespace Team1922.MVVM.Models {
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(0D)]
         public double SensorOffset {
-				TypeRestrictions.Validate("AnalogInput.SensorOffset", value);
             get {
                 return this.sensorOffsetField;
             }
             set {
+				TypeRestrictions.Validate("AnalogInput.SensorOffset", value);
                 this.sensorOffsetField = value;
                 this.RaisePropertyChanged("SensorOffset");
             }
