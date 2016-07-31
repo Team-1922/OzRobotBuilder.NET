@@ -98,7 +98,7 @@ namespace XSDFixer
                                                 thisProperty = splitLine[i-1];
                                         }
                                     }
-                                    if (line.Contains("set {"))
+                                    if (line.Contains(" set {"))
                                     {
                                         WriteLine($"\t\t\t\tTypeRestrictions.Validate(\"{thisClass}.{thisProperty}\", value);");
                                         break;
