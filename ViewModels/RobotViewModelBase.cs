@@ -6,24 +6,29 @@ using System.Threading.Tasks;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class RobotViewModel : ViewModelBase
+    public abstract class RobotViewModelBase : ViewModelBase
     {
-        private Robot _robot;
+        protected Robot _robot;
 
-        public RobotViewModel(Robot robot)
+        protected List<string> ClampAttributes {get;} 
+
+        public RobotViewModelBase(Robot robot)
         {
             _robot = robot;
             //GetBooksCommand = new DelegateCommand(OnGetBooks, CanGetBooks);
             AddSubsystemCommand = new DelegateCommand(OnAddSubsystem);
-            AddCommandCommand = new DelegateCommand(OnAddCommand);
+            AddContinuousCommandCommand = new DelegateCommand(OnAddContinuousCommand);
+            AddOnChangeEventHandlerCommand = new DelegateCommand(OnAddOnChangeEventHandler);
+            AddOnWithinRangeEventHandlerCommand = new DelegateCommand(OnAddOnWithinRangeEventHandler);
             AddJoystickCommand = new DelegateCommand(OnAddJoystick);
         }
 
-        private BindableBase _selectedElement;
-        public BindableBase SelectedElement
+        private INotifyPropertyChanged _selectedElement;
+        public INotifyPropertyChanged SelectedElement
         {
             get { return _selectedElement; }
             set
@@ -35,17 +40,27 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public IEnumerable<Subsystem> Subsystems => _robot.Subsystems;
-        public IEnumerable<Command> Commands => _robot.Commands;
-        public IEnumerable<Joystick> Joysticks => _robot.Joysticks;
+        public IEnumerable<Subsystem> Subsystems => _robot.Subsystem;
+        public IEnumerable<ContinuousCommand> Commands => _robot.ContinuousCommand;
+        public IEnumerable<OnChangeEventHandler> OnChangeEventHandlers => _robot.OnChangeEventHandler;
+        public IEnumerable<OnWithinRangeEventHandler> OnWithinRangeEventHandlers => _robot.OnWithinRangeEventHandler;
+        public IEnumerable<Joystick> Joysticks => _robot.Joystick;
 
         private void OnAddSubsystem()
         {
             EventAggregator<AddSubsystemEvent>.Instance.Publish(this, new AddSubsystemEvent());
         }
-        private void OnAddCommand()
+        private void OnAddContinuousCommand()
         {
-            EventAggregator<AddCommandEvent>.Instance.Publish(this, new AddCommandEvent());
+            EventAggregator<AddContinuousCommandEvent>.Instance.Publish(this, new AddContinuousCommandEvent());
+        }
+        private void OnAddOnChangeEventHandler()
+        {
+            EventAggregator<AddOnChangeEventHandler>.Instance.Publish(this, new AddOnChangeEventHandler());
+        }
+        private void OnAddOnWithinRangeEventHandler()
+        {
+            EventAggregator<AddOnWithinRangeEventHandler>.Instance.Publish(this, new AddOnWithinRangeEventHandler());
         }
         private void OnAddJoystick()
         {
@@ -88,7 +103,9 @@ namespace Team1922.MVVM.ViewModels
         }
 
         public ICommand AddSubsystemCommand { get; }
-        public ICommand AddCommandCommand { get; }
+        public ICommand AddContinuousCommandCommand { get; }
+        public ICommand AddOnChangeEventHandlerCommand { get; }
+        public ICommand AddOnWithinRangeEventHandlerCommand { get; }
         public ICommand AddJoystickCommand { get; }
     }
 }

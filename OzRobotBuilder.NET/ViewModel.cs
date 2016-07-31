@@ -33,6 +33,7 @@ using System.Diagnostics;
 using VSLangProj;
 using System.Text.RegularExpressions;
 using System.Text;
+using Team1922.MVVM.ViewModels;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -54,12 +55,8 @@ namespace Team1922.OzRobotBuilder.NET
     /// The View binds the various designer controls to the methods derived from IViewModel that get and set values in the XmlModel.
     /// The ViewModel and an underlying XmlModel manage how an IVsTextBuffer is shared between the designer and the XML editor (if opened).
     /// </summary>
-    public class ViewModel : IViewModel, IDataErrorInfo, INotifyPropertyChanged
+    public class ViewModel : RobotViewModelBase, IViewModel, INotifyPropertyChanged
     {
-        const int MaxIdLength = 100;
-        const int MaxProductNameLength = 60;
-        const int MaxDescriptionLength = 1024;
-
         XmlModel _xmlModel;
         XmlStore _xmlStore;
         VSTemplate _vstemplateModel;
@@ -955,65 +952,7 @@ namespace Team1922.OzRobotBuilder.NET
         }
 
         #endregion
-
-        #region IDataErrorInfo
-        public string Error
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public string this[string columnName]
-        {
-            get
-            {
-                string error = null;
-                switch (columnName)
-                {
-                    case "ID":
-                        error = ValidateId();
-                        break;
-                    case "Description":
-                        error = ValidateDescription();
-                        break;
-                }
-                return error;
-            }
-        }
-
-        private string ValidateId()
-        {
-            if (string.IsNullOrEmpty(TemplateID))
-            {
-                return string.Format(ResourceInfo.ValidationRequiredField, ResourceInfo.FieldNameId);
-            }
-
-            if (TemplateID.Length > MaxIdLength)
-            {
-                return string.Format(ResourceInfo.ValidationFieldMaxLength, ResourceInfo.FieldNameId, MaxIdLength);
-            }
-            return null;
-        }
-
-        private string ValidateDescription()
-        {
-            if (string.IsNullOrEmpty(Description))
-            {
-                return string.Format(ResourceInfo.ValidationRequiredField, ResourceInfo.FieldNameDescription);
-            }
-
-            if (Description.Length > MaxDescriptionLength)
-            {
-                return string.Format(ResourceInfo.ValidationFieldMaxLength, ResourceInfo.FieldNameDescription, MaxDescriptionLength);
-            }
-            return null;
-        }
-
-
-        #endregion
-
+        
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -9,6 +9,8 @@
     "net461": {
 
     },
+    "net452": {
+    },
     "netstandard1.5": {
       "imports": "dnxcore50"
     }
