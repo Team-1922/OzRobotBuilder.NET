@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Team1922.Contracts;
 
-namespace Team1922.Services
+namespace Team1922.MVVM.Services
 {
     /// <summary>
     /// The means the global io can be accessed

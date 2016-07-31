@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Team1922.Contracts
+namespace Team1922.MVVM.Contracts
 {
     /// <summary>
     /// Represents the state of the robot IO; separate from the robot model, but accessible to it

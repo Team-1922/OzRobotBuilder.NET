@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Team1922.Contracts
+namespace Team1922.MVVM.Contracts
 {
     /// <summary>
     /// represents a single unprocessed unit of robot IO
