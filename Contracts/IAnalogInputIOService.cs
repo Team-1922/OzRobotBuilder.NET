@@ -16,6 +16,14 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         int AverageValue { get; }
         /// <summary>
+        /// This raw value is subtracted from each sample before the sample is applied to the accumulator. Note that the accumulator is after the oversample and averaging engine in the pipeline so oversampling will affect the appropriate value for this parameter.
+        /// </summary>
+        int AccumulatorCenter { get; set; }
+        /// <summary>
+        /// The raw value deadband around the center point where the accumulator will treat the sample as 0.
+        /// </summary>
+        int AccumulatorDeadband { get; set; }
+        /// <summary>
         /// The number of samples that have been added to the accumulator since the last reset
         /// </summary>
         long AccumulatorCount { get; }
