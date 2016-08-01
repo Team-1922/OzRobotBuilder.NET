@@ -22,6 +22,8 @@ namespace Team1922.MVVM.Contracts
         long AccumulatorCount { get; set; }
         long AccumulatorValue { get; set; }
 
+        void ResetAccumulator();
+
         void SetAnalogInput(AnalogInput analogInput);
     }
 }
