@@ -195,7 +195,7 @@
     <xs:attribute name="ID" type="tns:AnalogInputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="AccumulatorCenter" type="tns:RawAnalogInput" default="2048"/>
-    <xs:attribute name="accumulatorDeadBand" type="tns:RawAnalogInput" use="required"/>
+    <xs:attribute name="AccumulatorDeadband" type="tns:RawAnalogInput" use="required"/>
     <xs:attribute name="AccumulatorInitialValue" type="tns:RawAnalogInput" default="0"/>
     <xs:attribute name="AverageBits" type="xs:int" use="required"/> <!--What are the limitations on this and the one below it-->
     <xs:attribute name="OversampleBits" type="xs:int" use="required"/>

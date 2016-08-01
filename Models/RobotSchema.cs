@@ -1716,14 +1716,14 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public int accumulatorDeadBand {
+        public int AccumulatorDeadband {
             get {
                 return this.accumulatorDeadBandField;
             }
             set {
-				TypeRestrictions.Validate("AnalogInput.accumulatorDeadBand", value);
+				TypeRestrictions.Validate("AnalogInput.AccumulatorDeadband", value);
                 this.accumulatorDeadBandField = value;
-                this.RaisePropertyChanged("accumulatorDeadBand");
+                this.RaisePropertyChanged("AccumulatorDeadband");
             }
         }
         
