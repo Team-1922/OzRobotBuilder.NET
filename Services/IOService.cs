@@ -11,7 +11,8 @@ namespace Team1922.MVVM.Services
     /// </summary>
     public static class IOService
     {
-        private static IRobotIOService ioService;
+        private static IRobotIOService _ioService;
+        private static bool _clampValues;
         /// <summary>
         /// The global IO Service instance
         /// </summary>
@@ -19,18 +20,20 @@ namespace Team1922.MVVM.Services
         {
             get
             {
-                if (null == ioService)
+                if (null == _ioService)
                     throw new NullReferenceException("IO Service Null! Call IOService.Init(IRobotIOService) before accessing IOService.Instance");
-                return ioService;
+                return _ioService;
             }
         }
         /// <summary>
         /// Called by the consuming program before accessing ANY IO
         /// </summary>
         /// <param name="mainIOService">The service to access the IO of the robot</param>
-        public static void Init(IRobotIOService mainIOService)
+        /// <param name="clampValues">whether frequently accessed values should be clamped instead of exceptions thrown</param>
+        public static void Init(IRobotIOService mainIOService, bool clampValues)
         {
-            ioService = mainIOService;
+            _ioService = mainIOService;
+            _clampValues = clampValues;
         }
     }
 }
