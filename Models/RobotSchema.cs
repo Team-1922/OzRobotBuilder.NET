@@ -1653,9 +1653,9 @@ namespace Team1922.MVVM.Models {
         
         private double sensorOffsetField;
         
-        private int rawInputField;
+        private int rawValueField;
         
-        private double convertedInputField;
+        private double valueField;
         
         private long accumulatorCountField;
         
@@ -1667,8 +1667,8 @@ namespace Team1922.MVVM.Models {
             this.accumulatorInitialValueField = 0;
             this.conversionRatioField = 1D;
             this.sensorOffsetField = 0D;
-            this.rawInputField = 0;
-            this.convertedInputField = 0D;
+            this.rawValueField = 0;
+            this.valueField = 0D;
             this.accumulatorCountField = ((long)(0));
             this.accumulatorValueField = ((long)(0));
         }
@@ -1798,28 +1798,28 @@ namespace Team1922.MVVM.Models {
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(0)]
-        public int RawInput {
+        public int RawValue {
             get {
-                return this.rawInputField;
+                return this.rawValueField;
             }
             set {
-				TypeRestrictions.Validate("AnalogInput.RawInput", value);
-                this.rawInputField = value;
-                this.RaisePropertyChanged("RawInput");
+				TypeRestrictions.Validate("AnalogInput.RawValue", value);
+                this.rawValueField = value;
+                this.RaisePropertyChanged("RawValue");
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double ConvertedInput {
+        public double Value {
             get {
-                return this.convertedInputField;
+                return this.valueField;
             }
             set {
-				TypeRestrictions.Validate("AnalogInput.ConvertedInput", value);
-                this.convertedInputField = value;
-                this.RaisePropertyChanged("ConvertedInput");
+				TypeRestrictions.Validate("AnalogInput.Value", value);
+                this.valueField = value;
+                this.RaisePropertyChanged("Value");
             }
         }
         

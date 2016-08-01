@@ -202,8 +202,8 @@
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts 12 bit input to usable output-->
     <xs:attribute name="SensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
     <!--State Values-->
-    <xs:attribute name="RawInput" type="tns:RawAnalogInput" default="0"/>
-    <xs:attribute name="ConvertedInput" type="xs:double" default="0"/>
+    <xs:attribute name="RawValue" type="tns:RawAnalogInput" default="0"/>
+    <xs:attribute name="Value" type="xs:double" default="0"/>
     <xs:attribute name="AccumulatorCount" type="xs:long" default="0"/>
     <xs:attribute name="AccumulatorValue" type="xs:long" default="0"/>
   </xs:complexType>
