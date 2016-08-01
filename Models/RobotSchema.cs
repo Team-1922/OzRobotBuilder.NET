@@ -1641,7 +1641,7 @@ namespace Team1922.MVVM.Models {
         
         private int accumulatorCenterField;
         
-        private int accumulatorDeadBandField;
+        private int accumulatorDeadbandField;
         
         private int accumulatorInitialValueField;
         
@@ -1655,7 +1655,11 @@ namespace Team1922.MVVM.Models {
         
         private int rawValueField;
         
+        private long rawAverageValueField;
+        
         private double valueField;
+        
+        private double averageValueField;
         
         private long accumulatorCountField;
         
@@ -1668,7 +1672,9 @@ namespace Team1922.MVVM.Models {
             this.conversionRatioField = 1D;
             this.sensorOffsetField = 0D;
             this.rawValueField = 0;
+            this.rawAverageValueField = ((long)(0));
             this.valueField = 0D;
+            this.averageValueField = 0D;
             this.accumulatorCountField = ((long)(0));
             this.accumulatorValueField = ((long)(0));
         }
@@ -1718,11 +1724,11 @@ namespace Team1922.MVVM.Models {
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public int AccumulatorDeadband {
             get {
-                return this.accumulatorDeadBandField;
+                return this.accumulatorDeadbandField;
             }
             set {
 				TypeRestrictions.Validate("AnalogInput.AccumulatorDeadband", value);
-                this.accumulatorDeadBandField = value;
+                this.accumulatorDeadbandField = value;
                 this.RaisePropertyChanged("AccumulatorDeadband");
             }
         }
@@ -1811,6 +1817,20 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        public long RawAverageValue {
+            get {
+                return this.rawAverageValueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.RawAverageValue", value);
+                this.rawAverageValueField = value;
+                this.RaisePropertyChanged("RawAverageValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(0D)]
         public double Value {
             get {
@@ -1820,6 +1840,20 @@ namespace Team1922.MVVM.Models {
 				TypeRestrictions.Validate("AnalogInput.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double AverageValue {
+            get {
+                return this.averageValueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.AverageValue", value);
+                this.averageValueField = value;
+                this.RaisePropertyChanged("AverageValue");
             }
         }
         

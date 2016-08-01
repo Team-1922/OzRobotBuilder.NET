@@ -7,10 +7,14 @@ namespace Team1922.MVVM.Contracts
 {
     /// <summary>
     /// This interface is used by the providers which need robot input;
+    /// </summary>
+    /// <remarks>
     /// Output values can be updated to the IO service when they are set, however
     /// input values must be updated every update cycle in order for event handlers
-    /// to properly recognize a state change
-    /// </summary>
+    /// to properly recognize a state change. 
+    /// 
+    /// Typically all interface properties with only a get accessor will do this update
+    /// </remarks>
     public interface IInputProvider
     {
         /// <summary>

@@ -14,7 +14,7 @@ namespace Team1922.MVVM.Contracts
         /// <summary>
         /// The result of post average and oversample algorithms
         /// </summary>
-        int AverageValue { get; }
+        long AverageValue { get; }
         /// <summary>
         /// This raw value is subtracted from each sample before the sample is applied to the accumulator. Note that the accumulator is after the oversample and averaging engine in the pipeline so oversampling will affect the appropriate value for this parameter.
         /// </summary>
