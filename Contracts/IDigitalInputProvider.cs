@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IDigitalInputProvider
+    public interface IDigitalInputProvider : IInputProvider
     {
         int ID { get; set; }
         string Name { get; set; }

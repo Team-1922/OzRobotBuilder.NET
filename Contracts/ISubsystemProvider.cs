@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface ISubsystemProvider
+    public interface ISubsystemProvider : IInputProvider
     {
         IEnumerable<IPWMOutputProvider> PWMOutputs { get; }
         IEnumerable<IAnalogInputProvider> AnalogInputs { get; }

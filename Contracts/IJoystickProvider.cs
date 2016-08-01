@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IJoystickProvider
+    public interface IJoystickProvider : IInputProvider
     {
         IEnumerable<IJoystickAxisProvider> Axes { get; set; }
         IEnumerable<IJoystickButtonProvider> Buttons { get; set; }

@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IRobotProvider
+    public interface IRobotProvider : IInputProvider
     {
         IEnumerable<ISubsystemProvider> Subsystems { get; }
         IEnumerable<IJoystickProvider> Joysticks { get; }

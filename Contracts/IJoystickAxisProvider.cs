@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IJoystickAxisProvider
+    public interface IJoystickAxisProvider : IInputProvider
     {
         int ID { get; set; }
         double Value { get; set; }

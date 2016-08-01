@@ -6,11 +6,11 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IJoystickButtonProvider
+    public interface IJoystickButtonProvider : IInputProvider
     {
         int ID { get; set; }
         bool Value { get; set; }
 
-        void SetJoystick(JoystickButton axis, Joystick joystick)
+        void SetJoystick(JoystickButton axis, Joystick joystick);
     }
 }

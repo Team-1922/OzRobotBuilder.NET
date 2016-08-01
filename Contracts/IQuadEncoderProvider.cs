@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IQuadEncoderProvider
+    public interface IQuadEncoderProvider : IInputProvider
     {
         int ID { get; set; }
         int ID1 { get; set; }
