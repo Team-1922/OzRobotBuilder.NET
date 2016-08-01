@@ -1,12 +1,11 @@
 {
   "version": "1.0.0-*",
   "dependencies": {
+    "Models": "1.0.0-*",
     "MVVMFramework": "1.0.0-*"
   },
   "frameworks": {
     "net461": {
-    },
-    "net452": {
     },
     "netstandard1.5": {
       "imports": "dnxcore50"
