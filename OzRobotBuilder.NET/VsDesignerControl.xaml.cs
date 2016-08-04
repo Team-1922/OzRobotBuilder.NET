@@ -22,7 +22,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Microsoft.VsTemplateDesigner
+namespace Team1922.OzRobotBuilder.NET
 {
     /// <summary>
     /// Interaction logic for VsDesignerControl.xaml

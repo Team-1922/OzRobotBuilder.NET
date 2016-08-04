@@ -16,7 +16,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Microsoft.VsTemplateDesigner
+namespace Team1922.OzRobotBuilder.NET
 {
     public interface IViewModel
     {

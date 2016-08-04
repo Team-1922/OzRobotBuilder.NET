@@ -33,7 +33,7 @@ using VSLangProj;
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace Microsoft.VsTemplateDesigner
+namespace Team1922.OzRobotBuilder.NET
 {
     public class ResourceInfo
     {
@@ -1043,7 +1043,7 @@ namespace Microsoft.VsTemplateDesigner
         private Microsoft.VisualStudio.Shell.SelectionContainer selContainer;
         public void OnSelectChanged(object p)
         {
-            selContainer = new VisualStudio.Shell.SelectionContainer(true, false);
+            selContainer = new Microsoft.VisualStudio.Shell.SelectionContainer(true, false);
             ArrayList items = new ArrayList();
             items.Add(p);
             selContainer.SelectableObjects = items;

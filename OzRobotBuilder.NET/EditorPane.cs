@@ -31,7 +31,7 @@ using ISysServiceProvider = System.IServiceProvider;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using VSStd97CmdID = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 
-namespace Microsoft.VsTemplateDesigner
+namespace Team1922.OzRobotBuilder.NET
 {
     /// <summary>
     /// This control hosts the editor and is responsible for

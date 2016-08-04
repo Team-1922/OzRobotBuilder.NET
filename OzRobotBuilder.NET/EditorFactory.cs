@@ -21,7 +21,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
-namespace Microsoft.VsTemplateDesigner
+namespace Team1922.OzRobotBuilder.NET
 {
     /// <summary>
     /// Factory for creating our editor object. Extends from the IVsEditoryFactory interface
