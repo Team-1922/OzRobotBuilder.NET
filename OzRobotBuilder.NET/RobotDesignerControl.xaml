@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="Team1922.OzRobotBuilder.NET.RobotDesignerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Team1922.OzRobotBuilder.NET"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="450"/>
+            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <ListBox Grid.Column="0"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Stretch"
+                  ItemsSource="{Binding Path=Subsystems }"  SelectedItem="{Binding Path=SelectedElement, Mode=TwoWay}">
+        </ListBox>
+
+        <GridSplitter Background="DarkGray"
+                          ResizeDirection="Columns"
+                          Grid.Column="1"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          ResizeBehavior="PreviousAndNext"/>
+        <DataGrid Background="Blue"
+                      Grid.Column="2"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch" CanUserResizeColumns="False" CanUserReorderColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

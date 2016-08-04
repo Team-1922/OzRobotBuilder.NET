@@ -1,31 +1,41 @@
-﻿using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
 
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Team1922.OzRobotBuilder.NET
 {
-    [Guid(GuidList.guidRobotDesignerEditorFactoryString)]
+    /// <summary>
+    /// Factory for creating our editor object. Extends from the IVsEditoryFactory interface
+    /// </summary>
+    [Guid(GuidList.guidVsTemplateDesignerEditorFactoryString)]
     public sealed class EditorFactory : IVsEditorFactory, IDisposable
     {
-        public const string Extension = ".robot";
+        public const string Extension = ".vstemplate";
 
-        private RobotDesignerPackage editorPackage;
+        private VsTemplateDesignerPackage editorPackage;
         private ServiceProvider vsServiceProvider;
 
 
-        public EditorFactory(RobotDesignerPackage package)
+        public EditorFactory(VsTemplateDesignerPackage package)
         {
             editorPackage = package;
         }
@@ -141,7 +151,7 @@ namespace Team1922.OzRobotBuilder.NET
             // Initialize to null
             ppunkDocView = IntPtr.Zero;
             ppunkDocData = IntPtr.Zero;
-            pguidCmdUI = GuidList.guidRobotDesignerEditorFactory;
+            pguidCmdUI = GuidList.guidVsTemplateDesignerEditorFactory;
             pgrfCDW = 0;
             pbstrEditorCaption = null;
 
@@ -220,7 +230,7 @@ namespace Team1922.OzRobotBuilder.NET
         #endregion
 
         #region IDisposable Members
-
+     
         public void Dispose()
         {
             Dispose(true);

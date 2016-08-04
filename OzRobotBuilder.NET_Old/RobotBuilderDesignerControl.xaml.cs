@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Team1922.MVVM.Framework;
-using Team1922.MVVM.ViewModels;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -22,14 +21,14 @@ namespace Team1922.OzRobotBuilder.NET
     /// </summary>
     public partial class RobotBuilderDesignerControl : UserControl
     {
-        public RobotViewModel ViewModel { get; }
+        public ViewModel ViewModel { get; }
 
         public RobotBuilderDesignerControl()
         {
             InitializeComponent();
         }
 
-        public RobotBuilderDesignerControl(RobotViewModel viewModel)
+        public RobotBuilderDesignerControl(ViewModel viewModel)
         {
             ViewModel = viewModel;
             InitializeComponent();

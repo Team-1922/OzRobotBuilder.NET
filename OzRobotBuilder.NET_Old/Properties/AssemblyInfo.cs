@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("OzRobotBuilder.NET")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Display a WPF designer when viewing xml files")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Team1922 OzRam")]
 [assembly: AssemblyProduct("OzRobotBuilder.NET")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Copyright © TODO")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
