@@ -1,22 +1,36 @@
-﻿using Microsoft.VisualStudio;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.XmlEditor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using Team1922.MVVM.Models;
-using Team1922.MVVM.ViewModels;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using System.Diagnostics;
+using VSLangProj;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -32,11 +46,21 @@ namespace Team1922.OzRobotBuilder.NET
         public static string ValidationRequiredField = "{0} is a required value.";
     }
 
-    public class ViewModel : RobotViewModelBase
+    /// <summary>
+    /// ViewModel is where the interesting portion of the VsTemplate Designer lives. The View binds to an instance of this class.
+    /// 
+    /// The View binds the various designer controls to the methods derived from IViewModel that get and set values in the XmlModel.
+    /// The ViewModel and an underlying XmlModel manage how an IVsTextBuffer is shared between the designer and the XML editor (if opened).
+    /// </summary>
+    public class ViewModel : IViewModel, IDataErrorInfo, INotifyPropertyChanged
     {
+        const int MaxIdLength = 100;
+        const int MaxProductNameLength = 60;
+        const int MaxDescriptionLength = 1024;
 
         XmlModel _xmlModel;
         XmlStore _xmlStore;
+        VSTemplate _vstemplateModel;
 
         IServiceProvider _serviceProvider;
         IVsTextLines _buffer;
@@ -174,14 +198,14 @@ namespace Team1922.OzRobotBuilder.NET
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Robot));
+                XmlSerializer serializer = new XmlSerializer(typeof(VSTemplate));
 
                 using (XmlReader reader = GetParseTree().CreateReader())
                 {
-                    _robotModel = (Robot)serializer.Deserialize(reader);
+                    _vstemplateModel = (VSTemplate)serializer.Deserialize(reader);
                 }
 
-                if (_robotModel == null)
+                if (_vstemplateModel == null || _vstemplateModel.TemplateData == null)
                 {
                     throw new Exception(ResourceInfo.InvalidVsTemplateData);
                 }
@@ -306,11 +330,11 @@ namespace Team1922.OzRobotBuilder.NET
                 //PopulateModelFromReferencesBindingList();
                 //PopulateModelFromContentBindingList();
 
-                XmlSerializer serializer = new XmlSerializer(typeof(Robot));
+                XmlSerializer serializer = new XmlSerializer(typeof(VSTemplate));
                 XDocument documentFromDesignerState = new XDocument();
                 using (XmlWriter w = documentFromDesignerState.CreateWriter())
                 {
-                    serializer.Serialize(w, _robotModel);
+                    serializer.Serialize(w, _vstemplateModel);
                 }
 
                 _synchronizing = true;
@@ -455,6 +479,578 @@ namespace Team1922.OzRobotBuilder.NET
                 _gettingCheckoutStatus = false;
             }
             return (bool)_canEditFile;
+        }
+
+        #endregion
+
+        #region IViewModel methods
+
+        public VSTemplateTemplateData TemplateData
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData;
+            }
+        }
+
+        public VSTemplateTemplateContent TemplateContent
+        {
+            get
+            {
+                return _vstemplateModel.TemplateContent;
+            }
+        }
+
+        public string TemplateID
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.TemplateID;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.TemplateID != value)
+                {
+                    _vstemplateModel.TemplateData.TemplateID = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("TemplateID");
+                }
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                if (!IsNameEnabled)
+                {
+                    return _vstemplateModel.TemplateData.Name.Package + " " + _vstemplateModel.TemplateData.Name.ID;
+                }
+                return _vstemplateModel.TemplateData.Name.Value;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.Name.Value != value)
+                {
+                    _vstemplateModel.TemplateData.Name.Value = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("Name");
+                }
+            }
+        }
+
+        public bool IsNameEnabled
+        {
+            get
+            {
+                // only enable if not associated with a package (guid)
+                return string.IsNullOrEmpty(_vstemplateModel.TemplateData.Name.Package);
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                if (!IsDescriptionEnabled)
+                {
+                    return _vstemplateModel.TemplateData.Description.Package + " " + _vstemplateModel.TemplateData.Description.ID;
+                }
+                return _vstemplateModel.TemplateData.Description.Value;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.Description.Value != value)
+                {
+                    _vstemplateModel.TemplateData.Description.Value = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("Description");
+                }
+            }
+        }
+
+        public bool IsDescriptionEnabled
+        {
+            get
+            {
+                // only enable if not associated with a package (guid)
+                return string.IsNullOrEmpty(_vstemplateModel.TemplateData.Description.Package);
+            }
+        }
+
+        public string Icon
+        {
+            get
+            {
+                if (!IsIconEnabled)
+                {
+                    return _vstemplateModel.TemplateData.Icon.Package + " " + _vstemplateModel.TemplateData.Icon.ID;
+                }
+                return _vstemplateModel.TemplateData.Icon.Value;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.Icon.Value != value)
+                {
+                    _vstemplateModel.TemplateData.Icon.Value = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("Icon");
+                }
+            }
+        }
+
+        public bool IsIconEnabled
+        {
+            get
+            {
+                // only enable if not associated with a package (guid)
+                return string.IsNullOrEmpty(_vstemplateModel.TemplateData.Icon.Package);
+            }
+        }
+
+
+        public string PreviewImage
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.PreviewImage;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.PreviewImage != value)
+                {
+                    _vstemplateModel.TemplateData.PreviewImage = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("PreviewImage");
+                }
+            }
+        }
+
+        public string ProjectType
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.ProjectType;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.ProjectType != value)
+                {
+                    _vstemplateModel.TemplateData.ProjectType = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("ProjectType");
+                }
+            }
+        }
+
+        public string ProjectSubType
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.ProjectSubType;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.ProjectSubType != value)
+                {
+                    _vstemplateModel.TemplateData.ProjectSubType = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("ProjectSubType");
+                }
+            }
+        }
+
+        public string DefaultName
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.DefaultName;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.DefaultName != value)
+                {
+                    _vstemplateModel.TemplateData.DefaultName = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("DefaultName");
+                }
+            }
+        }
+
+        public string GroupID
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.TemplateGroupID;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.TemplateGroupID != value)
+                {
+                    _vstemplateModel.TemplateData.TemplateGroupID = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("TemplateGroupID");
+                }
+            }
+        }
+
+        public string SortOrder
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.SortOrder;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.SortOrder != value)
+                {
+                    _vstemplateModel.TemplateData.SortOrder = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("SortOrder");
+                }
+            }
+        }
+
+        public string LocationFieldMRUPrefix
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.LocationFieldMRUPrefix;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.LocationFieldMRUPrefix != value)
+                {
+                    _vstemplateModel.TemplateData.LocationFieldMRUPrefix = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("LocationFieldMRUPrefix");
+                }
+            }
+        }
+
+        public bool ProvideDefaultName
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.ProvideDefaultName;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.ProvideDefaultName != value)
+                {
+                    // if we don't make sure the XML model knows this value is specified,
+                    // it won't save it (and it will get reset the next time we read the model)
+                    _vstemplateModel.TemplateData.ProvideDefaultNameSpecified = true;
+                    _vstemplateModel.TemplateData.ProvideDefaultName = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("ProvideDefaultName");
+                }
+            }
+        }
+
+        public bool CreateNewFolder
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.CreateNewFolder;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.CreateNewFolder != value)
+                {
+                    // if we don't make sure the XML model knows this value is specified,
+                    // it won't save it (and it will get reset the next time we read the model)
+                    _vstemplateModel.TemplateData.CreateNewFolderSpecified = true;
+                    _vstemplateModel.TemplateData.CreateNewFolder = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("CreateNewFolder");
+                }
+            }
+        }
+
+        public bool PromptForSaveOnCreation
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.PromptForSaveOnCreation;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.PromptForSaveOnCreation != value)
+                {
+                    // if we don't make sure the XML model knows this value is specified,
+                    // it won't save it (and it will get reset the next time we read the model)
+                    _vstemplateModel.TemplateData.PromptForSaveOnCreationSpecified = true;
+                    _vstemplateModel.TemplateData.PromptForSaveOnCreation = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("PromptForSaveOnCreation");
+                }
+            }
+        }
+
+        public bool Hidden
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.Hidden;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.Hidden != value)
+                {
+                    // if we don't make sure the XML model knows this value is specified,
+                    // it won't save it (and it will get reset the next time we read the model)
+                    _vstemplateModel.TemplateData.HiddenSpecified = true;
+                    _vstemplateModel.TemplateData.Hidden = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("Hidden");
+                }
+            }
+        }
+
+        public bool SupportsMasterPage
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.SupportsMasterPage;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.SupportsMasterPage != value)
+                {
+                    // if we don't make sure the XML model knows this value is specified,
+                    // it won't save it (and it will get reset the next time we read the model)
+                    _vstemplateModel.TemplateData.SupportsMasterPageSpecified = true;
+                    _vstemplateModel.TemplateData.SupportsMasterPage = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("SupportsMasterPage");
+                }
+            }
+        }
+
+        public bool SupportsCodeSeparation
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.SupportsCodeSeparation;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.SupportsCodeSeparation != value)
+                {
+                    // if we don't make sure the XML model knows this value is specified,
+                    // it won't save it (and it will get reset the next time we read the model)
+                    _vstemplateModel.TemplateData.SupportsCodeSeparationSpecified = true;
+                    _vstemplateModel.TemplateData.SupportsCodeSeparation = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("SupportsCodeSeparation");
+                }
+            }
+        }
+
+        public bool SupportsLanguageDropDown
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.SupportsLanguageDropDown;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.SupportsLanguageDropDown != value)
+                {
+                    // if we don't make sure the XML model knows this value is specified,
+                    // it won't save it (and it will get reset the next time we read the model)
+                    _vstemplateModel.TemplateData.SupportsLanguageDropDownSpecified = true;
+                    _vstemplateModel.TemplateData.SupportsLanguageDropDown = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("SupportsLanguageDropDown");
+                }
+            }
+        }
+
+        public bool IsLocationFieldSpecified
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.LocationFieldSpecified;
+            }
+        }
+
+        public VSTemplateTemplateDataLocationField LocationField
+        {
+            get
+            {
+                return _vstemplateModel.TemplateData.LocationField;
+            }
+            set
+            {
+                if (_vstemplateModel.TemplateData.LocationField != value)
+                {
+                    // if we don't make sure the XML model knows this value is specified,
+                    // it won't save it (and it will get reset the next time we read the model)
+                    _vstemplateModel.TemplateData.LocationFieldSpecified = true;
+                    _vstemplateModel.TemplateData.LocationField = value;
+                    DesignerDirty = true;
+                    NotifyPropertyChanged("LocationField");
+                }
+            }
+        }
+
+        public string WizardAssembly
+        {
+            get
+            {
+                if ((_vstemplateModel.WizardExtension != null) && (_vstemplateModel.WizardExtension.Count() == 1) && (_vstemplateModel.WizardExtension[0].Assembly.Count() == 1))
+                {
+                    return _vstemplateModel.WizardExtension[0].Assembly[0] as string;
+                }
+                return null;
+            }
+            set
+            {
+                // intentionally not implemented until the correct behavior is determined
+            }
+        }
+
+        public string WizardClassName
+        {
+            get
+            {
+                if ((_vstemplateModel.WizardExtension != null) && (_vstemplateModel.WizardExtension.Count() == 1) && (_vstemplateModel.WizardExtension[0].FullClassName.Count() == 1))
+                {
+                    return _vstemplateModel.WizardExtension[0].FullClassName[0] as string;
+                }
+                return null;
+            }
+            set
+            {
+                // intentionally not implemented until the correct behavior is determined
+            }
+        }
+
+        public string WizardData
+        {
+            get
+            {
+                string result = "";
+                if (_vstemplateModel.WizardData == null)
+                {
+                    return result;
+                }
+                foreach (var wizData in _vstemplateModel.WizardData)
+                {
+                    foreach (var xmlItem in wizData.Any)
+                    {
+                        result += xmlItem;
+                    }
+                }
+                return result;
+            }
+            set
+            {
+                // intentionally not implemented until the correct behavior is determined
+            }
+        }
+
+        #endregion
+
+        #region IDataErrorInfo
+        public string Error
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = null;
+                switch (columnName)
+                {
+                    case "ID":
+                        error = ValidateId();
+                        break;
+                    case "Description":
+                        error = ValidateDescription();
+                        break;
+                }
+                return error;
+            }
+        }
+
+        private string ValidateId()
+        {
+            if (string.IsNullOrEmpty(TemplateID))
+            {
+                return string.Format(ResourceInfo.ValidationRequiredField, ResourceInfo.FieldNameId);
+            }
+
+            if (TemplateID.Length > MaxIdLength)
+            {
+                return string.Format(ResourceInfo.ValidationFieldMaxLength, ResourceInfo.FieldNameId, MaxIdLength);
+            }
+            return null;
+        }
+
+        private string ValidateDescription()
+        {
+            if (string.IsNullOrEmpty(Description))
+            {
+                return string.Format(ResourceInfo.ValidationRequiredField, ResourceInfo.FieldNameDescription);
+            }
+
+            if (Description.Length > MaxDescriptionLength)
+            {
+                return string.Format(ResourceInfo.ValidationFieldMaxLength, ResourceInfo.FieldNameDescription, MaxDescriptionLength);
+            }
+            return null;
+        }
+
+
+        #endregion
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+
+        #region TreeView SelectionChanged
+
+        private ITrackSelection trackSel;
+        private ITrackSelection TrackSelection
+        {
+            get
+            {
+                if (trackSel == null)
+                    trackSel = _serviceProvider.GetService(typeof(STrackSelection)) as ITrackSelection;
+                return trackSel;
+            }
+        }
+
+        private Microsoft.VisualStudio.Shell.SelectionContainer selContainer;
+        public void OnSelectChanged(object p)
+        {
+            selContainer = new Microsoft.VisualStudio.Shell.SelectionContainer(true, false);
+            ArrayList items = new ArrayList();
+            items.Add(p);
+            selContainer.SelectableObjects = items;
+            selContainer.SelectedObjects = items;
+
+            ITrackSelection track = TrackSelection;
+            if (track != null)
+                track.OnSelectChange(selContainer);
         }
 
         #endregion

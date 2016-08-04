@@ -21,7 +21,7 @@ namespace Team1922.OzRobotBuilder.NET
     public sealed class EditorPane : WindowPane, IOleComponent, IVsDeferredDocView, IVsLinkedUndoClient
     {
         #region Fields
-        private RobotDesignerPackage _thisPackage;
+        private VsTemplateDesignerPackage _thisPackage;
         private string _fileName = string.Empty;
         private RobotDesignerControl _robotDesignerControl;
         private IVsTextLines _textBuffer;
@@ -37,7 +37,7 @@ namespace Team1922.OzRobotBuilder.NET
         /// our initialization functions.
         /// </summary>
         /// <param name="package">Our Package instance.</param>
-        public EditorPane(RobotDesignerPackage package, string fileName, IVsTextLines textBuffer)
+        public EditorPane(VsTemplateDesignerPackage package, string fileName, IVsTextLines textBuffer)
             : base(null)
         {
             _thisPackage = package;
