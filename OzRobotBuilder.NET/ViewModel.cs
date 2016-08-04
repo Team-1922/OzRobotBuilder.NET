@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -32,7 +33,7 @@ using VSLangProj;
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace Team1922.OzRobotBuilder.NET
+namespace Microsoft.VsTemplateDesigner
 {
     public class ResourceInfo
     {
@@ -1042,7 +1043,7 @@ namespace Team1922.OzRobotBuilder.NET
         private Microsoft.VisualStudio.Shell.SelectionContainer selContainer;
         public void OnSelectChanged(object p)
         {
-            selContainer = new Microsoft.VisualStudio.Shell.SelectionContainer(true, false);
+            selContainer = new VisualStudio.Shell.SelectionContainer(true, false);
             ArrayList items = new ArrayList();
             items.Add(p);
             selContainer.SelectableObjects = items;
@@ -1054,5 +1055,5 @@ namespace Team1922.OzRobotBuilder.NET
         }
 
         #endregion
-    }
+    }    
 }

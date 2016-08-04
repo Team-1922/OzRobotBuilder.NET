@@ -1,29 +1,50 @@
-﻿using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.XmlEditor;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.XmlEditor;
+//using tom;
+
+using ISysServiceProvider = System.IServiceProvider;
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using VSStd97CmdID = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 
-namespace Team1922.OzRobotBuilder.NET
+namespace Microsoft.VsTemplateDesigner
 {
+    /// <summary>
+    /// This control hosts the editor and is responsible for
+    /// handling the commands targeted to the editor 
+    /// </summary>
+
     [ComVisible(true)]
     public sealed class EditorPane : WindowPane, IOleComponent, IVsDeferredDocView, IVsLinkedUndoClient
     {
         #region Fields
         private VsTemplateDesignerPackage _thisPackage;
         private string _fileName = string.Empty;
-        private RobotDesignerControl _robotDesignerControl;
+        private VsDesignerControl _vsDesignerControl;
         private IVsTextLines _textBuffer;
         private uint _componentId;
         private IOleUndoManager _undoManager;
@@ -135,8 +156,8 @@ namespace Team1922.OzRobotBuilder.NET
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on 
             // the object returned by the Content property.
-            _robotDesignerControl = new RobotDesignerControl(new ViewModel(_store, _model, this, _textBuffer));
-            Content = _robotDesignerControl;
+            _vsDesignerControl = new VsDesignerControl(new ViewModel(_store, _model, this, _textBuffer));
+            Content = _vsDesignerControl;
 
             RegisterIndependentView(true);
 
@@ -371,7 +392,7 @@ namespace Team1922.OzRobotBuilder.NET
         /// <returns>S_OK if Marshal operations completed successfully.</returns>
         int IVsDeferredDocView.get_CmdUIGuid(out Guid pGuidCmdId)
         {
-            pGuidCmdId = GuidList.guidRobotDesignerEditorFactory;
+            pGuidCmdId = GuidList.guidVsTemplateDesignerEditorFactory;
             return VSConstants.S_OK;
         }
 
@@ -398,9 +419,9 @@ namespace Team1922.OzRobotBuilder.NET
 
         int IOleComponent.FDoIdle(uint grfidlef)
         {
-            if (_robotDesignerControl != null)
+            if (_vsDesignerControl != null)
             {
-                _robotDesignerControl.DoIdle();
+                _vsDesignerControl.DoIdle();
             }
             return VSConstants.S_OK;
         }

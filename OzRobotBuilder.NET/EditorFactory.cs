@@ -21,12 +21,12 @@ using Microsoft.VisualStudio.OLE.Interop;
 
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
-namespace Team1922.OzRobotBuilder.NET
+namespace Microsoft.VsTemplateDesigner
 {
     /// <summary>
     /// Factory for creating our editor object. Extends from the IVsEditoryFactory interface
     /// </summary>
-    [Guid(GuidList.guidRobotDesignerEditorFactoryString)]
+    [Guid(GuidList.guidVsTemplateDesignerEditorFactoryString)]
     public sealed class EditorFactory : IVsEditorFactory, IDisposable
     {
         public const string Extension = ".robot";
@@ -151,7 +151,7 @@ namespace Team1922.OzRobotBuilder.NET
             // Initialize to null
             ppunkDocView = IntPtr.Zero;
             ppunkDocData = IntPtr.Zero;
-            pguidCmdUI = GuidList.guidRobotDesignerEditorFactory;
+            pguidCmdUI = GuidList.guidVsTemplateDesignerEditorFactory;
             pgrfCDW = 0;
             pbstrEditorCaption = null;
 
@@ -230,7 +230,7 @@ namespace Team1922.OzRobotBuilder.NET
         #endregion
 
         #region IDisposable Members
-
+     
         public void Dispose()
         {
             Dispose(true);

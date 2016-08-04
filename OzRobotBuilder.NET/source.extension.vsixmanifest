@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="b67fa5a0-f1e1-424b-9676-3c24f14e0577" Version="1.0" Language="en-US" Publisher="Kevin Mackenzie" />
+    <Identity Id="36281d21-7247-4d06-9260-69d2a31b6a51" Version="1.0.2" Language="en-US" Publisher="Kevin Mackenzie" />
     <DisplayName>OzRobotBuilder.NET</DisplayName>
-    <Description>Empty VSIX Project.</Description>
+    <Description xml:space="preserve">TODO:</Description>
+    <Icon>Resources\Package.ico</Icon>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
@@ -11,4 +12,7 @@
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
 </PackageManifest>

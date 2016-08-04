@@ -19,7 +19,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 
-namespace Team1922.OzRobotBuilder.NET
+namespace Microsoft.VsTemplateDesigner
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -36,7 +36,7 @@ namespace Team1922.OzRobotBuilder.NET
     [PackageRegistration(UseManagedResourcesOnly = true)]
 
     // Register the class as a Designer View in cooperation with the Xml Editor
-    [ProvideXmlEditorChooserDesignerView("Robot", "robot", LogicalViewID.Designer, 0x61,
+    [ProvideXmlEditorChooserDesignerView("Robot", "robot", LogicalViewID.Designer, 0x60,
         DesignerLogicalViewEditor = typeof(EditorFactory),
         Namespace = "http://schemas.microsoft.com/developer/vstemplate/2005",
         MatchExtensionAndNamespace = false)]
@@ -48,7 +48,7 @@ namespace Team1922.OzRobotBuilder.NET
     // We register the XML Editor ("{FA3CD31E-987B-443A-9B81-186104E8DAC1}") as an EditorFactoryNotify
     // object to handle our ".vstemplate" file extension for the following projects:
     // Microsoft Visual Basic Project
-    //[EditorFactoryNotifyForProject("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
+    [EditorFactoryNotifyForProject("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
     // Microsoft Visual C# Project
     [EditorFactoryNotifyForProject("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
 
@@ -57,7 +57,7 @@ namespace Team1922.OzRobotBuilder.NET
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(GuidList.guidRobotDesignerPkgString)]
+    [Guid(GuidList.guidVsTemplateDesignerPkgString)]
     public sealed class VsTemplateDesignerPackage : Package
     {
         /// <summary>
@@ -69,7 +69,7 @@ namespace Team1922.OzRobotBuilder.NET
         /// </summary>
         public VsTemplateDesignerPackage()
         {
-
+            
         }
 
 
