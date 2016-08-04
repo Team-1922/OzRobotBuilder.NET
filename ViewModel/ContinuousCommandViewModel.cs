@@ -4,18 +4,15 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class ContinuousCommandViewModel : IContinuousCommandProvider
+    internal class ContinuousCommandViewModel : IContinuousCommandProvider
     {
+        ContinuousCommand _commandModel;
+
         public IEventTargetProvider EventTarget
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _eventTargetProvider;
             }
         }
 
@@ -23,18 +20,23 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _commandModel.Name;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _commandModel.Name = value;
             }
         }
 
         public void SetContinuousCommand(ContinuousCommand continuousCommand)
         {
-            throw new NotImplementedException();
+            _commandModel = continuousCommand;
+            _eventTargetProvider.SetEventTarget(_commandModel.EventTarget);
         }
+
+        #region Private Fields
+        IEventTargetProvider _eventTargetProvider = new EventTargetViewModel();
+        #endregion
     }
 }

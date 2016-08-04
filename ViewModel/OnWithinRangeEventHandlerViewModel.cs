@@ -4,18 +4,15 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class OnWithinRangeEventHandlerViewModel : IOnWithinRangeEventHandlerProvider
+    internal class OnWithinRangeEventHandlerViewModel : IOnWithinRangeEventHandlerProvider
     {
+        OnWithinRangeEventHandler _onWithinRangeEventHandlerModel;
+
         public IEventTargetProvider EventTarget
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _eventTargetProvider;
             }
         }
 
@@ -23,38 +20,38 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _onWithinRangeEventHandlerModel.Invert;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _onWithinRangeEventHandlerModel.Invert = value;
             }
         }
 
-        public double MaxField
+        public double Max
         {
             get
             {
-                throw new NotImplementedException();
+                return _onWithinRangeEventHandlerModel.Max;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _onWithinRangeEventHandlerModel.Max = value;
             }
         }
 
-        public double MinField
+        public double Min
         {
             get
             {
-                throw new NotImplementedException();
+                return _onWithinRangeEventHandlerModel.Min;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _onWithinRangeEventHandlerModel.Min = value;
             }
         }
 
@@ -62,12 +59,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _onWithinRangeEventHandlerModel.Name;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _onWithinRangeEventHandlerModel.Name = value;
             }
         }
 
@@ -75,18 +72,23 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _onWithinRangeEventHandlerModel.WatchPath;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _onWithinRangeEventHandlerModel.WatchPath = value;
             }
         }
 
         public void SetOnWithinRangeEventHandler(OnWithinRangeEventHandler onWithinRangeEventHandler)
         {
-            throw new NotImplementedException();
+            _onWithinRangeEventHandlerModel = onWithinRangeEventHandler;
+            _eventTargetProvider.SetEventTarget(_onWithinRangeEventHandlerModel.EventTarget);
         }
+
+        #region Private Fields
+        IEventTargetProvider _eventTargetProvider = new EventTargetViewModel();
+        #endregion
     }
 }

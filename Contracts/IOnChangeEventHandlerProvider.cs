@@ -8,7 +8,7 @@ namespace Team1922.MVVM.Contracts
 {
     public interface IOnChangeEventHandlerProvider
     {
-        IEventTargetProvider EventTarget { get; set; }
+        IEventTargetProvider EventTarget { get; }
         string Name { get; set; }
         string WatchPath { get; set; }
         double MinDelta { get; set; }

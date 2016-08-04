@@ -8,11 +8,11 @@ namespace Team1922.MVVM.Contracts
 {
     public interface IOnWithinRangeEventHandlerProvider
     {
-        IEventTargetProvider EventTarget { get; set; }
+        IEventTargetProvider EventTarget { get; }
         string Name { get; set; }
         string WatchPath { get; set; }
-        double MinField { get; set; }
-        double MaxField { get; set; }
+        double Min { get; set; }
+        double Max { get; set; }
         bool Invert { get; set; }
 
         void SetOnWithinRangeEventHandler(OnWithinRangeEventHandler onWithinRangeEventHandler);

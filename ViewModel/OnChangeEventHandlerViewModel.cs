@@ -6,16 +6,13 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class OnChangeEventHandlerViewModel : IOnChangeEventHandlerProvider
     {
+        OnChangeEventHandler _onChangeEventHandlerModel;
+
         public IEventTargetProvider EventTarget
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _eventTargetProvider;
             }
         }
 
@@ -23,12 +20,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _onChangeEventHandlerModel.MinDelta;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _onChangeEventHandlerModel.MinDelta = value;
             }
         }
 
@@ -36,12 +33,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _onChangeEventHandlerModel.Name;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _onChangeEventHandlerModel.Name = value;
             }
         }
 
@@ -49,18 +46,23 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _onChangeEventHandlerModel.WatchPath;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _onChangeEventHandlerModel.WatchPath = value;
             }
         }
 
         public void SetOnChangeEventHandler(OnChangeEventHandler onChangeEventHandler)
         {
-            throw new NotImplementedException();
+            _onChangeEventHandlerModel = onChangeEventHandler;
+            _eventTargetProvider.SetEventTarget(_onChangeEventHandlerModel.EventTarget);
         }
+
+        #region Private Fields
+        IEventTargetProvider _eventTargetProvider = new EventTargetViewModel();
+        #endregion
     }
 }

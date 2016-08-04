@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Contracts
     {
         EventTargetType Type { get; set; }
         string Path { get; set; }
-        string value { get; set; }
+        string Value { get; set; }
 
         void SetEventTarget(EventTarget eventTarget);
     }
