@@ -12,7 +12,8 @@
             <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0"
+        <TextBox Grid.Column="0">TESTING</TextBox>
+        <!--<ListBox Grid.Column="0"
                   VerticalAlignment="Top"
                   HorizontalAlignment="Stretch"
                   ItemsSource="{Binding Path=Subsystems }"  SelectedItem="{Binding Path=SelectedElement, Mode=TwoWay}">
@@ -32,6 +33,6 @@
                 <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}"/>
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
     </Grid>
 </UserControl>
