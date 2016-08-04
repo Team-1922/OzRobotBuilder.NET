@@ -12,8 +12,8 @@ namespace Team1922.MVVM.Contracts
         double I { get; set; }
         double D { get; set; }
         double F { get; set; }
-        double IZone { get; set; }
-        double ClosedLoopRampRate { get; set; }
+        int IZone { get; set; }
+        double CloseLoopRampRate { get; set; }
         int AllowableCloseLoopError { get; set; }
         CANTalonDifferentiationLevel SourceType { get; set; }
 
