@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Contracts
     {
         int ID { get; set; }
         string Name { get; set; }
-        bool Value { get; set; }
+        bool Value { get; }
 
         void SetDigitalInput(DigitalInput digitalInput);
     }
