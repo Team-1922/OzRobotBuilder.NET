@@ -115,6 +115,14 @@ namespace Team1922.MVVM.ViewModels
             set { _subsystemModel.SoftwarePIDEnabled = value; }
         }
 
+        public int ID
+        {
+            get
+            {
+                return _subsystemModel.ID;
+            }
+        }
+
         #region Private Fields
         List<IPWMOutputProvider> _pwmOutputProviders = new List<IPWMOutputProvider>();
         List<IAnalogInputProvider> _analogInputProviders = new List<IAnalogInputProvider>();

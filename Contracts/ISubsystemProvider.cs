@@ -15,6 +15,7 @@ namespace Team1922.MVVM.Contracts
         IEnumerable<ICANTalonProvider> CANTalons { get; }
         IPIDControllerSoftwareProvider PIDController { get; }
         string Name { get; set; }
+        int ID { get; }
         bool SoftwarePIDEnabled { get; set; }
 
         void SetSubsystem(Subsystem subsystem);

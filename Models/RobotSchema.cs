@@ -169,6 +169,8 @@ namespace Team1922.MVVM.Models {
         
         private string nameField;
         
+        private int idField;
+        
         private bool softwarePIDEnabledField;
         
         public Subsystem() {
@@ -268,6 +270,19 @@ namespace Team1922.MVVM.Models {
 				TypeRestrictions.Validate("Subsystem.Name", value);
                 this.nameField = value;
                 this.RaisePropertyChanged("Name");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+				TypeRestrictions.Validate("Subsystem.ID", value);
+                this.idField = value;
+                this.RaisePropertyChanged("ID");
             }
         }
         
