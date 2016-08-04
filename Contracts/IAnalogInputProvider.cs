@@ -29,10 +29,6 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         int AccumulatorDeadband { get; set; }
         /// <summary>
-        /// The AccumulatorInitialValue property of the model
-        /// </summary>
-        int AccumulatorInitialValue { get; set; }
-        /// <summary>
         /// The AverageBits property of the model
         /// </summary>
         int AverageBits { get; set; }
@@ -69,9 +65,13 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         long AccumulatorCount { get; }
         /// <summary>
+        /// The RawAccumulatorValue property of the model
+        /// </summary>
+        long RawAccumulatorValue { get; }
+        /// <summary>
         /// The AccumulatorValue property of the model
         /// </summary>
-        long AccumulatorValue { get; }
+        double AccumulatorValue { get; }
         /// <summary>
         /// Resets the hardware analog input accumulator
         /// </summary>

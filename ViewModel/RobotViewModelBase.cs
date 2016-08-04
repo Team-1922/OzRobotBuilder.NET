@@ -48,7 +48,7 @@ namespace Team1922.MVVM.ViewModels
             {
                 if (continuousCommand == null)
                     continue;
-                var provider = new ContinuousCommandProviderType();
+                var provider = new ContinuousCommandViewModel();
                 provider.SetContinuousCommand(continuousCommand);
                 _continuousCommandProviders.Add(provider);
             }
@@ -56,7 +56,7 @@ namespace Team1922.MVVM.ViewModels
             {
                 if (onChangeEventHandler == null)
                     continue;
-                var provider = new OnChangeEventHandlerProviderType();
+                var provider = new OnChangeEventHandlerViewModel();
                 provider.SetOnChangeEventHandler(onChangeEventHandler);
                 _onChangeEventHandlerProviders.Add(provider);
             }
@@ -64,7 +64,7 @@ namespace Team1922.MVVM.ViewModels
             {
                 if (onWithinRangeEventHandler == null)
                     continue;
-                var provider = new OnWithinRangeEventHandlerProviderType();
+                var provider = new OnWithinRangeEventHandlerViewModel();
                 provider.SetOnWithinRangeEventHandler(onWithinRangeEventHandler);
                 _onWithinRangeEventHandlerProviders.Add(provider);
             }
@@ -72,7 +72,7 @@ namespace Team1922.MVVM.ViewModels
             {
                 if (joystick == null)
                     continue;
-                var provider = new JoystickProviderType();
+                var provider = new JoystickViewModel();
                 provider.SetJoystick(joystick);
                 _joystickProviders.Add(provider);
             }
@@ -168,6 +168,14 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void UpdateInputValues()
+        {
+            foreach(var subsystem in _subsystemProviders)
+            {
+                subsystem.UpdateInputValues();
+            }
+        }
+
         public ICommand AddSubsystemCommand { get; }
         public ICommand AddContinuousCommandCommand { get; }
         public ICommand AddOnChangeEventHandlerCommand { get; }
@@ -186,33 +194,5 @@ namespace Team1922.MVVM.ViewModels
         List<IOnWithinRangeEventHandlerProvider> _onWithinRangeEventHandlerProviders = new List<IOnWithinRangeEventHandlerProvider>();
         List<IJoystickProvider> _joystickProviders = new List<IJoystickProvider>();
         #endregion
-    }
-    public class RobotEditorViewModelBase : RobotViewModelBase<SubsystemViewModel, ContinuousCommandViewModel, OnChangeEventHandlerViewModel, OnWithinRangeEventHandlerViewModel, JoystickViewModel>
-    {
-        public override int AnalogInputSampleRate
-        {
-            get
-            {
-                return _robotModel.AnalogInputSampleRate;
-            }
-
-            set
-            {
-                Analog
-            }
-        }
-
-        public override int TeamNumber
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
     }
 }

@@ -8,7 +8,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class SubsystemViewModel : ViewModelBase, ISubsystemProvider
+    internal class SubsystemViewModel : ViewModelBase, ISubsystemProvider
     {
         protected Subsystem _subsystemModel;
         
@@ -64,6 +64,22 @@ namespace Team1922.MVVM.ViewModels
                 var provider = new CANTalonViewModel();
                 provider.SetCANTalon(canTalon);
                 _canTalonProviders.Add(provider);
+            }
+        }
+
+        public void UpdateInputValues()
+        {
+            foreach(var analogInput in _analogInputProviders)
+            {
+                analogInput.UpdateInputValues();
+            }
+            foreach (var quadEncoder in _quadEncoderProviders)
+            {
+                quadEncoder.UpdateInputValues();
+            }
+            foreach (var canTalon in _canTalonProviders)
+            {
+                canTalon.UpdateInputValues();
             }
         }
 

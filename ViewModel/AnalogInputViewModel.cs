@@ -8,7 +8,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// The viewmodel for all analog inputs
     /// </summary>
-    public class AnalogInputViewModel : IAnalogInputProvider
+    internal class AnalogInputViewModel : IAnalogInputProvider
     {
         /// <summary>
         /// the reference to the model object
@@ -22,7 +22,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AccumulatorCenter = IOService.Instance.AnalogInputs[ID].AccumulatorCenter;
+                return _analogInputModel.AccumulatorCenter;
             }
 
             set
@@ -38,7 +38,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AccumulatorCount = IOService.Instance.AnalogInputs[ID].AccumulatorCount;
+                return _analogInputModel.AccumulatorCount;
             }
         }
 
@@ -49,7 +49,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AccumulatorDeadband = IOService.Instance.AnalogInputs[ID].AccumulatorDeadband;
+                return _analogInputModel.AccumulatorDeadband;
             }
 
             set
@@ -59,29 +59,13 @@ namespace Team1922.MVVM.ViewModels
         }
 
         /// <summary>
-        /// The AccumulatorInitialValue property of the model
-        /// </summary>
-        public int AccumulatorInitialValue
-        {
-            get
-            {
-                return _analogInputModel.AccumulatorInitialValue;
-            }
-
-            set
-            {
-                _analogInputModel.AccumulatorInitialValue = value;
-            }
-        }
-
-        /// <summary>
         /// The AccumulatorValue property of the model
         /// </summary>
-        public long AccumulatorValue
+        public double AccumulatorValue
         {
             get
             {
-                return _analogInputModel.AccumulatorValue = IOService.Instance.AnalogInputs[ID].AccumulatorValue;
+                return _analogInputModel.AccumulatorValue;
             }
         }
 
@@ -92,7 +76,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AverageBits = IOService.Instance.AnalogInputs[ID].AverageBits;
+                return _analogInputModel.AverageBits;
             }
 
             set
@@ -156,7 +140,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.OversampleBits = IOService.Instance.AnalogInputs[ID].OversampleBits;
+                return _analogInputModel.OversampleBits;
             }
 
             set
@@ -172,7 +156,18 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.RawValue = (int)IOService.Instance.AnalogInputs[ID].Value;
+                return _analogInputModel.RawValue;
+            }
+        }
+
+        /// <summary>
+        /// The RawAccumulatorValue property of the model
+        /// </summary>
+        public long RawAccumulatorValue
+        {
+            get
+            {
+                return _analogInputModel.RawAccumulatorValue;
             }
         }
 
@@ -207,7 +202,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.Value = RawValue * ConversionRatio;
+                return _analogInputModel.Value;
             }
         }
 
@@ -216,7 +211,10 @@ namespace Team1922.MVVM.ViewModels
         /// </summary>
         public double AverageValue
         {
-            get { return _analogInputModel.AverageValue = RawAverageValue * ConversionRatio; }
+            get
+            {
+                return _analogInputModel.AverageValue;
+            }
         }
 
         /// <summary>
@@ -237,14 +235,22 @@ namespace Team1922.MVVM.ViewModels
         }
 
         /// <summary>
-        /// Updates the attached analot input model instance with the IO service
+        /// Updates the attached analog input model instance with the IO service
         /// </summary>
         public void UpdateInputValues()
         {
-            var w = AverageValue;//NOTE: this updates both AverageValue and RawAverageValue
-            var x = Value;//NOTE: this updates both Value and RawValue
-            var y = AccumulatorCount;
-            var z = AccumulatorValue;
+            IAnalogInputIOService thisIOService = IOService.Instance.AnalogInputs[ID];
+
+            _analogInputModel.RawAverageValue = thisIOService.AverageValue;
+            _analogInputModel.AverageValue = RawAverageValue * ConversionRatio + SensorOffset;
+
+            _analogInputModel.RawAccumulatorValue = thisIOService.AccumulatorValue;
+            _analogInputModel.AccumulatorValue = RawAccumulatorValue * ConversionRatio + SensorOffset;
+
+            _analogInputModel.RawValue = (int)thisIOService.Value;
+            _analogInputModel.Value = RawValue * ConversionRatio + SensorOffset;
+
+            _analogInputModel.AccumulatorCount = thisIOService.AccumulatorCount;
         }
     }
 }

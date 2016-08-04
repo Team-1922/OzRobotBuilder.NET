@@ -204,10 +204,11 @@
     <!--State Values-->
     <xs:attribute name="RawValue" type="tns:RawAnalogInput" default="0"/>
     <xs:attribute name="RawAverageValue" type="xs:long" default="0"/>
+    <xs:attribute name="RawAccumulatorValue" type="xs:long" default="0"/>
     <xs:attribute name="Value" type="xs:double" default="0"/>
     <xs:attribute name="AverageValue" type="xs:double" default="0"/>
     <xs:attribute name="AccumulatorCount" type="xs:long" default="0"/>
-    <xs:attribute name="AccumulatorValue" type="xs:long" default="0"/>
+    <xs:attribute name="AccumulatorValue" type="xs:double" default="0"/><!--NOTE: this is post-conversion-->
   </xs:complexType>
       
   <xs:complexType name="PWMOutput">
@@ -325,11 +326,33 @@
       <xs:enumeration value="Speed"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="CANTalonNativeUnits">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="1023"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="CANTalonAnalogInput">
+    <xs:attribute name="RawValue" type="tns:CANTalonNativeUnits" default="0"/>
+    <xs:attribute name="RawVelocity" type="xs:double" default="0"/>
+    <xs:attribute name="Value" type="xs:double" default="0"/>
+    <xs:attribute name="Velocity" type="xs:double" default="0"/>
+    <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--user units/Native units-->
+    <xs:attribute name="SensorOffset" type="xs:double" default="0"/>
+  </xs:complexType>
+  <xs:complexType name="CANTalonQuadEncoder">
+    <xs:attribute name="RawValue" type="xs:long" default="0"/>
+    <xs:attribute name="RawVelocity" type="xs:double" default="0"/>
+    <xs:attribute name="Value" type="xs:double" default="0"/>
+    <xs:attribute name="Velocity" type="xs:double" default="0"/>
+    <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--user units/encoder units-->
+    <xs:attribute name="SensorOffset" type="xs:double" default="0"/>
+  </xs:complexType>
     
   <xs:complexType name="CANTalon">
     <xs:all>
-      <xs:element name="AnalogInput" type="tns:AnalogInput" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="QuadEncoder" type="tns:QuadEncoder" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="AnalogInput" type="tns:CANTalonAnalogInput" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="QuadEncoder" type="tns:CANTalonQuadEncoder" minOccurs="0" maxOccurs="1"/>
       <xs:element name="PIDConfig0" type="tns:PIDControllerSRX" minOccurs="0" maxOccurs="1"/>
       <xs:element name="PIDConfig1" type="tns:PIDControllerSRX" minOccurs="0" maxOccurs="1"/>
     </xs:all>
@@ -356,6 +379,10 @@
     <xs:attribute name="PeakReverseVoltage" type="xs:double" default="-12"/>
     <!--State Values-->
     <xs:attribute name="Value" type="xs:double" default="0"/>
+    <xs:attribute name="ForwardLimitSwitch" type="xs:boolean" default="0"/>
+    <xs:attribute name="ReverseLimitSwitch" type="xs:boolean" default="0"/>
+    <xs:attribute name="ForwardSoftLimitTripped" type="xs:boolean" default="0"/>
+    <xs:attribute name="ReverseSoftLimitTripped" type="xs:boolean" default="0"/>
   </xs:complexType>
  
 </xs:schema>

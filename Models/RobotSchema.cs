@@ -1186,11 +1186,261 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
+    public partial class CANTalonQuadEncoder : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private long rawValueField;
+        
+        private double rawVelocityField;
+        
+        private double valueField;
+        
+        private double velocityField;
+        
+        private double conversionRatioField;
+        
+        private double sensorOffsetField;
+        
+        public CANTalonQuadEncoder() {
+            this.rawValueField = ((long)(0));
+            this.rawVelocityField = 0D;
+            this.valueField = 0D;
+            this.velocityField = 0D;
+            this.conversionRatioField = 1D;
+            this.sensorOffsetField = 0D;
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        public long RawValue {
+            get {
+                return this.rawValueField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonQuadEncoder.RawValue", value);
+                this.rawValueField = value;
+                this.RaisePropertyChanged("RawValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double RawVelocity {
+            get {
+                return this.rawVelocityField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonQuadEncoder.RawVelocity", value);
+                this.rawVelocityField = value;
+                this.RaisePropertyChanged("RawVelocity");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double Value {
+            get {
+                return this.valueField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonQuadEncoder.Value", value);
+                this.valueField = value;
+                this.RaisePropertyChanged("Value");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double Velocity {
+            get {
+                return this.velocityField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonQuadEncoder.Velocity", value);
+                this.velocityField = value;
+                this.RaisePropertyChanged("Velocity");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(1D)]
+        public double ConversionRatio {
+            get {
+                return this.conversionRatioField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonQuadEncoder.ConversionRatio", value);
+                this.conversionRatioField = value;
+                this.RaisePropertyChanged("ConversionRatio");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double SensorOffset {
+            get {
+                return this.sensorOffsetField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonQuadEncoder.SensorOffset", value);
+                this.sensorOffsetField = value;
+                this.RaisePropertyChanged("SensorOffset");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class CANTalonAnalogInput : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private int rawValueField;
+        
+        private double rawVelocityField;
+        
+        private double valueField;
+        
+        private double velocityField;
+        
+        private double conversionRatioField;
+        
+        private double sensorOffsetField;
+        
+        public CANTalonAnalogInput() {
+            this.rawValueField = 0;
+            this.rawVelocityField = 0D;
+            this.valueField = 0D;
+            this.velocityField = 0D;
+            this.conversionRatioField = 1D;
+            this.sensorOffsetField = 0D;
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        public int RawValue {
+            get {
+                return this.rawValueField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonAnalogInput.RawValue", value);
+                this.rawValueField = value;
+                this.RaisePropertyChanged("RawValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double RawVelocity {
+            get {
+                return this.rawVelocityField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonAnalogInput.RawVelocity", value);
+                this.rawVelocityField = value;
+                this.RaisePropertyChanged("RawVelocity");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double Value {
+            get {
+                return this.valueField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonAnalogInput.Value", value);
+                this.valueField = value;
+                this.RaisePropertyChanged("Value");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double Velocity {
+            get {
+                return this.velocityField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonAnalogInput.Velocity", value);
+                this.velocityField = value;
+                this.RaisePropertyChanged("Velocity");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(1D)]
+        public double ConversionRatio {
+            get {
+                return this.conversionRatioField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonAnalogInput.ConversionRatio", value);
+                this.conversionRatioField = value;
+                this.RaisePropertyChanged("ConversionRatio");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double SensorOffset {
+            get {
+                return this.sensorOffsetField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonAnalogInput.SensorOffset", value);
+                this.sensorOffsetField = value;
+                this.RaisePropertyChanged("SensorOffset");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
     public partial class CANTalon : object, System.ComponentModel.INotifyPropertyChanged {
         
-        private AnalogInput analogInputField;
+        private CANTalonAnalogInput analogInputField;
         
-        private QuadEncoder quadEncoderField;
+        private CANTalonQuadEncoder quadEncoderField;
         
         private PIDControllerSRX pIDConfig0Field;
         
@@ -1240,6 +1490,14 @@ namespace Team1922.MVVM.Models {
         
         private double valueField;
         
+        private bool forwardLimitSwitchField;
+        
+        private bool reverseLimitSwitchField;
+        
+        private bool forwardSoftLimitTrippedField;
+        
+        private bool reverseSoftLimitTrippedField;
+        
         public CANTalon() {
             this.idField = -1;
             this.enabledPIDProfileField = false;
@@ -1262,10 +1520,14 @@ namespace Team1922.MVVM.Models {
             this.peakForwardVoltageField = 12D;
             this.peakReverseVoltageField = -12D;
             this.valueField = 0D;
+            this.forwardLimitSwitchField = false;
+            this.reverseLimitSwitchField = false;
+            this.forwardSoftLimitTrippedField = false;
+            this.reverseSoftLimitTrippedField = false;
         }
         
         /// <remarks/>
-        public AnalogInput AnalogInput {
+        public CANTalonAnalogInput AnalogInput {
             get {
                 return this.analogInputField;
             }
@@ -1276,7 +1538,7 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        public QuadEncoder QuadEncoder {
+        public CANTalonQuadEncoder QuadEncoder {
             get {
                 return this.quadEncoderField;
             }
@@ -1615,430 +1877,59 @@ namespace Team1922.MVVM.Models {
             }
         }
         
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-#if NET461
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-#endif
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
-        "")]
-    public partial class AnalogInput : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private int idField;
-        
-        private string nameField;
-        
-        private int accumulatorCenterField;
-        
-        private int accumulatorDeadbandField;
-        
-        private int accumulatorInitialValueField;
-        
-        private int averageBitsField;
-        
-        private int oversampleBitsField;
-        
-        private double conversionRatioField;
-        
-        private double sensorOffsetField;
-        
-        private int rawValueField;
-        
-        private long rawAverageValueField;
-        
-        private double valueField;
-        
-        private double averageValueField;
-        
-        private long accumulatorCountField;
-        
-        private long accumulatorValueField;
-        
-        public AnalogInput() {
-            this.idField = -1;
-            this.accumulatorCenterField = 2048;
-            this.accumulatorInitialValueField = 0;
-            this.conversionRatioField = 1D;
-            this.sensorOffsetField = 0D;
-            this.rawValueField = 0;
-            this.rawAverageValueField = ((long)(0));
-            this.valueField = 0D;
-            this.averageValueField = 0D;
-            this.accumulatorCountField = ((long)(0));
-            this.accumulatorValueField = ((long)(0));
-        }
-        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(-1)]
-        public int ID {
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        public bool ForwardLimitSwitch {
             get {
-                return this.idField;
+                return this.forwardLimitSwitchField;
             }
             set {
-				TypeRestrictions.Validate("AnalogInput.ID", value);
-                this.idField = value;
-                this.RaisePropertyChanged("ID");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.Name", value);
-                this.nameField = value;
-                this.RaisePropertyChanged("Name");
+				TypeRestrictions.Validate("CANTalon.ForwardLimitSwitch", value);
+                this.forwardLimitSwitchField = value;
+                this.RaisePropertyChanged("ForwardLimitSwitch");
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(2048)]
-        public int AccumulatorCenter {
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        public bool ReverseLimitSwitch {
             get {
-                return this.accumulatorCenterField;
+                return this.reverseLimitSwitchField;
             }
             set {
-				TypeRestrictions.Validate("AnalogInput.AccumulatorCenter", value);
-                this.accumulatorCenterField = value;
-                this.RaisePropertyChanged("AccumulatorCenter");
+				TypeRestrictions.Validate("CANTalon.ReverseLimitSwitch", value);
+                this.reverseLimitSwitchField = value;
+                this.RaisePropertyChanged("ReverseLimitSwitch");
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public int AccumulatorDeadband {
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        public bool ForwardSoftLimitTripped {
             get {
-                return this.accumulatorDeadbandField;
+                return this.forwardSoftLimitTrippedField;
             }
             set {
-				TypeRestrictions.Validate("AnalogInput.AccumulatorDeadband", value);
-                this.accumulatorDeadbandField = value;
-                this.RaisePropertyChanged("AccumulatorDeadband");
+				TypeRestrictions.Validate("CANTalon.ForwardSoftLimitTripped", value);
+                this.forwardSoftLimitTrippedField = value;
+                this.RaisePropertyChanged("ForwardSoftLimitTripped");
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0)]
-        public int AccumulatorInitialValue {
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        public bool ReverseSoftLimitTripped {
             get {
-                return this.accumulatorInitialValueField;
+                return this.reverseSoftLimitTrippedField;
             }
             set {
-				TypeRestrictions.Validate("AnalogInput.AccumulatorInitialValue", value);
-                this.accumulatorInitialValueField = value;
-                this.RaisePropertyChanged("AccumulatorInitialValue");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public int AverageBits {
-            get {
-                return this.averageBitsField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.AverageBits", value);
-                this.averageBitsField = value;
-                this.RaisePropertyChanged("AverageBits");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public int OversampleBits {
-            get {
-                return this.oversampleBitsField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.OversampleBits", value);
-                this.oversampleBitsField = value;
-                this.RaisePropertyChanged("OversampleBits");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(1D)]
-        public double ConversionRatio {
-            get {
-                return this.conversionRatioField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.ConversionRatio", value);
-                this.conversionRatioField = value;
-                this.RaisePropertyChanged("ConversionRatio");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double SensorOffset {
-            get {
-                return this.sensorOffsetField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.SensorOffset", value);
-                this.sensorOffsetField = value;
-                this.RaisePropertyChanged("SensorOffset");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0)]
-        public int RawValue {
-            get {
-                return this.rawValueField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.RawValue", value);
-                this.rawValueField = value;
-                this.RaisePropertyChanged("RawValue");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
-        public long RawAverageValue {
-            get {
-                return this.rawAverageValueField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.RawAverageValue", value);
-                this.rawAverageValueField = value;
-                this.RaisePropertyChanged("RawAverageValue");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double Value {
-            get {
-                return this.valueField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.Value", value);
-                this.valueField = value;
-                this.RaisePropertyChanged("Value");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double AverageValue {
-            get {
-                return this.averageValueField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.AverageValue", value);
-                this.averageValueField = value;
-                this.RaisePropertyChanged("AverageValue");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
-        public long AccumulatorCount {
-            get {
-                return this.accumulatorCountField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.AccumulatorCount", value);
-                this.accumulatorCountField = value;
-                this.RaisePropertyChanged("AccumulatorCount");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
-        public long AccumulatorValue {
-            get {
-                return this.accumulatorValueField;
-            }
-            set {
-				TypeRestrictions.Validate("AnalogInput.AccumulatorValue", value);
-                this.accumulatorValueField = value;
-                this.RaisePropertyChanged("AccumulatorValue");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-#if NET461
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-#endif
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
-        "")]
-    public partial class QuadEncoder : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private int idField;
-        
-        private int iD1Field;
-        
-        private string nameField;
-        
-        private double conversionRatioField;
-        
-        private long rawValueField;
-        
-        private double valueField;
-        
-        private double rawVelocityField;
-        
-        private double velocityField;
-        
-        public QuadEncoder() {
-            this.idField = -1;
-            this.iD1Field = -1;
-            this.conversionRatioField = 1D;
-            this.rawValueField = ((long)(0));
-            this.valueField = 0D;
-            this.rawVelocityField = 0D;
-            this.velocityField = 0D;
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(-1)]
-        public int ID {
-            get {
-                return this.idField;
-            }
-            set {
-				TypeRestrictions.Validate("QuadEncoder.ID", value);
-                this.idField = value;
-                this.RaisePropertyChanged("ID");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(-1)]
-        public int ID1 {
-            get {
-                return this.iD1Field;
-            }
-            set {
-				TypeRestrictions.Validate("QuadEncoder.ID1", value);
-                this.iD1Field = value;
-                this.RaisePropertyChanged("ID1");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-				TypeRestrictions.Validate("QuadEncoder.Name", value);
-                this.nameField = value;
-                this.RaisePropertyChanged("Name");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(1D)]
-        public double ConversionRatio {
-            get {
-                return this.conversionRatioField;
-            }
-            set {
-				TypeRestrictions.Validate("QuadEncoder.ConversionRatio", value);
-                this.conversionRatioField = value;
-                this.RaisePropertyChanged("ConversionRatio");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
-        public long RawValue {
-            get {
-                return this.rawValueField;
-            }
-            set {
-				TypeRestrictions.Validate("QuadEncoder.RawValue", value);
-                this.rawValueField = value;
-                this.RaisePropertyChanged("RawValue");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double Value {
-            get {
-                return this.valueField;
-            }
-            set {
-				TypeRestrictions.Validate("QuadEncoder.Value", value);
-                this.valueField = value;
-                this.RaisePropertyChanged("Value");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double RawVelocity {
-            get {
-                return this.rawVelocityField;
-            }
-            set {
-				TypeRestrictions.Validate("QuadEncoder.RawVelocity", value);
-                this.rawVelocityField = value;
-                this.RaisePropertyChanged("RawVelocity");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double Velocity {
-            get {
-                return this.velocityField;
-            }
-            set {
-				TypeRestrictions.Validate("QuadEncoder.Velocity", value);
-                this.velocityField = value;
-                this.RaisePropertyChanged("Velocity");
+				TypeRestrictions.Validate("CANTalon.ReverseSoftLimitTripped", value);
+                this.reverseSoftLimitTrippedField = value;
+                this.RaisePropertyChanged("ReverseSoftLimitTripped");
             }
         }
         
@@ -2313,6 +2204,450 @@ namespace Team1922.MVVM.Models {
 				TypeRestrictions.Validate("DigitalInput.Value", value);
                 this.valueField = value;
                 this.RaisePropertyChanged("Value");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class QuadEncoder : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private int idField;
+        
+        private int iD1Field;
+        
+        private string nameField;
+        
+        private double conversionRatioField;
+        
+        private long rawValueField;
+        
+        private double valueField;
+        
+        private double rawVelocityField;
+        
+        private double velocityField;
+        
+        public QuadEncoder() {
+            this.idField = -1;
+            this.iD1Field = -1;
+            this.conversionRatioField = 1D;
+            this.rawValueField = ((long)(0));
+            this.valueField = 0D;
+            this.rawVelocityField = 0D;
+            this.velocityField = 0D;
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+				TypeRestrictions.Validate("QuadEncoder.ID", value);
+                this.idField = value;
+                this.RaisePropertyChanged("ID");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID1 {
+            get {
+                return this.iD1Field;
+            }
+            set {
+				TypeRestrictions.Validate("QuadEncoder.ID1", value);
+                this.iD1Field = value;
+                this.RaisePropertyChanged("ID1");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+				TypeRestrictions.Validate("QuadEncoder.Name", value);
+                this.nameField = value;
+                this.RaisePropertyChanged("Name");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(1D)]
+        public double ConversionRatio {
+            get {
+                return this.conversionRatioField;
+            }
+            set {
+				TypeRestrictions.Validate("QuadEncoder.ConversionRatio", value);
+                this.conversionRatioField = value;
+                this.RaisePropertyChanged("ConversionRatio");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        public long RawValue {
+            get {
+                return this.rawValueField;
+            }
+            set {
+				TypeRestrictions.Validate("QuadEncoder.RawValue", value);
+                this.rawValueField = value;
+                this.RaisePropertyChanged("RawValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double Value {
+            get {
+                return this.valueField;
+            }
+            set {
+				TypeRestrictions.Validate("QuadEncoder.Value", value);
+                this.valueField = value;
+                this.RaisePropertyChanged("Value");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double RawVelocity {
+            get {
+                return this.rawVelocityField;
+            }
+            set {
+				TypeRestrictions.Validate("QuadEncoder.RawVelocity", value);
+                this.rawVelocityField = value;
+                this.RaisePropertyChanged("RawVelocity");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double Velocity {
+            get {
+                return this.velocityField;
+            }
+            set {
+				TypeRestrictions.Validate("QuadEncoder.Velocity", value);
+                this.velocityField = value;
+                this.RaisePropertyChanged("Velocity");
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class AnalogInput : object, System.ComponentModel.INotifyPropertyChanged {
+        
+        private int idField;
+        
+        private string nameField;
+        
+        private int accumulatorCenterField;
+        
+        private int accumulatorDeadbandField;
+        
+        private int accumulatorInitialValueField;
+        
+        private int averageBitsField;
+        
+        private int oversampleBitsField;
+        
+        private double conversionRatioField;
+        
+        private double sensorOffsetField;
+        
+        private int rawValueField;
+        
+        private long rawAverageValueField;
+        
+        private long rawAccumulatorValueField;
+        
+        private double valueField;
+        
+        private double averageValueField;
+        
+        private long accumulatorCountField;
+        
+        private double accumulatorValueField;
+        
+        public AnalogInput() {
+            this.idField = -1;
+            this.accumulatorCenterField = 2048;
+            this.accumulatorInitialValueField = 0;
+            this.conversionRatioField = 1D;
+            this.sensorOffsetField = 0D;
+            this.rawValueField = 0;
+            this.rawAverageValueField = ((long)(0));
+            this.rawAccumulatorValueField = ((long)(0));
+            this.valueField = 0D;
+            this.averageValueField = 0D;
+            this.accumulatorCountField = ((long)(0));
+            this.accumulatorValueField = 0D;
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(-1)]
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.ID", value);
+                this.idField = value;
+                this.RaisePropertyChanged("ID");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.Name", value);
+                this.nameField = value;
+                this.RaisePropertyChanged("Name");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(2048)]
+        public int AccumulatorCenter {
+            get {
+                return this.accumulatorCenterField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorCenter", value);
+                this.accumulatorCenterField = value;
+                this.RaisePropertyChanged("AccumulatorCenter");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int AccumulatorDeadband {
+            get {
+                return this.accumulatorDeadbandField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorDeadband", value);
+                this.accumulatorDeadbandField = value;
+                this.RaisePropertyChanged("AccumulatorDeadband");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        public int AccumulatorInitialValue {
+            get {
+                return this.accumulatorInitialValueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorInitialValue", value);
+                this.accumulatorInitialValueField = value;
+                this.RaisePropertyChanged("AccumulatorInitialValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int AverageBits {
+            get {
+                return this.averageBitsField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.AverageBits", value);
+                this.averageBitsField = value;
+                this.RaisePropertyChanged("AverageBits");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int OversampleBits {
+            get {
+                return this.oversampleBitsField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.OversampleBits", value);
+                this.oversampleBitsField = value;
+                this.RaisePropertyChanged("OversampleBits");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(1D)]
+        public double ConversionRatio {
+            get {
+                return this.conversionRatioField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.ConversionRatio", value);
+                this.conversionRatioField = value;
+                this.RaisePropertyChanged("ConversionRatio");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double SensorOffset {
+            get {
+                return this.sensorOffsetField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.SensorOffset", value);
+                this.sensorOffsetField = value;
+                this.RaisePropertyChanged("SensorOffset");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        public int RawValue {
+            get {
+                return this.rawValueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.RawValue", value);
+                this.rawValueField = value;
+                this.RaisePropertyChanged("RawValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        public long RawAverageValue {
+            get {
+                return this.rawAverageValueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.RawAverageValue", value);
+                this.rawAverageValueField = value;
+                this.RaisePropertyChanged("RawAverageValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        public long RawAccumulatorValue {
+            get {
+                return this.rawAccumulatorValueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.RawAccumulatorValue", value);
+                this.rawAccumulatorValueField = value;
+                this.RaisePropertyChanged("RawAccumulatorValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double Value {
+            get {
+                return this.valueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.Value", value);
+                this.valueField = value;
+                this.RaisePropertyChanged("Value");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double AverageValue {
+            get {
+                return this.averageValueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.AverageValue", value);
+                this.averageValueField = value;
+                this.RaisePropertyChanged("AverageValue");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(typeof(long), "0")]
+        public long AccumulatorCount {
+            get {
+                return this.accumulatorCountField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorCount", value);
+                this.accumulatorCountField = value;
+                this.RaisePropertyChanged("AccumulatorCount");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double AccumulatorValue {
+            get {
+                return this.accumulatorValueField;
+            }
+            set {
+				TypeRestrictions.Validate("AnalogInput.AccumulatorValue", value);
+                this.accumulatorValueField = value;
+                this.RaisePropertyChanged("AccumulatorValue");
             }
         }
         

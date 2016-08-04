@@ -11,7 +11,8 @@ namespace Team1922.MVVM.Contracts
     /// <remarks>
     /// Output values can be updated to the IO service when they are set, however
     /// input values must be updated every update cycle in order for event handlers
-    /// to properly recognize a state change. 
+    /// to properly recognize a state change.  Only values which can change without user
+    /// assignment should be updated here
     /// 
     /// Typically all interface properties with only a get accessor will do this update
     /// </remarks>

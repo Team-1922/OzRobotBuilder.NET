@@ -6,12 +6,15 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface ICANTalonProvider
+    /// <summary>
+    /// the contract for exposing a <see cref="CANTalon"/> from the model
+    /// </summary>
+    public interface ICANTalonProvider : IInputProvider
     {
-        IAnalogInputProvider AnalogInput { get; set; }
-        IQuadEncoderProvider QuadEncoder { get; set; }
-        IPIDControllerSRXProvider PIDConfig0 { get; set; }
-        IPIDControllerSRXProvider PIDConfig1 { get; set; }
+        ICANTalonQuadEncoderProvider QuadEncoder { get; }
+        ICANTalonAnalogInputProvider AnalogInput { get; }
+        IPIDControllerSRXProvider PIDConfig0 { get; }
+        IPIDControllerSRXProvider PIDConfig1 { get; }        
         int ID { get; set; }
         string Name { get; set; }
         bool EnabledPIDProfile { get; set; }
@@ -33,7 +36,14 @@ namespace Team1922.MVVM.Contracts
         double NominalReverseVoltage { get; set; }
         double PeakForwardVoltage { get; set; }
         double PeakReverseVoltage { get; set; }
+
         double Value { get; set; }
+
+        bool ForwardLimitSwitch { get; }
+        bool ReverseLimitSwitch { get; }
+
+        bool ForwardSoftLimitTripped { get; }
+        bool ReverseSoftLimitTripped { get; }
 
         void SetCANTalon(CANTalon canTalon);
     }
