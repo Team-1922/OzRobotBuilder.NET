@@ -2,34 +2,27 @@
 using System.Collections.Generic;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Models;
+using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class JoystickViewModel : IJoystickProvider
+    internal class JoystickViewModel : IJoystickProvider
     {
-        public IEnumerable<IJoystickAxisProvider> Axes
+        Joystick _joystickModel;
+
+        public IReadOnlyDictionary<uint, double> Axes
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _axes;
             }
         }
 
-        public IEnumerable<IJoystickButtonProvider> Buttons
+        public IReadOnlyDictionary<uint, bool> Buttons
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _buttons;
             }
         }
 
@@ -37,12 +30,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _joystickModel.ID;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _joystickModel.ID = value;
             }
         }
 
@@ -50,23 +43,36 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _joystickModel.Name;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _joystickModel.Name = value;
             }
         }
 
         public void SetJoystick(Joystick joystick)
         {
-            throw new NotImplementedException();
+            _joystickModel = joystick;
         }
 
         public void UpdateInputValues()
         {
-            throw new NotImplementedException();
+            var thisJoystickIOService = IOService.Instance.Joysticks[ID];
+            for(uint i = 1; i <= 12; ++i)
+            {
+                _buttons[i] = thisJoystickIOService.Buttons[i];
+            }
+            for(uint i = 1; i <= 5; ++i)
+            {
+                _axes[i] = thisJoystickIOService.Axes[i];
+            }
         }
+
+        #region Private Fields
+        Dictionary<uint, double> _axes = new Dictionary<uint, double>();
+        Dictionary<uint, bool> _buttons = new Dictionary<uint, bool>();
+        #endregion
     }
 }

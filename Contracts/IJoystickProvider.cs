@@ -8,8 +8,8 @@ namespace Team1922.MVVM.Contracts
 {
     public interface IJoystickProvider : IInputProvider
     {
-        IEnumerable<IJoystickAxisProvider> Axes { get; set; }
-        IEnumerable<IJoystickButtonProvider> Buttons { get; set; }
+        IReadOnlyDictionary<uint, double> Axes { get; }
+        IReadOnlyDictionary<uint, bool> Buttons { get; }
         int ID { get; set; }
         string Name { get; set; }
 

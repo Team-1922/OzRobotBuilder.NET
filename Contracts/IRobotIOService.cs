@@ -13,23 +13,27 @@ namespace Team1922.MVVM.Contracts
         /// <summary>
         /// A list of PWM outputs
         /// </summary>
-        IDictionary<int, IPWMOutputIOService> PWMOutputs { get; }
+        IReadOnlyDictionary<int, IPWMOutputIOService> PWMOutputs { get; }
         /// <summary>
         /// In data, analog inputs and potentioemters are used differently,
         /// however they both use the same id's & accessed similarly from hardware
         /// </summary>
-        IDictionary<int, IAnalogInputIOService> AnalogInputs { get; }
+        IReadOnlyDictionary<int, IAnalogInputIOService> AnalogInputs { get; }
         /// <summary>
         /// A list of Relay outputs
         /// </summary>
-        IDictionary<int, IRelayOutputIOService> RelayOutputs { get; }
+        IReadOnlyDictionary<int, IRelayOutputIOService> RelayOutputs { get; }
         /// <summary>
         /// A list of Digital inputs (quad encoders included)
         /// </summary>
-        IDictionary<int, IInputService> DigitalInputs { get; }
+        IReadOnlyDictionary<int, IInputService> DigitalInputs { get; }
         /// <summary>
         /// A list of CAN Talons
         /// </summary>
-        IDictionary<int, ICANTalonIOService> CANTalons { get; }
+        IReadOnlyDictionary<int, ICANTalonIOService> CANTalons { get; }
+        /// <summary>
+        /// A list of Joysticks
+        /// </summary>
+        IReadOnlyDictionary<int, IJoystickIOService> Joysticks { get; }
     }
 }
