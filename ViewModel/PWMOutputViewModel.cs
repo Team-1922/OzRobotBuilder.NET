@@ -11,7 +11,7 @@ namespace Team1922.MVVM.ViewModels
 
         public void SetPWMOutput(PWMOutput pwmOutput)
         {
-            throw new NotImplementedException();
+            _pwmOutputModel = pwmOutput;
         }
 
         public int ID
