@@ -12,10 +12,10 @@ namespace Team1922.MVVM.Contracts
         int ID1 { get; set; }
         string Name { get; set; }
         double ConversionRatio { get; set; }
-        long RawValue { get; set; }
-        double Value { get; set; }
-        double RawVelocity { get; set; }
-        double Velocity { get; set; }
+        long RawValue { get; }
+        double Value { get; }
+        double RawVelocity { get; }
+        double Velocity { get; }
 
         void SetQuadEncoder(QuadEncoder quadEncoder);
     }

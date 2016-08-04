@@ -1,21 +1,24 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Models;
+using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class QuadEncoderViewModel : IQuadEncoderProvider
+    internal class QuadEncoderViewModel : IQuadEncoderProvider
     {
+        QuadEncoder _quadEncoderModel;
+
         public double ConversionRatio
         {
             get
             {
-                throw new NotImplementedException();
+                return _quadEncoderModel.ConversionRatio;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _quadEncoderModel.ConversionRatio = value;
             }
         }
 
@@ -23,12 +26,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _quadEncoderModel.ID;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _quadEncoderModel.ID = value;
             }
         }
 
@@ -36,12 +39,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _quadEncoderModel.ID1;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _quadEncoderModel.ID1 = value;
             }
         }
 
@@ -49,12 +52,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                return _quadEncoderModel.Name;
             }
 
             set
             {
-                throw new NotImplementedException();
+                _quadEncoderModel.Name = value;
             }
         }
 
@@ -62,12 +65,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _quadEncoderModel.RawValue;
             }
         }
 
@@ -75,12 +73,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _quadEncoderModel.RawVelocity;
             }
         }
 
@@ -88,12 +81,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _quadEncoderModel.Value;
             }
         }
 
@@ -101,23 +89,27 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
+                return _quadEncoderModel.Velocity;
             }
         }
 
         public void SetQuadEncoder(QuadEncoder quadEncoder)
         {
-            throw new NotImplementedException();
+            _quadEncoderModel = quadEncoder;
         }
 
         public void UpdateInputValues()
         {
-            throw new NotImplementedException();
+            var thisInput = IOService.Instance.DigitalInputs[ID] as IQuadEncoderIOService;
+            if (null == thisInput)
+                //this means this digital input was not constructed with the quad encoder IO Service
+                return;//TODO: throw an exception or log
+
+            _quadEncoderModel.RawValue = (long)thisInput.Value;
+            _quadEncoderModel.Value = RawValue * ConversionRatio;
+
+            _quadEncoderModel.RawVelocity = (long)thisInput.Velocity;
+            _quadEncoderModel.Velocity = RawVelocity * ConversionRatio;
         }
     }
 }
