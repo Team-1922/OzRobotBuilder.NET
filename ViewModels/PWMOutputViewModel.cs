@@ -5,7 +5,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class PWMOutputViewModel : IPWMOutputProvider
+    internal class PWMOutputViewModel : IPWMOutputProvider
     {
         protected PWMOutput _pwmOutputModel;
 
