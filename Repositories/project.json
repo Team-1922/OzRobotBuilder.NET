@@ -6,16 +6,8 @@
   },
 
   "frameworks": {
-    "net461": {
-
-    },
     "netstandard1.5": {
       "imports": "dnxcore50"
     }
-  },
-  "scripts": {
-    "postcompile": [
-      "dotnet pack --no-build --configuration Debug -o %project:Directory%/../localPackages"
-    ]
   }
 }
