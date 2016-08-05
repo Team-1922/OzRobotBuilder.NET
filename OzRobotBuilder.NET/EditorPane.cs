@@ -44,7 +44,7 @@ namespace Team1922.OzRobotBuilder.NET
         #region Fields
         private RobotDesignerPackage _thisPackage;
         private string _fileName = string.Empty;
-        private VsDesignerControl _vsDesignerControl;
+        private RobotDesignerControl _vsDesignerControl;
         private IVsTextLines _textBuffer;
         private uint _componentId;
         private IOleUndoManager _undoManager;
@@ -156,7 +156,7 @@ namespace Team1922.OzRobotBuilder.NET
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on 
             // the object returned by the Content property.
-            _vsDesignerControl = new VsDesignerControl(new ViewModel(_store, _model, this, _textBuffer));
+            _vsDesignerControl = new RobotDesignerControl(new ViewModel(_store, _model, this, _textBuffer));
             Content = _vsDesignerControl;
 
             RegisterIndependentView(true);
@@ -392,7 +392,7 @@ namespace Team1922.OzRobotBuilder.NET
         /// <returns>S_OK if Marshal operations completed successfully.</returns>
         int IVsDeferredDocView.get_CmdUIGuid(out Guid pGuidCmdId)
         {
-            pGuidCmdId = GuidList.guidVsTemplateDesignerEditorFactory;
+            pGuidCmdId = GuidList.guidRobotDesignerEditorFactory;
             return VSConstants.S_OK;
         }
 

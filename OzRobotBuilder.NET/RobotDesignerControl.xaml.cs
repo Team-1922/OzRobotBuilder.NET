@@ -25,16 +25,16 @@ using System.Windows.Shapes;
 namespace Team1922.OzRobotBuilder.NET
 {
     /// <summary>
-    /// Interaction logic for VsDesignerControl.xaml
+    /// Interaction logic for RobotDesignerControl.xaml
     /// </summary>
-    public partial class VsDesignerControl : UserControl
+    public partial class RobotDesignerControl : UserControl
     {
-        public VsDesignerControl()
+        public RobotDesignerControl()
         {
             InitializeComponent();
         }
 
-        public VsDesignerControl(ViewModel viewModel)
+        public RobotDesignerControl(ViewModel viewModel)
         {
             DataContext = viewModel;
             InitializeComponent();

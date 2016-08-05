@@ -57,7 +57,7 @@ namespace Team1922.OzRobotBuilder.NET
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(GuidList.guidVsTemplateDesignerPkgString)]
+    [Guid(GuidList.guidRobotDesignerPkgString)]
     public sealed class RobotDesignerPackage : Package
     {
         /// <summary>

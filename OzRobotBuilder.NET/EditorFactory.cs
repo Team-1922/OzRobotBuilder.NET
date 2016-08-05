@@ -26,7 +26,7 @@ namespace Team1922.OzRobotBuilder.NET
     /// <summary>
     /// Factory for creating our editor object. Extends from the IVsEditoryFactory interface
     /// </summary>
-    [Guid(GuidList.guidVsTemplateDesignerEditorFactoryString)]
+    [Guid(GuidList.guidRobotDesignerEditorFactoryString)]
     public sealed class EditorFactory : IVsEditorFactory, IDisposable
     {
         public const string Extension = ".robot";
@@ -151,7 +151,7 @@ namespace Team1922.OzRobotBuilder.NET
             // Initialize to null
             ppunkDocView = IntPtr.Zero;
             ppunkDocData = IntPtr.Zero;
-            pguidCmdUI = GuidList.guidVsTemplateDesignerEditorFactory;
+            pguidCmdUI = GuidList.guidRobotDesignerEditorFactory;
             pgrfCDW = 0;
             pbstrEditorCaption = null;
 
