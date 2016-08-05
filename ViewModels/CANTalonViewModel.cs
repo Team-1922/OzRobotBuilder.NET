@@ -493,19 +493,32 @@ namespace Team1922.MVVM.ViewModels
         public void SetCANTalon(CANTalon canTalon)
         {
             _canTalonModel = canTalon;
-            
 
-            _quadEncoderProvider = new CANTalonQuadEncoderViewModel();
-            _quadEncoderProvider.SetCANTalon(canTalon);
+            _quadEncoderProvider = null;
+            _analogInputProvider = null;
+            _pidConfig0Provider = null;
+            _pidConfig1Provider = null;
 
-            _analogInputProvider = new CANTalonAnalogInputViewModel();
-            _analogInputProvider.SetCANTalon(canTalon);
-
-            _pidConfig0Provider = new PIDControllerSRXViewModel();
-            _pidConfig0Provider.SetPIDController(canTalon.PIDConfig0);
-
-            _pidConfig1Provider = new PIDControllerSRXViewModel();
-            _pidConfig1Provider.SetPIDController(canTalon.PIDConfig1);
+            if (null != _canTalonModel.QuadEncoder)
+            {
+                _quadEncoderProvider = new CANTalonQuadEncoderViewModel();
+                _quadEncoderProvider.SetCANTalon(canTalon);
+            }
+            if (null != _canTalonModel.AnalogInput)
+            {
+                _analogInputProvider = new CANTalonAnalogInputViewModel();
+                _analogInputProvider.SetCANTalon(canTalon);
+            }
+            if (null != _canTalonModel.PIDConfig0)
+            {
+                _pidConfig0Provider = new PIDControllerSRXViewModel();
+                _pidConfig0Provider.SetPIDController(canTalon.PIDConfig0);
+            }
+            if (null != _canTalonModel.PIDConfig1)
+            {
+                _pidConfig1Provider = new PIDControllerSRXViewModel();
+                _pidConfig1Provider.SetPIDController(canTalon.PIDConfig1);
+            }
         }
 
         /// <summary>
