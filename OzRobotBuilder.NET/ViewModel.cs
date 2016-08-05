@@ -34,6 +34,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using Team1922.MVVM.ViewModels;
 using Team1922.MVVM.Models;
+using System.Windows;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -105,7 +106,8 @@ namespace Team1922.OzRobotBuilder.NET
             _bufferReloadedHandler += new EventHandler(BufferReloaded);
             _xmlModel.BufferReloaded += _bufferReloadedHandler;
 
-            LoadModelFromXmlModel();
+            SetRobot(LoadModelFromXmlModel());
+            MessageBox.Show(Subsystems.First().Name);
         }
 
         public void Close()
@@ -334,7 +336,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //PopulateModelFromReferencesBindingList();
                 //PopulateModelFromContentBindingList();
 
-                XmlSerializer serializer = new XmlSerializer(typeof(VSTemplate));
+                XmlSerializer serializer = new XmlSerializer(typeof(Robot));
                 XDocument documentFromDesignerState = new XDocument();
                 using (XmlWriter w = documentFromDesignerState.CreateWriter())
                 {

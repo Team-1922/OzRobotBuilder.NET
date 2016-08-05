@@ -38,7 +38,7 @@ namespace Team1922.OzRobotBuilder.NET
     // Register the class as a Designer View in cooperation with the Xml Editor
     [ProvideXmlEditorChooserDesignerView("Robot", "robot", LogicalViewID.Designer, 0x60,
         DesignerLogicalViewEditor = typeof(EditorFactory),
-        Namespace = "http://schemas.microsoft.com/developer/vstemplate/2005",
+        Namespace = "http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd",
         MatchExtensionAndNamespace = false)]
     // And which type of files we want to handle
     [ProvideEditorExtension(typeof(EditorFactory), EditorFactory.Extension, 0x40, NameResourceID = 106)]

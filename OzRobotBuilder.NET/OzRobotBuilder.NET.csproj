@@ -69,7 +69,6 @@
       <DependentUpon>RobotDesignerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="RobotDesignerPackage.cs" />
-    <Compile Include="VsTemplateSchema.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
@@ -87,8 +86,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EditorPane.resx" />
-    <EmbeddedResource Include="Resources.resx" />
-    <EmbeddedResource Include="VSPackage.resx" />
+    <EmbeddedResource Include="Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VSPackage.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Page Include="RobotDesignerControl.xaml">
