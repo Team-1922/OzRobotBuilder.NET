@@ -1,14 +1,36 @@
-﻿using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.Design;
+using Microsoft.Win32;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
 
 namespace Team1922.OzRobotBuilder.NET
 {
+    /// <summary>
+    /// This is the class that implements the package exposed by this assembly.
+    ///
+    /// The minimum requirement for a class to be considered a valid package for Visual Studio
+    /// is to implement the IVsPackage interface and register itself with the shell.
+    /// This package uses the helper classes defined inside the Managed Package Framework (MPF)
+    /// to do it: it derives from the Package class that provides the implementation of the 
+    /// IVsPackage interface and uses the registration attributes defined in the framework to 
+    /// register itself and its components with the shell.
+    /// </summary>
     // This attribute tells the PkgDef creation utility (CreatePkgDef.exe) that this class is
     // a package.
     [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -16,7 +38,7 @@ namespace Team1922.OzRobotBuilder.NET
     // Register the class as a Designer View in cooperation with the Xml Editor
     [ProvideXmlEditorChooserDesignerView("Robot", "robot", LogicalViewID.Designer, 0x60,
         DesignerLogicalViewEditor = typeof(EditorFactory),
-        Namespace = "http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd",
+        Namespace = "http://schemas.microsoft.com/developer/vstemplate/2005",
         MatchExtensionAndNamespace = false)]
     // And which type of files we want to handle
     [ProvideEditorExtension(typeof(EditorFactory), EditorFactory.Extension, 0x40, NameResourceID = 106)]
@@ -26,7 +48,9 @@ namespace Team1922.OzRobotBuilder.NET
     // We register the XML Editor ("{FA3CD31E-987B-443A-9B81-186104E8DAC1}") as an EditorFactoryNotify
     // object to handle our ".vstemplate" file extension for the following projects:
     // Microsoft Visual Basic Project
-    //[EditorFactoryNotifyForProject("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
+    [EditorFactoryNotifyForProject("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
+    // Microsoft Visual C# Project
+    [EditorFactoryNotifyForProject("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}", EditorFactory.Extension, GuidList.guidXmlChooserEditorFactory)]
 
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
@@ -45,7 +69,7 @@ namespace Team1922.OzRobotBuilder.NET
         /// </summary>
         public RobotDesignerPackage()
         {
-
+            
         }
 
 

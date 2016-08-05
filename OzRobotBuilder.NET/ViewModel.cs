@@ -1,22 +1,39 @@
-﻿using Microsoft.VisualStudio;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.XmlEditor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using Team1922.MVVM.Models;
-using Team1922.MVVM.ViewModels;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using System.Diagnostics;
+using VSLangProj;
+using System.Text.RegularExpressions;
+using System.Text;
+using Team1922.MVVM.ViewModels;
+using Team1922.MVVM.Models;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -32,8 +49,17 @@ namespace Team1922.OzRobotBuilder.NET
         public static string ValidationRequiredField = "{0} is a required value.";
     }
 
+    /// <summary>
+    /// ViewModel is where the interesting portion of the VsTemplate Designer lives. The View binds to an instance of this class.
+    /// 
+    /// The View binds the various designer controls to the methods derived from ViewModel that get and set values in the XmlModel.
+    /// The ViewModel and an underlying XmlModel manage how an IVsTextBuffer is shared between the designer and the XML editor (if opened).
+    /// </summary>
     public class ViewModel : RobotViewModelBase
     {
+        const int MaxIdLength = 100;
+        const int MaxProductNameLength = 60;
+        const int MaxDescriptionLength = 1024;
 
         XmlModel _xmlModel;
         XmlStore _xmlStore;
@@ -170,18 +196,19 @@ namespace Team1922.OzRobotBuilder.NET
         /// <summary>
         /// Load the model from the underlying text buffer.
         /// </summary>
-        private void LoadModelFromXmlModel()
+        private Robot LoadModelFromXmlModel()
         {
+            Robot ret = null;
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Robot));
 
                 using (XmlReader reader = GetParseTree().CreateReader())
                 {
-                    _robotModel = (Robot)serializer.Deserialize(reader);
+                    ret = (Robot)serializer.Deserialize(reader);
                 }
 
-                if (_robotModel == null)
+                if (ret == null)
                 {
                     throw new Exception(ResourceInfo.InvalidVsTemplateData);
                 }
@@ -204,6 +231,7 @@ namespace Team1922.OzRobotBuilder.NET
                 // Update the Designer View
                 ViewModelChanged(this, new EventArgs());
             }
+            return ret;
         }
 
 
@@ -306,7 +334,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //PopulateModelFromReferencesBindingList();
                 //PopulateModelFromContentBindingList();
 
-                XmlSerializer serializer = new XmlSerializer(typeof(Robot));
+                XmlSerializer serializer = new XmlSerializer(typeof(VSTemplate));
                 XDocument documentFromDesignerState = new XDocument();
                 using (XmlWriter w = documentFromDesignerState.CreateWriter())
                 {
@@ -458,5 +486,6 @@ namespace Team1922.OzRobotBuilder.NET
         }
 
         #endregion
-    }
+        
+    }    
 }

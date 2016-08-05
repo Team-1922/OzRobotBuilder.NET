@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0.2",
   "dependencies": {
     "Models": "1.0.0-*",
     "Contracts": "1.0.0-*",
@@ -7,16 +7,9 @@
     "Services": "1.0.0-*"
   },
   "frameworks": {
-    "net461": {
-    },
     "netstandard1.5": {
       "imports": "dnxcore50"
     }
-  },
-  "scripts": {
-    "postcompile": [
-      "dotnet pack --no-build --configuration Debug -o %project:Directory%/../localPackages"
-    ]
   },
   "buildOptions": {
     "xmlDoc": true

@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0.1",
 
   "dependencies": {
     "Contracts": "1.0.0-*",
@@ -8,16 +8,8 @@
   },
 
   "frameworks": {
-    "net461": {
-
-    },
     "netstandard1.5": {
       "imports": "dnxcore50"
     }
-  },
-  "scripts": {
-    "postcompile": [
-      "dotnet pack --no-build --configuration Debug -o %project:Directory%/../localPackages"
-    ]
   }
 }

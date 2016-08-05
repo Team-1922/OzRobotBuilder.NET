@@ -1,8 +1,17 @@
-﻿using System;
+﻿/***************************************************************************
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+
+***************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,11 +29,17 @@ namespace Team1922.OzRobotBuilder.NET
     /// </summary>
     public partial class RobotDesignerControl : UserControl
     {
-        ViewModel _viewModel;
-        public RobotDesignerControl(ViewModel vm)
+        public RobotDesignerControl()
         {
-            _viewModel = vm;
             InitializeComponent();
+        }
+
+        public RobotDesignerControl(ViewModel viewModel)
+        {
+            DataContext = viewModel;
+            InitializeComponent();
+            // wait until we're initialized to handle events
+            viewModel.ViewModelChanged += new EventHandler(ViewModelChanged);
         }
 
         internal void DoIdle()

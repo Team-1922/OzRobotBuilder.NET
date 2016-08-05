@@ -35,8 +35,6 @@ namespace Team1922.MVVM.Contracts
         double PeakForwardVoltage { get; set; }
         double PeakReverseVoltage { get; set; }
 
-        double Value { get; set; }
-
         bool ForwardLimitSwitch { get; }
         bool ReverseLimitSwitch { get; }
 
