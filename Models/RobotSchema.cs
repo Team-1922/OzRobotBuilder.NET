@@ -2434,7 +2434,10 @@ namespace Team1922.MVVM.Models {
         public AnalogInput() {
             this.idField = -1;
             this.accumulatorCenterField = 2048;
+            this.accumulatorDeadbandField = 0;
             this.accumulatorInitialValueField = 0;
+            this.averageBitsField = 0;
+            this.oversampleBitsField = 0;
             this.conversionRatioField = 1D;
             this.sensorOffsetField = 0D;
             this.rawValueField = 0;
@@ -2489,6 +2492,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0)]
         public int AccumulatorDeadband {
             get {
                 return this.accumulatorDeadbandField;
@@ -2516,6 +2520,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0)]
         public int AverageBits {
             get {
                 return this.averageBitsField;
@@ -2529,6 +2534,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0)]
         public int OversampleBits {
             get {
                 return this.oversampleBitsField;

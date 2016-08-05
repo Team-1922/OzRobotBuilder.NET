@@ -196,10 +196,10 @@
     <xs:attribute name="ID" type="tns:AnalogInputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="AccumulatorCenter" type="tns:RawAnalogInput" default="2048"/>
-    <xs:attribute name="AccumulatorDeadband" type="tns:RawAnalogInput" use="required"/>
+    <xs:attribute name="AccumulatorDeadband" type="tns:RawAnalogInput" default="0"/>
     <xs:attribute name="AccumulatorInitialValue" type="tns:RawAnalogInput" default="0"/>
-    <xs:attribute name="AverageBits" type="xs:int" use="required"/> <!--What are the limitations on this and the one below it-->
-    <xs:attribute name="OversampleBits" type="xs:int" use="required"/>
+    <xs:attribute name="AverageBits" type="xs:int" default="0"/> <!--What are the limitations on this and the one below it-->
+    <xs:attribute name="OversampleBits" type="xs:int" default="0"/>
     <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--converts 12 bit input to usable output-->
     <xs:attribute name="SensorOffset" type="xs:double" default="0"/> <!--offset (post conversion)-->
     <!--State Values-->
