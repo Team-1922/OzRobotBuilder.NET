@@ -25,45 +25,60 @@ namespace Team1922.MVVM.ViewModels
             _subsystemModel = subsystem;
             PIDController.SetPIDController(_subsystemModel.PIDController);
 
-            foreach (var pwmOutput in _subsystemModel.PWMOutput)
+            if (null != _subsystemModel.PWMOutput)
             {
-                if (pwmOutput == null)
-                    continue;
-                var provider = new PWMOutputViewModel();
-                provider.SetPWMOutput(pwmOutput);
-                _pwmOutputProviders.Add(provider);
+                foreach (var pwmOutput in _subsystemModel.PWMOutput)
+                {
+                    if (pwmOutput == null)
+                        continue;
+                    var provider = new PWMOutputViewModel();
+                    provider.SetPWMOutput(pwmOutput);
+                    _pwmOutputProviders.Add(provider);
+                }
             }
-            foreach (var analogInput in _subsystemModel.AnalogInput)
+            if (null != _subsystemModel.AnalogInput)
             {
-                if (analogInput == null)
-                    continue;
-                var provider = new AnalogInputViewModel();
-                provider.SetAnalogInput(analogInput);
-                _analogInputProviders.Add(provider);
+                foreach (var analogInput in _subsystemModel.AnalogInput)
+                {
+                    if (analogInput == null)
+                        continue;
+                    var provider = new AnalogInputViewModel();
+                    provider.SetAnalogInput(analogInput);
+                    _analogInputProviders.Add(provider);
+                }
             }
-            foreach (var quadEncoder in _subsystemModel.QuadEncoder)
+            if (null != _subsystemModel.QuadEncoder)
             {
-                if (quadEncoder == null)
-                    continue;
-                var provider = new QuadEncoderViewModel();
-                provider.SetQuadEncoder(quadEncoder);
-                _quadEncoderProviders.Add(provider);
+                foreach (var quadEncoder in _subsystemModel.QuadEncoder)
+                {
+                    if (quadEncoder == null)
+                        continue;
+                    var provider = new QuadEncoderViewModel();
+                    provider.SetQuadEncoder(quadEncoder);
+                    _quadEncoderProviders.Add(provider);
+                }
             }
-            foreach (var relayOutput in _subsystemModel.RelayOutput)
+            if (null != _subsystemModel.RelayOutput)
             {
-                if (relayOutput == null)
-                    continue;
-                var provider = new RelayOutputViewModel();
-                provider.SetRelayOutput(relayOutput);
-                _relayOutputProviders.Add(provider);
+                foreach (var relayOutput in _subsystemModel.RelayOutput)
+                {
+                    if (relayOutput == null)
+                        continue;
+                    var provider = new RelayOutputViewModel();
+                    provider.SetRelayOutput(relayOutput);
+                    _relayOutputProviders.Add(provider);
+                }
             }
-            foreach (var canTalon in _subsystemModel.CANTalons)
+            if (null != _subsystemModel.CANTalons)
             {
-                if (canTalon == null)
-                    continue;
-                var provider = new CANTalonViewModel();
-                provider.SetCANTalon(canTalon);
-                _canTalonProviders.Add(provider);
+                foreach (var canTalon in _subsystemModel.CANTalons)
+                {
+                    if (canTalon == null)
+                        continue;
+                    var provider = new CANTalonViewModel();
+                    provider.SetCANTalon(canTalon);
+                    _canTalonProviders.Add(provider);
+                }
             }
         }
 

@@ -36,45 +36,60 @@ namespace Team1922.MVVM.ViewModels
 
             //setup the new providers
             _robotModel = robot;
-            foreach(var subsystem in _robotModel.Subsystem)
+            if (null != _robotModel.Subsystem)
             {
-                if (subsystem == null)
-                    continue;
-                var provider = new SubsystemViewModel();
-                provider.SetSubsystem(subsystem);
-                _subsystemProviders.Add(provider);
+                foreach (var subsystem in _robotModel.Subsystem)
+                {
+                    if (subsystem == null)
+                        continue;
+                    var provider = new SubsystemViewModel();
+                    provider.SetSubsystem(subsystem);
+                    _subsystemProviders.Add(provider);
+                }
             }
-            foreach (var continuousCommand in _robotModel.ContinuousCommand)
+            if (null != _robotModel.ContinuousCommand)
             {
-                if (continuousCommand == null)
-                    continue;
-                var provider = new ContinuousCommandViewModel();
-                provider.SetContinuousCommand(continuousCommand);
-                _continuousCommandProviders.Add(provider);
+                foreach (var continuousCommand in _robotModel.ContinuousCommand)
+                {
+                    if (continuousCommand == null)
+                        continue;
+                    var provider = new ContinuousCommandViewModel();
+                    provider.SetContinuousCommand(continuousCommand);
+                    _continuousCommandProviders.Add(provider);
+                }
             }
-            foreach (var onChangeEventHandler in _robotModel.OnChangeEventHandler)
+            if (null != _robotModel.OnChangeEventHandler)
             {
-                if (onChangeEventHandler == null)
-                    continue;
-                var provider = new OnChangeEventHandlerViewModel();
-                provider.SetOnChangeEventHandler(onChangeEventHandler);
-                _onChangeEventHandlerProviders.Add(provider);
+                foreach (var onChangeEventHandler in _robotModel.OnChangeEventHandler)
+                {
+                    if (onChangeEventHandler == null)
+                        continue;
+                    var provider = new OnChangeEventHandlerViewModel();
+                    provider.SetOnChangeEventHandler(onChangeEventHandler);
+                    _onChangeEventHandlerProviders.Add(provider);
+                }
             }
-            foreach (var onWithinRangeEventHandler in _robotModel.OnWithinRangeEventHandler)
+            if (null != _robotModel.OnWithinRangeEventHandler)
             {
-                if (onWithinRangeEventHandler == null)
-                    continue;
-                var provider = new OnWithinRangeEventHandlerViewModel();
-                provider.SetOnWithinRangeEventHandler(onWithinRangeEventHandler);
-                _onWithinRangeEventHandlerProviders.Add(provider);
+                foreach (var onWithinRangeEventHandler in _robotModel.OnWithinRangeEventHandler)
+                {
+                    if (onWithinRangeEventHandler == null)
+                        continue;
+                    var provider = new OnWithinRangeEventHandlerViewModel();
+                    provider.SetOnWithinRangeEventHandler(onWithinRangeEventHandler);
+                    _onWithinRangeEventHandlerProviders.Add(provider);
+                }
             }
-            foreach (var joystick in _robotModel.Joystick)
+            if (null != _robotModel.Joystick)
             {
-                if (joystick == null)
-                    continue;
-                var provider = new JoystickViewModel();
-                provider.SetJoystick(joystick);
-                _joystickProviders.Add(provider);
+                foreach (var joystick in _robotModel.Joystick)
+                {
+                    if (joystick == null)
+                        continue;
+                    var provider = new JoystickViewModel();
+                    provider.SetJoystick(joystick);
+                    _joystickProviders.Add(provider);
+                }
             }
         }
 
