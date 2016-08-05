@@ -14,5 +14,11 @@
   </Dependencies>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="ViewModels.dll" AssemblyName="ViewModels, Version=1.0.0.2, Culture=neutral, PublicKeyToken=null" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="MVVMFramework.dll" AssemblyName="MVVMFramework, Version=1.0.0.1, Culture=neutral, PublicKeyToken=null" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Contracts.dll" AssemblyName="Contracts, Version=1.0.0.1, Culture=neutral, PublicKeyToken=null" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Services.dll" AssemblyName="Services, Version=1.0.0.1, Culture=neutral, PublicKeyToken=null" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Repositories.dll" AssemblyName="Repositories, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Models.dll" AssemblyName="Models, Version=1.0.0.1, Culture=neutral, PublicKeyToken=null" />
   </Assets>
 </PackageManifest>

@@ -32,6 +32,8 @@ using System.Diagnostics;
 using VSLangProj;
 using System.Text.RegularExpressions;
 using System.Text;
+using Team1922.MVVM.ViewModels;
+using Team1922.MVVM.Models;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -53,7 +55,7 @@ namespace Team1922.OzRobotBuilder.NET
     /// The View binds the various designer controls to the methods derived from ViewModel that get and set values in the XmlModel.
     /// The ViewModel and an underlying XmlModel manage how an IVsTextBuffer is shared between the designer and the XML editor (if opened).
     /// </summary>
-    public class ViewModel
+    public class ViewModel : RobotViewModelBase
     {
         const int MaxIdLength = 100;
         const int MaxProductNameLength = 60;
@@ -61,7 +63,6 @@ namespace Team1922.OzRobotBuilder.NET
 
         XmlModel _xmlModel;
         XmlStore _xmlStore;
-        VSTemplate _vstemplateModel;
 
         IServiceProvider _serviceProvider;
         IVsTextLines _buffer;
@@ -195,18 +196,19 @@ namespace Team1922.OzRobotBuilder.NET
         /// <summary>
         /// Load the model from the underlying text buffer.
         /// </summary>
-        private void LoadModelFromXmlModel()
+        private Robot LoadModelFromXmlModel()
         {
+            Robot ret = null;
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(VSTemplate));
+                XmlSerializer serializer = new XmlSerializer(typeof(Robot));
 
                 using (XmlReader reader = GetParseTree().CreateReader())
                 {
-                    _vstemplateModel = (VSTemplate)serializer.Deserialize(reader);
+                    ret = (Robot)serializer.Deserialize(reader);
                 }
 
-                if (_vstemplateModel == null || _vstemplateModel.TemplateData == null)
+                if (ret == null)
                 {
                     throw new Exception(ResourceInfo.InvalidVsTemplateData);
                 }
@@ -229,6 +231,7 @@ namespace Team1922.OzRobotBuilder.NET
                 // Update the Designer View
                 ViewModelChanged(this, new EventArgs());
             }
+            return ret;
         }
 
 
@@ -335,7 +338,7 @@ namespace Team1922.OzRobotBuilder.NET
                 XDocument documentFromDesignerState = new XDocument();
                 using (XmlWriter w = documentFromDesignerState.CreateWriter())
                 {
-                    serializer.Serialize(w, _vstemplateModel);
+                    serializer.Serialize(w, _robotModel);
                 }
 
                 _synchronizing = true;

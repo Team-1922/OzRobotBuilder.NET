@@ -182,10 +182,31 @@ namespace Team1922.MVVM.ViewModels
         public ICommand AddOnWithinRangeEventHandlerCommand { get; }
         public ICommand AddJoystickCommand { get; }
 
-        #region Abstract Methods
-        public abstract int TeamNumber { get; set; }
-        public abstract int AnalogInputSampleRate { get; set; }
-        #endregion
+        public int TeamNumber
+        {
+            get
+            {
+                return _robotModel.TeamNumber;
+            }
+
+            set
+            {
+                _robotModel.TeamNumber = value;
+            }
+        }
+
+        public int AnalogInputSampleRate
+        {
+            get
+            {
+                return _robotModel.AnalogInputSampleRate;
+            }
+
+            set
+            {
+                _robotModel.AnalogInputSampleRate = value;
+            }
+        }
 
         #region Private Fields
         List<ISubsystemProvider> _subsystemProviders = new List<ISubsystemProvider>();
