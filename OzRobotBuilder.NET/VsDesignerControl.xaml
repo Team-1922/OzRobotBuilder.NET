@@ -7,5 +7,5 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="800">
-    <TextBox>HELLO WORLD</TextBox>
+    <TextBox>HELLO WORLD!</TextBox>
 </UserControl>

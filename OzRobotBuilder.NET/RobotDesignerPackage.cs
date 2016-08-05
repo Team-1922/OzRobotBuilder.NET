@@ -58,7 +58,7 @@ namespace Team1922.OzRobotBuilder.NET
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(GuidList.guidVsTemplateDesignerPkgString)]
-    public sealed class VsTemplateDesignerPackage : Package
+    public sealed class RobotDesignerPackage : Package
     {
         /// <summary>
         /// Default constructor of the package.
@@ -67,7 +67,7 @@ namespace Team1922.OzRobotBuilder.NET
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
-        public VsTemplateDesignerPackage()
+        public RobotDesignerPackage()
         {
             
         }

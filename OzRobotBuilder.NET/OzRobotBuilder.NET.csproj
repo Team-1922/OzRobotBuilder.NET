@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="EditorFactory.cs" />
     <Compile Include="EditorPane.cs" />
-    <Compile Include="IViewModel.cs" />
     <Compile Include="Properties\Guids.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,7 +64,7 @@
     <Compile Include="VsDesignerControl.xaml.cs">
       <DependentUpon>VsDesignerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VsTemplateDesignerPackage.cs" />
+    <Compile Include="RobotDesignerPackage.cs" />
     <Compile Include="VsTemplateSchema.cs" />
   </ItemGroup>
   <ItemGroup>

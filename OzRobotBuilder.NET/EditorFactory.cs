@@ -31,11 +31,11 @@ namespace Team1922.OzRobotBuilder.NET
     {
         public const string Extension = ".robot";
 
-        private VsTemplateDesignerPackage editorPackage;
+        private RobotDesignerPackage editorPackage;
         private ServiceProvider vsServiceProvider;
 
 
-        public EditorFactory(VsTemplateDesignerPackage package)
+        public EditorFactory(RobotDesignerPackage package)
         {
             editorPackage = package;
         }
