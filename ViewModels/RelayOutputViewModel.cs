@@ -1,11 +1,12 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class RelayOutputViewModel : IRelayOutputProvider
+    internal class RelayOutputViewModel : ViewModelBase, IRelayOutputProvider
     {
         RelayOutput _relayOutputModel;
 
@@ -18,7 +19,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _relayOutputModel.Direction = value;
+                var temp = _relayOutputModel.Direction;
+                SetProperty(ref temp, value);
+                _relayOutputModel.Direction = temp;
             }
         }
 
@@ -31,7 +34,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _relayOutputModel.ID = value;
+                var temp = _relayOutputModel.ID;
+                SetProperty(ref temp, value);
+                _relayOutputModel.ID = temp;
             }
         }
 
@@ -44,7 +49,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _relayOutputModel.Name = value;
+                var temp = _relayOutputModel.Name;
+                SetProperty(ref temp, value);
+                _relayOutputModel.Name = temp;
             }
         }
 
@@ -81,11 +88,13 @@ namespace Team1922.MVVM.ViewModels
                     case RelayValue.On:
                         if (Direction == RelayDirection.ForwardOnly)
                         {
-                            Value = RelayValue.Forward;
+                            ioService.ValueAsBool = true;
+                            ioService.ReverseValueAsBool = false;
                         }
                         else if (Direction == RelayDirection.ReverseOnly)
                         {
-                            Value = RelayValue.Reverse;
+                            ioService.ValueAsBool = false;
+                            ioService.ReverseValueAsBool = true;
                         }
                         else
                         {
@@ -94,8 +103,9 @@ namespace Team1922.MVVM.ViewModels
                         }
                         break;
                 }
-                //this is added at the end, becuase the RelayValue.On case calls this setter with different parameters;
-                _relayOutputModel.Value = value;
+                var temp = _relayOutputModel.Value;
+                SetProperty(ref temp, value);
+                _relayOutputModel.Value = temp;
             }
         }
 

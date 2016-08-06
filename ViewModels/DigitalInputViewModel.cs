@@ -9,7 +9,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class DigitalInputViewModel : IDigitalInputProvider
+    internal class DigitalInputViewModel : ViewModelBase, IDigitalInputProvider
     {
         DigitalInput _digitalInputModel;
 
@@ -22,7 +22,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _digitalInputModel.ID = (int)TypeRestrictions.Clamp("DigitalInput.ID", value);
+                var temp = _digitalInputModel.ID;
+                SetProperty(ref temp, value);
+                _digitalInputModel.ID = temp;
             }
         }
 
@@ -35,7 +37,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _digitalInputModel.Name = value;
+                var temp = _digitalInputModel.Name;
+                SetProperty(ref temp, value);
+                _digitalInputModel.Name = temp;
             }
         }
 
@@ -44,6 +48,13 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _digitalInputModel.Value;
+            }
+
+            private set
+            {
+                var temp = _digitalInputModel.Value;
+                SetProperty(ref temp, value);
+                _digitalInputModel.Value = temp;
             }
         }
 
@@ -54,7 +65,7 @@ namespace Team1922.MVVM.ViewModels
 
         public void UpdateInputValues()
         {
-            _digitalInputModel.Value = IOService.Instance.DigitalInputs[ID].ValueAsBool;
+            Value = IOService.Instance.DigitalInputs[ID].ValueAsBool;
         }
     }
 }

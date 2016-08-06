@@ -1,12 +1,23 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class OnWithinRangeEventHandlerViewModel : IOnWithinRangeEventHandlerProvider
+    internal class OnWithinRangeEventHandlerViewModel : ViewModelBase, IOnWithinRangeEventHandlerProvider
     {
         OnWithinRangeEventHandler _onWithinRangeEventHandlerModel;
+
+        public OnWithinRangeEventHandlerViewModel()
+        {
+            _eventTargetProvider.PropertyChanged += _eventTargetProvider_PropertyChanged;
+        }
+
+        private void _eventTargetProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged($"EventTarget.{e.PropertyName}");
+        }
 
         public IEventTargetProvider EventTarget
         {
@@ -25,7 +36,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _onWithinRangeEventHandlerModel.Invert = value;
+                var temp = _onWithinRangeEventHandlerModel.Invert;
+                SetProperty(ref temp, value);
+                _onWithinRangeEventHandlerModel.Invert = temp;
             }
         }
 
@@ -38,7 +51,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _onWithinRangeEventHandlerModel.Max = value;
+                var temp = _onWithinRangeEventHandlerModel.Max;
+                SetProperty(ref temp, value);
+                _onWithinRangeEventHandlerModel.Max = temp;
             }
         }
 
@@ -51,7 +66,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _onWithinRangeEventHandlerModel.Min = value;
+                var temp = _onWithinRangeEventHandlerModel.Min;
+                SetProperty(ref temp, value);
+                _onWithinRangeEventHandlerModel.Min = temp;
             }
         }
 
@@ -64,7 +81,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _onWithinRangeEventHandlerModel.Name = value;
+                var temp = _onWithinRangeEventHandlerModel.Name;
+                SetProperty(ref temp, value);
+                _onWithinRangeEventHandlerModel.Name = temp;
             }
         }
 
@@ -77,7 +96,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _onWithinRangeEventHandlerModel.WatchPath = value;
+                var temp = _onWithinRangeEventHandlerModel.WatchPath;
+                SetProperty(ref temp, value);
+                _onWithinRangeEventHandlerModel.WatchPath = temp;
             }
         }
 

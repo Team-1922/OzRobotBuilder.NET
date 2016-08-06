@@ -1,11 +1,12 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class QuadEncoderViewModel : IQuadEncoderProvider
+    internal class QuadEncoderViewModel : ViewModelBase, IQuadEncoderProvider
     {
         QuadEncoder _quadEncoderModel;
 
@@ -18,7 +19,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _quadEncoderModel.ConversionRatio = value;
+                var temp = _quadEncoderModel.ConversionRatio;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.ConversionRatio = temp;
             }
         }
 
@@ -31,7 +34,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _quadEncoderModel.ID = value;
+                var temp = _quadEncoderModel.ID;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.ID = temp;
             }
         }
 
@@ -44,7 +49,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _quadEncoderModel.ID1 = value;
+                var temp = _quadEncoderModel.ID1;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.ID1 = temp;
             }
         }
 
@@ -57,7 +64,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _quadEncoderModel.Name = value;
+                var temp = _quadEncoderModel.Name;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.Name = temp;
             }
         }
 
@@ -67,6 +76,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _quadEncoderModel.RawValue;
             }
+
+            private set
+            {
+                var temp = _quadEncoderModel.RawValue;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.RawValue = temp;
+            }
         }
 
         public double RawVelocity
@@ -74,6 +90,13 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _quadEncoderModel.RawVelocity;
+            }
+
+            private set
+            {
+                var temp = _quadEncoderModel.RawVelocity;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.RawVelocity = temp;
             }
         }
 
@@ -83,6 +106,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _quadEncoderModel.Value;
             }
+
+            private set
+            {
+                var temp = _quadEncoderModel.Value;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.Value = temp;
+            }
         }
 
         public double Velocity
@@ -90,6 +120,13 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _quadEncoderModel.Velocity;
+            }
+
+            private set
+            {
+                var temp = _quadEncoderModel.Velocity;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.Velocity = temp;
             }
         }
 
@@ -105,11 +142,11 @@ namespace Team1922.MVVM.ViewModels
                 //this means this digital input was not constructed with the quad encoder IO Service
                 return;//TODO: throw an exception or log
 
-            _quadEncoderModel.RawValue = (long)thisInput.Value;
-            _quadEncoderModel.Value = RawValue * ConversionRatio;
+            RawValue = (long)thisInput.Value;
+            Value = RawValue * ConversionRatio;
 
-            _quadEncoderModel.RawVelocity = (long)thisInput.Velocity;
-            _quadEncoderModel.Velocity = RawVelocity * ConversionRatio;
+            RawVelocity = thisInput.Velocity;
+            Velocity = RawVelocity * ConversionRatio;
         }
     }
 }

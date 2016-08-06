@@ -1,12 +1,23 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class ContinuousCommandViewModel : IContinuousCommandProvider
+    internal class ContinuousCommandViewModel : ViewModelBase, IContinuousCommandProvider
     {
         ContinuousCommand _commandModel;
+
+        public ContinuousCommandViewModel()
+        {
+            _eventTargetProvider.PropertyChanged += _eventTargetProvider_PropertyChanged;
+        }
+
+        private void _eventTargetProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged($"EventTarget.{e.PropertyName}");
+        }
 
         public IEventTargetProvider EventTarget
         {
@@ -25,7 +36,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _commandModel.Name = value;
+                var temp = _commandModel.Name;
+                SetProperty(ref temp, value);
+                _commandModel.Name = temp;
             }
         }
 
@@ -36,7 +49,7 @@ namespace Team1922.MVVM.ViewModels
         }
 
         #region Private Fields
-        IEventTargetProvider _eventTargetProvider = new EventTargetViewModel();
+        EventTargetViewModel _eventTargetProvider = new EventTargetViewModel();
         #endregion
     }
 }

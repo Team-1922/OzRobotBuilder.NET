@@ -9,7 +9,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// The viewmodel for all analog inputs
     /// </summary>
-    internal class AnalogInputViewModel : BindableBase, IAnalogInputProvider
+    internal class AnalogInputViewModel : ViewModelBase, IAnalogInputProvider
     {
         /// <summary>
         /// the reference to the model object

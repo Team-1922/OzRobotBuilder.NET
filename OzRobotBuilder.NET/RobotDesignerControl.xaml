@@ -23,7 +23,7 @@
             <TreeViewItem Name="tviSubsystems" Header="Subsystems" ItemsSource="{Binding Subsystems}" ItemTemplate="{StaticResource SubsystemTemplate}"/>
         </TreeView>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
-        <TextBox Grid.Column="2">Hello World</TextBox>
-        
+        <TextBlock Name="tbSelectedItem" Grid.Column="2" Text="{Binding Path=SelectedItem.Name, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="24" Background="Green"/>
+
     </Grid>
 </UserControl>

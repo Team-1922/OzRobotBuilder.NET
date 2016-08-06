@@ -1,12 +1,23 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class OnChangeEventHandlerViewModel : IOnChangeEventHandlerProvider
+    internal class OnChangeEventHandlerViewModel : ViewModelBase, IOnChangeEventHandlerProvider
     {
         OnChangeEventHandler _onChangeEventHandlerModel;
+
+        public OnChangeEventHandlerViewModel()
+        {
+            _eventTargetProvider.PropertyChanged += _eventTargetProvider_PropertyChanged;
+        }
+
+        private void _eventTargetProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged($"EventTarget.{e.PropertyName}");
+        }
 
         public IEventTargetProvider EventTarget
         {
@@ -25,7 +36,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _onChangeEventHandlerModel.MinDelta = value;
+                var temp = _onChangeEventHandlerModel.MinDelta;
+                SetProperty(ref temp, value);
+                _onChangeEventHandlerModel.MinDelta = temp;
             }
         }
 
@@ -38,7 +51,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _onChangeEventHandlerModel.Name = value;
+                var temp = _onChangeEventHandlerModel.Name;
+                SetProperty(ref temp, value);
+                _onChangeEventHandlerModel.Name = temp;
             }
         }
 
@@ -51,7 +66,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _onChangeEventHandlerModel.WatchPath = value;
+                var temp = _onChangeEventHandlerModel.WatchPath;
+                SetProperty(ref temp, value);
+                _onChangeEventHandlerModel.WatchPath = temp;
             }
         }
 

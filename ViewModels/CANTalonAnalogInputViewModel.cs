@@ -6,7 +6,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class CANTalonAnalogInputViewModel : BindableBase, ICANTalonAnalogInputProvider
+    internal class CANTalonAnalogInputViewModel : ViewModelBase, ICANTalonAnalogInputProvider
     {
         CANTalonAnalogInput _aiModel;
         int _canTalonID;

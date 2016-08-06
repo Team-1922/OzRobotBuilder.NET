@@ -10,7 +10,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// The viewmodel for each CANTalon instance
     /// </summary>
-    internal class CANTalonViewModel : BindableBase, ICANTalonProvider
+    internal class CANTalonViewModel : ViewModelBase, ICANTalonProvider
     {
         /// <summary>
         /// The CANTalon model reference

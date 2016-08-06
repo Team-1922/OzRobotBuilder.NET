@@ -22,6 +22,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Team1922.MVVM.Contracts;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -41,6 +42,15 @@ namespace Team1922.OzRobotBuilder.NET
             InitializeComponent();
             // wait until we're initialized to handle events
             viewModel.ViewModelChanged += new EventHandler(ViewModelChanged);
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SelectedElement")
+            {
+                this.tbSelectedItem.Text = ((DataContext as ViewModel)?.SelectedElement as IProvider)?.Name ?? "No Item Selected";
+            }
         }
 
         internal void DoIdle()
@@ -67,7 +77,7 @@ namespace Team1922.OzRobotBuilder.NET
         private void tvRobot_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             ViewModel viewModel = DataContext as ViewModel;
-            viewModel.SelectedElement = e.NewValue as INotifyPropertyChanged;
+            viewModel.SelectedElement = e.NewValue as IProvider;
         }
     }
 }

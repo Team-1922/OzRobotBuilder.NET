@@ -1,11 +1,12 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class PWMOutputViewModel : IPWMOutputProvider
+    public class PWMOutputViewModel : ViewModelBase, IPWMOutputProvider
     {
         protected PWMOutput _pwmOutputModel;
 
@@ -23,7 +24,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _pwmOutputModel.ID = value;
+                var temp = _pwmOutputModel.ID;
+                SetProperty(ref temp, value);
+                _pwmOutputModel.ID = temp;
             }
         }
         public string Name
@@ -35,7 +38,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _pwmOutputModel.Name = value;
+                var temp = _pwmOutputModel.Name;
+                SetProperty(ref temp, value);
+                _pwmOutputModel.Name = temp;
             }
         }
         public double Value
@@ -47,7 +52,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _pwmOutputModel.Value = IOService.Instance.PWMOutputs[ID].Value = TypeRestrictions.Clamp("PWMOutput.Value", value);
+                var temp = _pwmOutputModel.Value;
+                SetProperty(ref temp, IOService.Instance.PWMOutputs[ID].Value = TypeRestrictions.Clamp("PWMOutput.Value", value));
+                _pwmOutputModel.Value = temp;
             }
         }
     }

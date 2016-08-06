@@ -3,13 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class EventTargetViewModel : IEventTargetProvider
+    internal class EventTargetViewModel : ViewModelBase, IEventTargetProvider
     {
         EventTarget _eventTargetModel;
+
+        public string Name
+        {
+            get
+            {
+                return "Event Target";
+            }
+        }
 
         public string Path
         {
@@ -20,7 +29,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _eventTargetModel.Path = value;
+                var temp = _eventTargetModel.Path;
+                SetProperty(ref temp, value);
+                _eventTargetModel.Path = temp;
             }
         }
 
@@ -33,7 +44,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _eventTargetModel.Type = value;
+                var temp = _eventTargetModel.Type;
+                SetProperty(ref temp, value);
+                _eventTargetModel.Type = temp;
             }
         }
 
@@ -46,7 +59,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _eventTargetModel.Value = value;
+                var temp = _eventTargetModel.Value;
+                SetProperty(ref temp, value);
+                _eventTargetModel.Value = temp;
             }
         }
 

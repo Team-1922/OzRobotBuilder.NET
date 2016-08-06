@@ -8,6 +8,6 @@ namespace Team1922.MVVM.Contracts.Events
 {
     public class ItemSelectEvent : EventArgs
     {
-        public IProvider SelectedElement { get; set; }
+        public INotifyPropertyChanged SelectedElement { get; set; }
     }
 }

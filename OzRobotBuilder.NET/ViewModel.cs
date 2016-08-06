@@ -110,12 +110,13 @@ namespace Team1922.OzRobotBuilder.NET
 
             SetRobot(LoadModelFromXmlModel());
 
-            EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
+            //EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
         }
 
         private void MyItemSelectEvent(object sender, ItemSelectEvent args)
         {
-            MessageBox.Show($"Item Selected: {SelectedElement.GetType().ToString()}");
+            if(args.SelectedElement != null)
+                MessageBox.Show($"Item Selected: {SelectedElement.GetType().ToString()}");
         }
 
         public void Close()

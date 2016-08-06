@@ -6,7 +6,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class CANTalonQuadEncoderViewModel : BindableBase, ICANTalonQuadEncoderProvider
+    internal class CANTalonQuadEncoderViewModel : ViewModelBase, ICANTalonQuadEncoderProvider
     {
         CANTalonQuadEncoder _quadEncoderModel;
         int _canTalonID;

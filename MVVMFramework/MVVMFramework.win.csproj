@@ -48,6 +48,7 @@
     <Compile Include="NamedList.cs" />
     <Compile Include="ObservableDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyObservableDictionary.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
