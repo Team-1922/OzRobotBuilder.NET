@@ -35,6 +35,8 @@ using System.Text;
 using Team1922.MVVM.ViewModels;
 using Team1922.MVVM.Models;
 using System.Windows;
+using Team1922.MVVM.Framework;
+using Team1922.MVVM.Contracts.Events;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -107,7 +109,13 @@ namespace Team1922.OzRobotBuilder.NET
             _xmlModel.BufferReloaded += _bufferReloadedHandler;
 
             SetRobot(LoadModelFromXmlModel());
-            MessageBox.Show(Subsystems.First().Name);
+
+            EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
+        }
+
+        private void MyItemSelectEvent(object sender, ItemSelectEvent args)
+        {
+            MessageBox.Show($"Item Selected: {SelectedElement.GetType().ToString()}");
         }
 
         public void Close()
@@ -488,6 +496,6 @@ namespace Team1922.OzRobotBuilder.NET
         }
 
         #endregion
-        
+
     }    
 }

@@ -10,6 +10,7 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -61,6 +62,12 @@ namespace Team1922.OzRobotBuilder.NET
             ViewModel viewModel = DataContext as ViewModel;
             DataContext = null; // first, set to null so that we see the change and rebind
             DataContext = viewModel;
+        }
+
+        private void tvRobot_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            ViewModel viewModel = DataContext as ViewModel;
+            viewModel.SelectedElement = e.NewValue as INotifyPropertyChanged;
         }
     }
 }
