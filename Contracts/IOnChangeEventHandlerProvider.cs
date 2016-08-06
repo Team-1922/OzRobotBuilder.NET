@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IOnChangeEventHandlerProvider
+    public interface IOnChangeEventHandlerProvider : IProvider
     {
         IEventTargetProvider EventTarget { get; }
         string Name { get; set; }

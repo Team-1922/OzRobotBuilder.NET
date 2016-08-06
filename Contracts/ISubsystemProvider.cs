@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface ISubsystemProvider : IInputProvider
+    public interface ISubsystemProvider : IInputProvider, ICompoundProvider
     {
         IEnumerable<IPWMOutputProvider> PWMOutputs { get; }
         IEnumerable<IAnalogInputProvider> AnalogInputs { get; }
@@ -17,7 +18,7 @@ namespace Team1922.MVVM.Contracts
         string Name { get; set; }
         int ID { get; }
         bool SoftwarePIDEnabled { get; set; }
-
+        
         void SetSubsystem(Subsystem subsystem);
     }
 }

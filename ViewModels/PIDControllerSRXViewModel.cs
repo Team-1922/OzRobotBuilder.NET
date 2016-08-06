@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
@@ -109,6 +111,14 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 _pidControllerSRXVModel.SourceType = value;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "PID Controller";
             }
         }
 

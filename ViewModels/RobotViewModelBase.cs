@@ -23,6 +23,12 @@ namespace Team1922.MVVM.ViewModels
             AddOnChangeEventHandlerCommand = new DelegateCommand(OnAddOnChangeEventHandler);
             AddOnWithinRangeEventHandlerCommand = new DelegateCommand(OnAddOnWithinRangeEventHandler);
             AddJoystickCommand = new DelegateCommand(OnAddJoystick);
+
+            _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems");
+            _continuousCommandProviders = new CompoundProviderList<IContinuousCommandProvider>("Continuous Commands");
+            _onChangeEventHandlerProviders = new CompoundProviderList<IOnChangeEventHandlerProvider>("On Change Event Handlers");
+            _onWithinRangeEventHandlerProviders = new CompoundProviderList<IOnWithinRangeEventHandlerProvider>("On Within Rage Event Handlers");
+            _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks");
         }
 
         public void SetRobot(Robot robot)
@@ -223,12 +229,84 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public IEnumerable<IProvider> Children
+        {
+            get
+            {
+                return _children.Values;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return "Robot";
+            }
+        }
+
         #region Private Fields
-        List<ISubsystemProvider> _subsystemProviders = new List<ISubsystemProvider>();
-        List<IContinuousCommandProvider> _continuousCommandProviders = new List<IContinuousCommandProvider>();
-        List<IOnChangeEventHandlerProvider> _onChangeEventHandlerProviders = new List<IOnChangeEventHandlerProvider>();
-        List<IOnWithinRangeEventHandlerProvider> _onWithinRangeEventHandlerProviders = new List<IOnWithinRangeEventHandlerProvider>();
-        List<IJoystickProvider> _joystickProviders = new List<IJoystickProvider>();
+        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+        CompoundProviderList<ISubsystemProvider> _subsystemProviders
+        {
+            get
+            {
+                return _children["_subsystemProviders"] as CompoundProviderList<ISubsystemProvider>;
+            }
+
+            set
+            {
+                _children["_subsystemProviders"] = value;
+            }
+        }
+        CompoundProviderList<IContinuousCommandProvider> _continuousCommandProviders
+        {
+            get
+            {
+                return _children["_continuousCommandProviders"] as CompoundProviderList<IContinuousCommandProvider>;
+            }
+
+            set
+            {
+                _children["_continuousCommandProviders"] = value;
+            }
+        }
+        CompoundProviderList<IOnChangeEventHandlerProvider> _onChangeEventHandlerProviders
+        {
+            get
+            {
+                return _children["_onChangeEventHandlerProviders"] as CompoundProviderList<IOnChangeEventHandlerProvider>;
+            }
+
+            set
+            {
+                _children["_onChangeEventHandlerProviders"] = value;
+            }
+        }
+        CompoundProviderList<IOnWithinRangeEventHandlerProvider> _onWithinRangeEventHandlerProviders
+        {
+            get
+            {
+                return _children["_onWithinRangeEventHandlerProviders"] as CompoundProviderList<IOnWithinRangeEventHandlerProvider>;
+            }
+
+            set
+            {
+                _children["_onWithinRangeEventHandlerProviders"] = value;
+            }
+        }
+        CompoundProviderList<IJoystickProvider> _joystickProviders
+        {
+            get
+            {
+                return _children["_joystickProviders"] as CompoundProviderList<IJoystickProvider>;
+            }
+
+            set
+            {
+                _children["_joystickProviders"] = value;
+            }
+        }
         #endregion
     }
 }

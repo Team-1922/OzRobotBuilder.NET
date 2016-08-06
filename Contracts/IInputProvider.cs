@@ -16,7 +16,7 @@ namespace Team1922.MVVM.Contracts
     /// 
     /// Typically all interface properties with only a get accessor will do this update
     /// </remarks>
-    public interface IInputProvider
+    public interface IInputProvider : IProvider
     {
         /// <summary>
         /// Called every update cycle to update input values from the <see cref="IRobotIOService"/>

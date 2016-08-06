@@ -74,6 +74,14 @@ namespace Team1922.MVVM.ViewModels
             _canTalonID = canTalon.ID;
         }
 
+        public string Name
+        {
+            get
+            {
+                return "Analog Input";
+            }
+        }
+
         public void UpdateInputValues()
         {
             _aiModel.RawVelocity = IOService.Instance.CANTalons[_canTalonID].AnalogVelocity;

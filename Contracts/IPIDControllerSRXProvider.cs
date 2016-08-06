@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IPIDControllerSRXProvider
+    public interface IPIDControllerSRXProvider : IProvider
     {
         double P { get; set; }
         double I { get; set; }

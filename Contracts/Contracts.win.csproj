@@ -59,6 +59,7 @@
     <Compile Include="ICANTalonIOService.cs" />
     <Compile Include="ICANTalonProvider.cs" />
     <Compile Include="ICANTalonQuadEncoderProvider.cs" />
+    <Compile Include="ICompoundProvider.cs" />
     <Compile Include="IContinuousCommandProvider.cs" />
     <Compile Include="IDigitalInputIOService.cs" />
     <Compile Include="IDigitalInputProvider.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="IOutputService.cs" />
     <Compile Include="IPIDControllerSoftwareProvider.cs" />
     <Compile Include="IPIDControllerSRXProvider.cs" />
+    <Compile Include="IProvider.cs" />
     <Compile Include="IPWMOutputIOService.cs" />
     <Compile Include="IPWMOutputProvider.cs" />
     <Compile Include="IQuadEncoderIOService.cs" />
@@ -87,6 +89,10 @@
     <ProjectReference Include="..\Models\Models.win.csproj">
       <Project>{47b66599-e6f8-46a1-9731-05a099a04fc3}</Project>
       <Name>Models.win</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MVVMFramework\MVVMFramework.win.csproj">
+      <Project>{f22008c9-1d99-4bee-93e2-88e2cf5ee938}</Project>
+      <Name>MVVMFramework.win</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

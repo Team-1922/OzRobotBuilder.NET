@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// the contract for exposing a <see cref="CANTalon"/> from the model
     /// </summary>
-    public interface ICANTalonProvider : IInputProvider
+    public interface ICANTalonProvider : IInputProvider, ICompoundProvider
     {
         ICANTalonQuadEncoderProvider QuadEncoder { get; }
         ICANTalonAnalogInputProvider AnalogInput { get; }

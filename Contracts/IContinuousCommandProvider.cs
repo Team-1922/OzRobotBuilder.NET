@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IContinuousCommandProvider
+    public interface IContinuousCommandProvider : IProvider
     {
         IEventTargetProvider EventTarget { get; }
         string Name { get; set; }

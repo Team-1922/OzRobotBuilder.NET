@@ -5,5 +5,6 @@
        TeamNumber="1922">
   <Subsystem Name="TestSubsystem" ID="0">
     <PWMOutput Name="TestMotor" ID="0"/>
+    <AnalogInput Name="TestInput" ID="0"/>
   </Subsystem>
 </Robot>

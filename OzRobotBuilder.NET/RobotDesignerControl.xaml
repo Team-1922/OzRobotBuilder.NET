@@ -4,25 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:rbns="clr-namespace:Team1922.OzRobotBuilder.NET"
-             xmlns:cts="clr-namespace:Team1922.MVVM.Contracts;assembly=Contracts"
+             xmlns:vm="clr-namespace:Team1922.MVVM.ViewModels;assembly=ViewModels"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="800">
-    <Grid>        
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" MaxWidth="450"/>
             <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Name="lbSubsystems" ItemsSource="{Binding Subsystems}"  Grid.Column="0" HorizontalContentAlignment="Stretch">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Name}"/>                        
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <TreeView Name="tvRobot" ItemsSource="{Binding}" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate x:Key="SubsystemTemplate" ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+            <TreeViewItem Name="tviSubsystems" Header="Subsystems" ItemsSource="{Binding Subsystems}" ItemTemplate="{StaticResource SubsystemTemplate}"/>
+        </TreeView>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
         <TextBox Grid.Column="2">Hello World</TextBox>
         

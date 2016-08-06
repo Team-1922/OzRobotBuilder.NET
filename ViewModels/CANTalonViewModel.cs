@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Services;
 
@@ -487,6 +489,14 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public IEnumerable<IProvider> Children
+        {
+            get
+            {
+                return _children.Values;
+            }
+        }
+
         /// <summary>
         /// Set the CANTalon model reference
         /// </summary>
@@ -536,10 +546,55 @@ namespace Team1922.MVVM.ViewModels
         }
 
         #region Private Fields
-        ICANTalonQuadEncoderProvider _quadEncoderProvider;
-        ICANTalonAnalogInputProvider _analogInputProvider;
-        IPIDControllerSRXProvider _pidConfig0Provider;
-        IPIDControllerSRXProvider _pidConfig1Provider;
+        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+        ICANTalonQuadEncoderProvider _quadEncoderProvider
+        {
+            get
+            {
+                return _children["_quadEncoderProvider"] as ICANTalonQuadEncoderProvider;
+            }
+
+            set
+            {
+                _children["_quadEncoderProvider"] = value;
+            }
+        }
+        ICANTalonAnalogInputProvider _analogInputProvider
+        {
+            get
+            {
+                return _children["_analogInputProvider"] as ICANTalonAnalogInputProvider;
+            }
+
+            set
+            {
+                _children["_analogInputProvider"] = value;
+            }
+        }
+        IPIDControllerSRXProvider _pidConfig0Provider
+        {
+            get
+            {
+                return _children["_pidConfig0Provider"] as IPIDControllerSRXProvider;
+            }
+
+            set
+            {
+                _children["_pidConfig0Provider"] = value;
+            }
+        }
+        IPIDControllerSRXProvider _pidConfig1Provider
+        {
+            get
+            {
+                return _children["_pidConfig1Provider"] as IPIDControllerSRXProvider;
+            }
+
+            set
+            {
+                _children["_pidConfig1Provider"] = value;
+            }
+        }
         #endregion
     }
 }

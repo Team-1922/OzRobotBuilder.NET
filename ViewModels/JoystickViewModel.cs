@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Services;
 

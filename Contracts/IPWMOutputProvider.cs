@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IPWMOutputProvider
+    public interface IPWMOutputProvider : IProvider
     {
         int ID { get; set; }
         string Name { get; set; }

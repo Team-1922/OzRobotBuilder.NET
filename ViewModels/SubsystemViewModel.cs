@@ -12,6 +12,15 @@ namespace Team1922.MVVM.ViewModels
     {
         protected Subsystem _subsystemModel;
         
+        public SubsystemViewModel()
+        {
+            _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider>("PWM Outputs");
+            _analogInputProviders = new CompoundProviderList<IAnalogInputProvider>("Analog Inputs");
+            _quadEncoderProviders = new CompoundProviderList<IQuadEncoderProvider>("Quadrature Encoder");
+            _relayOutputProviders = new CompoundProviderList<IRelayOutputProvider>("Relay Outputs");
+            _canTalonProviders = new CompoundProviderList<ICANTalonProvider>("CAN Talons");
+        }
+
         public void SetSubsystem(Subsystem subsystem)
         {
             //cleanup the old providers
@@ -130,6 +139,14 @@ namespace Team1922.MVVM.ViewModels
             set { _subsystemModel.SoftwarePIDEnabled = value; }
         }
 
+        public IEnumerable<IProvider> Children
+        {
+            get
+            {
+                return _children.Values;
+            }
+        }
+
         public int ID
         {
             get
@@ -139,11 +156,67 @@ namespace Team1922.MVVM.ViewModels
         }
 
         #region Private Fields
-        List<IPWMOutputProvider> _pwmOutputProviders = new List<IPWMOutputProvider>();
-        List<IAnalogInputProvider> _analogInputProviders = new List<IAnalogInputProvider>();
-        List<IQuadEncoderProvider> _quadEncoderProviders = new List<IQuadEncoderProvider>();
-        List<IRelayOutputProvider> _relayOutputProviders = new List<IRelayOutputProvider>();
-        List<ICANTalonProvider> _canTalonProviders = new List<ICANTalonProvider>();
+        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+        CompoundProviderList<IPWMOutputProvider> _pwmOutputProviders
+        {
+            get
+            {
+                return _children["_pwmOutputProviders"] as CompoundProviderList<IPWMOutputProvider>;
+            }
+
+            set
+            {
+                _children["_pwmOutputProviders"] = value;
+            }
+        }
+        CompoundProviderList<IAnalogInputProvider> _analogInputProviders
+        {
+            get
+            {
+                return _children["_analogInputProviders"] as CompoundProviderList<IAnalogInputProvider>;
+            }
+
+            set
+            {
+                _children["_analogInputProviders"] = value;
+            }
+        }
+        CompoundProviderList<IQuadEncoderProvider> _quadEncoderProviders
+        {
+            get
+            {
+                return _children["_quadEncoderProviders"] as CompoundProviderList<IQuadEncoderProvider>;
+            }
+
+            set
+            {
+                _children["_quadEncoderProviders"] = value;
+            }
+        }
+        CompoundProviderList<IRelayOutputProvider> _relayOutputProviders
+        {
+            get
+            {
+                return _children["_relayOutputProviders"] as CompoundProviderList<IRelayOutputProvider>;
+            }
+
+            set
+            {
+                _children["_relayOutputProviders"] = value;
+            }
+        }
+        CompoundProviderList<ICANTalonProvider> _canTalonProviders
+        {
+            get
+            {
+                return _children["_canTalonProviders"] as CompoundProviderList<ICANTalonProvider>;
+            }
+
+            set
+            {
+                _children["_canTalonProviders"] = value;
+            }
+        }
         #endregion
     }
 }

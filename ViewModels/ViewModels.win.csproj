@@ -45,6 +45,7 @@
     <Compile Include="CANTalonAnalogInputViewModel.cs" />
     <Compile Include="CANTalonQuadEncoderViewModel.cs" />
     <Compile Include="CANTalonViewModel.cs" />
+    <Compile Include="CompoundProviderList.cs" />
     <Compile Include="ContinuousCommandViewModel.cs" />
     <Compile Include="DigitalInputViewModel.cs" />
     <Compile Include="EventTargetViewModel.cs" />

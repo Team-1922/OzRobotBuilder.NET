@@ -5,7 +5,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class PWMOutputViewModel : IPWMOutputProvider
+    public class PWMOutputViewModel : IPWMOutputProvider
     {
         protected PWMOutput _pwmOutputModel;
 
@@ -16,18 +16,39 @@ namespace Team1922.MVVM.ViewModels
 
         public int ID
         {
-            get { return _pwmOutputModel.ID; }
-            set { _pwmOutputModel.ID = value; }
+            get
+            {
+                return _pwmOutputModel.ID;
+            }
+
+            set
+            {
+                _pwmOutputModel.ID = value;
+            }
         }
         public string Name
         {
-            get { return _pwmOutputModel.Name; }
-            set { _pwmOutputModel.Name = value; }
+            get
+            {
+                return _pwmOutputModel.Name;
+            }
+
+            set
+            {
+                _pwmOutputModel.Name = value;
+            }
         }
         public double Value
         {
-            get { return _pwmOutputModel.Value = IOService.Instance.PWMOutputs[ID].Value; }
-            set { _pwmOutputModel.Value = IOService.Instance.PWMOutputs[ID].Value = TypeRestrictions.Clamp("PWMOutput.Value", value); }
+            get
+            {
+                return _pwmOutputModel.Value = IOService.Instance.PWMOutputs[ID].Value;
+            }
+
+            set
+            {
+                _pwmOutputModel.Value = IOService.Instance.PWMOutputs[ID].Value = TypeRestrictions.Clamp("PWMOutput.Value", value);
+            }
         }
     }
 }

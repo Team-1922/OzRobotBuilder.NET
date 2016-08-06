@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts
 {
-    public interface IRelayOutputProvider
+    public interface IRelayOutputProvider : IProvider
     {
         int ID { get; set; }
         string Name { get; set; }

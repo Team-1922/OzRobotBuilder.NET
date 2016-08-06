@@ -68,6 +68,14 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public string Name
+        {
+            get
+            {
+                return "Quadrature Encoder";
+            }
+        }
+
         public void SetCANTalon(CANTalon canTalon)
         {
             _quadEncoderModel = canTalon.QuadEncoder;
