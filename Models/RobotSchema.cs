@@ -26,7 +26,7 @@ namespace Team1922.MVVM.Models {
         "")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "", IsNullable=false)]
-    public partial class Robot : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Robot {
         
         private Subsystem[] subsystemField;
         
@@ -54,7 +54,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.subsystemField = value;
-                this.RaisePropertyChanged("Subsystem");
             }
         }
         
@@ -66,7 +65,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.joystickField = value;
-                this.RaisePropertyChanged("Joystick");
             }
         }
         
@@ -78,7 +76,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.onChangeEventHandlerField = value;
-                this.RaisePropertyChanged("OnChangeEventHandler");
             }
         }
         
@@ -90,7 +87,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.onWithinRangeEventHandlerField = value;
-                this.RaisePropertyChanged("OnWithinRangeEventHandler");
             }
         }
         
@@ -102,7 +98,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.continuousCommandField = value;
-                this.RaisePropertyChanged("ContinuousCommand");
             }
         }
         
@@ -115,7 +110,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Robot.TeamNumber", value);
                 this.teamNumberField = value;
-                this.RaisePropertyChanged("TeamNumber");
             }
         }
         
@@ -129,16 +123,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Robot.AnalogInputSampleRate", value);
                 this.analogInputSampleRateField = value;
-                this.RaisePropertyChanged("AnalogInputSampleRate");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -151,7 +135,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class Subsystem : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Subsystem {
         
         private PWMOutput[] pWMOutputField;
         
@@ -185,7 +169,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.pWMOutputField = value;
-                this.RaisePropertyChanged("PWMOutput");
             }
         }
         
@@ -197,7 +180,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.analogInputField = value;
-                this.RaisePropertyChanged("AnalogInput");
             }
         }
         
@@ -209,7 +191,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.quadEncoderField = value;
-                this.RaisePropertyChanged("QuadEncoder");
             }
         }
         
@@ -221,7 +202,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.digitalInputField = value;
-                this.RaisePropertyChanged("DigitalInput");
             }
         }
         
@@ -233,7 +213,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.relayOutputField = value;
-                this.RaisePropertyChanged("RelayOutput");
             }
         }
         
@@ -245,7 +224,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.cANTalonsField = value;
-                this.RaisePropertyChanged("CANTalons");
             }
         }
         
@@ -256,7 +234,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.pIDControllerField = value;
-                this.RaisePropertyChanged("PIDController");
             }
         }
         
@@ -269,7 +246,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Subsystem.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -282,7 +258,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Subsystem.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -296,16 +271,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Subsystem.SoftwarePIDEnabled", value);
                 this.softwarePIDEnabledField = value;
-                this.RaisePropertyChanged("SoftwarePIDEnabled");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -318,7 +283,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class PWMOutput : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class PWMOutput {
         
         private int idField;
         
@@ -341,7 +306,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PWMOutput.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -354,7 +318,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PWMOutput.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -368,16 +331,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PWMOutput.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -390,7 +343,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class ContinuousCommand : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class ContinuousCommand {
         
         private EventTarget eventTargetField;
         
@@ -403,7 +356,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.eventTargetField = value;
-                this.RaisePropertyChanged("EventTarget");
             }
         }
         
@@ -416,16 +368,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("ContinuousCommand.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -438,7 +380,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class EventTarget : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class EventTarget {
         
         private EventTargetType typeField;
         
@@ -455,7 +397,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("EventTarget.Type", value);
                 this.typeField = value;
-                this.RaisePropertyChanged("Type");
             }
         }
         
@@ -468,7 +409,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("EventTarget.Path", value);
                 this.pathField = value;
-                this.RaisePropertyChanged("Path");
             }
         }
         
@@ -481,16 +421,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("EventTarget.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -516,7 +446,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class OnWithinRangeEventHandler : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class OnWithinRangeEventHandler {
         
         private EventTarget eventTargetField;
         
@@ -541,7 +471,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.eventTargetField = value;
-                this.RaisePropertyChanged("EventTarget");
             }
         }
         
@@ -554,7 +483,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("OnWithinRangeEventHandler.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -567,7 +495,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("OnWithinRangeEventHandler.WatchPath", value);
                 this.watchPathField = value;
-                this.RaisePropertyChanged("WatchPath");
             }
         }
         
@@ -580,7 +507,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("OnWithinRangeEventHandler.Min", value);
                 this.minField = value;
-                this.RaisePropertyChanged("Min");
             }
         }
         
@@ -593,7 +519,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("OnWithinRangeEventHandler.Max", value);
                 this.maxField = value;
-                this.RaisePropertyChanged("Max");
             }
         }
         
@@ -607,16 +532,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("OnWithinRangeEventHandler.Invert", value);
                 this.invertField = value;
-                this.RaisePropertyChanged("Invert");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -629,7 +544,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class OnChangeEventHandler : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class OnChangeEventHandler {
         
         private EventTarget eventTargetField;
         
@@ -650,7 +565,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.eventTargetField = value;
-                this.RaisePropertyChanged("EventTarget");
             }
         }
         
@@ -663,7 +577,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("OnChangeEventHandler.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -676,7 +589,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("OnChangeEventHandler.WatchPath", value);
                 this.watchPathField = value;
-                this.RaisePropertyChanged("WatchPath");
             }
         }
         
@@ -690,16 +602,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("OnChangeEventHandler.MinDelta", value);
                 this.minDeltaField = value;
-                this.RaisePropertyChanged("MinDelta");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -712,7 +614,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class JoystickButton : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class JoystickButton {
         
         private int idField;
         
@@ -731,7 +633,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("JoystickButton.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -745,16 +646,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("JoystickButton.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -767,7 +658,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class JoystickAxis : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class JoystickAxis {
         
         private int idField;
         
@@ -786,7 +677,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("JoystickAxis.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -800,16 +690,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("JoystickAxis.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -822,7 +702,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class Joystick : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Joystick {
         
         private JoystickAxis[] axisField;
         
@@ -844,7 +724,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.axisField = value;
-                this.RaisePropertyChanged("Axis");
             }
         }
         
@@ -856,7 +735,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.buttonField = value;
-                this.RaisePropertyChanged("Button");
             }
         }
         
@@ -869,7 +747,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Joystick.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -883,16 +760,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Joystick.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -905,7 +772,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class PIDControllerSoftware : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class PIDControllerSoftware {
         
         private double pField;
         
@@ -936,7 +803,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSoftware.P", value);
                 this.pField = value;
-                this.RaisePropertyChanged("P");
             }
         }
         
@@ -949,7 +815,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSoftware.I", value);
                 this.iField = value;
-                this.RaisePropertyChanged("I");
             }
         }
         
@@ -962,7 +827,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSoftware.D", value);
                 this.dField = value;
-                this.RaisePropertyChanged("D");
             }
         }
         
@@ -976,7 +840,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSoftware.F", value);
                 this.fField = value;
-                this.RaisePropertyChanged("F");
             }
         }
         
@@ -989,7 +852,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSoftware.Tolerance", value);
                 this.toleranceField = value;
-                this.RaisePropertyChanged("Tolerance");
             }
         }
         
@@ -1003,7 +865,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSoftware.CycleDuration", value);
                 this.cycleDurationField = value;
-                this.RaisePropertyChanged("CycleDuration");
             }
         }
         
@@ -1017,16 +878,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSoftware.Continuous", value);
                 this.continuousField = value;
-                this.RaisePropertyChanged("Continuous");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -1039,7 +890,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class PIDControllerSRX : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class PIDControllerSRX {
         
         private double pField;
         
@@ -1072,7 +923,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSRX.P", value);
                 this.pField = value;
-                this.RaisePropertyChanged("P");
             }
         }
         
@@ -1085,7 +935,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSRX.I", value);
                 this.iField = value;
-                this.RaisePropertyChanged("I");
             }
         }
         
@@ -1098,7 +947,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSRX.D", value);
                 this.dField = value;
-                this.RaisePropertyChanged("D");
             }
         }
         
@@ -1112,7 +960,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSRX.F", value);
                 this.fField = value;
-                this.RaisePropertyChanged("F");
             }
         }
         
@@ -1126,7 +973,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSRX.IZone", value);
                 this.iZoneField = value;
-                this.RaisePropertyChanged("IZone");
             }
         }
         
@@ -1140,7 +986,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSRX.CloseLoopRampRate", value);
                 this.closeLoopRampRateField = value;
-                this.RaisePropertyChanged("CloseLoopRampRate");
             }
         }
         
@@ -1153,7 +998,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSRX.AllowableCloseLoopError", value);
                 this.allowableCloseLoopErrorField = value;
-                this.RaisePropertyChanged("AllowableCloseLoopError");
             }
         }
         
@@ -1166,16 +1010,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("PIDControllerSRX.SourceType", value);
                 this.sourceTypeField = value;
-                this.RaisePropertyChanged("SourceType");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -1201,7 +1035,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class CANTalonQuadEncoder : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CANTalonQuadEncoder {
         
         private long rawValueField;
         
@@ -1234,7 +1068,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonQuadEncoder.RawValue", value);
                 this.rawValueField = value;
-                this.RaisePropertyChanged("RawValue");
             }
         }
         
@@ -1248,7 +1081,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonQuadEncoder.RawVelocity", value);
                 this.rawVelocityField = value;
-                this.RaisePropertyChanged("RawVelocity");
             }
         }
         
@@ -1262,7 +1094,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonQuadEncoder.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
             }
         }
         
@@ -1276,7 +1107,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonQuadEncoder.Velocity", value);
                 this.velocityField = value;
-                this.RaisePropertyChanged("Velocity");
             }
         }
         
@@ -1290,7 +1120,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonQuadEncoder.ConversionRatio", value);
                 this.conversionRatioField = value;
-                this.RaisePropertyChanged("ConversionRatio");
             }
         }
         
@@ -1304,16 +1133,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonQuadEncoder.SensorOffset", value);
                 this.sensorOffsetField = value;
-                this.RaisePropertyChanged("SensorOffset");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -1326,7 +1145,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class CANTalonAnalogInput : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CANTalonAnalogInput {
         
         private int rawValueField;
         
@@ -1359,7 +1178,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonAnalogInput.RawValue", value);
                 this.rawValueField = value;
-                this.RaisePropertyChanged("RawValue");
             }
         }
         
@@ -1373,7 +1191,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonAnalogInput.RawVelocity", value);
                 this.rawVelocityField = value;
-                this.RaisePropertyChanged("RawVelocity");
             }
         }
         
@@ -1387,7 +1204,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonAnalogInput.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
             }
         }
         
@@ -1401,7 +1217,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonAnalogInput.Velocity", value);
                 this.velocityField = value;
-                this.RaisePropertyChanged("Velocity");
             }
         }
         
@@ -1415,7 +1230,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonAnalogInput.ConversionRatio", value);
                 this.conversionRatioField = value;
-                this.RaisePropertyChanged("ConversionRatio");
             }
         }
         
@@ -1429,16 +1243,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonAnalogInput.SensorOffset", value);
                 this.sensorOffsetField = value;
-                this.RaisePropertyChanged("SensorOffset");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -1451,7 +1255,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class CANTalon : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class CANTalon {
         
         private CANTalonAnalogInput analogInputField;
         
@@ -1548,7 +1352,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.analogInputField = value;
-                this.RaisePropertyChanged("AnalogInput");
             }
         }
         
@@ -1559,7 +1362,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.quadEncoderField = value;
-                this.RaisePropertyChanged("QuadEncoder");
             }
         }
         
@@ -1570,7 +1372,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.pIDConfig0Field = value;
-                this.RaisePropertyChanged("PIDConfig0");
             }
         }
         
@@ -1581,7 +1382,6 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.pIDConfig1Field = value;
-                this.RaisePropertyChanged("PIDConfig1");
             }
         }
         
@@ -1595,7 +1395,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -1608,7 +1407,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -1622,7 +1420,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.EnabledPIDProfile", value);
                 this.enabledPIDProfileField = value;
-                this.RaisePropertyChanged("EnabledPIDProfile");
             }
         }
         
@@ -1636,7 +1433,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.FeedbackDevice", value);
                 this.feedbackDeviceField = value;
-                this.RaisePropertyChanged("FeedbackDevice");
             }
         }
         
@@ -1650,7 +1446,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ControlMode", value);
                 this.controlModeField = value;
-                this.RaisePropertyChanged("ControlMode");
             }
         }
         
@@ -1664,7 +1459,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.NeutralMode", value);
                 this.neutralModeField = value;
-                this.RaisePropertyChanged("NeutralMode");
             }
         }
         
@@ -1678,7 +1472,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ZeroSensorPositionOnIndexEnabled", value);
                 this.zeroSensorPositionOnIndexEnabledField = value;
-                this.RaisePropertyChanged("ZeroSensorPositionOnIndexEnabled");
             }
         }
         
@@ -1692,7 +1485,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ZeroSensorPositionOnRisingEdge", value);
                 this.zeroSensorPositionOnRisingEdgeField = value;
-                this.RaisePropertyChanged("ZeroSensorPositionOnRisingEdge");
             }
         }
         
@@ -1706,7 +1498,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ReverseSensor", value);
                 this.reverseSensorField = value;
-                this.RaisePropertyChanged("ReverseSensor");
             }
         }
         
@@ -1720,7 +1511,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ReverseClosedLoopOutput", value);
                 this.reverseClosedLoopOutputField = value;
-                this.RaisePropertyChanged("ReverseClosedLoopOutput");
             }
         }
         
@@ -1734,7 +1524,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ReversePercentVBusOutput", value);
                 this.reversePercentVBusOutputField = value;
-                this.RaisePropertyChanged("ReversePercentVBusOutput");
             }
         }
         
@@ -1748,7 +1537,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ForwardLimitSwitchEnabled", value);
                 this.forwardLimitSwitchEnabledField = value;
-                this.RaisePropertyChanged("ForwardLimitSwitchEnabled");
             }
         }
         
@@ -1762,7 +1550,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ReverseLimitSwitchEnabled", value);
                 this.reverseLimitSwitchEnabledField = value;
-                this.RaisePropertyChanged("ReverseLimitSwitchEnabled");
             }
         }
         
@@ -1776,7 +1563,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ForwardSoftLimitEnabled", value);
                 this.forwardSoftLimitEnabledField = value;
-                this.RaisePropertyChanged("ForwardSoftLimitEnabled");
             }
         }
         
@@ -1790,7 +1576,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ReverseSoftLimitEnabled", value);
                 this.reverseSoftLimitEnabledField = value;
-                this.RaisePropertyChanged("ReverseSoftLimitEnabled");
             }
         }
         
@@ -1804,7 +1589,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ForwardSoftLimit", value);
                 this.forwardSoftLimitField = value;
-                this.RaisePropertyChanged("ForwardSoftLimit");
             }
         }
         
@@ -1818,7 +1602,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ReverseSoftLimit", value);
                 this.reverseSoftLimitField = value;
-                this.RaisePropertyChanged("ReverseSoftLimit");
             }
         }
         
@@ -1832,7 +1615,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.NominalForwardVoltage", value);
                 this.nominalForwardVoltageField = value;
-                this.RaisePropertyChanged("NominalForwardVoltage");
             }
         }
         
@@ -1846,7 +1628,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.NominalReverseVoltage", value);
                 this.nominalReverseVoltageField = value;
-                this.RaisePropertyChanged("NominalReverseVoltage");
             }
         }
         
@@ -1860,7 +1641,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.PeakForwardVoltage", value);
                 this.peakForwardVoltageField = value;
-                this.RaisePropertyChanged("PeakForwardVoltage");
             }
         }
         
@@ -1874,7 +1654,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.PeakReverseVoltage", value);
                 this.peakReverseVoltageField = value;
-                this.RaisePropertyChanged("PeakReverseVoltage");
             }
         }
         
@@ -1888,7 +1667,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
             }
         }
         
@@ -1902,7 +1680,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ForwardLimitSwitch", value);
                 this.forwardLimitSwitchField = value;
-                this.RaisePropertyChanged("ForwardLimitSwitch");
             }
         }
         
@@ -1916,7 +1693,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ReverseLimitSwitch", value);
                 this.reverseLimitSwitchField = value;
-                this.RaisePropertyChanged("ReverseLimitSwitch");
             }
         }
         
@@ -1930,7 +1706,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ForwardSoftLimitTripped", value);
                 this.forwardSoftLimitTrippedField = value;
-                this.RaisePropertyChanged("ForwardSoftLimitTripped");
             }
         }
         
@@ -1944,16 +1719,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalon.ReverseSoftLimitTripped", value);
                 this.reverseSoftLimitTrippedField = value;
-                this.RaisePropertyChanged("ReverseSoftLimitTripped");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -2044,7 +1809,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class RelayOutput : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class RelayOutput {
         
         private int idField;
         
@@ -2070,7 +1835,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("RelayOutput.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -2083,7 +1847,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("RelayOutput.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -2097,7 +1860,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("RelayOutput.Direction", value);
                 this.directionField = value;
-                this.RaisePropertyChanged("Direction");
             }
         }
         
@@ -2111,16 +1873,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("RelayOutput.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -2168,7 +1920,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class DigitalInput : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class DigitalInput {
         
         private int idField;
         
@@ -2191,7 +1943,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("DigitalInput.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -2204,7 +1955,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("DigitalInput.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -2218,16 +1968,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("DigitalInput.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -2240,7 +1980,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class QuadEncoder : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class QuadEncoder {
         
         private int idField;
         
@@ -2278,7 +2018,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("QuadEncoder.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -2292,7 +2031,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("QuadEncoder.ID1", value);
                 this.iD1Field = value;
-                this.RaisePropertyChanged("ID1");
             }
         }
         
@@ -2305,7 +2043,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("QuadEncoder.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -2319,7 +2056,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("QuadEncoder.ConversionRatio", value);
                 this.conversionRatioField = value;
-                this.RaisePropertyChanged("ConversionRatio");
             }
         }
         
@@ -2333,7 +2069,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("QuadEncoder.RawValue", value);
                 this.rawValueField = value;
-                this.RaisePropertyChanged("RawValue");
             }
         }
         
@@ -2347,7 +2082,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("QuadEncoder.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
             }
         }
         
@@ -2361,7 +2095,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("QuadEncoder.RawVelocity", value);
                 this.rawVelocityField = value;
-                this.RaisePropertyChanged("RawVelocity");
             }
         }
         
@@ -2375,16 +2108,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("QuadEncoder.Velocity", value);
                 this.velocityField = value;
-                this.RaisePropertyChanged("Velocity");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -2397,7 +2120,7 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class AnalogInput : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class AnalogInput {
         
         private int idField;
         
@@ -2459,7 +2182,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.ID", value);
                 this.idField = value;
-                this.RaisePropertyChanged("ID");
             }
         }
         
@@ -2472,7 +2194,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.Name", value);
                 this.nameField = value;
-                this.RaisePropertyChanged("Name");
             }
         }
         
@@ -2486,7 +2207,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.AccumulatorCenter", value);
                 this.accumulatorCenterField = value;
-                this.RaisePropertyChanged("AccumulatorCenter");
             }
         }
         
@@ -2500,7 +2220,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.AccumulatorDeadband", value);
                 this.accumulatorDeadbandField = value;
-                this.RaisePropertyChanged("AccumulatorDeadband");
             }
         }
         
@@ -2514,7 +2233,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.AccumulatorInitialValue", value);
                 this.accumulatorInitialValueField = value;
-                this.RaisePropertyChanged("AccumulatorInitialValue");
             }
         }
         
@@ -2528,7 +2246,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.AverageBits", value);
                 this.averageBitsField = value;
-                this.RaisePropertyChanged("AverageBits");
             }
         }
         
@@ -2542,7 +2259,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.OversampleBits", value);
                 this.oversampleBitsField = value;
-                this.RaisePropertyChanged("OversampleBits");
             }
         }
         
@@ -2556,7 +2272,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.ConversionRatio", value);
                 this.conversionRatioField = value;
-                this.RaisePropertyChanged("ConversionRatio");
             }
         }
         
@@ -2570,7 +2285,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.SensorOffset", value);
                 this.sensorOffsetField = value;
-                this.RaisePropertyChanged("SensorOffset");
             }
         }
         
@@ -2584,7 +2298,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.RawValue", value);
                 this.rawValueField = value;
-                this.RaisePropertyChanged("RawValue");
             }
         }
         
@@ -2598,7 +2311,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.RawAverageValue", value);
                 this.rawAverageValueField = value;
-                this.RaisePropertyChanged("RawAverageValue");
             }
         }
         
@@ -2612,7 +2324,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.RawAccumulatorValue", value);
                 this.rawAccumulatorValueField = value;
-                this.RaisePropertyChanged("RawAccumulatorValue");
             }
         }
         
@@ -2626,7 +2337,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.Value", value);
                 this.valueField = value;
-                this.RaisePropertyChanged("Value");
             }
         }
         
@@ -2640,7 +2350,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.AverageValue", value);
                 this.averageValueField = value;
-                this.RaisePropertyChanged("AverageValue");
             }
         }
         
@@ -2654,7 +2363,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.AccumulatorCount", value);
                 this.accumulatorCountField = value;
-                this.RaisePropertyChanged("AccumulatorCount");
             }
         }
         
@@ -2668,16 +2376,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("AnalogInput.AccumulatorValue", value);
                 this.accumulatorValueField = value;
-                this.RaisePropertyChanged("AccumulatorValue");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
