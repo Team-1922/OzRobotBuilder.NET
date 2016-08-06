@@ -28,5 +28,13 @@ namespace Team1922.MVVM.ViewModels
         {
             get;
         }
+
+        public IReadOnlyDictionary<string, string> Properties
+        {
+            get
+            {
+                return (from child in Children select child).ToDictionary(child => child.Name, child => (child.ToString() ?? "null"));
+            }
+        }
     }
 }

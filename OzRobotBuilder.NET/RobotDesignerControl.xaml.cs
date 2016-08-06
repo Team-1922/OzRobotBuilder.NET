@@ -49,7 +49,7 @@ namespace Team1922.OzRobotBuilder.NET
         {
             if (e.PropertyName == "SelectedElement")
             {
-                this.tbSelectedItem.Text = ((DataContext as ViewModel)?.SelectedElement as IProvider)?.Name ?? "No Item Selected";
+                this.tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as IProvider)?.Properties ?? null;
             }
         }
 
@@ -78,6 +78,11 @@ namespace Team1922.OzRobotBuilder.NET
         {
             ViewModel viewModel = DataContext as ViewModel;
             viewModel.SelectedElement = e.NewValue as IProvider;
+        }
+
+        private void tbEditor_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

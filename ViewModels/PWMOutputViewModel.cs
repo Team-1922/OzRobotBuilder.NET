@@ -47,7 +47,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pwmOutputModel.Value = IOService.Instance.PWMOutputs[ID].Value;
+                return _pwmOutputModel.Value;
             }
 
             set

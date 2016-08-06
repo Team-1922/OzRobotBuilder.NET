@@ -19,5 +19,17 @@ namespace Team1922.MVVM.Contracts
         /// in the model, this does not have to conform to the xml schema "Name" restriction
         /// </summary>
         string Name { get; }
+        /// <summary>
+        /// This represents all of the properties the provider has so it can be easily accessable to a 
+        /// key,value user-interface feature
+        /// </summary>
+        IReadOnlyDictionary<string,string> Properties { get; }
+        /// <summary>
+        /// This essentially is the setter for the <see cref="Properties"/> property;
+        /// NOTE: this is not required to work in a hierarchial mannor
+        /// </summary>
+        /// <param name="key">the name of the property to set</param>
+        /// <param name="value">the value of the property to set</param>
+        //void SetProperty(string key, string value);
     }
 }

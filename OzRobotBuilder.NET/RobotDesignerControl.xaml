@@ -23,7 +23,13 @@
             <TreeViewItem Name="tviSubsystems" Header="Subsystems" ItemsSource="{Binding Subsystems}" ItemTemplate="{StaticResource SubsystemTemplate}"/>
         </TreeView>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
-        <TextBlock Name="tbSelectedItem" Grid.Column="2" Text="{Binding Path=SelectedItem.Name, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="24" Background="Green"/>
+        <!--<TextBlock Name="tbSelectedItem" Grid.Column="2" Text="{Binding Path=SelectedItem.Name, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="24" Background="Green"/>-->
+        <DataGrid Name="tbEditor" AutoGenerateColumns="False" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseDoubleClick="tbEditor_MouseDoubleClick" Background="White">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Property Name" Width="1*" Binding="{Binding Key}" />
+                <DataGridTextColumn Header="Value" Width="3*" Binding="{Binding Value}" />
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </UserControl>
