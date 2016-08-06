@@ -10,7 +10,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// The viewmodel for each CANTalon instance
     /// </summary>
-    internal class CANTalonViewModel : ICANTalonProvider
+    internal class CANTalonViewModel : BindableBase, ICANTalonProvider
     {
         /// <summary>
         /// The CANTalon model reference
@@ -71,6 +71,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _canTalonModel.ForwardLimitSwitch;
             }
+
+            private set
+            {
+                var temp = _canTalonModel.ForwardLimitSwitch;
+                SetProperty(ref temp, value);
+                _canTalonModel.ForwardLimitSwitch = temp;
+            }
         }
 
         /// <summary>
@@ -81,6 +88,13 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _canTalonModel.ReverseLimitSwitch;
+            }
+
+            private set
+            {
+                var temp = _canTalonModel.ReverseLimitSwitch;
+                SetProperty(ref temp, value);
+                _canTalonModel.ReverseLimitSwitch = temp;
             }
         }
 
@@ -93,6 +107,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _canTalonModel.ForwardSoftLimitTripped;
             }
+
+            private set
+            {
+                var temp = _canTalonModel.ForwardSoftLimitTripped;
+                SetProperty(ref temp, value);
+                _canTalonModel.ForwardSoftLimitTripped = temp;
+            }
         }
 
         /// <summary>
@@ -103,6 +124,13 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _canTalonModel.ReverseSoftLimitTripped;
+            }
+
+            private set
+            {
+                var temp = _canTalonModel.ReverseSoftLimitTripped;
+                SetProperty(ref temp, value);
+                _canTalonModel.ReverseSoftLimitTripped = temp;
             }
         }
 
@@ -118,7 +146,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ControlMode = IOService.Instance.CANTalons[ID].ControlMode = value;
+                var temp = _canTalonModel.ControlMode;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ControlMode = value);
+                _canTalonModel.ControlMode = temp;
             }
         }
 
@@ -134,7 +164,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.EnabledPIDProfile = IOService.Instance.CANTalons[ID].EnabledPIDProfile = value;
+                var temp = _canTalonModel.EnabledPIDProfile;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].EnabledPIDProfile = value);
+                _canTalonModel.EnabledPIDProfile = temp;
             }
         }
 
@@ -150,7 +182,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.FeedbackDevice = IOService.Instance.CANTalons[ID].FeedbackDevice = value;
+                var temp = _canTalonModel.FeedbackDevice;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].FeedbackDevice = value);
+                _canTalonModel.FeedbackDevice = temp;
             }
         }
 
@@ -166,7 +200,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ForwardLimitSwitchEnabled = IOService.Instance.CANTalons[ID].ForwardLimitSwitchEnabled = value;
+                var temp = _canTalonModel.ForwardLimitSwitchEnabled;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ForwardLimitSwitchEnabled = value);
+                _canTalonModel.ForwardLimitSwitchEnabled = temp;
             }
         }
 
@@ -182,7 +218,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ForwardSoftLimit = IOService.Instance.CANTalons[ID].ForwardSoftLimit = value;
+                var temp = _canTalonModel.ForwardSoftLimit;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ForwardSoftLimit = value);
+                _canTalonModel.ForwardSoftLimit = temp;
             }
         }
 
@@ -198,7 +236,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ForwardSoftLimitEnabled = IOService.Instance.CANTalons[ID].ForwardSoftLimitEnabled = value;
+                var temp = _canTalonModel.ForwardSoftLimitEnabled;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ForwardSoftLimitEnabled = value);
+                _canTalonModel.ForwardSoftLimitEnabled = temp;
             }
         }
 
@@ -214,7 +254,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ID = value;
+                var temp = _canTalonModel.ID;
+                SetProperty(ref temp, value);
+                _canTalonModel.ID = temp;
             }
         }
 
@@ -230,7 +272,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.Name = value;
+                var temp = _canTalonModel.Name;
+                SetProperty(ref temp, value);
+                _canTalonModel.Name = temp;
             }
         }
 
@@ -246,7 +290,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.NeutralMode = IOService.Instance.CANTalons[ID].NeutralMode = value;
+                var temp = _canTalonModel.NeutralMode;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].NeutralMode = value);
+                _canTalonModel.NeutralMode = temp;
             }
         }
 
@@ -262,7 +308,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.NominalForwardVoltage = IOService.Instance.CANTalons[ID].NominalForwardVoltage = value;
+                var temp = _canTalonModel.NominalForwardVoltage;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].NominalForwardVoltage = value);
+                _canTalonModel.NominalForwardVoltage = temp;
             }
         }
 
@@ -278,7 +326,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.NominalReverseVoltage = IOService.Instance.CANTalons[ID].NominalReverseVoltage = value;
+                var temp = _canTalonModel.NominalReverseVoltage;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].NominalReverseVoltage = value);
+                _canTalonModel.NominalReverseVoltage = temp;
             }
         }
 
@@ -294,7 +344,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.PeakForwardVoltage = IOService.Instance.CANTalons[ID].PeakForwardVoltage = value;
+                var temp = _canTalonModel.PeakForwardVoltage;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].PeakForwardVoltage = value);
+                _canTalonModel.PeakForwardVoltage = temp;
             }
         }
 
@@ -310,7 +362,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.PeakReverseVoltage = IOService.Instance.CANTalons[ID].PeakReverseVoltage = value;
+                var temp = _canTalonModel.PeakReverseVoltage;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].PeakReverseVoltage = value);
+                _canTalonModel.PeakReverseVoltage = temp;
             }
         }
 
@@ -326,7 +380,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ReverseClosedLoopOutput = IOService.Instance.CANTalons[ID].ReverseClosedLoopOutput = value;
+                var temp = _canTalonModel.ReverseClosedLoopOutput;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseClosedLoopOutput = value);
+                _canTalonModel.ReverseClosedLoopOutput = temp;
             }
         }
 
@@ -342,7 +398,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ReverseLimitSwitchEnabled = IOService.Instance.CANTalons[ID].ReverseLimitSwitchEnabled = value;
+                var temp = _canTalonModel.ReverseLimitSwitchEnabled;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseLimitSwitchEnabled = value);
+                _canTalonModel.ReverseLimitSwitchEnabled = temp;
             }
         }
 
@@ -358,7 +416,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ReversePercentVBusOutput = IOService.Instance.CANTalons[ID].ReversePercentVBusOutput = value;
+                var temp = _canTalonModel.ReversePercentVBusOutput;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReversePercentVBusOutput = value);
+                _canTalonModel.ReversePercentVBusOutput = temp;
             }
         }
 
@@ -374,7 +434,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ReverseSensor = IOService.Instance.CANTalons[ID].ReverseSensor = value;
+                var temp = _canTalonModel.ReverseSensor;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseSensor = value);
+                _canTalonModel.ReverseSensor = temp;
             }
         }
 
@@ -390,7 +452,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ReverseSoftLimit = IOService.Instance.CANTalons[ID].ReverseSoftLimit = value;
+                var temp = _canTalonModel.ReverseSoftLimit;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseSoftLimit = value);
+                _canTalonModel.ReverseSoftLimit = temp;
             }
         }
 
@@ -406,7 +470,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ReverseSoftLimitEnabled = IOService.Instance.CANTalons[ID].ReverseSoftLimitEnabled = value;
+                var temp = _canTalonModel.ReverseSoftLimitEnabled;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseSoftLimitEnabled = value);
+                _canTalonModel.ReverseSoftLimitEnabled = temp;
             }
         }
 
@@ -422,7 +488,6 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.Value = value;
                 switch (ControlMode)
                 {
                     case CANTalonControlMode.Current:
@@ -446,14 +511,17 @@ namespace Team1922.MVVM.ViewModels
                         {
                             case CANTalonFeedbackDevice.AnalogEncoder:
                             case CANTalonFeedbackDevice.AnalogPotentiometer:
-                                IOService.Instance.CANTalons[ID].Value = (Value - AnalogInput.SensorOffset) / AnalogInput.ConversionRatio;
+                                IOService.Instance.CANTalons[ID].Value = (value - AnalogInput.SensorOffset) / AnalogInput.ConversionRatio;
                                 break;
                             case CANTalonFeedbackDevice.QuadEncoder:
-                                IOService.Instance.CANTalons[ID].Value = (Value - QuadEncoder.SensorOffset) / QuadEncoder.ConversionRatio;
+                                IOService.Instance.CANTalons[ID].Value = (value - QuadEncoder.SensorOffset) / QuadEncoder.ConversionRatio;
                                 break;
                         }
                         break;
                 }
+                var temp = _canTalonModel.Value;
+                SetProperty(ref temp, value);
+                _canTalonModel.Value = temp;
             }
         }
 
@@ -469,7 +537,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ZeroSensorPositionOnIndexEnabled = IOService.Instance.CANTalons[ID].ZeroSensorPositionOnIndexEnabled = value;
+                var temp = _canTalonModel.ZeroSensorPositionOnIndexEnabled;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ZeroSensorPositionOnIndexEnabled = value);
+                _canTalonModel.ZeroSensorPositionOnIndexEnabled = temp;
             }
         }
 
@@ -485,7 +555,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _canTalonModel.ZeroSensorPositionOnRisingEdge = IOService.Instance.CANTalons[ID].ZeroSensorPositionOnRisingEdge = value;
+                var temp = _canTalonModel.ZeroSensorPositionOnRisingEdge;
+                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ZeroSensorPositionOnRisingEdge = value);
+                _canTalonModel.ZeroSensorPositionOnRisingEdge = temp;
             }
         }
 
@@ -538,11 +610,12 @@ namespace Team1922.MVVM.ViewModels
         {
             _quadEncoderProvider.UpdateInputValues();
             _analogInputProvider.UpdateInputValues();
+            
+            ForwardLimitSwitch = IOService.Instance.CANTalons[ID].ForwardLimitSwitch;
+            ReverseLimitSwitch = IOService.Instance.CANTalons[ID].ReverseLimitSwitch;
 
-            // the "value" value (this might change depending on what mode you're in)
-            _canTalonModel.Value = IOService.Instance.CANTalons[ID].Value;
-            _canTalonModel.ForwardLimitSwitch = IOService.Instance.CANTalons[ID].ForwardLimitSwitch;
-            _canTalonModel.ReverseLimitSwitch = IOService.Instance.CANTalons[ID].ReverseLimitSwitch;
+            ForwardSoftLimit = IOService.Instance.CANTalons[ID].ForwardSoftLimit;
+            ReverseSoftLimit = IOService.Instance.CANTalons[ID].ReverseSoftLimit;
         }
 
         #region Private Fields

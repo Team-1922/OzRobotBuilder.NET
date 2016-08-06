@@ -1,11 +1,12 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class CANTalonAnalogInputViewModel : ICANTalonAnalogInputProvider
+    internal class CANTalonAnalogInputViewModel : BindableBase, ICANTalonAnalogInputProvider
     {
         CANTalonAnalogInput _aiModel;
         int _canTalonID;
@@ -19,7 +20,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _aiModel.ConversionRatio = value;
+                var temp = _aiModel.ConversionRatio;
+                SetProperty(ref temp, value);
+                _aiModel.ConversionRatio = temp;
             }
         }
 
@@ -29,6 +32,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _aiModel.RawValue;
             }
+
+            private set
+            {
+                var temp = _aiModel.RawValue;
+                SetProperty(ref temp, value);
+                _aiModel.RawValue = temp;
+            }
         }
 
         public double RawVelocity
@@ -36,6 +46,13 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _aiModel.RawVelocity;
+            }
+
+            private set
+            {
+                var temp = _aiModel.RawVelocity;
+                SetProperty(ref temp, value);
+                _aiModel.RawVelocity = temp;
             }
         }
 
@@ -48,7 +65,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _aiModel.SensorOffset = value;
+                var temp = _aiModel.SensorOffset;
+                SetProperty(ref temp, value);
+                _aiModel.SensorOffset = temp;
             }
         }
 
@@ -58,6 +77,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _aiModel.Value;
             }
+
+            private set
+            {
+                var temp = _aiModel.Value;
+                SetProperty(ref temp, value);
+                _aiModel.Value = temp;
+            }
         }
 
         public double Velocity
@@ -66,12 +92,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _aiModel.Velocity;
             }
-        }
 
-        public void SetCANTalon(CANTalon canTalon)
-        {
-            _aiModel = canTalon.AnalogInput;
-            _canTalonID = canTalon.ID;
+            private set
+            {
+                var temp = _aiModel.Velocity;
+                SetProperty(ref temp, value);
+                _aiModel.Velocity = temp;
+            }
         }
 
         public string Name
@@ -82,13 +109,19 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void SetCANTalon(CANTalon canTalon)
+        {
+            _aiModel = canTalon.AnalogInput;
+            _canTalonID = canTalon.ID;
+        }
+
         public void UpdateInputValues()
         {
-            _aiModel.RawVelocity = IOService.Instance.CANTalons[_canTalonID].AnalogVelocity;
-            _aiModel.Velocity = RawVelocity * ConversionRatio + SensorOffset;
+            RawVelocity = IOService.Instance.CANTalons[_canTalonID].AnalogVelocity;
+            Velocity = RawVelocity * ConversionRatio + SensorOffset;
 
-            _aiModel.RawValue = IOService.Instance.CANTalons[_canTalonID].AnalogValue;
-            _aiModel.Value = RawValue * ConversionRatio + SensorOffset;
+            RawValue = IOService.Instance.CANTalons[_canTalonID].AnalogValue;
+            Value = RawValue * ConversionRatio + SensorOffset;
         }
     }
 }

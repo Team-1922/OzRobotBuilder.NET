@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Framework;
@@ -11,7 +12,7 @@ namespace Team1922.MVVM.Contracts
     /// is mostly a helper interface for the WPF designer so the TreeView can be used on 
     /// all of the viewmodels easily
     /// </summary>
-    public interface IProvider
+    public interface IProvider : INotifyPropertyChanged
     {
         /// <summary>
         /// The name of this provider; if this provider does have a name

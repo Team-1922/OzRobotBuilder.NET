@@ -1,11 +1,12 @@
 ﻿using System;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class CANTalonQuadEncoderViewModel : ICANTalonQuadEncoderProvider
+    internal class CANTalonQuadEncoderViewModel : BindableBase, ICANTalonQuadEncoderProvider
     {
         CANTalonQuadEncoder _quadEncoderModel;
         int _canTalonID;
@@ -19,7 +20,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _quadEncoderModel.ConversionRatio = value;
+                var temp = _quadEncoderModel.ConversionRatio;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.ConversionRatio = temp;
             }
         }
 
@@ -29,6 +32,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _quadEncoderModel.RawValue;
             }
+
+            private set
+            {
+                var temp = _quadEncoderModel.RawValue;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.RawValue = temp;
+            }
         }
 
         public double RawVelocity
@@ -36,6 +46,13 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _quadEncoderModel.RawVelocity;
+            }
+
+            private set
+            {
+                var temp = _quadEncoderModel.RawVelocity;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.RawVelocity = temp;
             }
         }
 
@@ -48,7 +65,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                _quadEncoderModel.SensorOffset = value;
+                var temp = _quadEncoderModel.SensorOffset;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.SensorOffset = temp;
             }
         }
 
@@ -58,6 +77,13 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _quadEncoderModel.Value;
             }
+
+            private set
+            {
+                var temp = _quadEncoderModel.Value;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.Value = temp;
+            }
         }
 
         public double Velocity
@@ -65,6 +91,13 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _quadEncoderModel.Velocity;
+            }
+
+            private set
+            {
+                var temp = _quadEncoderModel.Velocity;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.Velocity = temp;
             }
         }
 
@@ -84,11 +117,11 @@ namespace Team1922.MVVM.ViewModels
 
         public void UpdateInputValues()
         {
-            _quadEncoderModel.RawVelocity = IOService.Instance.CANTalons[_canTalonID].EncoderVelocity;
-            _quadEncoderModel.Velocity = RawVelocity * ConversionRatio + SensorOffset;
+            RawVelocity = IOService.Instance.CANTalons[_canTalonID].EncoderVelocity;
+            Velocity = RawVelocity * ConversionRatio + SensorOffset;
 
-            _quadEncoderModel.RawValue = IOService.Instance.CANTalons[_canTalonID].EncoderValue;
-            _quadEncoderModel.Value = RawValue * ConversionRatio + SensorOffset;
+            RawValue = IOService.Instance.CANTalons[_canTalonID].EncoderValue;
+            Value = RawValue * ConversionRatio + SensorOffset;
         }
     }
 }
