@@ -54,15 +54,37 @@ namespace Team1922.OzRobotBuilder.NET
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
+        internal struct TestStruct
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
+        }
+        private List<TestStruct> _tempList = new List<TestStruct>() { new TestStruct() { Key = "Hello", Value = "World" } };
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "SelectedElement")
             {
-                var test = ((DataContext as ViewModel));
-                var test1 = test?.SelectedElement as ViewModelBase;
-                tbEditor.ItemsSource = test1;
+                //var test = ((DataContext as ViewModel));
+                //var test1 = test?.SelectedElement as ViewModelBase;
+                //tbEditor.ItemsSource = (test.SelectedElement as ViewModelBase);
+                tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase).GetEditableKeyValueList();
+                //UpdateDataGrid();
             }
         }
+        /// <summary>
+        /// I decided to continue making measurable progress, I am switching to manual data
+        /// binding for the datagrid, becuase it is being just too cumbersome
+        /// </summary>
+        /*private void UpdateDataGrid()
+        {
+            var selectedItem = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase);
+            if (null == selectedItem)
+                return;
+            foreach (var pair in selectedItem)
+            {
+                tbEditor.
+            }
+        }*/
 
         internal void DoIdle()
         {
@@ -93,7 +115,7 @@ namespace Team1922.OzRobotBuilder.NET
 
         private void tbEditor_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var selectedItemText = ((KeyValuePair<string, string>)(tbEditor.SelectedCells?.First().Item)).Key;
+            /*var selectedItemText = ((KeyValuePair<string, string>)(tbEditor.SelectedCells?.First().Item)).Key;
             if ("" == selectedItemText)
                 return;
 
@@ -124,7 +146,7 @@ namespace Team1922.OzRobotBuilder.NET
             if(null != selectedItemProvider)
             {
 
-            }
+            }*/
         }
         public static int GetRowIndex(DataGridCell dataGridCell)
         {
@@ -166,6 +188,14 @@ namespace Team1922.OzRobotBuilder.NET
                 {
                     treeViewItem.IsSelected = true;
                 }
+            }
+        }
+
+        private void tbEditor_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            if(e.EditAction == DataGridEditAction.Commit)
+            {
+                var test = (e.EditingElement as TextBox).Text;
             }
         }
     }

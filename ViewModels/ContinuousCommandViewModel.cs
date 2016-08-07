@@ -18,7 +18,7 @@ namespace Team1922.MVVM.ViewModels
         private void _eventTargetProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Type")
-                UpdateKeys();
+                UpdateKeyValueList();
             OnPropertyChanged($"EventTarget.{e.PropertyName}");
         }
 

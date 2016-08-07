@@ -4,7 +4,8 @@
     "Models": "1.0.0-*",
     "Contracts": "1.0.0-*",
     "MVVMFramework": "1.0.0-*",
-    "Services": "1.0.0-*"
+    "Services": "1.0.0-*",
+    "System.ComponentModel.TypeConverter": "4.1.0"
   },
   "frameworks": {
     "netstandard1.5": {

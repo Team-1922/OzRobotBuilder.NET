@@ -99,6 +99,11 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        protected override List<string> GetOverrideKeys()
+        {
+            return _keys;
+        }
+
         private INotifyPropertyChanged _selectedElement;
         public INotifyPropertyChanged SelectedElement
         {
@@ -245,11 +250,6 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        protected override List<string> GetOverrideKeys()
-        {
-            return new List<string>() { "AnalogInputSampleRate","ContinuousCommands","Joysticks","Name","OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
-        }
-
         public override string this[string key]
         {
             get
@@ -295,6 +295,7 @@ namespace Team1922.MVVM.ViewModels
 
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+        readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "ContinuousCommands", "Joysticks", "Name", "OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
         CompoundProviderList<ISubsystemProvider> _subsystemProviders
         {
             get

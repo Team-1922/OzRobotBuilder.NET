@@ -16,18 +16,29 @@
         </Grid.ColumnDefinitions>
         <TreeView Name="tvRobot" SelectedItemChanged="tvRobot_SelectedItemChanged" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TreeView.Resources>
-                <HierarchicalDataTemplate x:Key="SubsystemTemplate" ItemsSource="{Binding Children}">
+                <HierarchicalDataTemplate x:Key="HierarchialTemplate" ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
-            <TreeViewItem Name="tviSubsystems" Header="Subsystems" ItemsSource="{Binding Subsystems}" ItemTemplate="{StaticResource SubsystemTemplate}"/>
+            <TreeViewItem Name="tviRobot" Header="Robot" ItemsSource="{Binding Children}" ItemTemplate="{StaticResource HierarchialTemplate}"/>
         </TreeView>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
         <!--<TextBlock Name="tbSelectedItem" Grid.Column="2" Text="{Binding Path=SelectedItem.Name, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="24" Background="Green"/>-->
-        <DataGrid Name="tbEditor" SelectionMode="Single" SelectionUnit="Cell" AutoGenerateColumns="False" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseDoubleClick="tbEditor_MouseDoubleClick" Background="White">
+        <DataGrid Name="tbEditor" 
+                  SelectionMode="Single" 
+                  SelectionUnit="Cell" 
+                  AutoGenerateColumns="False" 
+                  Grid.Column="2" 
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch" 
+                  Background="White"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  MouseDoubleClick="tbEditor_MouseDoubleClick" 
+                  CellEditEnding="tbEditor_CellEditEnding" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Property Name" IsReadOnly="True" Width="1*" Binding="{Binding Key}" />
-                <DataGridTextColumn Header="Value" Width="3*" Binding="{Binding Value}" />
+                <DataGridTextColumn Header="Property Name" IsReadOnly="True" Width="1*" Binding="{Binding Key, Mode=OneWay}"/>
+                <DataGridTextColumn Header="Value" IsReadOnly="False" Width="3*" Binding="{Binding Value, Mode=TwoWay}"/>
             </DataGrid.Columns>
         </DataGrid>
 

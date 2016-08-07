@@ -22,7 +22,7 @@ namespace Team1922.MVVM.ViewModels
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            UpdateKeys();
+            UpdateKeyValueList();
         }
 
         protected override List<string> GetOverrideKeys()

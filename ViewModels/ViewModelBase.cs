@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Team1922.MVVM.Framework;
 
 namespace Team1922.MVVM.ViewModels
@@ -38,82 +42,55 @@ namespace Team1922.MVVM.ViewModels
         }
     }
 
+    public class VMKeyValueList : ObservableCollection<VMKeyValuePair>
+    {
+    }
+
     /// <summary>
     /// This wraps the <see cref="BindableBase"/>, and the ability to access values based on a string key along
     /// with enumerate through it with read AND write access to the value
     /// </summary>
-    public abstract class ViewModelBase : BindableBase, IEnumerable<VMKeyValuePair>, IEnumerator<VMKeyValuePair>
+    public abstract class ViewModelBase : BindableBase
     {
         private List<string> _keys = new List<string>();
-        private int _enumeratorIndex = -1;
+        VMKeyValueList _keyValueList = new VMKeyValueList();
+        //private int _enumeratorIndex = -1;
 
         protected ViewModelBase()
         {
-            UpdateKeys();
+            UpdateKeyValueList();
         }
-        protected void UpdateKeys()
+
+        protected void UpdateKeyValueList()
         {
             _keys = GetOverrideKeys();
+            _keyValueList.Clear();
+            foreach(var key in _keys)
+            {
+                _keyValueList.Add(new VMKeyValuePair(key, this));
+            }
         }
         protected virtual List<string> GetOverrideKeys()
         {
             return (from x in GetType().GetProperties()
-                where x.Name != "Properties" 
-                && x.Name != "Children" 
-                && x.Name != "this[string]" 
-                && x.Name != "Current" 
+                where x.Name != "Properties"
+                && x.Name != "Children"
+                && x.Name != "this[string]"
+                && x.Name != "Current"
                 && x.Name != "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
+                && x.Name != "Count"
+                && x.Name != "IsReadOnly"
                 select x.Name).ToList();
         }
         public List<string> GetKeys()
         {
             return _keys;
         }
-        public IEnumerator<VMKeyValuePair> GetEnumerator()
+        public VMKeyValueList GetEditableKeyValueList()
         {
-            return this;
+            return _keyValueList;
         }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-        public bool MoveNext()
-        {
-            _enumeratorIndex++;
-            return _enumeratorIndex < _keys.Count;
-        }
-        public void Reset()
-        {
-            _enumeratorIndex = -1;
-        }
-        public VMKeyValuePair Current
-        {
-            get
-            {
-                return CurrentInternal;
-            }
-        }
-        object IEnumerator.Current
-        {
-            get
-            {
-                return CurrentInternal;
-            }
-        }
-        private VMKeyValuePair CurrentInternal
-        {
-            get
-            {
-                try
-                {
-                    return new VMKeyValuePair(_keys[_enumeratorIndex], this);
-                }
-                catch(Exception)
-                {
-                    throw new InvalidOperationException();
-                }
-            }
-        }
+
         public bool TryGetValue(string key, out string value)
         {
             try
@@ -128,6 +105,8 @@ namespace Team1922.MVVM.ViewModels
             return true;
         }
 
+
+        #region Child Casting Helper Methods
         protected int SafeCastInt(string value)
         {
             int ret;
@@ -173,7 +152,8 @@ namespace Team1922.MVVM.ViewModels
             else
                 throw new ArgumentException("Value Entered Not Boolean");
         }
-
+        #endregion
+        
         #region Abstract Methods
         /// <summary>
         /// This gives read/write access to the viewmodel based on the name of the property
@@ -216,6 +196,7 @@ namespace Team1922.MVVM.ViewModels
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

@@ -59,7 +59,7 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _eventTargetModel.Type;
                 SetProperty(ref temp, value);
                 _eventTargetModel.Type = temp;
-                UpdateKeys();
+                UpdateKeyValueList();
             }
         }
 
