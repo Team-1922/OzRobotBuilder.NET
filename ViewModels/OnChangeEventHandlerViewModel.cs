@@ -1,30 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class OnChangeEventHandlerViewModel : ViewModelBase, IOnChangeEventHandlerProvider
+    internal class OnChangeEventHandlerViewModel : EventViewModelBase, IOnChangeEventHandlerProvider
     {
         OnChangeEventHandler _onChangeEventHandlerModel;
 
         public OnChangeEventHandlerViewModel()
         {
-            _eventTargetProvider.PropertyChanged += _eventTargetProvider_PropertyChanged;
+            EventTarget.PropertyChanged += _eventTargetProvider_PropertyChanged;
         }
 
         private void _eventTargetProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "Type")
+                UpdateKeys();
             OnPropertyChanged($"EventTarget.{e.PropertyName}");
         }
 
-        public IEventTargetProvider EventTarget
+        protected override List<string> GetOverrideKeys()
         {
-            get
-            {
-                return _eventTargetProvider;
-            }
+            var ret = base.GetOverrideKeys();
+            ret.AddRange(GetTargetKeys());
+            return ret;
         }
 
         public double MinDelta
@@ -72,14 +74,53 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                string ret;
+                if (TryGetTargetValue(key, out ret))
+                    return ret;
+
+                switch (key)
+                {
+                    case "Name":
+                        return Name;
+                    case "MinDelta":
+                        return MinDelta.ToString();
+                    case "WatchPath":
+                        return WatchPath;
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                if (TrySetTargetValue(key, value))
+                    return;
+
+                switch (key)
+                {
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "MinDelta":
+                        MinDelta = SafeCastDouble(value);
+                        break;
+                    case "WatchPath":
+                        WatchPath = value;
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         public void SetOnChangeEventHandler(OnChangeEventHandler onChangeEventHandler)
         {
             _onChangeEventHandlerModel = onChangeEventHandler;
-            _eventTargetProvider.SetEventTarget(_onChangeEventHandlerModel.EventTarget);
+            EventTarget.SetEventTarget(_onChangeEventHandlerModel.EventTarget);
         }
-
-        #region Private Fields
-        IEventTargetProvider _eventTargetProvider = new EventTargetViewModel();
-        #endregion
     }
 }

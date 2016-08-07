@@ -138,6 +138,71 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+
+
+        public override string this[string key]
+        {
+            get
+            {
+                switch (key)
+                {
+                    case "Name":
+                        return Name;
+                    case "AllowableCloseLoopError":
+                        return AllowableCloseLoopError.ToString();
+                    case "CloseLoopRampRate":
+                        return CloseLoopRampRate.ToString();
+                    case "P":
+                        return P.ToString();
+                    case "I":
+                        return I.ToString();
+                    case "D":
+                        return D.ToString();
+                    case "F":
+                        return F.ToString();
+                    case "IZone":
+                        return IZone.ToString();
+                    case "SourceType":
+                        return SourceType.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "AllowableCloseLoopError":
+                        AllowableCloseLoopError = SafeCastInt(value);
+                        break;
+                    case "CloseLoopRampRate":
+                        CloseLoopRampRate = SafeCastDouble(value);
+                        break;
+                    case "P":
+                        P = SafeCastDouble(value);
+                        break;
+                    case "I":
+                        I = SafeCastDouble(value);
+                        break;
+                    case "D":
+                        D = SafeCastDouble(value);
+                        break;
+                    case "F":
+                        F = SafeCastDouble(value);
+                        break;
+                    case "IZone":
+                        IZone = SafeCastInt(value);
+                        break;
+                    case "SourceType":
+                        SourceType = SafeCastEnum<CANTalonDifferentiationLevel>(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         public void SetPIDController(PIDControllerSRX pidController)
         {
             _pidControllerSRXModel = pidController;

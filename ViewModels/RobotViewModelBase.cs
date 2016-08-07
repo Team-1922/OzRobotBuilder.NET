@@ -34,11 +34,11 @@ namespace Team1922.MVVM.ViewModels
         public void SetRobot(Robot robot)
         {
             //clear the old providers
-            _subsystemProviders.Clear();
-            _continuousCommandProviders.Clear();
-            _onChangeEventHandlerProviders.Clear();
-            _onWithinRangeEventHandlerProviders.Clear();
-            _joystickProviders.Clear();
+            _subsystemProviders.Items.Clear();
+            _continuousCommandProviders.Items.Clear();
+            _onChangeEventHandlerProviders.Items.Clear();
+            _onWithinRangeEventHandlerProviders.Items.Clear();
+            _joystickProviders.Items.Clear();
 
             //setup the new providers
             _robotModel = robot;
@@ -50,7 +50,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new SubsystemViewModel();
                     provider.SetSubsystem(subsystem);
-                    _subsystemProviders.Add(provider);
+                    _subsystemProviders.Items.Add(provider);
                 }
             }
             if (null != _robotModel.ContinuousCommand)
@@ -61,7 +61,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new ContinuousCommandViewModel();
                     provider.SetContinuousCommand(continuousCommand);
-                    _continuousCommandProviders.Add(provider);
+                    _continuousCommandProviders.Items.Add(provider);
                 }
             }
             if (null != _robotModel.OnChangeEventHandler)
@@ -72,7 +72,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new OnChangeEventHandlerViewModel();
                     provider.SetOnChangeEventHandler(onChangeEventHandler);
-                    _onChangeEventHandlerProviders.Add(provider);
+                    _onChangeEventHandlerProviders.Items.Add(provider);
                 }
             }
             if (null != _robotModel.OnWithinRangeEventHandler)
@@ -83,7 +83,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new OnWithinRangeEventHandlerViewModel();
                     provider.SetOnWithinRangeEventHandler(onWithinRangeEventHandler);
-                    _onWithinRangeEventHandlerProviders.Add(provider);
+                    _onWithinRangeEventHandlerProviders.Items.Add(provider);
                 }
             }
             if (null != _robotModel.Joystick)
@@ -94,7 +94,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new JoystickViewModel();
                     provider.SetJoystick(joystick);
-                    _joystickProviders.Add(provider);
+                    _joystickProviders.Items.Add(provider);
                 }
             }
         }
@@ -114,23 +114,23 @@ namespace Team1922.MVVM.ViewModels
 
         public IEnumerable<ISubsystemProvider> Subsystems
         {
-            get { return _subsystemProviders; }
+            get { return _subsystemProviders.Items; }
         }
         public IEnumerable<IContinuousCommandProvider> ContinuousCommands
         {
-            get { return _continuousCommandProviders; }
+            get { return _continuousCommandProviders.Items; }
         }
         public IEnumerable<IOnChangeEventHandlerProvider> OnChangeEventHandlers
         {
-            get { return _onChangeEventHandlerProviders; }
+            get { return _onChangeEventHandlerProviders.Items; }
         }
         public IEnumerable<IOnWithinRangeEventHandlerProvider> OnWithinRangeEventHandlers
         {
-            get { return _onWithinRangeEventHandlerProviders; }
+            get { return _onWithinRangeEventHandlerProviders.Items; }
         }
         public IEnumerable<IJoystickProvider> Joysticks
         {
-            get { return _joystickProviders; }
+            get { return _joystickProviders.Items; }
         }
 
         private void OnAddSubsystem()
@@ -191,7 +191,7 @@ namespace Team1922.MVVM.ViewModels
 
         public void UpdateInputValues()
         {
-            foreach(var subsystem in _subsystemProviders)
+            foreach(var subsystem in _subsystemProviders.Items)
             {
                 subsystem.UpdateInputValues();
             }
@@ -242,6 +242,54 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return "Robot";
+            }
+        }
+
+        protected override List<string> GetOverrideKeys()
+        {
+            return new List<string>() { "AnalogInputSampleRate","ContinuousCommands","Joysticks","Name","OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
+        }
+
+        public override string this[string key]
+        {
+            get
+            {
+                switch(key)
+                {
+                    case "AnalogInputSampleRate":
+                        return AnalogInputSampleRate.ToString();
+                    case "ContinuousCommands":
+                        return ContinuousCommands.ToString();
+                    case "Joysticks":
+                        return Joysticks.ToString();
+                    case "Name":
+                        return Name;
+                    case "OnChangeEventHandlers":
+                        return OnChangeEventHandlers.ToString();
+                    case "OnWithinRangeEventHandlers":
+                        return OnWithinRangeEventHandlers.ToString();
+                    case "Subsystems":
+                        return Subsystems.ToString();
+                    case "TeamNumber":
+                        return TeamNumber.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "AnalogInputSampleRate":
+                        AnalogInputSampleRate = SafeCastInt(value);
+                        break;
+                    case "TeamNumber":
+                        TeamNumber = SafeCastInt(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
             }
         }
 

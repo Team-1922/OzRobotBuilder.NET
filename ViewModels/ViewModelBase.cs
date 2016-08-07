@@ -10,7 +10,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// This is like <see cref="KeyValuePair{TKey, TValue}"/>, but the key is readonly and the value is read/write
     /// </summary>
-    internal class VMKeyValuePair
+    public class VMKeyValuePair
     {
         public VMKeyValuePair(string key, ViewModelBase vm)
         {
@@ -42,35 +42,32 @@ namespace Team1922.MVVM.ViewModels
     /// This wraps the <see cref="BindableBase"/>, and the ability to access values based on a string key along
     /// with enumerate through it with read AND write access to the value
     /// </summary>
-    internal abstract class ViewModelBase : BindableBase, IEnumerable<VMKeyValuePair>, IEnumerator<VMKeyValuePair>
+    public abstract class ViewModelBase : BindableBase, IEnumerable<VMKeyValuePair>, IEnumerator<VMKeyValuePair>
     {
         private List<string> _keys = new List<string>();
-        private int _enumeratorIndex = 0;
-        VMKeyValuePair _current = null;
-
-        private int EnumeratorIndex
-        {
-            get
-            {
-                return _enumeratorIndex;
-            }
-
-            set
-            {
-                _enumeratorIndex = value;
-                RefreshCurrent();
-            }
-        }
+        private int _enumeratorIndex = -1;
 
         protected ViewModelBase()
         {
-            _keys = GetKeys(); 
+            UpdateKeys();
         }
-        protected virtual List<string> GetKeys()
+        protected void UpdateKeys()
+        {
+            _keys = GetOverrideKeys();
+        }
+        protected virtual List<string> GetOverrideKeys()
         {
             return (from x in GetType().GetProperties()
-                where x.Name != "Properties" && x.Name != "Children" && x.Name != "this[string]"
+                where x.Name != "Properties" 
+                && x.Name != "Children" 
+                && x.Name != "this[string]" 
+                && x.Name != "Current" 
+                && x.Name != "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
                 select x.Name).ToList();
+        }
+        public List<string> GetKeys()
+        {
+            return _keys;
         }
         public IEnumerator<VMKeyValuePair> GetEnumerator()
         {
@@ -82,14 +79,12 @@ namespace Team1922.MVVM.ViewModels
         }
         public bool MoveNext()
         {
-            if (_enumeratorIndex + 1 > _keys.Count)
-                return false;
             _enumeratorIndex++;
-            return true;
+            return _enumeratorIndex < _keys.Count;
         }
         public void Reset()
         {
-            _enumeratorIndex = 0;
+            _enumeratorIndex = -1;
         }
         public VMKeyValuePair Current
         {
@@ -109,15 +104,15 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _current;
+                try
+                {
+                    return new VMKeyValuePair(_keys[_enumeratorIndex], this);
+                }
+                catch(Exception)
+                {
+                    throw new InvalidOperationException();
+                }
             }
-        }
-        private void RefreshCurrent()
-        {
-            if (null == _current)
-                _current = new VMKeyValuePair(_keys[_enumeratorIndex], this);
-            else
-                _current.Set(_keys[_enumeratorIndex], this);
         }
         public bool TryGetValue(string key, out string value)
         {

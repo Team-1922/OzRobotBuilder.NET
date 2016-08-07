@@ -1,30 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class OnWithinRangeEventHandlerViewModel : ViewModelBase, IOnWithinRangeEventHandlerProvider
+    internal class OnWithinRangeEventHandlerViewModel : EventViewModelBase, IOnWithinRangeEventHandlerProvider
     {
         OnWithinRangeEventHandler _onWithinRangeEventHandlerModel;
 
         public OnWithinRangeEventHandlerViewModel()
         {
-            _eventTargetProvider.PropertyChanged += _eventTargetProvider_PropertyChanged;
+            EventTarget.PropertyChanged += _eventTargetProvider_PropertyChanged;
         }
 
         private void _eventTargetProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "Type")
+                UpdateKeys();
             OnPropertyChanged($"EventTarget.{e.PropertyName}");
         }
 
-        public IEventTargetProvider EventTarget
+        protected override List<string> GetOverrideKeys()
         {
-            get
-            {
-                return _eventTargetProvider;
-            }
+            var ret = base.GetOverrideKeys();
+            ret.AddRange(GetTargetKeys());
+            return ret;
         }
 
         public bool Invert
@@ -102,14 +104,64 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                string ret;
+                if (TryGetTargetValue(key, out ret))
+                    return ret;
+
+                switch (key)
+                {
+                    case "Name":
+                        return Name;
+                    case "Min":
+                        return Min.ToString();
+                    case "Max":
+                        return Max.ToString();
+                    case "Invert":
+                        return Invert.ToString();
+                    case "WatchPath":
+                        return WatchPath;
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                if (TrySetTargetValue(key, value))
+                    return;
+
+                switch (key)
+                {
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "Min":
+                        Min = SafeCastDouble(value);
+                        break;
+                    case "Max":
+                        Max = SafeCastDouble(value);
+                        break;
+                    case "Invert":
+                        Invert = SafeCastBool(value);
+                        break;
+                    case "WatchPath":
+                        WatchPath = value;
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         public void SetOnWithinRangeEventHandler(OnWithinRangeEventHandler onWithinRangeEventHandler)
         {
             _onWithinRangeEventHandlerModel = onWithinRangeEventHandler;
-            _eventTargetProvider.SetEventTarget(_onWithinRangeEventHandlerModel.EventTarget);
+            EventTarget.SetEventTarget(_onWithinRangeEventHandlerModel.EventTarget);
         }
-
-        #region Private Fields
-        IEventTargetProvider _eventTargetProvider = new EventTargetViewModel();
-        #endregion
+        
     }
 }

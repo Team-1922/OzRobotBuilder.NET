@@ -1,30 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class ContinuousCommandViewModel : ViewModelBase, IContinuousCommandProvider
+    internal class ContinuousCommandViewModel : EventViewModelBase, IContinuousCommandProvider
     {
         ContinuousCommand _commandModel;
 
         public ContinuousCommandViewModel()
         {
-            _eventTargetProvider.PropertyChanged += _eventTargetProvider_PropertyChanged;
+            EventTarget.PropertyChanged += _eventTargetProvider_PropertyChanged;
         }
 
         private void _eventTargetProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "Type")
+                UpdateKeys();
             OnPropertyChanged($"EventTarget.{e.PropertyName}");
         }
 
-        public IEventTargetProvider EventTarget
+        protected override List<string> GetOverrideKeys()
         {
-            get
-            {
-                return _eventTargetProvider;
-            }
+            var ret = new List<string>() { "Name" };
+            ret.AddRange(GetTargetKeys());
+            return ret;
         }
 
         public string Name
@@ -46,12 +48,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
+                string ret;
+                if (TryGetTargetValue(key, out ret))
+                    return ret;
+
                 switch(key)
                 {
                     case "Name":
                         return Name;
-                    case "EventTarget":
-                        return "EventTarget";
                     default:
                         throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
                 }
@@ -59,6 +63,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
+                if (TrySetTargetValue(key, value))
+                    return;
+
                 switch(key)
                 {
                     case "Name":
@@ -73,11 +80,7 @@ namespace Team1922.MVVM.ViewModels
         public void SetContinuousCommand(ContinuousCommand continuousCommand)
         {
             _commandModel = continuousCommand;
-            _eventTargetProvider.SetEventTarget(_commandModel.EventTarget);
+            EventTarget.SetEventTarget(_commandModel.EventTarget);
         }
-
-        #region Private Fields
-        EventTargetViewModel _eventTargetProvider = new EventTargetViewModel();
-        #endregion
     }
 }

@@ -109,6 +109,47 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                switch(key)
+                {
+                    case "Direction":
+                        return Direction.ToString();
+                    case "ID":
+                        return ID.ToString();
+                    case "Name":
+                        return Name;
+                    case "Value":
+                        return Value.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "Direction":
+                        Direction = SafeCastEnum<RelayDirection>(value);
+                            break;
+                    case "ID":
+                        ID = SafeCastInt(value);
+                        break;
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "Value":
+                        Value = SafeCastEnum<RelayValue>(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         public void SetRelayOutput(RelayOutput relayOutput)
         {
             _relayOutputModel = relayOutput;

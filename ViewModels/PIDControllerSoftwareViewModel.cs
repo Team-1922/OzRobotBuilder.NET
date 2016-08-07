@@ -123,6 +123,64 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                switch (key)
+                {
+                    case "Name":
+                        return Name;
+                    case "Continuous":
+                        return Continuous.ToString();
+                    case "CycleDuration":
+                        return CycleDuration.ToString();
+                    case "P":
+                        return P.ToString();
+                    case "I":
+                        return I.ToString();
+                    case "D":
+                        return D.ToString();
+                    case "F":
+                        return F.ToString();
+                    case "Tolerance":
+                        return Tolerance.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "Continuous":
+                        Continuous = SafeCastBool(value);
+                        break;
+                    case "CycleDuration":
+                        CycleDuration = SafeCastDouble(value);
+                        break;
+                    case "P":
+                        P = SafeCastDouble(value);
+                        break;
+                    case "I":
+                        I = SafeCastDouble(value);
+                        break;
+                    case "D":
+                        D = SafeCastDouble(value);
+                        break;
+                    case "F":
+                        F = SafeCastDouble(value);
+                        break;
+                    case "Tolerance":
+                        Tolerance = SafeCastDouble(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         public void SetPIDController(PIDControllerSoftware pidController)
         {
             _pidControllerSoftwareModel = pidController;

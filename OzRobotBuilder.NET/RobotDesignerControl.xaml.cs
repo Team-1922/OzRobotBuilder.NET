@@ -24,6 +24,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.ViewModels;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -39,8 +40,15 @@ namespace Team1922.OzRobotBuilder.NET
 
         public RobotDesignerControl(ViewModel viewModel)
         {
-            DataContext = viewModel;
-            InitializeComponent();
+            try
+            {
+                DataContext = viewModel;
+                InitializeComponent();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
             // wait until we're initialized to handle events
             viewModel.ViewModelChanged += new EventHandler(ViewModelChanged);
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -50,7 +58,9 @@ namespace Team1922.OzRobotBuilder.NET
         {
             if (e.PropertyName == "SelectedElement")
             {
-                this.tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as IProvider) ?? null;
+                var test = ((DataContext as ViewModel));
+                var test1 = test?.SelectedElement as ViewModelBase;
+                tbEditor.ItemsSource = test1;
             }
         }
 

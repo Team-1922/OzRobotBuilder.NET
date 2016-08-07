@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,18 +10,55 @@ using Team1922.MVVM.Contracts;
 namespace Team1922.MVVM.ViewModels
 {
 
-    class CompoundProviderList<T> : ObservableCollection<T>, ICompoundProvider where T : IProvider
+    class CompoundProviderList<T> : ViewModelBase, ICompoundProvider where T : IProvider
     {
+        public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
+
         public CompoundProviderList(string name)
         {
             Name = name;
+        }
+        
+
+        protected override List<string> GetOverrideKeys()
+        {
+            return (from item in Items select item.Name).ToList();
+        }
+
+        private T FindByName(string name)
+        {
+            foreach(var item in Items)
+            {
+                if (item.Name == name)
+                    return item;
+            }
+            throw new Exception();
+        }
+        public override string this[string key]
+        {
+            get
+            {
+                try
+                {
+                    return FindByName(key).ToString();
+                }
+                catch(Exception)
+                {
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                throw new ArgumentException($"\"{key}\" is Read-Only");
+            }
         }
 
         public IEnumerable<IProvider> Children
         {
             get
             {
-                return this.Cast<IProvider>();
+                return Items.Cast<IProvider>();
             }
         }
 

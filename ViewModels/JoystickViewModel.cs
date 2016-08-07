@@ -37,7 +37,7 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        protected virtual List<string> GetKeys()
+        protected virtual List<string> GetOverrideKeys()
         {
             var ret = new List<string>(){ "Name", "ID" };
             for(int i = 1; i <= 12; ++i)

@@ -49,6 +49,7 @@
     <Compile Include="ContinuousCommandViewModel.cs" />
     <Compile Include="DigitalInputViewModel.cs" />
     <Compile Include="EventTargetViewModel.cs" />
+    <Compile Include="EventViewModelBase.cs" />
     <Compile Include="JoystickViewModel.cs" />
     <Compile Include="OnChangeEventHandlerViewModel.cs" />
     <Compile Include="OnWithinRangeEventHandlerViewModel.cs" />

@@ -130,6 +130,68 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                switch (key)
+                {
+                    case "Name":
+                        return Name;
+                    case "ID":
+                        return ID.ToString();
+                    case "ID1":
+                        return ID1.ToString();
+                    case "ConversionRatio":
+                        return ConversionRatio.ToString();
+                    case "RawValue":
+                        return RawValue.ToString();
+                    case "RawVelocity":
+                        return RawVelocity.ToString();
+                    case "Value":
+                        return Value.ToString();
+                    case "Velocity":
+                        return Velocity.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "ID":
+                        ID = SafeCastInt(value);
+                        break;
+                    case "ID1":
+                        ID1 = SafeCastInt(value);
+                        break;
+                    case "ConversionRatio":
+                        ConversionRatio = SafeCastDouble(value);
+                        break;
+                    case "RawValue":
+                        RawValue = SafeCastLong(value);
+                        break;
+                    case "RawVelocity":
+                        RawVelocity = SafeCastDouble(value);
+                        break;
+                    case "Value":
+                        Value = SafeCastDouble(value);
+                        break;
+                    case "Velocity":
+                        Velocity = SafeCastDouble(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
+
         public void SetQuadEncoder(QuadEncoder quadEncoder)
         {
             _quadEncoderModel = quadEncoder;

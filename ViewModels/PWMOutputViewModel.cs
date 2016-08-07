@@ -6,7 +6,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class PWMOutputViewModel : ViewModelBase, IPWMOutputProvider
+    internal class PWMOutputViewModel : ViewModelBase, IPWMOutputProvider
     {
         protected PWMOutput _pwmOutputModel;
 
@@ -55,6 +55,42 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _pwmOutputModel.Value;
                 SetProperty(ref temp, IOService.Instance.PWMOutputs[ID].Value = TypeRestrictions.Clamp("PWMOutput.Value", value));
                 _pwmOutputModel.Value = temp;
+            }
+        }
+
+        public override string this[string key]
+        {
+            get
+            {
+                switch(key)
+                {
+                    case "Name":
+                        return Name;
+                    case "Value":
+                        return Value.ToString();
+                    case "ID":
+                        return ID.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "Value":
+                        Value = SafeCastDouble(value);
+                        break;
+                    case "ID":
+                        ID = SafeCastInt(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
             }
         }
     }

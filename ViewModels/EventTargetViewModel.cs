@@ -11,6 +11,18 @@ namespace Team1922.MVVM.ViewModels
     internal class EventTargetViewModel : ViewModelBase, IEventTargetProvider
     {
         EventTarget _eventTargetModel;
+        
+        /// <summary>
+        /// This is overriden to only give some values if the other values have a certain state
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<string> GetOverrideKeys()
+        {
+            var ret = new List<string>() { "Name", "Type", "Value" };
+            if (Type == EventTargetType.ModifyValue)
+                ret.Add("Path");
+            return ret;
+        }
 
         public string Name
         {
@@ -47,6 +59,7 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _eventTargetModel.Type;
                 SetProperty(ref temp, value);
                 _eventTargetModel.Type = temp;
+                UpdateKeys();
             }
         }
 

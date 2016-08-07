@@ -24,11 +24,11 @@ namespace Team1922.MVVM.ViewModels
         public void SetSubsystem(Subsystem subsystem)
         {
             //cleanup the old providers
-            _pwmOutputProviders.Clear();
-            _analogInputProviders.Clear();
-            _quadEncoderProviders.Clear();
-            _relayOutputProviders.Clear();
-            _canTalonProviders.Clear();
+            _pwmOutputProviders.Items.Clear();
+            _analogInputProviders.Items.Clear();
+            _quadEncoderProviders.Items.Clear();
+            _relayOutputProviders.Items.Clear();
+            _canTalonProviders.Items.Clear();
 
             //setup the new providers
             _subsystemModel = subsystem;
@@ -42,7 +42,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new PWMOutputViewModel();
                     provider.SetPWMOutput(pwmOutput);
-                    _pwmOutputProviders.Add(provider);
+                    _pwmOutputProviders.Items.Add(provider);
                 }
             }
             if (null != _subsystemModel.AnalogInput)
@@ -53,7 +53,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new AnalogInputViewModel();
                     provider.SetAnalogInput(analogInput);
-                    _analogInputProviders.Add(provider);
+                    _analogInputProviders.Items.Add(provider);
                 }
             }
             if (null != _subsystemModel.QuadEncoder)
@@ -64,7 +64,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new QuadEncoderViewModel();
                     provider.SetQuadEncoder(quadEncoder);
-                    _quadEncoderProviders.Add(provider);
+                    _quadEncoderProviders.Items.Add(provider);
                 }
             }
             if (null != _subsystemModel.RelayOutput)
@@ -75,7 +75,7 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new RelayOutputViewModel();
                     provider.SetRelayOutput(relayOutput);
-                    _relayOutputProviders.Add(provider);
+                    _relayOutputProviders.Items.Add(provider);
                 }
             }
             if (null != _subsystemModel.CANTalons)
@@ -86,22 +86,22 @@ namespace Team1922.MVVM.ViewModels
                         continue;
                     var provider = new CANTalonViewModel();
                     provider.SetCANTalon(canTalon);
-                    _canTalonProviders.Add(provider);
+                    _canTalonProviders.Items.Add(provider);
                 }
             }
         }
 
         public void UpdateInputValues()
         {
-            foreach(var analogInput in _analogInputProviders)
+            foreach(var analogInput in _analogInputProviders.Items)
             {
                 analogInput.UpdateInputValues();
             }
-            foreach (var quadEncoder in _quadEncoderProviders)
+            foreach (var quadEncoder in _quadEncoderProviders.Items)
             {
                 quadEncoder.UpdateInputValues();
             }
-            foreach (var canTalon in _canTalonProviders)
+            foreach (var canTalon in _canTalonProviders.Items)
             {
                 canTalon.UpdateInputValues();
             }
@@ -109,23 +109,23 @@ namespace Team1922.MVVM.ViewModels
 
         public IEnumerable<IPWMOutputProvider> PWMOutputs
         {
-            get { return _pwmOutputProviders; }
+            get { return _pwmOutputProviders.Items; }
         }
         public IEnumerable<IAnalogInputProvider> AnalogInputs
         {
-            get { return _analogInputProviders; }
+            get { return _analogInputProviders.Items; }
         }
         public IEnumerable<IQuadEncoderProvider> QuadEncoders
         {
-            get { return _quadEncoderProviders; }
+            get { return _quadEncoderProviders.Items; }
         }
         public IEnumerable<IRelayOutputProvider> RelayOutputs
         {
-            get { return _relayOutputProviders; }
+            get { return _relayOutputProviders.Items; }
         }
         public IEnumerable<ICANTalonProvider> CANTalons
         {
-            get { return _canTalonProviders; }
+            get { return _canTalonProviders.Items; }
         }
         public IPIDControllerSoftwareProvider PIDController { get; } = new PIDControllerSoftwareViewModel();
         public string Name
@@ -152,6 +152,51 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _subsystemModel.ID;
+            }
+        }
+
+        public override string this[string key]
+        {
+            get
+            {
+                switch(key)
+                {
+                    case "AnalogInputs":
+                        return AnalogInputs.ToString();
+                    case "CANTalons":
+                        return CANTalons.ToString();
+                    case "ID":
+                        return ID.ToString();
+                    case "Name":
+                        return Name;
+                    case "PIDController":
+                        return PIDController.ToString();
+                    case "PWMOutputs":
+                        return PWMOutputs.ToString();
+                    case "QuadEncoders":
+                        return QuadEncoders.ToString();
+                    case "RelayOutputs":
+                        return RelayOutputs.ToString();
+                    case "SoftwarePIDEnabled":
+                        return SoftwarePIDEnabled.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch(key)
+                {
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "SoftwarePIDEnabled":
+                        SoftwarePIDEnabled = SafeCastBool(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
             }
         }
 
