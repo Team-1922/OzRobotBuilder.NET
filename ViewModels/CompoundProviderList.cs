@@ -17,8 +17,13 @@ namespace Team1922.MVVM.ViewModels
         public CompoundProviderList(string name)
         {
             Name = name;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
-        
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateKeys();
+        }
 
         protected override List<string> GetOverrideKeys()
         {
