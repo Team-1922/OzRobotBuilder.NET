@@ -58,6 +58,39 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                switch (key)
+                {
+                    case "Name":
+                        return Name;
+                    case "Value":
+                        return Value.ToString();
+                    case "ID":
+                        return ID.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "ID":
+                        ID = SafeCastInt(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         public void SetDigitalInput(DigitalInput digitalInput)
         {
             _digitalInputModel = digitalInput;

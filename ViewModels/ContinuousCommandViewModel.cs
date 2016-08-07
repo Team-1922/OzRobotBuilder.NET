@@ -46,12 +46,27 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                throw new NotImplementedException();
+                switch(key)
+                {
+                    case "Name":
+                        return Name;
+                    case "EventTarget":
+                        return "EventTarget";
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
             }
 
             set
             {
-                throw new NotImplementedException();
+                switch(key)
+                {
+                    case "Name":
+                        Name = value;
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
             }
         }
 

@@ -61,11 +61,16 @@ namespace Team1922.MVVM.ViewModels
                 RefreshCurrent();
             }
         }
+
         protected ViewModelBase()
         {
-            _keys = (from x in GetType().GetProperties()
-                     where x.Name != "Properties" && x.Name != "Children" && x.Name != "this[string]"
-                     select x.Name).ToList();
+            _keys = GetKeys(); 
+        }
+        protected virtual List<string> GetKeys()
+        {
+            return (from x in GetType().GetProperties()
+                where x.Name != "Properties" && x.Name != "Children" && x.Name != "this[string]"
+                select x.Name).ToList();
         }
         public IEnumerator<VMKeyValuePair> GetEnumerator()
         {

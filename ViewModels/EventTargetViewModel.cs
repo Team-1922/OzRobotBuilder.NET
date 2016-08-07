@@ -65,6 +65,44 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                switch (key)
+                {
+                    case "Name":
+                        return Name;
+                    case "Path":
+                        return Path;
+                    case "Type":
+                        return Type.ToString();
+                    case "Value":
+                        return Value;
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "Path":
+                        Path = value;
+                        break;
+                    case "Type":
+                        Type = SafeCastEnum<EventTargetType>(value);
+                        break;
+                    case "Value":
+                        Value = value;
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         public void SetEventTarget(EventTarget eventTarget)
         {
             _eventTargetModel = eventTarget;

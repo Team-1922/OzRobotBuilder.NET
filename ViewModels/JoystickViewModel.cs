@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
@@ -34,6 +35,20 @@ namespace Team1922.MVVM.ViewModels
             {
                 OnPropertyChanged($"Axes[{e.NewStartingIndex}]");
             }
+        }
+
+        protected virtual List<string> GetKeys()
+        {
+            var ret = new List<string>(){ "Name", "ID" };
+            for(int i = 1; i <= 12; ++i)
+            {
+                ret.Add($"Buttons[{i}]");
+            }
+            for (int i = 1; i <= 6; ++i)
+            {
+                ret.Add($"Axes[{i}]");
+            }
+            return ret;
         }
 
         public IReadOnlyDictionary<uint, double> Axes
@@ -75,6 +90,78 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 _joystickModel.Name = value;
+            }
+        }
+
+        private Regex axisTester = new Regex("^Axes\\[([1-9]|1[0-2])\\]$");
+        private Regex buttonTester = new Regex("^Buttons\\[([1-9]|1[0-2])\\]$");
+        private bool GetAxis(string key, out string output)
+        {
+            //special situation where the axes/buttons can be referenced by index
+            if (axisTester.IsMatch(key))
+            {
+                //get the second to last character
+                uint index;
+                bool success = uint.TryParse(key.Substring(key.Length - 2, 1), out index);
+                if (success)
+                {
+                    output = _axes[index].ToString();
+                }
+            }
+            output = "";
+            return false;
+        }
+        private bool GetButton(string key, out string output)
+        {
+            //special situation where the axes/buttons can be referenced by index
+            if (buttonTester.IsMatch(key))
+            {
+                //get the second to last character
+                uint index;
+                bool success = uint.TryParse(key.Substring(key.Length - 2, 1), out index);
+                if (success)
+                {
+                    output = _buttons[index].ToString();
+                }
+            }
+            output = "";
+            return false;
+        }
+
+        public override string this[string key]
+        {
+            get
+            {
+                string ret;
+                if (GetAxis(key, out ret))
+                    return ret;
+                if (GetButton(key, out ret))
+                    return ret;
+
+                switch (key)
+                {
+                    case "Name":
+                        return Name;
+                    case "ID":
+                        return ID.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "ID":
+                        ID = SafeCastInt(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
             }
         }
 
