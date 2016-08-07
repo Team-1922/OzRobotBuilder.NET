@@ -60,6 +60,7 @@
     <Compile Include="RelayOutputViewModel.cs" />
     <Compile Include="RobotViewModelBase.cs" />
     <Compile Include="SubsystemViewModel.cs" />
+    <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contracts\Contracts.win.csproj">

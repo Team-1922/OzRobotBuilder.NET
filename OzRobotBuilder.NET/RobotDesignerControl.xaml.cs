@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,7 +50,7 @@ namespace Team1922.OzRobotBuilder.NET
         {
             if (e.PropertyName == "SelectedElement")
             {
-                this.tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as IProvider)?.Properties ?? null;
+                this.tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as IProvider) ?? null;
             }
         }
 
@@ -82,7 +83,80 @@ namespace Team1922.OzRobotBuilder.NET
 
         private void tbEditor_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            var selectedItemText = ((KeyValuePair<string, string>)(tbEditor.SelectedCells?.First().Item)).Key;
+            if ("" == selectedItemText)
+                return;
 
+            //open up the child selected if it is a child
+            var parent = (DataContext as ViewModel)?.SelectedElement as ICompoundProvider;
+            if (null != parent)
+            {
+                var children = parent.Children;
+                if (null != children)
+                {
+                    foreach (var child in children)
+                    {
+                        if (null == child)
+                        {
+                            continue;
+                        }
+                        if (child.Name == selectedItemText)
+                        {
+                            SelectChild(child.Name);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            //edit it if it is not a child
+            var selectedItemProvider = (DataContext as ViewModel)?.SelectedElement as IProvider;
+            if(null != selectedItemProvider)
+            {
+
+            }
+        }
+        public static int GetRowIndex(DataGridCell dataGridCell)
+        {
+            // Use reflection to get DataGridCell.RowDataItem property value.
+            PropertyInfo rowDataItemProperty = dataGridCell.GetType().GetProperty("RowDataItem", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            DataGrid dataGrid = GetDataGridFromChild(dataGridCell);
+
+            return dataGrid.Items.IndexOf(rowDataItemProperty.GetValue(dataGridCell, null));
+        }
+        public static DataGrid GetDataGridFromChild(DependencyObject dataGridPart)
+        {
+            if (VisualTreeHelper.GetParent(dataGridPart) == null)
+            {
+                throw new NullReferenceException("Control is null.");
+            }
+            if (VisualTreeHelper.GetParent(dataGridPart) is DataGrid)
+            {
+                return (DataGrid)VisualTreeHelper.GetParent(dataGridPart);
+            }
+            else
+            {
+                return GetDataGridFromChild(VisualTreeHelper.GetParent(dataGridPart));
+            }
+        }
+
+        private void SelectChild(string childName)
+        {
+            var children = (tvRobot.SelectedItem as TreeViewItem)?.Items;
+            if (null == children)
+                return;
+
+            foreach(var item in children)
+            {
+                var treeViewItem = item as TreeViewItem;
+                if (null == treeViewItem)
+                    continue;
+                if((string)treeViewItem.Header == childName)
+                {
+                    treeViewItem.IsSelected = true;
+                }
+            }
         }
     }
 }

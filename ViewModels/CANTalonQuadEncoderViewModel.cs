@@ -109,6 +109,47 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                switch(key)
+                {
+                    case "ConversionRatio":
+                        return ConversionRatio.ToString();
+                    case "Name":
+                        return Name;
+                    case "RawValue":
+                        return RawValue.ToString();
+                    case "RawVelocity":
+                        return RawVelocity.ToString();
+                    case "SensorOffset":
+                        return SensorOffset.ToString();
+                    case "Value":
+                        return Value.ToString();
+                    case "Velocity":
+                        return Velocity.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch(key)
+                {
+                    case "ConversionRatio":
+                        ConversionRatio = SafeCastDouble(value);
+                        break;
+                    case "SensorOffset":
+                        SensorOffset = SafeCastDouble(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         public void SetCANTalon(CANTalon canTalon)
         {
             _quadEncoderModel = canTalon.QuadEncoder;

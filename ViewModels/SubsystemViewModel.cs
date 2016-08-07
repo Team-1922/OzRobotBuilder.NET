@@ -14,11 +14,11 @@ namespace Team1922.MVVM.ViewModels
         
         public SubsystemViewModel()
         {
-            _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider>("PWM Outputs");
-            _analogInputProviders = new CompoundProviderList<IAnalogInputProvider>("Analog Inputs");
-            _quadEncoderProviders = new CompoundProviderList<IQuadEncoderProvider>("Quadrature Encoder");
-            _relayOutputProviders = new CompoundProviderList<IRelayOutputProvider>("Relay Outputs");
-            _canTalonProviders = new CompoundProviderList<ICANTalonProvider>("CAN Talons");
+            _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider>("PWMOutputs");
+            _analogInputProviders = new CompoundProviderList<IAnalogInputProvider>("AnalogInputs");
+            _quadEncoderProviders = new CompoundProviderList<IQuadEncoderProvider>("QuadEncoders");
+            _relayOutputProviders = new CompoundProviderList<IRelayOutputProvider>("RelayOutputs");
+            _canTalonProviders = new CompoundProviderList<ICANTalonProvider>("CANTalons");
         }
 
         public void SetSubsystem(Subsystem subsystem)

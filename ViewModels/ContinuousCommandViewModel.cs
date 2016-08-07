@@ -42,6 +42,19 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public void SetContinuousCommand(ContinuousCommand continuousCommand)
         {
             _commandModel = continuousCommand;

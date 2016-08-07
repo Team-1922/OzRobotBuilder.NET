@@ -288,6 +288,81 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string this[string key]
+        {
+            get
+            {
+                switch (key)
+                {
+                    case "AccumulatorCenter":
+                        return AccumulatorCenter.ToString();
+                    case "AccumulatorCount":
+                        return AccumulatorCount.ToString();
+                    case "AccumulatorDeadband":
+                        return AccumulatorDeadband.ToString();
+                    case "AccumulatorValue":
+                        return AccumulatorValue.ToString();
+                    case "AverageBits":
+                        return AverageBits.ToString();
+                    case "AverageValue":
+                        return AverageValue.ToString();
+                    case "ConversionRatio":
+                        return ConversionRatio.ToString();
+                    case "ID":
+                        return ID.ToString();
+                    case "Name":
+                        return Name.ToString();
+                    case "OversampleBits":
+                        return OversampleBits.ToString();
+                    case "RawAccumulatorValue":
+                        return RawAccumulatorValue.ToString();
+                    case "RawAverageValue":
+                        return RawAverageValue.ToString();
+                    case "RawValue":
+                        return RawValue.ToString();
+                    case "SensorOffset":
+                        return SensorOffset.ToString();
+                    case "Value":
+                        return Value.ToString();
+                    default:
+                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                }
+            }
+
+            set
+            {
+                switch (key)
+                {
+                    case "AccumulatorCenter":
+                        AccumulatorCenter = SafeCastInt(value);
+                        break;
+                    case "AccumulatorDeadband":
+                        AccumulatorDeadband = SafeCastInt(value);
+                        break;
+                    case "AverageBits":
+                        AverageBits = SafeCastInt(value);
+                        break;
+                    case "ConversionRatio":
+                        ConversionRatio = SafeCastDouble(value);
+                        break;
+                    case "ID":
+                        ID = SafeCastInt(value);
+                        break;
+                    case "Name":
+                        Name = value;
+                        break;
+                    case "OversampleBits":
+                        OversampleBits = SafeCastInt(value);
+                        break;
+                    case "SensorOffset":
+                        SensorOffset = SafeCastDouble(value);
+                        break;
+                    default:
+                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+                }
+            }
+        }
+
         /// <summary>
         /// Resets the hardware analog input accumulator
         /// </summary>
