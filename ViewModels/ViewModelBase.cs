@@ -50,7 +50,7 @@ namespace Team1922.MVVM.ViewModels
     /// This wraps the <see cref="BindableBase"/>, and the ability to access values based on a string key along
     /// with enumerate through it with read AND write access to the value
     /// </summary>
-    public abstract class ViewModelBase : BindableBase, IDataErrorInfo
+    public abstract class ViewModelBase : BindableBase
     {
         private List<string> _keys = new List<string>();
         VMKeyValueList _keyValueList = new VMKeyValueList();
