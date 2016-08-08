@@ -16,7 +16,7 @@ namespace Team1922.MVVM.ViewModels
         /// This is overriden to only give some values if the other values have a certain state
         /// </summary>
         /// <returns></returns>
-        protected virtual List<string> GetOverrideKeys()
+        protected override List<string> GetOverrideKeys()
         {
             var ret = new List<string>() { "Name", "Type", "Value" };
             if (Type == EventTargetType.ModifyValue)
