@@ -20,16 +20,10 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         string Name { get; }
         /// <summary>
-        /// This represents all of the properties the provider has so it can be easily accessable to a 
-        /// key,value user-interface feature
+        /// Gives read and write access to this provider's properties
         /// </summary>
-        //IReadOnlyDictionary<string,string> Properties { get; }
-        /// <summary>
-        /// This essentially is the setter for the <see cref="Properties"/> property;
-        /// NOTE: this is not required to work in a hierarchial mannor
-        /// </summary>
-        /// <param name="key">the name of the property to set</param>
-        /// <param name="value">the value of the property to set</param>
-        //void SetProperty(string key, string value);
+        /// <param name="key">the name of the property to update</param>
+        /// <returns>the value of the property</returns>
+        string this[string key] { get; set; }
     }
 }

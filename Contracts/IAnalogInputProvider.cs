@@ -17,10 +17,6 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         int ID { get; set; }
         /// <summary>
-        /// The Name property of the model
-        /// </summary>
-        string Name { get; set; }
-        /// <summary>
         /// The AccumulatorCenter property of the model
         /// </summary>
         int AccumulatorCenter { get; set; }

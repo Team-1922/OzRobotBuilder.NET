@@ -7,7 +7,7 @@ namespace Team1922.MVVM.Contracts
 {
     /// <summary>
     /// The special parts needed for quadrature encoders
-    /// NOTE: <see cref="IIOService.Value"/> returns native encoder units
+    /// NOTE: <see cref="IInputService.Value"/> returns native encoder units
     /// </summary>
     public interface IQuadEncoderIOService : IInputService
     {
