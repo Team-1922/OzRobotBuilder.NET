@@ -219,7 +219,17 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = _canTalonModel.ForwardSoftLimit;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ForwardSoftLimit = value);
+                switch(FeedbackDevice) //TODO: this might need some refining
+                {
+                    case CANTalonFeedbackDevice.AnalogEncoder:
+                    case CANTalonFeedbackDevice.AnalogPotentiometer:
+                        IOService.Instance.CANTalons[ID].ForwardSoftLimit = (value - AnalogInput.SensorOffset) / AnalogInput.ConversionRatio;
+                        break;
+                    default:
+                        IOService.Instance.CANTalons[ID].ForwardSoftLimit = (value - QuadEncoder.SensorOffset) / QuadEncoder.ConversionRatio;
+                        break;
+                }
+                SetProperty(ref temp, value);
                 _canTalonModel.ForwardSoftLimit = temp;
             }
         }
@@ -453,7 +463,17 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = _canTalonModel.ReverseSoftLimit;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseSoftLimit = value);
+                switch (FeedbackDevice) //TODO: this might need some refining
+                {
+                    case CANTalonFeedbackDevice.AnalogEncoder:
+                    case CANTalonFeedbackDevice.AnalogPotentiometer:
+                        IOService.Instance.CANTalons[ID].ReverseSoftLimit = (value - AnalogInput.SensorOffset) / AnalogInput.ConversionRatio;
+                        break;
+                    default:
+                        IOService.Instance.CANTalons[ID].ReverseSoftLimit = (value - QuadEncoder.SensorOffset) / QuadEncoder.ConversionRatio;
+                        break;
+                }
+                SetProperty(ref temp, value);
                 _canTalonModel.ReverseSoftLimit = temp;
             }
         }
