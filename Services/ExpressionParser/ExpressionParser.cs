@@ -26,35 +26,51 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 _binaryOperation.Add(operation);
             }
         }
-
-        //static Regex _numbers = new Regex("^[0-9]$");
+        
+        /// <summary>
+        /// The operations which are allowed to be in the format "4+5"
+        /// </summary>
         static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^)$");
+        /// <summary>
+        /// Converts text at the given position up to the next special operation in <see cref="_specialOps"/>
+        /// </summary>
+        /// <param name="expression">the expression to loop through</param>
+        /// <param name="i">the current index of <paramref name="expression"/></param>
+        /// <returns>a node representing the operand</returns>
         private ExpressionNode GetOperand(string expression, ref int i)
         {
-            //is this a group?
+            //is this a sub-group
             if (expression[i] == '(')
             {
+                //if so, take this subgroup, and recurse
                 int begin = ++i;
                 while (expression[i] != ')') ++i;
 
                 //increment once at the end to make sure the next character is at the index location
                 i++;
-
+                
                 return Group(expression.Substring(begin, i - begin - 1));
             }
             else
             {
-                //keep going until the next operation
+                //if this is not a new sub-group, just loop until the next operand
                 int begin = i;
                 while (i < expression.Length && !_specialOps.IsMatch($"{expression[i]}")) ++i;
                 return new ExpressionToken(double.Parse(expression.Substring(begin, i - begin)));
             }
         }
+        /// <summary>
+        /// Retrieves a binary operation with the given text-identifier
+        /// </summary>
+        /// <param name="op">the name of this operation, <see cref="IOperation.Name"/></param>
+        /// <returns>the operation represented with <paramref name="op"/></returns>
         private BinaryOperation GetBinaryOperation(string op)
         {
             //if there is NO space between the two elements, that means multiplication (i.e. two touching parentheses)
             if (op == "")
                 return _binaryOperation[2];//this should be multiplication
+
+            //go through each binary operation and check if the string properly represents it
             foreach(var operation in _binaryOperation)
             {
                 if (operation.Name == op)
@@ -63,25 +79,26 @@ namespace Team1922.MVVM.Services.ExpressionParser
             return null;
         }
         /// <summary>
-        /// converts expression into LISP-style expression
+        /// converts string expression into expression tree
         /// </summary>
         /// <param name="expression">the expression to convert</param>
         /// <returns>the converted expression</returns>
         private ExpressionNode Group(string expression)
         {
+            //create the root node
             ExpressionNode tree = new ExpressionNode();
-            string ret = "";
-            //TODO: it might be better to directly convert this into a tree instead of frankensteining the LISP-style insto string first
-            //go through the string and convert into LISP-style operations
+
+            //whether this is the first scan-cycle
             bool first = true;
             for (int i = 0; i < expression.Length; ++i)
             {
+                //On the first scan, get the left-hand operand right-out
                 if(first)
                 {
                     //get the left operand
                     tree.Children.Add(GetOperand(expression, ref i));
 
-                    //this keeps groups with ONLY a single parenthetical expression from making problems
+                    //this keeps groups with ONLY a single parenthetical expression from throwing exceptions
                     if (i >= expression.Length)
                         return tree.Children.First();
                 }
@@ -90,35 +107,50 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 int opBegin = i;
                 while (_specialOps.IsMatch($"{expression[i]}")) ++i;
                 string op = expression.Substring(opBegin, i - opBegin);
-                //if (op == "")
-                //    ++i;//this fixes an issue where an uninitialized
+
+                //Get the current operation
+                var currentOperation = GetBinaryOperation(op);
+                if (currentOperation == null)
+                    throw new Exception($"Failed to Retrieve Valid Binary Operation For Operation \"{op}\"");
+
+                //get the right operend
+                var rightOperand = GetOperand(expression, ref i);
 
                 if (first)
                 {
+                    //update the first variable
                     first = false;
-                    tree.Operation = GetBinaryOperation(op);
-                    if (null == tree.Operation)
-                        throw new Exception();//TODO: make this more elegant
 
-                    //get the right operend
-                    tree.Children.Add(GetOperand(expression, ref i));
+                    //on the first go-through, set the current operation to the tree's operation becuase it has not yet been set
+                    tree.Operation = currentOperation;
+
+                    //on the first go-through, set the right-hand operand to the tree's right-hand operand because it has not yet been set
+                    tree.Children.Add(rightOperand);
                     continue;
                 }
 
+                //create this next operation node
                 var thisNode = new ExpressionNode();
-                thisNode.Operation = GetBinaryOperation(op);
+                thisNode.Operation = currentOperation;
+
                 //this priority is MORE important than the previous one
-                if ((thisNode.Operation as BinaryOperation).Priority < (tree.Operation as BinaryOperation).Priority)
+                if (currentOperation.Priority < (tree.Operation as BinaryOperation).Priority)
                 {
-                    //store the previous right operation as the left operand of the current operation
+                    //steal the previous operation's right-hand operand
                     thisNode.Children.Add(tree.Children[1]);
+                    
+                    //insert this node as the right-hand of the previous operator
                     tree.Children[1] = thisNode;
                 }
                 else//this priority is NOT more important than the previous one
                 {
+                    //Make the left-hand operator the previous tree
                     thisNode.Children.Add(tree);
+
+                    //set the tree to this node, becuase it is now the last operation to execute
                     tree = thisNode;
                 }
+
                 //the next operand is the new right operand
                 thisNode.Children.Add(GetOperand(expression, ref i));
             }
