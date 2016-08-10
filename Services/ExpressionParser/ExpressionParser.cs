@@ -36,7 +36,11 @@ namespace Team1922.MVVM.Services.ExpressionParser
             {
                 int begin = ++i;
                 while (expression[i] != ')') ++i;
-                return Group(expression.Substring(begin, i - begin));
+
+                //increment once at the end to make sure the next character is at the index location
+                i++;
+
+                return Group(expression.Substring(begin, i - begin - 1));
             }
             else
             {
@@ -48,6 +52,9 @@ namespace Team1922.MVVM.Services.ExpressionParser
         }
         private BinaryOperation GetBinaryOperation(string op)
         {
+            //if there is NO space between the two elements, that means multiplication (i.e. two touching parentheses)
+            if (op == "")
+                return _binaryOperation[2];//this should be multiplication
             foreach(var operation in _binaryOperation)
             {
                 if (operation.Name == op)
@@ -75,7 +82,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                     tree.Children.Add(GetOperand(expression, ref i));
 
                     //this keeps groups with ONLY a single parenthetical expression from making problems
-                    if (i >= expression.Length || expression[i] == ')')
+                    if (i >= expression.Length)
                         return tree.Children.First();
                 }
 
@@ -83,7 +90,8 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 int opBegin = i;
                 while (_specialOps.IsMatch($"{expression[i]}")) ++i;
                 string op = expression.Substring(opBegin, i - opBegin);
-
+                //if (op == "")
+                //    ++i;//this fixes an issue where an uninitialized
 
                 if (first)
                 {
@@ -114,11 +122,6 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 //the next operand is the new right operand
                 thisNode.Children.Add(GetOperand(expression, ref i));
             }
-
-            //now that all of the non-numbers are received, add grouping symbols around the important ones
-
-
-            //this is a bit of a special case; add multiplication wherever a close and open parenthesis meet
 
             return tree;
         }
