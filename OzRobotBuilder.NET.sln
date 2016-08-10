@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OzRobotBuilder.NET", "OzRob
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ns1.5", "ns1.5", "{183F3E1E-59CB-4250-8E50-213FE0CECC3F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{CF81C2F8-067D-477D-8896-82736F22CF3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AppStore|Any CPU = AppStore|Any CPU
