@@ -25,13 +25,11 @@ namespace Team1922.MVVM.Contracts
         /// <returns>the success of the conversion</returns>
         bool TryParseExpression(string expression, out IExpression compiledExpression);
         /// <summary>
-        /// attempts to parse the given string into a compiled expression
+        /// Parses a given string into a compiled expression, throws exception upon error
         /// </summary>
-        /// <typeparam name="T">the return type of the expression</typeparam>
-        /// <param name="expression">the string expression</param>
-        /// <param name="compiledExpression">the compiled expression; null if failed</param>
-        /// <returns>the success of the conversion</returns>
-        bool TryParseExpression<T>(string expression, out IExpression<T> compiledExpression);
+        /// <param name="expression">the expression to parse</param>
+        /// <returns>a compiled expression</returns>
+        IExpression ParseExpression(string expression);
         /// <summary>
         /// Checks if the string expression is valid
         /// </summary>

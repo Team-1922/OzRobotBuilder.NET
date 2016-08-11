@@ -22,18 +22,4 @@ namespace Team1922.MVVM.Contracts
         /// <returns>the string representation of this expression</returns>
         string GetString();
     }
-
-    /// <summary>
-    /// extends the compiled expression with a given return type
-    /// </summary>
-    /// <typeparam name="RetType">the return type of this expression</typeparam>
-    public interface IExpression<RetType> : IExpression
-    {
-        /// <summary>
-        /// Executes this expression
-        /// </summary>
-        /// <returns>the result of the expression</returns>
-        RetType Evaluate();
-    }
-
 }

@@ -25,7 +25,9 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 _binaryOperation.Add(operation);
             }
         }
-        
+
+        #region Private Helper Methods
+
         /// <summary>
         /// The operations which are allowed to be in the format "4+5"
         /// </summary>
@@ -167,6 +169,11 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
             return ret;
         }
+        /// <summary>
+        /// Looks up the given operation name in the registered list
+        /// </summary>
+        /// <param name="opName">the name of the operation to find</param>
+        /// <returns>the operation with the given name; null if it does not exist</returns>
         private IOperation GetOperation(string opName)
         {
             foreach (var operation in _operations)
@@ -274,20 +281,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
             return tree;
         }
-
-        private ExpressionNode ParseExpression(string expression)
-        {
-            //start by removing all of the spaces
-            string condensed = new string((from ch in expression.Trim() where ch != ' ' select ch).ToArray());
-
-            //then remove the parenthesis at the beginning and end which do not do anything (this keep
-            //int parenthesesCount = 0;
-            //for(int i = 0; i < condensed.Length - parenthesesCount; ++i)
-            //    if (condensed[i] == '(' && condensed[condensed.Length - i - 1] == ')')
-            //        parenthesesCount++;
-            //return Group(condensed.Substring(parenthesesCount, condensed.Length - 2*parenthesesCount));
-            return Group(condensed);
-        }
+        #endregion
 
         #region IExpressionParser Methods
         public bool AssertExpression(IExpression expression)
@@ -311,7 +305,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         {
             try
             {
-                compiledExpression = new Expression(expression, ParseExpression(expression));
+                compiledExpression = ParseExpression(expression);
                 return true;
             }
             catch(Exception)
@@ -320,11 +314,16 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 return false;
             }
         }
-
-        public bool TryParseExpression<T>(string expression, out IExpression<T> compiledExpression)
+        
+        public IExpression ParseExpression(string expression)
         {
-            throw new NotImplementedException();
+            //start by removing all of the spaces
+            string condensed = new string((from ch in expression.Trim() where ch != ' ' select ch).ToArray());
+            
+            //return the grouped expression
+            return new Expression(expression, Group(condensed));
         }
+        
         #endregion
     }
 }
