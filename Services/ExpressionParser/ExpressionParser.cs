@@ -207,7 +207,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
             //whether this is the first scan-cycle
             bool first = true;
-            for (int i = 0; i < expression.Length; ++i)
+            for (int i = 0; i < expression.Length;)
             {
                 //On the first scan, get the left-hand operand right-out
                 if(first)
@@ -269,7 +269,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 }
 
                 //the next operand is the new right operand
-                thisNode.Children.Add(GetOperand(expression, ref i));
+                thisNode.Children.Add(rightOperand);
             }
 
             return tree;
