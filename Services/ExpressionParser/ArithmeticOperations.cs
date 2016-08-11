@@ -20,6 +20,30 @@ namespace Team1922.MVVM.Services.ExpressionParser
             new Power() };
     }
 
+    internal class ClampOperation : IOperation
+    {
+        public string Name
+        {
+            get
+            {
+                return "clamp";
+            }
+        }
+
+        public uint ParamCount
+        {
+            get
+            {
+                return 3;
+            }
+        }
+
+        public double Perform(List<double> param)
+        {
+            return Math.Min(Math.Max(param[0], param[1]),param[2]);
+        }
+    }
+
     #region Operations
     internal enum OperationPriority
     {

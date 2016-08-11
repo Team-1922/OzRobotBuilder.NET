@@ -22,7 +22,6 @@ namespace Team1922.MVVM.Services.ExpressionParser
         {
             foreach(var operation in ArithmeticOperations.Operations)
             {
-                RegisterOperation(operation);
                 _binaryOperation.Add(operation);
             }
         }
@@ -31,6 +30,10 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// The operations which are allowed to be in the format "4+5"
         /// </summary>
         static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^)$");
+        /// <summary>
+        /// The regular expression for valid operation names
+        /// </summary>
+        static Regex _validOpName = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$");
         /// <summary>
         /// Converts text at the given position up to the next special operation in <see cref="_specialOps"/>
         /// </summary>
@@ -43,13 +46,45 @@ namespace Team1922.MVVM.Services.ExpressionParser
             if (expression[i] == '(')
             {
                 //if so, take this subgroup, and recurse
-                int begin = ++i;
-                while (expression[i] != ')') ++i;
-
-                //increment once at the end to make sure the next character is at the index location
-                i++;
+                var returnExpression = GetParentheticalStatement(expression, ref i);
                 
-                return Group(expression.Substring(begin, i - begin - 1));
+                return Group(returnExpression);
+            }
+            else if(_validOpName.IsMatch($"{expression[i]}"))
+            {
+                //this means it is a non-binary operation (user added or otherwise)
+                int begin = i;
+                
+                //continue until we reach the open parenthesis
+                while (expression[i] != '(') ++i;
+
+                //get the operation from this string
+                var operation = GetOperation(expression.Substring(begin, i - begin));
+
+                //get the list of parameters
+                string parameters = GetParentheticalStatement(expression, ref i);
+
+                //split the string based on TOP LEVEL COMMAS ONLY
+                //  This means the commas inside other parenthetical expressions do not count
+                var paramList = GetParamList(parameters);
+
+                //make sure the correct number of parameters were passed
+                if(paramList.Count != operation.ParamCount)
+                    throw new Exception($"Improper Number of Parameters Passed to \"{operation.Name}\"");
+
+                //construct the expression node
+                var node = new ExpressionNode();
+                node.Operation = operation;
+
+                //get the children by recursing this method
+                int j = 0;
+                foreach (var param in paramList)
+                {
+                    j = 0;
+                    node.Children.Add(GetOperand(param, ref j));
+                    Console.WriteLine(param);
+                }
+                return node;
             }
             else
             {
@@ -58,6 +93,88 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 while (i < expression.Length && !_specialOps.IsMatch($"{expression[i]}")) ++i;
                 return new ExpressionToken(double.Parse(expression.Substring(begin, i - begin)));
             }
+        }
+        /// <summary>
+        /// Gets the next parenthetical statement in a string
+        /// </summary>
+        /// <param name="statement">the string</param>
+        /// <param name="i">the index of the string to start</param>
+        /// <returns>the next parenthetical statement</returns>
+        private string GetParentheticalStatement(string statement, ref int i)
+        {
+            //increment once at the beginning to remove the open parenthesis
+            int begin = ++i;
+            int level = 0;
+            try
+            {
+                //since there will be parentheses within this operation, make sure to get the whole string
+                //  once "level" reaches -1, this means the closing parenthesis is reached
+                while (level != -1)
+                {
+                    var ch = statement[i];
+                    if (ch == '(')
+                        level++;
+                    else if (ch == ')')
+                        level--;
+                    
+                    //increment at the end to go past the end parenthesis
+                    ++i;
+                }
+            }
+            catch (Exception)
+            {
+                //this occurs if a parenthesis was opened but not closed properly
+                throw new Exception("Parenthetical Statement Not Properly Closed");
+            }
+            return statement.Substring(begin, i - begin - 1);
+        }
+        /// <summary>
+        /// Converts string representation of parameters into a list of the parameters
+        /// </summary>
+        /// <param name="param">the comma-delimited parameters</param>
+        /// <returns>a list representation of these parameters</returns>
+        private List<string> GetParamList(string param)
+        {
+            List<string> ret = new List<string>();
+            int level = 0;
+            int begin = 0;
+            for(int i = 0; i < param.Length; ++i)
+            {
+                var ch = param[i];
+
+                //prevent the commas inside parentheses from counting
+                if (ch == '(')
+                    level++;
+                else if (ch == ')')
+                    level--;
+                if(level == 0)
+                {
+                    if (ch == ',')
+                    {
+                        //surround the parameter with parentheses so the GetOperand method knows that it is part of one group
+                        ret.Add($"({param.Substring(begin, i - begin)})");
+                        begin = i + 1;
+                    }
+                }
+            }
+
+            //add the last parameter
+            if(param.Length > 1)
+            {
+                //surround the parameter with parentheses so the GetOperand method knows that it is part of one group
+                ret.Add($"({param.Substring(begin, param.Length - begin)})");
+            }
+
+            return ret;
+        }
+        private IOperation GetOperation(string opName)
+        {
+            foreach (var operation in _operations)
+            {
+                if (operation.Name.ToLowerInvariant() == opName.ToLowerInvariant())
+                    return operation;
+            }
+            return null;
         }
         /// <summary>
         /// Retrieves a binary operation with the given text-identifier
@@ -185,6 +302,8 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
         public void RegisterOperation(IOperation operation)
         {
+            if (!_validOpName.IsMatch(operation.Name))
+                throw new ArgumentException($"Invalid Operation Name: \"{operation.Name}\"");
             _operations.Add(operation);
         }
 
