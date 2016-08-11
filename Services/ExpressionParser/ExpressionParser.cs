@@ -181,26 +181,27 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 if (operation.Name.ToLowerInvariant() == opName.ToLowerInvariant())
                     return operation;
             }
-            return null;
+            throw new ArgumentException($"Operation: \"{opName}\" Is Invalid");
         }
         /// <summary>
         /// Retrieves a binary operation with the given text-identifier
         /// </summary>
-        /// <param name="op">the name of this operation, <see cref="IOperation.Name"/></param>
+        /// <param name="opName">the name of this operation, <see cref="IOperation.Name"/></param>
         /// <returns>the operation represented with <paramref name="op"/></returns>
-        private BinaryOperation GetBinaryOperation(string op)
+        private BinaryOperation GetBinaryOperation(string opName)
         {
             //if there is NO space between the two elements, that means multiplication (i.e. two touching parentheses)
-            if (op == "")
+            if (opName == "")
                 return _binaryOperation[2];//this should be multiplication
 
             //go through each binary operation and check if the string properly represents it
             foreach(var operation in _binaryOperation)
             {
-                if (operation.Name == op)
+                if (operation.Name == opName)
                     return operation;
             }
-            return null;
+
+            throw new ArgumentException($"Binary Operation: \"{opName}\" Is Invalid");
         }
         /// <summary>
         /// converts string expression into expression tree
@@ -234,8 +235,6 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
                 //Get the current operation
                 var currentOperation = GetBinaryOperation(op);
-                if (currentOperation == null)
-                    throw new Exception($"Failed to Retrieve Valid Binary Operation For Operation \"{op}\"");
 
                 //get the right operend
                 var rightOperand = GetOperand(expression, ref i);
