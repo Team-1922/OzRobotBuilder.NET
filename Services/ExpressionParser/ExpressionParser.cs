@@ -320,7 +320,22 @@ namespace Team1922.MVVM.Services.ExpressionParser
             string condensed = new string((from ch in expression.Trim() where ch != ' ' select ch).ToArray());
             
             //return the grouped expression
-            return new Expression(expression, Group(condensed));
+            try
+            {
+                return new Expression(expression, Group(condensed));
+            }
+            catch(FormatException)
+            {
+                throw new ArgumentException("Expression Contained Improperly Formatted Numbers");
+            }
+            catch(IndexOutOfRangeException)
+            {
+                throw new ArgumentException("Expression Contained Malformed Syntax");
+            }
+            catch(Exception)
+            {
+                throw;
+            }
         }
         
         #endregion
