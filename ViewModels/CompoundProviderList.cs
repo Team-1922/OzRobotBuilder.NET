@@ -39,24 +39,22 @@ namespace Team1922.MVVM.ViewModels
             }
             throw new Exception();
         }
-        public override string this[string key]
-        {
-            get
-            {
-                try
-                {
-                    return FindByName(key).ToString();
-                }
-                catch(Exception)
-                {
-                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-                }
-            }
 
-            set
+        protected override string GetValue(string key)
+        {
+            try
             {
-                throw new ArgumentException($"\"{key}\" is Read-Only");
+                return FindByName(key).ToString();
             }
+            catch(Exception)
+            {
+                throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            }
+        }
+
+        protected override void SetValue(string key, string value)
+        {
+            throw new ArgumentException($"\"{key}\" is Read-Only");
         }
 
         public IEnumerable<IProvider> Children

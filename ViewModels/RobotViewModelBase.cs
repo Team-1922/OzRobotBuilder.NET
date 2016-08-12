@@ -250,47 +250,45 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public override string this[string key]
+        protected override string GetValue(string key)
         {
-            get
+            switch(key)
             {
-                switch(key)
-                {
-                    case "AnalogInputSampleRate":
-                        return AnalogInputSampleRate.ToString();
-                    case "ContinuousCommands":
-                        return ContinuousCommands.ToString();
-                    case "Joysticks":
-                        return Joysticks.ToString();
-                    case "Name":
-                        return Name;
-                    case "OnChangeEventHandlers":
-                        return OnChangeEventHandlers.ToString();
-                    case "OnWithinRangeEventHandlers":
-                        return OnWithinRangeEventHandlers.ToString();
-                    case "Subsystems":
-                        return Subsystems.ToString();
-                    case "TeamNumber":
-                        return TeamNumber.ToString();
-                    default:
-                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-                }
+                case "AnalogInputSampleRate":
+                    return AnalogInputSampleRate.ToString();
+                case "ContinuousCommands":
+                    return ContinuousCommands.ToString();
+                case "Joysticks":
+                    return Joysticks.ToString();
+                case "Name":
+                    return Name;
+                case "OnChangeEventHandlers":
+                    return OnChangeEventHandlers.ToString();
+                case "OnWithinRangeEventHandlers":
+                    return OnWithinRangeEventHandlers.ToString();
+                case "Subsystems":
+                    return Subsystems.ToString();
+                case "TeamNumber":
+                    return TeamNumber.ToString();
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
+        }
 
-            set
+        protected override void SetValue(string key, string value)
+        {
+            switch (key)
             {
-                switch (key)
-                {
-                    case "AnalogInputSampleRate":
-                        AnalogInputSampleRate = SafeCastInt(value);
-                        break;
-                    case "TeamNumber":
-                        TeamNumber = SafeCastInt(value);
-                        break;
-                    default:
-                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-                }
+                case "AnalogInputSampleRate":
+                    AnalogInputSampleRate = SafeCastInt(value);
+                    break;
+                case "TeamNumber":
+                    TeamNumber = SafeCastInt(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
+            
         }
 
         #region Private Fields

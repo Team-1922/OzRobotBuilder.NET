@@ -123,10 +123,8 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public override string this[string key]
+        protected override string GetValue(string key)
         {
-            get
-            {
                 switch (key)
                 {
                     case "Name":
@@ -148,37 +146,37 @@ namespace Team1922.MVVM.ViewModels
                     default:
                         throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
                 }
-            }
+        }
 
-            set
+        protected override void SetValue(string key, string value)
+        {
+            switch (key)
             {
-                switch (key)
-                {
-                    case "Continuous":
-                        Continuous = SafeCastBool(value);
-                        break;
-                    case "CycleDuration":
-                        CycleDuration = SafeCastDouble(value);
-                        break;
-                    case "P":
-                        P = SafeCastDouble(value);
-                        break;
-                    case "I":
-                        I = SafeCastDouble(value);
-                        break;
-                    case "D":
-                        D = SafeCastDouble(value);
-                        break;
-                    case "F":
-                        F = SafeCastDouble(value);
-                        break;
-                    case "Tolerance":
-                        Tolerance = SafeCastDouble(value);
-                        break;
-                    default:
-                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-                }
+                case "Continuous":
+                    Continuous = SafeCastBool(value);
+                    break;
+                case "CycleDuration":
+                    CycleDuration = SafeCastDouble(value);
+                    break;
+                case "P":
+                    P = SafeCastDouble(value);
+                    break;
+                case "I":
+                    I = SafeCastDouble(value);
+                    break;
+                case "D":
+                    D = SafeCastDouble(value);
+                    break;
+                case "F":
+                    F = SafeCastDouble(value);
+                    break;
+                case "Tolerance":
+                    Tolerance = SafeCastDouble(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
+            
         }
 
         public void SetPIDController(PIDControllerSoftware pidController)

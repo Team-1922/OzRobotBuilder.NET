@@ -155,49 +155,47 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public override string this[string key]
+        protected override string GetValue(string key)
         {
-            get
+            switch(key)
             {
-                switch(key)
-                {
-                    case "AnalogInputs":
-                        return AnalogInputs.ToString();
-                    case "CANTalons":
-                        return CANTalons.ToString();
-                    case "ID":
-                        return ID.ToString();
-                    case "Name":
-                        return Name;
-                    case "PIDController":
-                        return PIDController.ToString();
-                    case "PWMOutputs":
-                        return PWMOutputs.ToString();
-                    case "QuadEncoders":
-                        return QuadEncoders.ToString();
-                    case "RelayOutputs":
-                        return RelayOutputs.ToString();
-                    case "SoftwarePIDEnabled":
-                        return SoftwarePIDEnabled.ToString();
-                    default:
-                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-                }
+                case "AnalogInputs":
+                    return AnalogInputs.ToString();
+                case "CANTalons":
+                    return CANTalons.ToString();
+                case "ID":
+                    return ID.ToString();
+                case "Name":
+                    return Name;
+                case "PIDController":
+                    return PIDController.ToString();
+                case "PWMOutputs":
+                    return PWMOutputs.ToString();
+                case "QuadEncoders":
+                    return QuadEncoders.ToString();
+                case "RelayOutputs":
+                    return RelayOutputs.ToString();
+                case "SoftwarePIDEnabled":
+                    return SoftwarePIDEnabled.ToString();
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
+        }
 
-            set
+        protected override void SetValue(string key, string value)
+        {
+            switch(key)
             {
-                switch(key)
-                {
-                    case "Name":
-                        Name = value;
-                        break;
-                    case "SoftwarePIDEnabled":
-                        SoftwarePIDEnabled = SafeCastBool(value);
-                        break;
-                    default:
-                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-                }
+                case "Name":
+                    Name = value;
+                    break;
+                case "SoftwarePIDEnabled":
+                    SoftwarePIDEnabled = SafeCastBool(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
+            
         }
 
         #region Private Fields

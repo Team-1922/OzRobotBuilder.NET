@@ -44,38 +44,36 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public override string this[string key]
+        protected override string GetValue(string key)
         {
-            get
+            string ret;
+            if (TryGetTargetValue(key, out ret))
+                return ret;
+
+            switch(key)
             {
-                string ret;
-                if (TryGetTargetValue(key, out ret))
-                    return ret;
-
-                switch(key)
-                {
-                    case "Name":
-                        return Name;
-                    default:
-                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-                }
-            }
-
-            set
-            {
-                if (TrySetTargetValue(key, value))
-                    return;
-
-                switch(key)
-                {
-                    case "Name":
-                        Name = value;
-                        break;
-                    default:
-                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-                }
+                case "Name":
+                    return Name;
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
+
+        protected override void SetValue(string key, string value)
+        {
+            if (TrySetTargetValue(key, value))
+                return;
+
+            switch(key)
+            {
+                case "Name":
+                    Name = value;
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+            }
+        }
+        
 
         public void SetContinuousCommand(ContinuousCommand continuousCommand)
         {
