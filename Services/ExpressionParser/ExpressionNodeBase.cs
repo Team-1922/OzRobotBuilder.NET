@@ -13,7 +13,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <summary>
         /// one child branch of the binary tree (left-hand operand)
         /// </summary>
-        public List<OperationExpressionNode> Children { get; } = new List<OperationExpressionNode>();
+        public List<ExpressionNodeBase> Children { get; } = new List<ExpressionNodeBase>();
 
         /// <summary>
         /// Returns the result of the evaluated expression

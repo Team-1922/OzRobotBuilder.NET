@@ -47,7 +47,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <param name="expression">the expression to loop through</param>
         /// <param name="i">the current index of <paramref name="expression"/></param>
         /// <returns>a node representing the operand</returns>
-        private OperationExpressionNode GetOperand(string expression, ref int i)
+        private ExpressionNodeBase GetOperand(string expression, ref int i)
         {
             //if this starts with unary "-" operator
             if(expression[i] == '-')
@@ -77,7 +77,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 //get the path within the brackets
                 var path = GetGroupStatement(expression, ref i, '[', ']');
 
-                //TODO: modify the data
+                return new DataAccessExpressionNode(DataAccess.Instance, path);
             }
             else if(_validOpName.IsMatch($"{expression[i]}"))
             {
@@ -237,10 +237,10 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// </summary>
         /// <param name="expression">the expression to convert</param>
         /// <returns>the converted expression</returns>
-        private OperationExpressionNode Group(string expression)
+        private ExpressionNodeBase Group(string expression)
         {
             //create the root node
-            OperationExpressionNode tree = new OperationExpressionNode();
+            ExpressionNodeBase tree = null;
 
             //whether this is the first scan-cycle
             bool first = true;
@@ -280,7 +280,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                     first = false;
 
                     //the first time through with a unary operator is a little bit different, becuase order of operations still takes affect
-                    if (thisNode.Children[0].Operation is UnaryMinus && currentOperation.Priority < OperationPriority.MultDiv)
+                    if ((thisNode.Children[0] as OperationExpressionNode)?.Operation is UnaryMinus && currentOperation.Priority < OperationPriority.MultDiv)
                     {
                         //first set the top-level equal to the unary minus operation          
                         tree = thisNode.Children[0];
@@ -300,7 +300,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 else
                 {
                     //this priority is MORE important than the previous one
-                    if (currentOperation.Priority < (tree.Operation as BinaryOperation).Priority)
+                    if (currentOperation.Priority < (((tree as OperationExpressionNode)?.Operation as BinaryOperation)?.Priority ?? OperationPriority.AddSub))
                     {
                         //steal the previous operation's right-hand operand
                         thisNode.Children.Add(tree.Children[1]);

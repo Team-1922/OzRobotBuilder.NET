@@ -11,7 +11,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
     /// </summary>
     public class DataAccessExpressionNode : ExpressionNodeBase
     {
-        IHierarchialAccess _dataRoot;
+        IDataAccessService _dataRoot;
         string _path;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// </summary>
         /// <param name="dataRoot">that data to access</param>
         /// <param name="path">the location (path) of that data to access</param>
-        public DataAccessExpressionNode(IHierarchialAccess dataRoot, string path)
+        public DataAccessExpressionNode(IDataAccessService dataRoot, string path)
         {
             _dataRoot = dataRoot;
             _path = path;
@@ -32,7 +32,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         public override double Evaluate()
         {
             double ret;
-            if (double.TryParse(_dataRoot[_path], out ret))
+            if (double.TryParse(_dataRoot.DataInstance[_path], out ret))
                 return ret;
             else
                 throw new Exception($"DataAccessExpressionNode({_path}) Does Not Contain Numerical Value!");

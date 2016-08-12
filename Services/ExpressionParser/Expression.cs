@@ -8,9 +8,9 @@ namespace Team1922.MVVM.Services.ExpressionParser
 {
     public class Expression : IExpression
     {
-        OperationExpressionNode _rootNode;
+        ExpressionNodeBase _rootNode;
         string _expressionString;
-        public Expression(string exp, OperationExpressionNode rootNode)
+        public Expression(string exp, ExpressionNodeBase rootNode)
         {
             _expressionString = exp;
             _rootNode = rootNode;
