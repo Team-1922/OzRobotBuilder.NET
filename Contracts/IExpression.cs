@@ -15,7 +15,7 @@ namespace Team1922.MVVM.Contracts
         /// executes this expression
         /// </summary>
         /// <returns>the result of the expression</returns>
-        double Evaluate();
+        decimal Evaluate();
         /// <summary>
         /// Gets the string representation of this expression
         /// </summary>

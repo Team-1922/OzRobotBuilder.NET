@@ -14,16 +14,28 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <summary>
         /// this token's value
         /// </summary>
-        public double Value { get; set; }
+        public double Value
+        {
+            get
+            {
+                return (double)_value;
+            }
+
+            set
+            {
+                _value = (decimal)value;
+            }
+        }
+        private decimal _value;
 
         public ExpressionToken(double value)
         {
             Value = value;
         }
 
-        public override double Evaluate()
+        public override decimal Evaluate()
         {
-            return Value;
+            return _value;
         }
     }
 }
