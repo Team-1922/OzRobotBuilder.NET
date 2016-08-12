@@ -31,12 +31,6 @@ namespace Team1922.MVVM.Contracts
         /// <returns>a compiled expression</returns>
         IExpression ParseExpression(string expression);
         /// <summary>
-        /// Checks if the string expression is valid
-        /// </summary>
-        /// <param name="expression">the string expression</param>
-        /// <returns>whether this expression is valid</returns>
-        bool IsValidExpression(string expression);
-        /// <summary>
         /// Checks to make sure this expression is still valid if the model changed in a significant way
         /// </summary>
         /// <param name="expression">the expression to check</param>

@@ -338,12 +338,15 @@ namespace Team1922.MVVM.Services.ExpressionParser
         #region IExpressionParser Methods
         public bool AssertExpression(IExpression expression)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool IsValidExpression(string expression)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                expression.Evaluate();
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         public void RegisterOperation(IOperation operation)
