@@ -280,7 +280,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                     first = false;
 
                     //the first time through with a unary operator is a little bit different, becuase order of operations still takes affect
-                    if ((thisNode.Children[0] as OperationExpressionNode)?.Operation is UnaryMinus && currentOperation.Priority < OperationPriority.MultDiv)
+                    if (((thisNode.Children[0] as OperationExpressionNode ?? ThrowNodeException<OperationExpressionNode>())?.Operation is UnaryMinus) && currentOperation.Priority < OperationPriority.MultDiv)
                     {
                         //first set the top-level equal to the unary minus operation          
                         tree = thisNode.Children[0];
@@ -300,7 +300,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 else
                 {
                     //this priority is MORE important than the previous one
-                    if (currentOperation.Priority < (((tree as OperationExpressionNode)?.Operation as BinaryOperation)?.Priority ?? OperationPriority.AddSub))
+                    if (currentOperation.Priority < ((((tree as OperationExpressionNode)?.Operation) as BinaryOperation)?.Priority ?? OperationPriority.GroupingSymbols))
                     {
                         //steal the previous operation's right-hand operand
                         thisNode.Children.Add(tree.Children[1]);
@@ -323,6 +323,15 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
 
             return tree;
+        }
+        /// <summary>
+        /// this is called after using nullpropogation with an invalid cast
+        /// </summary>
+        /// <typeparam name="T">this just makes this method compatable with any context</typeparam>
+        /// <returns>nothing, only throws an exception</returns>
+        private T ThrowNodeException<T>()
+        {
+            throw new Exception("Unsuccessful ExpressionNode Cast!");
         }
         #endregion
 
