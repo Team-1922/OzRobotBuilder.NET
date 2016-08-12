@@ -47,7 +47,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <param name="expression">the expression to loop through</param>
         /// <param name="i">the current index of <paramref name="expression"/></param>
         /// <returns>a node representing the operand</returns>
-        private ExpressionNode GetOperand(string expression, ref int i)
+        private OperationExpressionNode GetOperand(string expression, ref int i)
         {
             //if this starts with unary "-" operator
             if(expression[i] == '-')
@@ -56,7 +56,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 i++;
 
                 //then create an intermediary layer where the multiply-by-negative-one occurs
-                ExpressionNode node = new ExpressionNode();
+                OperationExpressionNode node = new OperationExpressionNode();
                 node.Operation = _unaryMinusOperation;
                 node.Children.Add(new ExpressionToken(0));//this is to get the BinaryOperation class not to complain
                 node.Children.Add(GetOperand(expression, ref i));
@@ -67,9 +67,17 @@ namespace Team1922.MVVM.Services.ExpressionParser
             if (expression[i] == '(')
             {
                 //if so, take this subgroup, and recurse
-                var returnExpression = GetParentheticalStatement(expression, ref i);
+                var returnExpression = GetGroupStatement(expression, ref i);
                 
                 return Group(returnExpression);
+            }
+            //is this data-access?
+            else if(expression[i] == '[')
+            {
+                //get the path within the brackets
+                var path = GetGroupStatement(expression, ref i, '[', ']');
+
+                //TODO: modify the data
             }
             else if(_validOpName.IsMatch($"{expression[i]}"))
             {
@@ -83,7 +91,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 var operation = GetOperation(expression.Substring(begin, i - begin));
 
                 //get the list of parameters
-                string parameters = GetParentheticalStatement(expression, ref i);
+                string parameters = GetGroupStatement(expression, ref i);
 
                 //split the string based on TOP LEVEL COMMAS ONLY
                 //  This means the commas inside other parenthetical expressions do not count
@@ -94,7 +102,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                     throw new Exception($"Improper Number of Parameters Passed to \"{operation.Name}\"");
 
                 //construct the expression node
-                var node = new ExpressionNode();
+                var node = new OperationExpressionNode();
                 node.Operation = operation;
 
                 //get the children by recursing this method
@@ -116,12 +124,14 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
         /// <summary>
-        /// Gets the next parenthetical statement in a string
+        /// Gets the next group statement in a string
         /// </summary>
-        /// <param name="statement">the string</param>
-        /// <param name="i">the index of the string to start</param>
+        /// <param name="statement">the string to look through</param>
+        /// <param name="open">the open-group character (i.e. '(')</param>
+        /// <param name="close">the close-group character (i.e. ')')</param>
+        /// <param name="i">the index of the string to start at</param>
         /// <returns>the next parenthetical statement</returns>
-        private string GetParentheticalStatement(string statement, ref int i)
+        private string GetGroupStatement(string statement, ref int i, char open = '(', char close = ')')
         {
             //increment once at the beginning to remove the open parenthesis
             int begin = ++i;
@@ -133,9 +143,9 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 while (level != -1)
                 {
                     var ch = statement[i];
-                    if (ch == '(')
+                    if (ch == open)
                         level++;
-                    else if (ch == ')')
+                    else if (ch == close)
                         level--;
                     
                     //increment at the end to go past the end parenthesis
@@ -227,17 +237,17 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// </summary>
         /// <param name="expression">the expression to convert</param>
         /// <returns>the converted expression</returns>
-        private ExpressionNode Group(string expression)
+        private OperationExpressionNode Group(string expression)
         {
             //create the root node
-            ExpressionNode tree = new ExpressionNode();
+            OperationExpressionNode tree = new OperationExpressionNode();
 
             //whether this is the first scan-cycle
             bool first = true;
             for (int i = 0; i < expression.Length;)
             {
                 //create this next operation node
-                var thisNode = new ExpressionNode();
+                var thisNode = new OperationExpressionNode();
 
                 //On the first scan, get the left-hand operand right-out
                 if (first)
