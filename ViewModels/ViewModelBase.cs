@@ -51,7 +51,7 @@ namespace Team1922.MVVM.ViewModels
     /// This wraps the <see cref="BindableBase"/>, and the ability to access values based on a string key along
     /// with enumerate through it with read AND write access to the value
     /// </summary>
-    public abstract class ViewModelBase : BindableBase
+    public abstract class ViewModelBase : BindableBase, IHierarchialAccess
     {
         private List<string> _keys = new List<string>();
         VMKeyValueList _keyValueList = new VMKeyValueList();
@@ -71,18 +71,6 @@ namespace Team1922.MVVM.ViewModels
                 _keyValueList.Add(new VMKeyValuePair(key, this));
             }
         }
-        protected virtual List<string> GetOverrideKeys()
-        {
-            return (from x in GetType().GetProperties()
-                where x.Name != "Properties"
-                && x.Name != "Children"
-                && x.Name != "this[string]"
-                && x.Name != "Current"
-                && x.Name != "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
-                && x.Name != "Count"
-                && x.Name != "IsReadOnly"
-                select x.Name).ToList();
-        }
         public List<string> GetKeys()
         {
             return _keys;
@@ -92,6 +80,13 @@ namespace Team1922.MVVM.ViewModels
             return _keyValueList;
         }
 
+        #region IHierarchialAccess Methods
+        /// <summary>
+        /// Hierarchial exception-safe access to data
+        /// </summary>
+        /// <param name="key">the path to the value to read</param>
+        /// <param name="value">the value read from <paramref name="key"/></param>
+        /// <returns>whether or not the read was successful</returns>
         public bool TryGetValue(string key, out string value)
         {
             try
@@ -105,7 +100,25 @@ namespace Team1922.MVVM.ViewModels
             }
             return true;
         }
-        
+        /// <summary>
+        /// Hierarchial exception-safe access to data
+        /// </summary>
+        /// <param name="key">the path to the value to write</param>
+        /// <param name="value">the value to write to<paramref name="key"/></param>
+        /// <returns>whether or not the write was successful</returns>
+        public bool TrySetValue(string key, string value)
+        {
+            try
+            {
+                this[key] = value;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// This gives read/write access to the viewmodel based on the name of the property;
         /// NOTE: this does support hierarchial access
@@ -146,6 +159,10 @@ namespace Team1922.MVVM.ViewModels
                 return "";
             }
 
+            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
+            //  and not every time they would be accessed in the other view-models
+
+            //if this is a compound provider, loop through all of its sub-view-models
             if (this is ICompoundProvider)
             {
                 var me = this as ICompoundProvider;
@@ -153,12 +170,13 @@ namespace Team1922.MVVM.ViewModels
                 {
                     if (child.Name == thisMember[0])
                     {
-                        if (child is ViewModelBase)
+                        //if this is also a hierarchial access, which is almost definitely is, then call the child's function
+                        if (child is IHierarchialAccess)
                         {
                             if (read)
-                                return (child as ViewModelBase)[thisMember[1]];
+                                return (child as IHierarchialAccess)[thisMember[1]];
                             else
-                                (child as ViewModelBase)[thisMember[1]] = value;
+                                (child as IHierarchialAccess)[thisMember[1]] = value;
                             return "";
                         }
                     }
@@ -166,6 +184,7 @@ namespace Team1922.MVVM.ViewModels
             }
             throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
         }
+        #endregion
 
         #region Child Casting Helper Methods
         protected int SafeCastInt(string value)
@@ -215,7 +234,7 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region Abstract Methods
+        #region Abstract & Virtual Methods
         /// <summary>
         /// This gives read access to the viewmodel based on the name of the property; this should not give hierarchial access
         /// </summary>
@@ -228,6 +247,18 @@ namespace Team1922.MVVM.ViewModels
         /// <param name="key">the name of the property</param>
         /// <param name="value">the string representation of the property</param>
         protected abstract void SetValue(string key, string value);
+        protected virtual List<string> GetOverrideKeys()
+        {
+            return (from x in GetType().GetProperties()
+                    where x.Name != "Properties"
+                    && x.Name != "Children"
+                    && x.Name != "this[string]"
+                    && x.Name != "Current"
+                    && x.Name != "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
+                    && x.Name != "Count"
+                    && x.Name != "IsReadOnly"
+                    select x.Name).ToList();
+        }
         #endregion
 
         #region IDisposable Support
