@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Services
     {
         private static IExpressionParser _dataAccess;
         /// <summary>
-        /// The global IDataAccessService instance
+        /// The global IExpressionParser instance
         /// </summary>
         public static IExpressionParser Instance
         {
