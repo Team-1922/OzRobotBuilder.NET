@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
     /// <summary>
     /// Represents an expression node which has an operation to execute
     /// </summary>
-    public class OperationExpressionNode : ExpressionNodeBase
+    internal class OperationExpressionNode : ExpressionNodeBase
     {
         public IOperation Operation { get; set; }
 

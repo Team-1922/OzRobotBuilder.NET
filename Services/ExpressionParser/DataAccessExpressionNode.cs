@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
     /// <summary>
     /// Represents an expression node which accesses data derived from <see cref="IHierarchialAccess"/>
     /// </summary>
-    public class DataAccessExpressionNode : ExpressionNodeBase
+    internal class DataAccessExpressionNode : ExpressionNodeBase
     {
         IDataAccessService _dataRoot;
         string _path;

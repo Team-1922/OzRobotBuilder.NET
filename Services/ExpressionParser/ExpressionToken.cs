@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
     /// <summary>
     /// This represents a single number instead of an operation to perform
     /// </summary>
-    public class ExpressionToken : OperationExpressionNode
+    internal class ExpressionToken : OperationExpressionNode
     {
         /// <summary>
         /// this token's value

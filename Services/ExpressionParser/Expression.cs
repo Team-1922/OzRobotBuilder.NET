@@ -6,7 +6,7 @@ using Team1922.MVVM.Contracts;
 
 namespace Team1922.MVVM.Services.ExpressionParser
 {
-    public class Expression : IExpression
+    internal class Expression : IExpression
     {
         ExpressionNodeBase _rootNode;
         string _expressionString;

@@ -8,7 +8,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
     /// <summary>
     /// represents a node of a tree of expressions
     /// </summary>
-    public abstract class ExpressionNodeBase
+    internal abstract class ExpressionNodeBase
     {
         /// <summary>
         /// one child branch of the binary tree (left-hand operand)
