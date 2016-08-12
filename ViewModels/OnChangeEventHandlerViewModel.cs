@@ -74,10 +74,8 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public override string this[string key]
+        protected override string GetValue(string key)
         {
-            get
-            {
                 string ret;
                 if (TryGetTargetValue(key, out ret))
                     return ret;
@@ -93,28 +91,28 @@ namespace Team1922.MVVM.ViewModels
                     default:
                         throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
                 }
-            }
+        }
 
-            set
+        protected override void SetValue(string key, string value)
+        {
+            if (TrySetTargetValue(key, value))
+                return;
+
+            switch (key)
             {
-                if (TrySetTargetValue(key, value))
-                    return;
-
-                switch (key)
-                {
-                    case "Name":
-                        Name = value;
-                        break;
-                    case "MinDelta":
-                        MinDelta = SafeCastDouble(value);
-                        break;
-                    case "WatchPath":
-                        WatchPath = value;
-                        break;
-                    default:
-                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-                }
+                case "Name":
+                    Name = value;
+                    break;
+                case "MinDelta":
+                    MinDelta = SafeCastDouble(value);
+                    break;
+                case "WatchPath":
+                    WatchPath = value;
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
+            
         }
 
         public void SetOnChangeEventHandler(OnChangeEventHandler onChangeEventHandler)

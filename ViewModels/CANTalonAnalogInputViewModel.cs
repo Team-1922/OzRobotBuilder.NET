@@ -109,10 +109,8 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public override string this[string key]
+        protected override string GetValue(string key)
         {
-            get
-            {
                 switch (key)
                 {
                     case "ConversionRatio":
@@ -132,23 +130,23 @@ namespace Team1922.MVVM.ViewModels
                     default:
                         throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
                 }
-            }
+        }
 
-            set
+        protected override void SetValue(string key, string value)
+        {
+            switch (key)
             {
-                switch (key)
-                {
-                    case "ConversionRatio":
-                        ConversionRatio = SafeCastDouble(value);
-                        break;
-                    case "SensorOffset":
-                        SensorOffset = SafeCastLong(value);
-                        break;
-                    default:
-                        throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-                }
+                case "ConversionRatio":
+                    ConversionRatio = SafeCastDouble(value);
+                    break;
+                case "SensorOffset":
+                    SensorOffset = SafeCastLong(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
         }
+        
 
         public void SetCANTalon(CANTalon canTalon)
         {

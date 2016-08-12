@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
 
 namespace Team1922.MVVM.ViewModels
@@ -104,7 +105,67 @@ namespace Team1922.MVVM.ViewModels
             }
             return true;
         }
+        
+        /// <summary>
+        /// This gives read/write access to the viewmodel based on the name of the property;
+        /// NOTE: this does support hierarchial access
+        /// </summary>
+        /// <param name="key">The name of the property</param>
+        /// <returns>the string representation of the property</returns>
+        public string this[string key]
+        {
+            get
+            {
+                return ValueReadWrite(key, true);
+            }
 
+            set
+            {
+                ValueReadWrite(key, false, value);
+            }
+        }
+        /// <summary>
+        /// This is a helper method for <see cref="this[string]"/>, becuase the recursive access
+        /// shares most of the code between read and write
+        /// </summary>
+        /// <param name="key">the name of the variable to modify</param>
+        /// <param name="read"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private string ValueReadWrite(string key, bool read, string value="")
+        {
+            var thisMember = key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
+            if (null == thisMember)
+                throw new ArgumentException($"\"{key}\" Is an Invalid Property");
+            if (thisMember.Length == 1)
+            {
+                if (read)
+                    return GetValue(key);
+                else
+                    SetValue(key, value);
+                return "";
+            }
+
+            if (this is ICompoundProvider)
+            {
+                var me = this as ICompoundProvider;
+                foreach (var child in me.Children)
+                {
+                    if (child.Name == thisMember[0])
+                    {
+                        if (child is ViewModelBase)
+                        {
+                            if (read)
+                                return (child as ViewModelBase)[thisMember[1]];
+                            else
+                                (child as ViewModelBase)[thisMember[1]] = value;
+                            return "";
+                        }
+                    }
+                }
+            }
+            throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+        }
 
         #region Child Casting Helper Methods
         protected int SafeCastInt(string value)
@@ -153,14 +214,20 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentException("Value Entered Not Boolean");
         }
         #endregion
-        
+
         #region Abstract Methods
         /// <summary>
-        /// This gives read/write access to the viewmodel based on the name of the property
+        /// This gives read access to the viewmodel based on the name of the property; this should not give hierarchial access
         /// </summary>
-        /// <param name="key">The name of the property</param>
+        /// <param name="key">the name of the property</param>
         /// <returns>the string representation of the property</returns>
-        public abstract string this[string key] { get; set; }
+        protected abstract string GetValue(string key);
+        /// <summary>
+        /// This gives write access to the viewmodel based on the name of the property; this should not give herarchial access
+        /// </summary>
+        /// <param name="key">the name of the property</param>
+        /// <param name="value">the string representation of the property</param>
+        protected abstract void SetValue(string key, string value);
         #endregion
 
         #region IDisposable Support
@@ -196,7 +263,6 @@ namespace Team1922.MVVM.ViewModels
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-
         #endregion
     }
 }

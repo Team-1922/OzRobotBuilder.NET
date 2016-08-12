@@ -689,164 +689,163 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public override string this[string key]
-        {
-            get
-            {
-                switch (key)
-                {
-                    case "AnalogInput":
-                        return "Analog Input Config";
-                    case "ControlMode":
-                        return ControlMode.ToString();
-                    case "EnabledPIDProfile":
-                        return EnabledPIDProfile.ToString();
-                    case "FeedbackDevice":
-                        return FeedbackDevice.ToString();
-                    case "ForwardLimitSwitch":
-                        return ForwardLimitSwitch.ToString();
-                    case "ForwardLimitSwitchEnabled":
-                        return ForwardLimitSwitchEnabled.ToString();
-                    case "ForwardSoftLimit":
-                        return ForwardSoftLimit.ToString();
-                    case "ForwardSoftLimitEnabled":
-                        return ForwardSoftLimitEnabled.ToString();
-                    case "ForwardSoftLimitTripped":
-                        return ForwardSoftLimitTripped.ToString();
-                    case "ID":
-                        return ID.ToString();
-                    case "Name":
-                        return Name;
-                    case "NeutralMode":
-                        return NeutralMode.ToString();
-                    case "NominalForwardVoltage":
-                        return NominalForwardVoltage.ToString();
-                    case "NominalReverseVoltage":
-                        return NominalReverseVoltage.ToString();
-                    case "PeakForwardVoltage":
-                        return PeakForwardVoltage.ToString();
-                    case "PeakReverseVoltage":
-                        return PeakReverseVoltage.ToString();
-                    case "PIDConfig0":
-                        return "PIDConfiguration 0";
-                    case "PIDConfig1":
-                        return "PIDConfiguration 1";
-                    case "QuadEncoder":
-                        return "Quadrature Encoder";
-                    case "ReverseClosedLoopOutput":
-                        return ReverseClosedLoopOutput.ToString();
-                    case "ReverseLimitSwitch":
-                        return ReverseLimitSwitch.ToString();
-                    case "ReverseLimitSwitchEnabled":
-                        return ReverseLimitSwitchEnabled.ToString();
-                    case "ReversePercentVBusOutput":
-                        return ReversePercentVBusOutput.ToString();
-                    case "ReverseSensor":
-                        return ReverseSensor.ToString();
-                    case "ReverseSoftLimit":
-                        return ReverseSoftLimit.ToString();
-                    case "ReverseSoftLimitEnabled":
-                        return ReverseSoftLimitEnabled.ToString();
-                    case "ReverseSoftLimitTripped":
-                        return ReverseSoftLimitTripped.ToString();
-                    case "Value":
-                        return Value.ToString();
-                    case "ZeroSensorPositionOnIndexEnabled":
-                        return ZeroSensorPositionOnIndexEnabled.ToString();
-                    case "ZeroSensorPositionOnRisingEdge":
-                        return ZeroSensorPositionOnRisingEdge.ToString();
-                    default:
-                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-                }
-            }
 
-            set
+        protected override string GetValue(string key)
+        {
+            switch (key)
             {
-                switch (key)
-                {
-                    case "ControlMode":
-                        ControlMode = SafeCastEnum<CANTalonControlMode>(value);
-                        break;
-                    case "EnabledPIDProfile":
-                        EnabledPIDProfile = SafeCastBool(value);
-                        break;
-                    case "FeedbackDevice":
-                        FeedbackDevice = SafeCastEnum<CANTalonFeedbackDevice>(value);
-                        break;
-                    case "ForwardLimitSwitch":
-                        ForwardLimitSwitch = SafeCastBool(value);
-                        break;
-                    case "ForwardLimitSwitchEnabled":
-                        ForwardLimitSwitchEnabled = SafeCastBool(value);
-                        break;
-                    case "ForwardSoftLimit":
-                        ForwardSoftLimit = SafeCastDouble(value);
-                        break;
-                    case "ForwardSoftLimitEnabled":
-                        ForwardSoftLimitEnabled = SafeCastBool(value);
-                        break;
-                    case "ForwardSoftLimitTripped":
-                        ForwardSoftLimitTripped = SafeCastBool(value);
-                        break;
-                    case "ID":
-                        ID = SafeCastInt(value);
-                        break;
-                    case "Name":
-                        Name = value;
-                        break;
-                    case "NeutralMode":
-                        NeutralMode = SafeCastEnum<CANTalonNeutralMode>(value);
-                        break;
-                    case "NominalForwardVoltage":
-                        NominalForwardVoltage = SafeCastDouble(value);
-                        break;
-                    case "NominalReverseVoltage":
-                        NominalReverseVoltage = SafeCastDouble(value);
-                        break;
-                    case "PeakForwardVoltage":
-                        PeakForwardVoltage = SafeCastDouble(value);
-                        break;
-                    case "PeakReverseVoltage":
-                        PeakReverseVoltage = SafeCastDouble(value);
-                        break;
-                    case "ReverseClosedLoopOutput":
-                        ReverseClosedLoopOutput = SafeCastBool(value);
-                        break;
-                    case "ReverseLimitSwitch":
-                        ReverseLimitSwitch = SafeCastBool(value);
-                        break;
-                    case "ReverseLimitSwitchEnabled":
-                        ReverseLimitSwitchEnabled = SafeCastBool(value);
-                        break;
-                    case "ReversePercentVBusOutput":
-                        ReversePercentVBusOutput = SafeCastBool(value);
-                        break;
-                    case "ReverseSensor":
-                        ReverseSensor = SafeCastBool(value);
-                        break;
-                    case "ReverseSoftLimit":
-                        ReverseSoftLimit = SafeCastDouble(value);
-                        break;
-                    case "ReverseSoftLimitEnabled":
-                        ReverseSoftLimitEnabled = SafeCastBool(value);
-                        break;
-                    case "ReverseSoftLimitTripped":
-                        ReverseSoftLimitTripped = SafeCastBool(value);
-                        break;
-                    case "Value":
-                        Value = SafeCastDouble(value);
-                        break;
-                    case "ZeroSensorPositionOnIndexEnabled":
-                        ZeroSensorPositionOnIndexEnabled = SafeCastBool(value);
-                        break;
-                    case "ZeroSensorPositionOnRisingEdge":
-                        ZeroSensorPositionOnRisingEdge = SafeCastBool(value);
-                        break;
-                    default:
-                        throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-                }
+                case "AnalogInput":
+                    return "Analog Input Config";
+                case "ControlMode":
+                    return ControlMode.ToString();
+                case "EnabledPIDProfile":
+                    return EnabledPIDProfile.ToString();
+                case "FeedbackDevice":
+                    return FeedbackDevice.ToString();
+                case "ForwardLimitSwitch":
+                    return ForwardLimitSwitch.ToString();
+                case "ForwardLimitSwitchEnabled":
+                    return ForwardLimitSwitchEnabled.ToString();
+                case "ForwardSoftLimit":
+                    return ForwardSoftLimit.ToString();
+                case "ForwardSoftLimitEnabled":
+                    return ForwardSoftLimitEnabled.ToString();
+                case "ForwardSoftLimitTripped":
+                    return ForwardSoftLimitTripped.ToString();
+                case "ID":
+                    return ID.ToString();
+                case "Name":
+                    return Name;
+                case "NeutralMode":
+                    return NeutralMode.ToString();
+                case "NominalForwardVoltage":
+                    return NominalForwardVoltage.ToString();
+                case "NominalReverseVoltage":
+                    return NominalReverseVoltage.ToString();
+                case "PeakForwardVoltage":
+                    return PeakForwardVoltage.ToString();
+                case "PeakReverseVoltage":
+                    return PeakReverseVoltage.ToString();
+                case "PIDConfig0":
+                    return "PIDConfiguration 0";
+                case "PIDConfig1":
+                    return "PIDConfiguration 1";
+                case "QuadEncoder":
+                    return "Quadrature Encoder";
+                case "ReverseClosedLoopOutput":
+                    return ReverseClosedLoopOutput.ToString();
+                case "ReverseLimitSwitch":
+                    return ReverseLimitSwitch.ToString();
+                case "ReverseLimitSwitchEnabled":
+                    return ReverseLimitSwitchEnabled.ToString();
+                case "ReversePercentVBusOutput":
+                    return ReversePercentVBusOutput.ToString();
+                case "ReverseSensor":
+                    return ReverseSensor.ToString();
+                case "ReverseSoftLimit":
+                    return ReverseSoftLimit.ToString();
+                case "ReverseSoftLimitEnabled":
+                    return ReverseSoftLimitEnabled.ToString();
+                case "ReverseSoftLimitTripped":
+                    return ReverseSoftLimitTripped.ToString();
+                case "Value":
+                    return Value.ToString();
+                case "ZeroSensorPositionOnIndexEnabled":
+                    return ZeroSensorPositionOnIndexEnabled.ToString();
+                case "ZeroSensorPositionOnRisingEdge":
+                    return ZeroSensorPositionOnRisingEdge.ToString();
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
+
+        protected override void SetValue(string key, string value)
+        {
+            switch (key)
+            {
+                case "ControlMode":
+                    ControlMode = SafeCastEnum<CANTalonControlMode>(value);
+                    break;
+                case "EnabledPIDProfile":
+                    EnabledPIDProfile = SafeCastBool(value);
+                    break;
+                case "FeedbackDevice":
+                    FeedbackDevice = SafeCastEnum<CANTalonFeedbackDevice>(value);
+                    break;
+                case "ForwardLimitSwitch":
+                    ForwardLimitSwitch = SafeCastBool(value);
+                    break;
+                case "ForwardLimitSwitchEnabled":
+                    ForwardLimitSwitchEnabled = SafeCastBool(value);
+                    break;
+                case "ForwardSoftLimit":
+                    ForwardSoftLimit = SafeCastDouble(value);
+                    break;
+                case "ForwardSoftLimitEnabled":
+                    ForwardSoftLimitEnabled = SafeCastBool(value);
+                    break;
+                case "ForwardSoftLimitTripped":
+                    ForwardSoftLimitTripped = SafeCastBool(value);
+                    break;
+                case "ID":
+                    ID = SafeCastInt(value);
+                    break;
+                case "Name":
+                    Name = value;
+                    break;
+                case "NeutralMode":
+                    NeutralMode = SafeCastEnum<CANTalonNeutralMode>(value);
+                    break;
+                case "NominalForwardVoltage":
+                    NominalForwardVoltage = SafeCastDouble(value);
+                    break;
+                case "NominalReverseVoltage":
+                    NominalReverseVoltage = SafeCastDouble(value);
+                    break;
+                case "PeakForwardVoltage":
+                    PeakForwardVoltage = SafeCastDouble(value);
+                    break;
+                case "PeakReverseVoltage":
+                    PeakReverseVoltage = SafeCastDouble(value);
+                    break;
+                case "ReverseClosedLoopOutput":
+                    ReverseClosedLoopOutput = SafeCastBool(value);
+                    break;
+                case "ReverseLimitSwitch":
+                    ReverseLimitSwitch = SafeCastBool(value);
+                    break;
+                case "ReverseLimitSwitchEnabled":
+                    ReverseLimitSwitchEnabled = SafeCastBool(value);
+                    break;
+                case "ReversePercentVBusOutput":
+                    ReversePercentVBusOutput = SafeCastBool(value);
+                    break;
+                case "ReverseSensor":
+                    ReverseSensor = SafeCastBool(value);
+                    break;
+                case "ReverseSoftLimit":
+                    ReverseSoftLimit = SafeCastDouble(value);
+                    break;
+                case "ReverseSoftLimitEnabled":
+                    ReverseSoftLimitEnabled = SafeCastBool(value);
+                    break;
+                case "ReverseSoftLimitTripped":
+                    ReverseSoftLimitTripped = SafeCastBool(value);
+                    break;
+                case "Value":
+                    Value = SafeCastDouble(value);
+                    break;
+                case "ZeroSensorPositionOnIndexEnabled":
+                    ZeroSensorPositionOnIndexEnabled = SafeCastBool(value);
+                    break;
+                case "ZeroSensorPositionOnRisingEdge":
+                    ZeroSensorPositionOnRisingEdge = SafeCastBool(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            }
+        }
+        
         #endregion
     }
 }
