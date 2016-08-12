@@ -12,6 +12,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
     {
         private List<IOperation> _operations = new List<IOperation>();
         private List<BinaryOperation> _binaryOperation = new List<BinaryOperation>();
+        private UnaryMinus _unaryMinusOperation = new UnaryMinus();
 
         public ExpressionParser()
         {
@@ -37,6 +38,10 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// </summary>
         static Regex _validOpName = new Regex(@"^[a-zA-Z][a-zA-Z0-9]*$");
         /// <summary>
+        /// This is used to test operation characters against these signs to make sure the are recognized as such
+        /// </summary>
+        static Regex _validSigns = new Regex(@"^(\+|-)$");
+        /// <summary>
         /// Converts text at the given position up to the next special operation in <see cref="_specialOps"/>
         /// </summary>
         /// <param name="expression">the expression to loop through</param>
@@ -44,6 +49,20 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <returns>a node representing the operand</returns>
         private ExpressionNode GetOperand(string expression, ref int i)
         {
+            //if this starts with unary "-" operator
+            if(expression[i] == '-')
+            {
+                //make sure to move to the next character
+                i++;
+
+                //then create an intermediary layer where the multiply-by-negative-one occurs
+                ExpressionNode node = new ExpressionNode();
+                node.Operation = _unaryMinusOperation;
+                node.Children.Add(new ExpressionToken(0));//this is to get the BinaryOperation class not to complain
+                node.Children.Add(GetOperand(expression, ref i));
+                return node;
+            }
+
             //is this a sub-group
             if (expression[i] == '(')
             {
@@ -92,6 +111,11 @@ namespace Team1922.MVVM.Services.ExpressionParser
             {
                 //if this is not a new sub-group, just loop until the next operand
                 int begin = i;
+                //if this number has a sign before it, make sure to add it as part of the number
+                /*if (i < expression.Length && _validSigns.IsMatch($"{expression[i]}"))
+                {
+                    ++i;
+                }*/
                 while (i < expression.Length && !_specialOps.IsMatch($"{expression[i]}")) ++i;
                 return new ExpressionToken(double.Parse(expression.Substring(begin, i - begin)));
             }
@@ -218,7 +242,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             for (int i = 0; i < expression.Length;)
             {
                 //On the first scan, get the left-hand operand right-out
-                if(first)
+                if (first)
                 {
                     //get the left operand
                     tree.Children.Add(GetOperand(expression, ref i));
@@ -230,7 +254,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
                 //get the text representation of this operation
                 int opBegin = i;
-                while (_specialOps.IsMatch($"{expression[i]}")) ++i;
+                while (_specialOps.IsMatch($"{expression[i]}") && (i > opBegin ? !_validSigns.IsMatch($"{expression[i]}") : true)) ++i;
                 string op = expression.Substring(opBegin, i - opBegin);
 
                 //Get the current operation
@@ -238,44 +262,63 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
                 //get the right operend
                 var rightOperand = GetOperand(expression, ref i);
+                
+                //create this next operation node
+                var thisNode = new ExpressionNode();
+                thisNode.Operation = currentOperation;
 
                 if (first)
                 {
                     //update the first variable
                     first = false;
 
-                    //on the first go-through, set the current operation to the tree's operation becuase it has not yet been set
-                    tree.Operation = currentOperation;
+                    //the first time through with a unary operator is a little bit different, becuase order of operations still takes affect
+                    if (tree.Children[0].Operation is UnaryMinus && currentOperation.Priority > OperationPriority.MultDiv)
+                    {
+                        //first set the top-level equal to the unary minus operation          
+                        tree = tree.Children[0];
 
-                    //on the first go-through, set the right-hand operand to the tree's right-hand operand because it has not yet been set
-                    tree.Children.Add(rightOperand);
-                    continue;
+                        //steal the unary operation's operand
+                        thisNode.Children.Add(tree.Children[1]);
+
+                        //then insert this operation as the right-hand operand
+                        tree.Children[1] = thisNode;
+
+                        //finally set the operand of this operation to the next operand as usual
+                        thisNode.Children.Add(rightOperand);
+                    }
+                    else
+                    {
+                        //on the first go-through, set the current operation to the tree's operation becuase it has not yet been set
+                        tree.Operation = currentOperation;
+
+                        //on the first go-through, set the right-hand operand to the tree's right-hand operand because it has not yet been set
+                        tree.Children.Add(rightOperand);
+                    }
                 }
-
-                //create this next operation node
-                var thisNode = new ExpressionNode();
-                thisNode.Operation = currentOperation;
-
-                //this priority is MORE important than the previous one
-                if (currentOperation.Priority < (tree.Operation as BinaryOperation).Priority)
+                else
                 {
-                    //steal the previous operation's right-hand operand
-                    thisNode.Children.Add(tree.Children[1]);
-                    
-                    //insert this node as the right-hand of the previous operator
-                    tree.Children[1] = thisNode;
-                }
-                else//this priority is NOT more important than the previous one
-                {
-                    //Make the left-hand operator the previous tree
-                    thisNode.Children.Add(tree);
+                    //this priority is MORE important than the previous one
+                    if (currentOperation.Priority < (tree.Operation as BinaryOperation).Priority)
+                    {
+                        //steal the previous operation's right-hand operand
+                        thisNode.Children.Add(tree.Children[1]);
 
-                    //set the tree to this node, becuase it is now the last operation to execute
-                    tree = thisNode;
-                }
+                        //insert this node as the right-hand of the previous operator
+                        tree.Children[1] = thisNode;
+                    }
+                    else//this priority is NOT more important than the previous one
+                    {
+                        //Make the left-hand operator the previous tree
+                        thisNode.Children.Add(tree);
 
-                //the next operand is the new right operand
-                thisNode.Children.Add(rightOperand);
+                        //set the tree to this node, becuase it is now the last operation to execute
+                        tree = thisNode;
+                    }
+
+                    //the next operand is the new right operand
+                    thisNode.Children.Add(rightOperand);
+                }
             }
 
             return tree;
@@ -322,7 +365,8 @@ namespace Team1922.MVVM.Services.ExpressionParser
             //return the grouped expression
             try
             {
-                return new Expression(expression, Group(condensed));
+                var ret =  new Expression(expression, Group(condensed));
+                return ret;
             }
             catch(FormatException)
             {

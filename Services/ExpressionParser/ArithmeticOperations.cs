@@ -45,6 +45,28 @@ namespace Team1922.MVVM.Services.ExpressionParser
     }
 
     #region Operations
+    /// <summary>
+    /// This is not technically a binary operation, however it does need to have the "Priority" property to work correctly
+    /// </summary>
+    internal class UnaryMinus : BinaryOperation
+    {
+        public UnaryMinus() : base("-")
+        {
+        }
+
+        public override OperationPriority Priority
+        {
+            get
+            {
+                return OperationPriority.MultDiv;
+            }
+        }
+
+        protected override double Perform(double input1, double input2)
+        {
+            return -1 * input2;
+        }
+    }
     internal enum OperationPriority
     {
         GroupingSymbols=0,
