@@ -64,6 +64,7 @@
     <Compile Include="IDigitalInputIOService.cs" />
     <Compile Include="IDigitalInputProvider.cs" />
     <Compile Include="IEventTargetProvider.cs" />
+    <Compile Include="IHierarchialAccess.cs" />
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IInputService.cs" />
     <Compile Include="IJoystickIOService.cs" />
