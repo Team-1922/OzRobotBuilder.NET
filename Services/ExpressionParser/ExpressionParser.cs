@@ -111,11 +111,6 @@ namespace Team1922.MVVM.Services.ExpressionParser
             {
                 //if this is not a new sub-group, just loop until the next operand
                 int begin = i;
-                //if this number has a sign before it, make sure to add it as part of the number
-                /*if (i < expression.Length && _validSigns.IsMatch($"{expression[i]}"))
-                {
-                    ++i;
-                }*/
                 while (i < expression.Length && !_specialOps.IsMatch($"{expression[i]}")) ++i;
                 return new ExpressionToken(double.Parse(expression.Substring(begin, i - begin)));
             }
