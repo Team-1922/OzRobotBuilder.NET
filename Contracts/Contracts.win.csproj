@@ -61,6 +61,7 @@
     <Compile Include="ICANTalonQuadEncoderProvider.cs" />
     <Compile Include="ICompoundProvider.cs" />
     <Compile Include="IContinuousCommandProvider.cs" />
+    <Compile Include="IDataAccessService.cs" />
     <Compile Include="IDigitalInputIOService.cs" />
     <Compile Include="IDigitalInputProvider.cs" />
     <Compile Include="IEventTargetProvider.cs" />
