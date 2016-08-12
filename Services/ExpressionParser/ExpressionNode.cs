@@ -22,7 +22,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// Returns the result of the evaluated expression
         /// </summary>
         /// <returns></returns>
-        public virtual decimal Evaluate()
+        public virtual double Evaluate()
         {
             return Operation.Perform((from child in Children select child.Evaluate()).ToList());
         }

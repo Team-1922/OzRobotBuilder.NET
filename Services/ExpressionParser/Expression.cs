@@ -16,7 +16,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             _rootNode = rootNode;
         }
 
-        public decimal Evaluate()
+        public double Evaluate()
         {
             return _rootNode.Evaluate();
         }

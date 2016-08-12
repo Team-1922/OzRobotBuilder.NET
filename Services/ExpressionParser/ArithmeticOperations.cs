@@ -38,7 +38,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        public decimal Perform(List<decimal> param)
+        public double Perform(List<double> param)
         {
             return Math.Min(Math.Max(param[0], param[1]),param[2]);
         }
@@ -62,7 +62,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        protected override decimal Perform(decimal input1, decimal input2)
+        protected override double Perform(double input1, double input2)
         {
             return -1 * input2;
         }
@@ -98,13 +98,13 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
         public abstract OperationPriority Priority{ get; }
 
-        public decimal Perform(List<decimal> param)
+        public double Perform(List<double> param)
         {
             if (param.Count != 2)
                 throw new ArgumentException("param count not equal to 2");
             return Perform(param[0], param[1]);
         }
-        protected abstract decimal Perform(decimal input1, decimal input2);
+        protected abstract double Perform(double input1, double input2);
     }
     internal class Addition : BinaryOperation
     {
@@ -120,7 +120,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        protected override decimal Perform(decimal input1, decimal input2) => input1 + input2;
+        protected override double Perform(double input1, double input2) => input1 + input2;
     }
     internal class Subtraction : BinaryOperation
     {
@@ -136,7 +136,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        protected override decimal Perform(decimal input1, decimal input2) => input1 - input2;
+        protected override double Perform(double input1, double input2) => input1 - input2;
     }
     internal class Multiplication : BinaryOperation
     {
@@ -152,7 +152,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        protected override decimal Perform(decimal input1, decimal input2) => input1 * input2;
+        protected override double Perform(double input1, double input2) => input1 * input2;
     }
     internal class Division : BinaryOperation
     {
@@ -168,7 +168,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        protected override decimal Perform(decimal input1, decimal input2) => input1 / input2;
+        protected override double Perform(double input1, double input2) => input1 / input2;
     }
     internal class Modulus : BinaryOperation
     {
@@ -184,7 +184,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        protected override decimal Perform(decimal input1, decimal input2) => input1 % input2;
+        protected override double Perform(double input1, double input2) => input1 % input2;
     }
     internal class Power : BinaryOperation
     {
@@ -200,7 +200,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        protected override decimal Perform(decimal input1, decimal input2) => (decimal)Math.Pow((double)input1, (double)input2);
+        protected override double Perform(double input1, double input2) => Math.Pow(input1, input2);
     }
     #endregion
 }

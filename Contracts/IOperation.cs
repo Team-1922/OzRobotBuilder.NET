@@ -23,6 +23,6 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="param">the params passed to this operation</param>
         /// <returns>the result of this operation</returns>
-        decimal Perform(List<decimal> param);
+        double Perform(List<double> param);
     }
 }
