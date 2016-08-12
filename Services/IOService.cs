@@ -45,6 +45,8 @@ namespace Team1922.MVVM.Services
         /// <param name="clampValues">whether frequently accessed values should be clamped instead of exceptions thrown</param>
         public static void Init(IRobotIOService mainIOService, bool clampValues)
         {
+            if (_ioService != null)
+                throw new Exception("IO Service Is Already Initialized!");
             _ioService = mainIOService;
             _clampValues = clampValues;
         }
