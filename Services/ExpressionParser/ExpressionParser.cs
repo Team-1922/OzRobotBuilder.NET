@@ -241,15 +241,18 @@ namespace Team1922.MVVM.Services.ExpressionParser
             bool first = true;
             for (int i = 0; i < expression.Length;)
             {
+                //create this next operation node
+                var thisNode = new ExpressionNode();
+
                 //On the first scan, get the left-hand operand right-out
                 if (first)
                 {
                     //get the left operand
-                    tree.Children.Add(GetOperand(expression, ref i));
+                    thisNode.Children.Add(GetOperand(expression, ref i));
 
                     //this keeps groups with ONLY a single parenthetical expression from throwing exceptions
                     if (i >= expression.Length)
-                        return tree.Children.First();
+                        return thisNode.Children[0];
                 }
 
                 //get the text representation of this operation
@@ -263,37 +266,30 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 //get the right operend
                 var rightOperand = GetOperand(expression, ref i);
                 
-                //create this next operation node
-                var thisNode = new ExpressionNode();
+                //set the operation
                 thisNode.Operation = currentOperation;
-
+                
                 if (first)
                 {
                     //update the first variable
                     first = false;
 
                     //the first time through with a unary operator is a little bit different, becuase order of operations still takes affect
-                    if (tree.Children[0].Operation is UnaryMinus && currentOperation.Priority > OperationPriority.MultDiv)
+                    if (thisNode.Children[0].Operation is UnaryMinus && currentOperation.Priority < OperationPriority.MultDiv)
                     {
                         //first set the top-level equal to the unary minus operation          
-                        tree = tree.Children[0];
+                        tree = thisNode.Children[0];
 
                         //steal the unary operation's operand
-                        thisNode.Children.Add(tree.Children[1]);
+                        thisNode.Children[0] = tree.Children[1];
 
                         //then insert this operation as the right-hand operand
                         tree.Children[1] = thisNode;
-
-                        //finally set the operand of this operation to the next operand as usual
-                        thisNode.Children.Add(rightOperand);
                     }
                     else
                     {
-                        //on the first go-through, set the current operation to the tree's operation becuase it has not yet been set
-                        tree.Operation = currentOperation;
-
-                        //on the first go-through, set the right-hand operand to the tree's right-hand operand because it has not yet been set
-                        tree.Children.Add(rightOperand);
+                        //simply set this node to the tree node, because it has not been set yet
+                        tree = thisNode;
                     }
                 }
                 else
@@ -315,10 +311,10 @@ namespace Team1922.MVVM.Services.ExpressionParser
                         //set the tree to this node, becuase it is now the last operation to execute
                         tree = thisNode;
                     }
-
-                    //the next operand is the new right operand
-                    thisNode.Children.Add(rightOperand);
                 }
+
+                //the next operand is the new right operand
+                thisNode.Children.Add(rightOperand);
             }
 
             return tree;
@@ -375,10 +371,6 @@ namespace Team1922.MVVM.Services.ExpressionParser
             catch(IndexOutOfRangeException)
             {
                 throw new ArgumentException("Expression Contained Malformed Syntax");
-            }
-            catch(Exception)
-            {
-                throw;
             }
         }
         
