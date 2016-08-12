@@ -7,7 +7,7 @@ namespace Team1922.MVVM.Services
     /// </summary>
     public class ExpressionParserService
     {
-        private static IExpressionParser _dataAccess;
+        private static IExpressionParser _instance;
         /// <summary>
         /// The global IExpressionParser instance
         /// </summary>
@@ -15,9 +15,9 @@ namespace Team1922.MVVM.Services
         {
             get
             {
-                if (null == _dataAccess)
-                    _dataAccess = new ExpressionParser.ExpressionParser();
-                return _dataAccess;
+                if (null == _instance)
+                    _instance = new ExpressionParser.ExpressionParser();
+                return _instance;
             }
         }
     }
