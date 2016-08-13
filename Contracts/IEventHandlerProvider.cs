@@ -22,5 +22,9 @@ namespace Team1922.MVVM.Contracts
         /// The name of this command
         /// </summary>
         string Name { get; set; }
+        /// <summary>
+        /// Whether or not the condition is currently met
+        /// </summary>
+        bool ConditionMet { get; }
     }
 }

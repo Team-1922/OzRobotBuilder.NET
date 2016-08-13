@@ -325,6 +325,12 @@ namespace Team1922.MVVM.Models {
         
         private string conditionField;
         
+        private bool conditionMetField;
+        
+        public EventHandler() {
+            this.conditionMetField = false;
+        }
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public string Name {
@@ -358,6 +364,19 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("EventHandler.Condition", value);
                 this.conditionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(false)]
+        public bool ConditionMet {
+            get {
+                return this.conditionMetField;
+            }
+            set {
+				TypeRestrictions.Validate("EventHandler.ConditionMet", value);
+                this.conditionMetField = value;
             }
         }
     }

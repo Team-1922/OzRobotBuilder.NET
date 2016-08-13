@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Models;
+using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
     internal class EventHandlerViewModel : ViewModelBase, IEventHandlerProvider
     {
         private Models.EventHandler _eventHandlerModel;
+        private IExpression _conditionExpression;
+        private IExpression _expression;
 
         public string Condition
         {
@@ -23,6 +26,7 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _eventHandlerModel.Condition;
                 SetProperty(ref temp, value);
                 _eventHandlerModel.Condition = temp;
+                _conditionExpression = ExpressionParserService.Instance.ParseExpression(value);
             }
         }
 
@@ -38,6 +42,7 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _eventHandlerModel.Expression;
                 SetProperty(ref temp, value);
                 _eventHandlerModel.Expression = temp;
+                _expression = ExpressionParserService.Instance.ParseExpression(value);
             }
         }
 
@@ -56,6 +61,14 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public bool ConditionMet
+        {
+            get
+            {
+                return _conditionExpression != null ? _conditionExpression.Evaluate() > 1 : false;
+            }
+        }
+
         protected override string GetValue(string key)
         {
             switch (key)
@@ -66,6 +79,8 @@ namespace Team1922.MVVM.ViewModels
                     return Expression.ToString();
                 case "Condition":
                     return Condition.ToString();
+                case "ConditionMet":
+                    return ConditionMet.ToString();
                 default:
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
