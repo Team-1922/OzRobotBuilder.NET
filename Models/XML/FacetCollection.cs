@@ -79,7 +79,7 @@ namespace Team1922.MVVM.Models.XML
         {
             string andFacetString = _andFacet.Stringify();
             string orFacetString = _orFacets.Stringify();
-            if (andFacetString != "")
+            if (andFacetString != "" && orFacetString != "")
             {                
                 andFacetString = $"{andFacetString}\n";
                 orFacetString = $"OR {orFacetString}";

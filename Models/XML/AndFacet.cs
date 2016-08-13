@@ -17,8 +17,8 @@ namespace Team1922.MVVM.Models.XML
 
         public string Stringify()
         {
-            string facet1String = Facet1 == null ? "" : Facet1.GetConstructionString();
-            string facet2String = Facet2 == null ? "" : Facet2.GetConstructionString();
+            string facet1String = Facet1 == null ? "" : Facet1.Stringify();
+            string facet2String = Facet2 == null ? "" : Facet2.Stringify();
             if (facet1String == "")
             {
                 if (facet2String == "")

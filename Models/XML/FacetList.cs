@@ -10,6 +10,8 @@ namespace Team1922.MVVM.Models.XML
     {
         public string Stringify()
         {
+            if (Count == 0)
+                return "";
             string ret = "";
             foreach(var facet in this)
             {
