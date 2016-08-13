@@ -65,6 +65,8 @@
     <Compile Include="IDigitalInputIOService.cs" />
     <Compile Include="IDigitalInputProvider.cs" />
     <Compile Include="IEventTargetProvider.cs" />
+    <Compile Include="IExpression.cs" />
+    <Compile Include="IExpressionParser.cs" />
     <Compile Include="IHierarchialAccess.cs" />
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IInputService.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="IJoystickProvider.cs" />
     <Compile Include="IOnChangeEventHandlerProvider.cs" />
     <Compile Include="IOnWithinRangeEventHandlerProvider.cs" />
+    <Compile Include="IOperation.cs" />
     <Compile Include="IOutputService.cs" />
     <Compile Include="IPIDControllerSoftwareProvider.cs" />
     <Compile Include="IPIDControllerSRXProvider.cs" />

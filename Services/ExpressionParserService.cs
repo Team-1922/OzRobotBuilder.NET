@@ -20,5 +20,9 @@ namespace Team1922.MVVM.Services
                 return _instance;
             }
         }
+        /// <summary>
+        /// Whether or not the the expression parser should be able to access the <see cref="DataAccessService"/>
+        /// </summary>
+        public static bool DataAccessEnabled { get; set; } = true;
     }
 }
