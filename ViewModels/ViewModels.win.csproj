@@ -46,13 +46,9 @@
     <Compile Include="CANTalonQuadEncoderViewModel.cs" />
     <Compile Include="CANTalonViewModel.cs" />
     <Compile Include="CompoundProviderList.cs" />
-    <Compile Include="ContinuousCommandViewModel.cs" />
     <Compile Include="DigitalInputViewModel.cs" />
-    <Compile Include="EventTargetViewModel.cs" />
-    <Compile Include="EventViewModelBase.cs" />
+    <Compile Include="EventHandlerViewModel.cs" />
     <Compile Include="JoystickViewModel.cs" />
-    <Compile Include="OnChangeEventHandlerViewModel.cs" />
-    <Compile Include="OnWithinRangeEventHandlerViewModel.cs" />
     <Compile Include="PIDControllerSoftwareViewModel.cs" />
     <Compile Include="PIDControllerSRXViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

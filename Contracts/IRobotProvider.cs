@@ -20,17 +20,9 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         IEnumerable<IJoystickProvider> Joysticks { get; }
         /// <summary>
-        /// This robot's on-change EventHandlers; all of the event handlers and commands might be merged
+        /// This robot's event handlers
         /// </summary>
-        IEnumerable<IOnChangeEventHandlerProvider> OnChangeEventHandlers { get; }
-        /// <summary>
-        /// This robot's on-within-range EventHandlers; all of the event handlers and commands might be merged
-        /// </summary>
-        IEnumerable<IOnWithinRangeEventHandlerProvider> OnWithinRangeEventHandlers { get; }
-        /// <summary>
-        /// This robot's continuous Commands; all of the event handlers and commands might be merged
-        /// </summary>
-        IEnumerable<IContinuousCommandProvider> ContinuousCommands { get; }
+        IEnumerable<IEventHandlerProvider> EventHandlers { get; }
         /// <summary>
         /// This robot's Team Number
         /// </summary>

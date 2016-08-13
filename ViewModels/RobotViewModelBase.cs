@@ -19,15 +19,11 @@ namespace Team1922.MVVM.ViewModels
         {
             //GetBooksCommand = new DelegateCommand(OnGetBooks, CanGetBooks);
             AddSubsystemCommand = new DelegateCommand(OnAddSubsystem);
-            AddContinuousCommandCommand = new DelegateCommand(OnAddContinuousCommand);
-            AddOnChangeEventHandlerCommand = new DelegateCommand(OnAddOnChangeEventHandler);
-            AddOnWithinRangeEventHandlerCommand = new DelegateCommand(OnAddOnWithinRangeEventHandler);
+            AddEventHandlerCommand = new DelegateCommand(OnAddEventHandler);
             AddJoystickCommand = new DelegateCommand(OnAddJoystick);
 
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems");
-            _continuousCommandProviders = new CompoundProviderList<IContinuousCommandProvider>("Continuous Commands");
-            _onChangeEventHandlerProviders = new CompoundProviderList<IOnChangeEventHandlerProvider>("On Change Event Handlers");
-            _onWithinRangeEventHandlerProviders = new CompoundProviderList<IOnWithinRangeEventHandlerProvider>("On Within Rage Event Handlers");
+            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("Event Handlers");
             _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks");
         }
 
@@ -35,9 +31,7 @@ namespace Team1922.MVVM.ViewModels
         {
             //clear the old providers
             _subsystemProviders.Items.Clear();
-            _continuousCommandProviders.Items.Clear();
-            _onChangeEventHandlerProviders.Items.Clear();
-            _onWithinRangeEventHandlerProviders.Items.Clear();
+            _eventHandlerProviders.Items.Clear();
             _joystickProviders.Items.Clear();
 
             //setup the new providers
@@ -53,37 +47,15 @@ namespace Team1922.MVVM.ViewModels
                     _subsystemProviders.Items.Add(provider);
                 }
             }
-            if (null != _robotModel.ContinuousCommand)
+            if (null != _robotModel.EventHandler)
             {
-                foreach (var continuousCommand in _robotModel.ContinuousCommand)
-                {
-                    if (continuousCommand == null)
-                        continue;
-                    var provider = new ContinuousCommandViewModel();
-                    provider.SetContinuousCommand(continuousCommand);
-                    _continuousCommandProviders.Items.Add(provider);
-                }
-            }
-            if (null != _robotModel.OnChangeEventHandler)
-            {
-                foreach (var onChangeEventHandler in _robotModel.OnChangeEventHandler)
-                {
-                    if (onChangeEventHandler == null)
-                        continue;
-                    var provider = new OnChangeEventHandlerViewModel();
-                    provider.SetOnChangeEventHandler(onChangeEventHandler);
-                    _onChangeEventHandlerProviders.Items.Add(provider);
-                }
-            }
-            if (null != _robotModel.OnWithinRangeEventHandler)
-            {
-                foreach (var onWithinRangeEventHandler in _robotModel.OnWithinRangeEventHandler)
+                foreach (var onWithinRangeEventHandler in _robotModel.EventHandler)
                 {
                     if (onWithinRangeEventHandler == null)
                         continue;
-                    var provider = new OnWithinRangeEventHandlerViewModel();
-                    provider.SetOnWithinRangeEventHandler(onWithinRangeEventHandler);
-                    _onWithinRangeEventHandlerProviders.Items.Add(provider);
+                    var provider = new EventHandlerViewModel();
+                    provider.SetEventHandler(onWithinRangeEventHandler);
+                    _eventHandlerProviders.Items.Add(provider);
                 }
             }
             if (null != _robotModel.Joystick)
@@ -121,17 +93,9 @@ namespace Team1922.MVVM.ViewModels
         {
             get { return _subsystemProviders.Items; }
         }
-        public IEnumerable<IContinuousCommandProvider> ContinuousCommands
+        public IEnumerable<IEventHandlerProvider> EventHandlers
         {
-            get { return _continuousCommandProviders.Items; }
-        }
-        public IEnumerable<IOnChangeEventHandlerProvider> OnChangeEventHandlers
-        {
-            get { return _onChangeEventHandlerProviders.Items; }
-        }
-        public IEnumerable<IOnWithinRangeEventHandlerProvider> OnWithinRangeEventHandlers
-        {
-            get { return _onWithinRangeEventHandlerProviders.Items; }
+            get { return _eventHandlerProviders.Items; }
         }
         public IEnumerable<IJoystickProvider> Joysticks
         {
@@ -142,17 +106,9 @@ namespace Team1922.MVVM.ViewModels
         {
             EventAggregator<AddSubsystemEvent>.Instance.Publish(this, new AddSubsystemEvent());
         }
-        private void OnAddContinuousCommand()
+        private void OnAddEventHandler()
         {
-            EventAggregator<AddContinuousCommandEvent>.Instance.Publish(this, new AddContinuousCommandEvent());
-        }
-        private void OnAddOnChangeEventHandler()
-        {
-            EventAggregator<AddOnChangeEventHandler>.Instance.Publish(this, new AddOnChangeEventHandler());
-        }
-        private void OnAddOnWithinRangeEventHandler()
-        {
-            EventAggregator<AddOnWithinRangeEventHandler>.Instance.Publish(this, new AddOnWithinRangeEventHandler());
+            EventAggregator<AddEventHandlerEvent>.Instance.Publish(this, new AddEventHandlerEvent());
         }
         private void OnAddJoystick()
         {
@@ -203,9 +159,7 @@ namespace Team1922.MVVM.ViewModels
         }
 
         public ICommand AddSubsystemCommand { get; }
-        public ICommand AddContinuousCommandCommand { get; }
-        public ICommand AddOnChangeEventHandlerCommand { get; }
-        public ICommand AddOnWithinRangeEventHandlerCommand { get; }
+        public ICommand AddEventHandlerCommand { get; }
         public ICommand AddJoystickCommand { get; }
 
         public int TeamNumber
@@ -256,16 +210,12 @@ namespace Team1922.MVVM.ViewModels
             {
                 case "AnalogInputSampleRate":
                     return AnalogInputSampleRate.ToString();
-                case "ContinuousCommands":
-                    return ContinuousCommands.ToString();
                 case "Joysticks":
                     return Joysticks.ToString();
                 case "Name":
                     return Name;
-                case "OnChangeEventHandlers":
-                    return OnChangeEventHandlers.ToString();
-                case "OnWithinRangeEventHandlers":
-                    return OnWithinRangeEventHandlers.ToString();
+                case "EventHandlers":
+                    return EventHandlers.ToString();
                 case "Subsystems":
                     return Subsystems.ToString();
                 case "TeamNumber":
@@ -306,40 +256,16 @@ namespace Team1922.MVVM.ViewModels
                 _children["_subsystemProviders"] = value;
             }
         }
-        CompoundProviderList<IContinuousCommandProvider> _continuousCommandProviders
+        CompoundProviderList<IEventHandlerProvider> _eventHandlerProviders
         {
             get
             {
-                return _children["_continuousCommandProviders"] as CompoundProviderList<IContinuousCommandProvider>;
+                return _children["_eventHandlerProviders"] as CompoundProviderList<IEventHandlerProvider>;
             }
 
             set
             {
-                _children["_continuousCommandProviders"] = value;
-            }
-        }
-        CompoundProviderList<IOnChangeEventHandlerProvider> _onChangeEventHandlerProviders
-        {
-            get
-            {
-                return _children["_onChangeEventHandlerProviders"] as CompoundProviderList<IOnChangeEventHandlerProvider>;
-            }
-
-            set
-            {
-                _children["_onChangeEventHandlerProviders"] = value;
-            }
-        }
-        CompoundProviderList<IOnWithinRangeEventHandlerProvider> _onWithinRangeEventHandlerProviders
-        {
-            get
-            {
-                return _children["_onWithinRangeEventHandlerProviders"] as CompoundProviderList<IOnWithinRangeEventHandlerProvider>;
-            }
-
-            set
-            {
-                _children["_onWithinRangeEventHandlerProviders"] = value;
+                _children["_eventHandlerProviders"] = value;
             }
         }
         CompoundProviderList<IJoystickProvider> _joystickProviders

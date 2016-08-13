@@ -103,5 +103,10 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
         }
+
+        public void SetEventHandler(Models.EventHandler eventHandler)
+        {
+            _eventHandlerModel = eventHandler;
+        }
     }
 }

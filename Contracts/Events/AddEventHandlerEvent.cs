@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Team1922.MVVM.Contracts.Events
 {
-    public class AddOnWithinRangeEventHandler : EventArgs
+    public class AddEventHandlerEvent : EventArgs
     {
     }
 }

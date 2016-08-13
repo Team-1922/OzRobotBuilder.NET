@@ -26,5 +26,11 @@ namespace Team1922.MVVM.Contracts
         /// Whether or not the condition is currently met
         /// </summary>
         bool ConditionMet { get; }
+
+        /// <summary>
+        /// Sets the model instance for this event handler provider
+        /// </summary>
+        /// <param name="eventHandler">the event handler model instance</param>
+        void SetEventHandler(Models.EventHandler eventHandler);
     }
 }
