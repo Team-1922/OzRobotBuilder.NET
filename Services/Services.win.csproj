@@ -41,6 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess.cs" />
+    <Compile Include="DataAccessService.cs" />
+    <Compile Include="ExpressionParserService.cs" />
+    <Compile Include="ExpressionParser\ArithmeticOperations.cs" />
+    <Compile Include="ExpressionParser\DataAccessExpressionNode.cs" />
+    <Compile Include="ExpressionParser\Expression.cs" />
+    <Compile Include="ExpressionParser\ExpressionNodeBase.cs" />
+    <Compile Include="ExpressionParser\ExpressionParser.cs" />
+    <Compile Include="ExpressionParser\ExpressionToken.cs" />
+    <Compile Include="ExpressionParser\OperationExpressionNode.cs" />
     <Compile Include="IOService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
