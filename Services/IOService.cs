@@ -12,7 +12,7 @@ namespace Team1922.MVVM.Services
     /// </summary>
     public static class IOService
     {
-        private static IRobotIOService _ioService;
+        private static IRobotIOService _instance;
         private static bool _clampValues;
         /// <summary>
         /// The global IO Service instance
@@ -21,9 +21,9 @@ namespace Team1922.MVVM.Services
         {
             get
             {
-                if (null == _ioService)
+                if (null == _instance)
                     throw new NullReferenceException("IO Service Null! Call IOService.Init(IRobotIOService) before accessing IOService.Instance");
-                return _ioService;
+                return _instance;
             }
         }
         /// <summary>
@@ -45,9 +45,9 @@ namespace Team1922.MVVM.Services
         /// <param name="clampValues">whether frequently accessed values should be clamped instead of exceptions thrown</param>
         public static void Init(IRobotIOService mainIOService, bool clampValues)
         {
-            if (_ioService != null)
+            if (_instance != null)
                 throw new Exception("IO Service Is Already Initialized!");
-            _ioService = mainIOService;
+            _instance = mainIOService;
             _clampValues = clampValues;
         }
     }
