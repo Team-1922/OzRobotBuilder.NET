@@ -26,6 +26,9 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _eventHandlerModel.Condition;
                 SetProperty(ref temp, value);
                 _eventHandlerModel.Condition = temp;
+                //this throws an exception AFTER the condition variable is set, becuase it would be annoying
+                //  if the text in the box gets deleted after the user types it in and it is wrong; this could be a pretty big
+                //  set of text too
                 _conditionExpression = ExpressionParserService.Instance.ParseExpression(value);
             }
         }
@@ -42,6 +45,9 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _eventHandlerModel.Expression;
                 SetProperty(ref temp, value);
                 _eventHandlerModel.Expression = temp;
+                //this throws an exception AFTER the expression variable is set, becuase it would be annoying
+                //  if the text in the box gets deleted after the user types it in and it is wrong; this could be a pretty big
+                //  set of text too
                 _expression = ExpressionParserService.Instance.ParseExpression(value);
             }
         }
