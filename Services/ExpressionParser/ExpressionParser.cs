@@ -74,10 +74,15 @@ namespace Team1922.MVVM.Services.ExpressionParser
             //is this data-access?
             else if(expression[i] == '[')
             {
+                if(!ExpressionParserService.DataAccessEnabled)
+                {
+                    throw new Exception("Attempt to Access Data From Expression Parser when Data Access is Not Enabled; Set \"ExpressionParserService.DataAccessEnabled\" to \"true\"!");
+                }
+
                 //get the path within the brackets
                 var path = GetGroupStatement(expression, ref i, '[', ']');
 
-                return new DataAccessExpressionNode(DataAccess.Instance, path);
+                return new DataAccessExpressionNode(DataAccessService.Instance, path);
             }
             else if(_validOpName.IsMatch($"{expression[i]}"))
             {
