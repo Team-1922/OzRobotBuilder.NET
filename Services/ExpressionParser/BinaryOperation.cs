@@ -39,6 +39,13 @@ namespace Team1922.MVVM.Services.ExpressionParser
     }
     internal abstract class BinaryOperationBool : BinaryOperation<bool>, IBinaryOperationBool
     {
+        public override OperationPriority Priority
+        {
+            get
+            {
+                return OperationPriority.Boolean;
+            }
+        }
     }
 
 }
