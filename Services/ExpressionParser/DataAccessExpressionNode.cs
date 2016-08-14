@@ -47,8 +47,13 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
             else
             {
-                _operation.Perform(_path, Children[0].Evaluate());
-                return Children[0].Evaluate();
+                if (Children[0] is DataAccessExpressionNode)
+                {
+                    _operation.Perform((Children[0] as DataAccessExpressionNode)._path, Children[1].Evaluate());
+                    return Children[1].Evaluate();
+                }
+                else
+                    throw new Exception("First Operand of \"=\" Operation Is ReadOnly!");
             }
         }
     }

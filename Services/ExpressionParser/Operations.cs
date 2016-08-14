@@ -30,6 +30,7 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
             new BooleanOr(),
             new BooleanAnd()
         };
+        public static StoreOperation StoreOperation { get; } = new StoreOperation();
     }
 
     internal class ClampOperation : FuncStyleOperation

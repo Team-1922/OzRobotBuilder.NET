@@ -30,6 +30,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             {
                 _binaryOperations.Add(operation);
             }
+            _binaryOperations.Add(OperationInstances.StoreOperation);
         }
 
         #region Private Helper Methods
@@ -291,6 +292,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 {
                     var newNode = new DataAccessExpressionNode(DataAccessService.Instance, currentOperation as StoreOperation);
                     newNode.Children.AddRange(thisNode.Children);
+                    thisNode = newNode;
                 }
                 else
                 {
