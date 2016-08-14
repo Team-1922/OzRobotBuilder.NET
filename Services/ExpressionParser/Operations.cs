@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
 
-namespace Team1922.MVVM.Services.ExpressionParser
+namespace Team1922.MVVM.Services.ExpressionParser.Operations
 {
     /// <summary>
     /// This represents the core operations with the special mathmatical syntax (i.e. 2 + 4 instead of +(2,4))
     /// </summary>
-    internal static class Operations
+    internal static class OperationInstances
     {
         public static List<BinaryOperationDouble> DoubleOperations { get; } = new List<BinaryOperationDouble>() {
             new Addition(),
@@ -21,7 +21,9 @@ namespace Team1922.MVVM.Services.ExpressionParser
         };
     }
 
-    internal class ClampOperation : FuncStyleOperation
+    #region Function-Style Operations
+
+    internal class Clamp : FuncStyleOperation
     {
         public override string Name
         {
@@ -44,6 +46,21 @@ namespace Team1922.MVVM.Services.ExpressionParser
             return Math.Min(Math.Max(param[0], param[1]),param[2]);
         }
     }
+    #endregion
+
+    #region Boolean Operaitons
+    internal class BooleanOr : BinaryOperationBool
+    {
+        public override string Name => "||";
+        public override bool Perform(bool input1, bool input2) => input1 || input2;
+    }
+    internal class BooleanAnd : BinaryOperationBool
+    {
+        public override string Name => "&&";
+        public override bool Perform(bool input1, bool input2) => input1 && input2;
+    }
+
+    #endregion
 
     #region Double Operations
     /// <summary>
