@@ -28,11 +28,11 @@ namespace Team1922.MVVM.Models {
         "", IsNullable=false)]
     public partial class Robot {
         
-        private Subsystem[] subsystemField;
+        private System.Collections.Generic.List<Subsystem> subsystemField; 
         
-        private Joystick[] joystickField;
+        private System.Collections.Generic.List<Joystick> joystickField; 
         
-        private EventHandler[] eventHandlerField;
+        private System.Collections.Generic.List<EventHandler> eventHandlerField; 
         
         private int teamNumberField;
         
@@ -44,7 +44,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Subsystem")]
-        public Subsystem[] Subsystem {
+        public System.Collections.Generic.List<Subsystem> Subsystem { 
             get {
                 return this.subsystemField;
             }
@@ -55,7 +55,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Joystick")]
-        public Joystick[] Joystick {
+        public System.Collections.Generic.List<Joystick> Joystick { 
             get {
                 return this.joystickField;
             }
@@ -66,7 +66,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("EventHandler")]
-        public EventHandler[] EventHandler {
+        public System.Collections.Generic.List<EventHandler> EventHandler { 
             get {
                 return this.eventHandlerField;
             }
@@ -111,17 +111,17 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class Subsystem {
         
-        private PWMOutput[] pWMOutputField;
+        private System.Collections.Generic.List<PWMOutput> pWMOutputField; 
         
-        private AnalogInput[] analogInputField;
+        private System.Collections.Generic.List<AnalogInput> analogInputField; 
         
-        private QuadEncoder[] quadEncoderField;
+        private System.Collections.Generic.List<QuadEncoder> quadEncoderField; 
         
-        private DigitalInput[] digitalInputField;
+        private System.Collections.Generic.List<DigitalInput> digitalInputField; 
         
-        private RelayOutput[] relayOutputField;
+        private System.Collections.Generic.List<RelayOutput> relayOutputField; 
         
-        private CANTalon[] cANTalonsField;
+        private System.Collections.Generic.List<CANTalon> cANTalonsField; 
         
         private PIDControllerSoftware pIDControllerField;
         
@@ -137,7 +137,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PWMOutput")]
-        public PWMOutput[] PWMOutput {
+        public System.Collections.Generic.List<PWMOutput> PWMOutput { 
             get {
                 return this.pWMOutputField;
             }
@@ -148,7 +148,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AnalogInput")]
-        public AnalogInput[] AnalogInput {
+        public System.Collections.Generic.List<AnalogInput> AnalogInput { 
             get {
                 return this.analogInputField;
             }
@@ -159,7 +159,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("QuadEncoder")]
-        public QuadEncoder[] QuadEncoder {
+        public System.Collections.Generic.List<QuadEncoder> QuadEncoder { 
             get {
                 return this.quadEncoderField;
             }
@@ -170,7 +170,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DigitalInput")]
-        public DigitalInput[] DigitalInput {
+        public System.Collections.Generic.List<DigitalInput> DigitalInput { 
             get {
                 return this.digitalInputField;
             }
@@ -181,7 +181,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RelayOutput")]
-        public RelayOutput[] RelayOutput {
+        public System.Collections.Generic.List<RelayOutput> RelayOutput { 
             get {
                 return this.relayOutputField;
             }
@@ -192,7 +192,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CANTalons")]
-        public CANTalon[] CANTalons {
+        public System.Collections.Generic.List<CANTalon> CANTalons { 
             get {
                 return this.cANTalonsField;
             }
@@ -479,9 +479,9 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class Joystick {
         
-        private JoystickAxis[] axisField;
+        private System.Collections.Generic.List<JoystickAxis> axisField; 
         
-        private JoystickButton[] buttonField;
+        private System.Collections.Generic.List<JoystickButton> buttonField; 
         
         private string nameField;
         
@@ -493,7 +493,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Axis")]
-        public JoystickAxis[] Axis {
+        public System.Collections.Generic.List<JoystickAxis> Axis { 
             get {
                 return this.axisField;
             }
@@ -504,7 +504,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Button")]
-        public JoystickButton[] Button {
+        public System.Collections.Generic.List<JoystickButton> Button { 
             get {
                 return this.buttonField;
             }
