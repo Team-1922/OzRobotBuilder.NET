@@ -76,145 +76,44 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
     /// </summary>
     internal class UnaryMinus : BinaryOperationDouble
     {
-        public override string Name
-        {
-            get
-            {
-                return "-";
-            }
-        }
-
-        public override OperationPriority Priority
-        {
-            get
-            {
-                return OperationPriority.MultDiv;
-            }
-        }
-
-        public override double Perform(double input1, double input2)
-        {
-            return -1 * input2;
-        }
+        public override string Name => "-";
+        public override OperationPriority Priority => OperationPriority.MultDiv;
+        public override double Perform(double input1, double input2) => -1 * input2;
     }
     internal class Addition : BinaryOperationDouble
     {
-        public override string Name
-        {
-            get
-            {
-                return "+";
-            }
-        }
-
-        public override OperationPriority Priority
-        {
-            get
-            {
-                return OperationPriority.AddSub;
-            }
-        }
-
+        public override string Name => "+";
+        public override OperationPriority Priority => OperationPriority.AddSub;
         public override double Perform(double input1, double input2) => input1 + input2;
     }
     internal class Subtraction : BinaryOperationDouble
     {
-        public override string Name
-        {
-            get
-            {
-                return "-";
-            }
-        }
-
-        public override OperationPriority Priority
-        {
-            get
-            {
-                return OperationPriority.AddSub;
-            }
-        }
-
+        public override string Name => "-";
+        public override OperationPriority Priority => OperationPriority.AddSub;
         public override double Perform(double input1, double input2) => input1 - input2;
     }
     internal class Multiplication : BinaryOperationDouble
     {
-        public override string Name
-        {
-            get
-            {
-                return "*";
-            }
-        }
-
-        public override OperationPriority Priority
-        {
-            get
-            {
-                return OperationPriority.MultDiv;
-            }
-        }
-
+        public override string Name => "*";
+        public override OperationPriority Priority => OperationPriority.MultDiv;
         public override double Perform(double input1, double input2) => input1 * input2;
     }
     internal class Division : BinaryOperationDouble
     {
-        public override string Name
-        {
-            get
-            {
-                return "/";
-            }
-        }
-
-        public override OperationPriority Priority
-        {
-            get
-            {
-                return OperationPriority.MultDiv;
-            }
-        }
-
+        public override string Name => "/";
+        public override OperationPriority Priority => OperationPriority.MultDiv;
         public override double Perform(double input1, double input2) => input1 / input2;
     }
     internal class Modulus : BinaryOperationDouble
     {
-        public override string Name
-        {
-            get
-            {
-                return "%";
-            }
-        }
-
-        public override OperationPriority Priority
-        {
-            get
-            {
-                return OperationPriority.MultDiv;
-            }
-        }
-
+        public override string Name => "%";
+        public override OperationPriority Priority => OperationPriority.MultDiv;
         public override double Perform(double input1, double input2) => input1 % input2;
     }
     internal class Power : BinaryOperationDouble
     {
-        public override string Name
-        {
-            get
-            {
-                return "^";
-            }
-        }
-
-        public override OperationPriority Priority
-        {
-            get
-            {
-                return OperationPriority.Exponent;
-            }
-        }
-
+        public override string Name => "^";
+        public override OperationPriority Priority => OperationPriority.Exponent;
         public override double Perform(double input1, double input2) => Math.Pow(input1, input2);
     }
     internal class Greater : BinaryOperationDouble
