@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
 
-namespace Team1922.MVVM.Services.ExpressionParser
+namespace Team1922.MVVM.Services.ExpressionParser.Operations
 {
     /// <summary>
     /// This represents the core operations with the special mathmatical syntax (i.e. 2 + 4 instead of +(2,4))
     /// </summary>
-    internal static class Operations
+    internal static class OperationInstances
     {
         public static List<BinaryOperationDouble> DoubleOperations { get; } = new List<BinaryOperationDouble>() {
             new Addition(),

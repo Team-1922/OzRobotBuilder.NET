@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Services.ExpressionParser.Operations;
 
 namespace Team1922.MVVM.Services.ExpressionParser
 {
@@ -21,7 +22,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
         private void RegisterOperations()
         {
-            foreach(var operation in Operations.DoubleOperations)
+            foreach(var operation in OperationInstances.DoubleOperations)
             {
                 _binaryOperations.Add(operation);
             }
