@@ -18,7 +18,12 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
             new Multiplication(),
             new Division(),
             new Modulus(),
-            new Power()
+            new Power(),
+            new Greater(),
+            new GreaterOrEqual(),
+            new Less(),
+            new LessOrEqual(),
+            new IsEqual()
         };
         public static List<BinaryOperationBool> BoolOperations { get; } = new List<BinaryOperationBool>()
         {
@@ -211,6 +216,36 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
         }
 
         public override double Perform(double input1, double input2) => Math.Pow(input1, input2);
+    }
+    internal class Greater : BinaryOperationDouble
+    {
+        public override string Name => ">";
+        public override OperationPriority Priority => OperationPriority.Boolean;
+        public override double Perform(double input1, double input2) => input1 > input2 ? 1 : 0;
+    }
+    internal class GreaterOrEqual : BinaryOperationDouble
+    {
+        public override string Name => ">=";
+        public override OperationPriority Priority => OperationPriority.Boolean;
+        public override double Perform(double input1, double input2) => input1 >= input2 ? 1 : 0;
+    }
+    internal class Less : BinaryOperationDouble
+    {
+        public override string Name => "<";
+        public override OperationPriority Priority => OperationPriority.Boolean;
+        public override double Perform(double input1, double input2) => input1 < input2 ? 1 : 0;
+    }
+    internal class LessOrEqual : BinaryOperationDouble
+    {
+        public override string Name => "<=";
+        public override OperationPriority Priority => OperationPriority.Boolean;
+        public override double Perform(double input1, double input2) => input1 <= input2 ? 1 : 0;
+    }
+    internal class IsEqual : BinaryOperationDouble
+    {
+        public override string Name => "==";
+        public override OperationPriority Priority => OperationPriority.Boolean;
+        public override double Perform(double input1, double input2) => input1 == input2 ? 1 : 0;
     }
     #endregion
 }
