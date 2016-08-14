@@ -33,7 +33,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <summary>
         /// The operations which are allowed to be in the format "4+5"
         /// </summary>
-        static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^)$");
+        static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^|\&|\||<|>|=)$");
         /// <summary>
         /// The regular expression for valid operation names
         /// </summary>
