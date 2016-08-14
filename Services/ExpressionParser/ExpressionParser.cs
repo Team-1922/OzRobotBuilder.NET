@@ -263,7 +263,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             for (int i = 0; i < expression.Length;)
             {
                 //create this next operation node
-                var thisNode = new OperationExpressionNode();
+                ExpressionNodeBase thisNode = new OperationExpressionNode();
 
                 //On the first scan, get the left-hand operand right-out
                 if (first)
@@ -286,9 +286,18 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
                 //get the right operend
                 var rightOperand = GetOperand(expression, ref i);
-                
-                //set the operation
-                thisNode.Operation = currentOperation;
+
+                if (currentOperation is StoreOperation)
+                {
+                    var newNode = new DataAccessExpressionNode(DataAccessService.Instance, currentOperation as StoreOperation);
+                    newNode.Children.AddRange(thisNode.Children);
+                }
+                else
+                {
+                    //set the operation
+                    (thisNode as OperationExpressionNode).Operation = currentOperation;
+                }
+
                 
                 if (first)
                 {
