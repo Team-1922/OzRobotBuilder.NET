@@ -85,6 +85,12 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
                 return new DataAccessExpressionNode(DataAccessService.Instance, path);
             }
+            else if(expression[i] == '+')
+            {
+                //if the operand starts with a + sign, this means nothing; it is redundant
+                i++;
+                return GetOperand(expression, ref i);
+            }
             else if(_validOpName.IsMatch($"{expression[i]}"))
             {
                 //this means it is a non-binary operation (user added or otherwise)
