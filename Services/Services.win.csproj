@@ -46,6 +46,7 @@
     <Compile Include="ExpressionParserService.cs" />
     <Compile Include="ExpressionParser\BinaryOperation.cs" />
     <Compile Include="ExpressionParser\DataAccessExpressionNode.cs" />
+    <Compile Include="ExpressionParser\DataWriteExpressionNode.cs" />
     <Compile Include="ExpressionParser\Expression.cs" />
     <Compile Include="ExpressionParser\ExpressionNodeBase.cs" />
     <Compile Include="ExpressionParser\ExpressionParser.cs" />

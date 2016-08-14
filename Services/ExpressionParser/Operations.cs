@@ -30,7 +30,8 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
             new BooleanOr(),
             new BooleanAnd()
         };
-        public static StoreOperation StoreOperation { get; } = new StoreOperation();
+        public static DataAccessWriteOperation WriteOperation { get; } = new DataAccessWriteOperation();
+        public static DataAccessOperation ReadOperation { get; } = new DataAccessOperation();
     }
 
     internal class ClampOperation : FuncStyleOperation
@@ -153,18 +154,35 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
     /// <summary>
     /// This class is a little bit unique, becuase only the DataAccessExpressionNode uses it
     /// </summary>
-    internal class StoreOperation : BinaryOperationDouble
+    internal class DataAccessWriteOperation : BinaryOperationDouble
     {
         public override string Name => "=";
         public override OperationPriority Priority => OperationPriority.Lowest;
         public override double Perform(double input1, double input2)
         {
-            throw new Exception("Perform Should Not Be Called on StoreOperation");
+            throw new Exception("Perform Should Not Be Called on DataAccessWriteOperation");
         }
         public void Perform(string dataPath, double value)
         {
-            DataAccessService.Instance.AssertPath(dataPath);
             DataAccessService.Instance.DataInstance[dataPath] = value.ToString();
+        }
+    }
+    internal class DataAccessOperation : IOperationDouble
+    {
+        public string Name => "[]";
+        public uint ParamCount => 1;
+        public OperationPriority Priority => OperationPriority.Lowest;
+        public double Perform(List<double> param)
+        {
+            throw new Exception("Perform Should Not Be Called on DataAccessOperation");
+        }
+        //TODO: maybe support more than just doubles in the future?
+        public double Perform(string dataPath)
+        {
+            double ret;
+            if (double.TryParse(DataAccessService.Instance.DataInstance[dataPath], out ret))
+                return ret;
+            throw new Exception($"DataAccessExpressionNode({dataPath}) Does Not Contain Numerical Value!");
         }
     }
     #endregion

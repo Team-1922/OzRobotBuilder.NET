@@ -30,7 +30,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             {
                 _binaryOperations.Add(operation);
             }
-            _binaryOperations.Add(OperationInstances.StoreOperation);
+            _binaryOperations.Add(OperationInstances.WriteOperation);
         }
 
         #region Private Helper Methods
@@ -88,7 +88,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 //get the path within the brackets
                 var path = GetGroupStatement(expression, ref i, '[', ']');
 
-                return new DataAccessExpressionNode(DataAccessService.Instance, path);
+                return new DataAccessExpressionNode(path, OperationInstances.ReadOperation);
             }
             else if(expression[i] == '+')
             {
@@ -288,9 +288,9 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 //get the right operend
                 var rightOperand = GetOperand(expression, ref i);
 
-                if (currentOperation is StoreOperation)
+                if (currentOperation is DataAccessWriteOperation)
                 {
-                    var newNode = new DataAccessExpressionNode(DataAccessService.Instance, currentOperation as StoreOperation);
+                    var newNode = new DataWriteExpressionNode(currentOperation as DataAccessWriteOperation);
                     newNode.Children.AddRange(thisNode.Children);
                     thisNode = newNode;
                 }
