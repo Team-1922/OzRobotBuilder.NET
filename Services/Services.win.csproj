@@ -44,13 +44,17 @@
     <Compile Include="DataAccess.cs" />
     <Compile Include="DataAccessService.cs" />
     <Compile Include="ExpressionParserService.cs" />
-    <Compile Include="ExpressionParser\ArithmeticOperations.cs" />
+    <Compile Include="ExpressionParser\BinaryOperation.cs" />
     <Compile Include="ExpressionParser\DataAccessExpressionNode.cs" />
+    <Compile Include="ExpressionParser\DataWriteExpressionNode.cs" />
     <Compile Include="ExpressionParser\Expression.cs" />
     <Compile Include="ExpressionParser\ExpressionNodeBase.cs" />
     <Compile Include="ExpressionParser\ExpressionParser.cs" />
     <Compile Include="ExpressionParser\ExpressionToken.cs" />
+    <Compile Include="ExpressionParser\FuncStyleOperation.cs" />
+    <Compile Include="ExpressionParser\IBinaryOperation.cs" />
     <Compile Include="ExpressionParser\OperationExpressionNode.cs" />
+    <Compile Include="ExpressionParser\Operations.cs" />
     <Compile Include="IOService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

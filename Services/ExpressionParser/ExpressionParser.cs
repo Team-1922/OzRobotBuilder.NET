@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Services.ExpressionParser.Operations;
 
 namespace Team1922.MVVM.Services.ExpressionParser
 {
     public class ExpressionParser : IExpressionParser
     {
         private List<IOperation> _operations = new List<IOperation>();
-        private List<BinaryOperation> _binaryOperation = new List<BinaryOperation>();
+        private List<IOperation> _binaryOperations = new List<IOperation>();
         private UnaryMinus _unaryMinusOperation = new UnaryMinus();
 
         public ExpressionParser()
@@ -21,18 +22,23 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
         private void RegisterOperations()
         {
-            foreach(var operation in ArithmeticOperations.Operations)
+            foreach(var operation in OperationInstances.DoubleOperations)
             {
-                _binaryOperation.Add(operation);
+                _binaryOperations.Add(operation);
             }
+            foreach(var operation in OperationInstances.BoolOperations)
+            {
+                _binaryOperations.Add(operation);
+            }
+            _binaryOperations.Add(OperationInstances.WriteOperation);
         }
 
         #region Private Helper Methods
 
         /// <summary>
-        /// The operations which are allowed to be in the format "4+5"
+        /// The operations characters which are allowed to be in the format "4+5"
         /// </summary>
-        static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^)$");
+        static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^|\&|\||<|>|=)$");
         /// <summary>
         /// The regular expression for valid operation names
         /// </summary>
@@ -82,7 +88,13 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 //get the path within the brackets
                 var path = GetGroupStatement(expression, ref i, '[', ']');
 
-                return new DataAccessExpressionNode(DataAccessService.Instance, path);
+                return new DataAccessExpressionNode(path, OperationInstances.ReadOperation);
+            }
+            else if(expression[i] == '+')
+            {
+                //if the operand starts with a + sign, this means nothing; it is redundant
+                i++;
+                return GetOperand(expression, ref i);
             }
             else if(_validOpName.IsMatch($"{expression[i]}"))
             {
@@ -222,14 +234,14 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// </summary>
         /// <param name="opName">the name of this operation, <see cref="IOperation.Name"/></param>
         /// <returns>the operation represented with <paramref name="op"/></returns>
-        private BinaryOperation GetBinaryOperation(string opName)
+        private IOperation GetBinaryOperation(string opName)
         {
             //if there is NO space between the two elements, that means multiplication (i.e. two touching parentheses)
             if (opName == "")
-                return _binaryOperation[2];//this should be multiplication
+                return _binaryOperations[2];//this should be multiplication
 
             //go through each binary operation and check if the string properly represents it
-            foreach(var operation in _binaryOperation)
+            foreach(var operation in _binaryOperations)
             {
                 if (operation.Name == opName)
                     return operation;
@@ -252,7 +264,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             for (int i = 0; i < expression.Length;)
             {
                 //create this next operation node
-                var thisNode = new OperationExpressionNode();
+                ExpressionNodeBase thisNode = new OperationExpressionNode();
 
                 //On the first scan, get the left-hand operand right-out
                 if (first)
@@ -275,9 +287,19 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
                 //get the right operend
                 var rightOperand = GetOperand(expression, ref i);
-                
-                //set the operation
-                thisNode.Operation = currentOperation;
+
+                if (currentOperation is DataAccessWriteOperation)
+                {
+                    var newNode = new DataWriteExpressionNode(currentOperation as DataAccessWriteOperation);
+                    newNode.Children.AddRange(thisNode.Children);
+                    thisNode = newNode;
+                }
+                else
+                {
+                    //set the operation
+                    (thisNode as OperationExpressionNode).Operation = currentOperation;
+                }
+
                 
                 if (first)
                 {
@@ -285,7 +307,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                     first = false;
 
                     //the first time through with a unary operator is a little bit different, becuase order of operations still takes affect
-                    if (((thisNode.Children[0] as OperationExpressionNode ?? ThrowNodeException<OperationExpressionNode>())?.Operation is UnaryMinus) && currentOperation.Priority < OperationPriority.MultDiv)
+                    if (thisNode.Children[0] is OperationExpressionNode && ((thisNode.Children[0] as OperationExpressionNode)?.Operation is UnaryMinus) && currentOperation.Priority < OperationPriority.MultDiv)
                     {
                         //first set the top-level equal to the unary minus operation          
                         tree = thisNode.Children[0];
@@ -305,7 +327,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 else
                 {
                     //this priority is MORE important than the previous one
-                    if (currentOperation.Priority < ((((tree as OperationExpressionNode)?.Operation) as BinaryOperation)?.Priority ?? OperationPriority.GroupingSymbols))
+                    if (currentOperation.Priority < (((tree as OperationExpressionNode)?.Operation)?.Priority ?? ThrowNodeException<OperationPriority>()))
                     {
                         //steal the previous operation's right-hand operand
                         thisNode.Children.Add(tree.Children[1]);
@@ -395,7 +417,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 throw new ArgumentException("Expression Contained Malformed Syntax");
             }
         }
-        
+
         #endregion
     }
 }
