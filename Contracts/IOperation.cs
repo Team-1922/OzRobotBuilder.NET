@@ -53,6 +53,7 @@ namespace Team1922.MVVM.Contracts
         Exponent = 1,
         MultDiv = 2,
         AddSub = 3,
-        Boolean = 4//These always get evaluated LAST
+        Boolean = 4,
+        Lowest = Boolean + 1//These always get evaluated LAST
     }
 }

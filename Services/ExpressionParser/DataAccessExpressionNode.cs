@@ -12,6 +12,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
     internal class DataAccessExpressionNode : ExpressionNodeBase
     {
         IDataAccessService _dataRoot;
+        Operations.StoreOperation _operation;
         string _path;
 
         /// <summary>
@@ -24,6 +25,11 @@ namespace Team1922.MVVM.Services.ExpressionParser
             _dataRoot = dataRoot;
             _path = path;
         }
+        public DataAccessExpressionNode(IDataAccessService dataRoot, Operations.StoreOperation operation)
+        {
+            _dataRoot = dataRoot;
+            _operation = operation;
+        }
 
         /// <summary>
         /// Instead of executing an operation, this accesses a given set of data
@@ -31,11 +37,19 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <returns>the data at <see cref="_path"/> in <see cref="_dataRoot"/></returns>
         public override double Evaluate()
         {
-            double ret;
-            if (double.TryParse(_dataRoot.DataInstance[_path], out ret))
-                return ret;
+            if (_operation == null)
+            {
+                double ret;
+                if (double.TryParse(_dataRoot.DataInstance[_path], out ret))
+                    return ret;
+                else
+                    throw new Exception($"DataAccessExpressionNode({_path}) Does Not Contain Numerical Value!");
+            }
             else
-                throw new Exception($"DataAccessExpressionNode({_path}) Does Not Contain Numerical Value!");
+            {
+                _operation.Perform(_path, Children[0].Evaluate());
+                return Children[0].Evaluate();
+            }
         }
     }
 }

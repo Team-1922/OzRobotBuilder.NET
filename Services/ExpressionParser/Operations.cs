@@ -147,4 +147,24 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
         public override double Perform(double input1, double input2) => input1 == input2 ? 1 : 0;
     }
     #endregion
+
+    #region Other Operations
+    /// <summary>
+    /// This class is a little bit unique, becuase only the DataAccessExpressionNode uses it
+    /// </summary>
+    internal class StoreOperation : BinaryOperationDouble
+    {
+        public override string Name => "=";
+        public override OperationPriority Priority => OperationPriority.Lowest;
+        public override double Perform(double input1, double input2)
+        {
+            throw new Exception("Perform Should Not Be Called on StoreOperation");
+        }
+        public void Perform(string dataPath, double value)
+        {
+            DataAccessService.Instance.AssertPath(dataPath);
+            DataAccessService.Instance.DataInstance[dataPath] = value.ToString();
+        }
+    }
+    #endregion
 }
