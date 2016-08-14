@@ -11,13 +11,19 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
     /// </summary>
     internal static class OperationInstances
     {
-        public static List<BinaryOperationDouble> DoubleOperations { get; } = new List<BinaryOperationDouble>() {
+        public static List<BinaryOperationDouble> DoubleOperations { get; } = new List<BinaryOperationDouble>()
+        {
             new Addition(),
             new Subtraction(),
             new Multiplication(),
             new Division(),
             new Modulus(),
             new Power()
+        };
+        public static List<BinaryOperationBool> BoolOperations { get; } = new List<BinaryOperationBool>()
+        {
+            new BooleanOr(),
+            new BooleanAnd()
         };
     }
 
@@ -44,6 +50,20 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
             return Math.Min(Math.Max(param[0], param[1]),param[2]);
         }
     }
+
+    #region Boolean Operaitons
+    internal class BooleanOr : BinaryOperationBool
+    {
+        public override string Name => "||";
+        public override bool Perform(bool input1, bool input2) => input1 || input2;
+    }
+    internal class BooleanAnd : BinaryOperationBool
+    {
+        public override string Name => "&&";
+        public override bool Perform(bool input1, bool input2) => input1 && input2;
+    }
+
+    #endregion
 
     #region Double Operations
     /// <summary>

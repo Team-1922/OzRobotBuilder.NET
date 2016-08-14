@@ -26,12 +26,16 @@ namespace Team1922.MVVM.Services.ExpressionParser
             {
                 _binaryOperations.Add(operation);
             }
+            foreach(var operation in OperationInstances.BoolOperations)
+            {
+                _binaryOperations.Add(operation);
+            }
         }
 
         #region Private Helper Methods
 
         /// <summary>
-        /// The operations which are allowed to be in the format "4+5"
+        /// The operations characters which are allowed to be in the format "4+5"
         /// </summary>
         static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^|\&|\||<|>|=)$");
         /// <summary>

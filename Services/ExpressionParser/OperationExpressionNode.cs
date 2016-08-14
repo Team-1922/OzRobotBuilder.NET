@@ -32,7 +32,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         }
         private double EvaluateBool()
         {
-            return (Operation as IOperationBool).Perform((from child in Children select (child.Evaluate() > 1.0)).ToList()) ? 1 : 0;
+            return (Operation as IOperationBool).Perform((from child in Children select (child.Evaluate() >= 1.0)).ToList()) ? 1 : 0;
         }
     }
 }
