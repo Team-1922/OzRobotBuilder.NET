@@ -6,6 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts.Events
 {
+    [Obsolete]
     public class AddAnalogInputEvent : AddSubsystemComponentEvent
     {
         public AddAnalogInputEvent(Subsystem subsystem) : base(subsystem)

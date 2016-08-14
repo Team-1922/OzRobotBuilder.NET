@@ -14,12 +14,17 @@
             <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <TreeView Name="tvRobot" SelectedItemChanged="tvRobot_SelectedItemChanged" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TreeView Name="tvRobot" SelectedItemChanged="tvRobot_SelectedItemChanged" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseRightButtonUp="tvRobot_MouseRightButtonUp">
             <TreeView.Resources>
                 <HierarchicalDataTemplate x:Key="HierarchialTemplate" ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding OnAddSubsystem}"/>
+                </ContextMenu>
+            </TreeView.ContextMenu>
             <TreeViewItem Name="tviRobot" Header="Robot" ItemsSource="{Binding Children}" ItemTemplate="{StaticResource HierarchialTemplate}"/>
         </TreeView>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>

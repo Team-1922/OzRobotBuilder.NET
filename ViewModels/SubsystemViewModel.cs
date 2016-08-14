@@ -17,6 +17,7 @@ namespace Team1922.MVVM.ViewModels
             _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider>("PWMOutputs");
             _analogInputProviders = new CompoundProviderList<IAnalogInputProvider>("AnalogInputs");
             _quadEncoderProviders = new CompoundProviderList<IQuadEncoderProvider>("QuadEncoders");
+            _digitalInputProviders = new CompoundProviderList<IDigitalInputProvider>("DigitalInputs");
             _relayOutputProviders = new CompoundProviderList<IRelayOutputProvider>("RelayOutputs");
             _canTalonProviders = new CompoundProviderList<ICANTalonProvider>("CANTalons");
         }
@@ -38,55 +39,35 @@ namespace Team1922.MVVM.ViewModels
             {
                 foreach (var pwmOutput in _subsystemModel.PWMOutput)
                 {
-                    if (pwmOutput == null)
-                        continue;
-                    var provider = new PWMOutputViewModel();
-                    provider.SetPWMOutput(pwmOutput);
-                    _pwmOutputProviders.Items.Add(provider);
+                    AddPWMOutput(pwmOutput, false);
                 }
             }
             if (null != _subsystemModel.AnalogInput)
             {
                 foreach (var analogInput in _subsystemModel.AnalogInput)
                 {
-                    if (analogInput == null)
-                        continue;
-                    var provider = new AnalogInputViewModel();
-                    provider.SetAnalogInput(analogInput);
-                    _analogInputProviders.Items.Add(provider);
+                    AddAnalogInput(analogInput, false);
                 }
             }
             if (null != _subsystemModel.QuadEncoder)
             {
                 foreach (var quadEncoder in _subsystemModel.QuadEncoder)
                 {
-                    if (quadEncoder == null)
-                        continue;
-                    var provider = new QuadEncoderViewModel();
-                    provider.SetQuadEncoder(quadEncoder);
-                    _quadEncoderProviders.Items.Add(provider);
+                    AddQuadEncoder(quadEncoder, false);
                 }
             }
             if (null != _subsystemModel.RelayOutput)
             {
                 foreach (var relayOutput in _subsystemModel.RelayOutput)
                 {
-                    if (relayOutput == null)
-                        continue;
-                    var provider = new RelayOutputViewModel();
-                    provider.SetRelayOutput(relayOutput);
-                    _relayOutputProviders.Items.Add(provider);
+                    AddRelayOutput(relayOutput, false);
                 }
             }
             if (null != _subsystemModel.CANTalons)
             {
                 foreach (var canTalon in _subsystemModel.CANTalons)
                 {
-                    if (canTalon == null)
-                        continue;
-                    var provider = new CANTalonViewModel();
-                    provider.SetCANTalon(canTalon);
-                    _canTalonProviders.Items.Add(provider);
+                    AddCANTalon(canTalon, false);
                 }
             }
         }
@@ -118,6 +99,13 @@ namespace Team1922.MVVM.ViewModels
         public IEnumerable<IQuadEncoderProvider> QuadEncoders
         {
             get { return _quadEncoderProviders.Items; }
+        }
+        public IEnumerable<IDigitalInputProvider> DigitalInputs
+        {
+            get
+            {
+                return _digitalInputProviders.Items;
+            }
         }
         public IEnumerable<IRelayOutputProvider> RelayOutputs
         {
@@ -198,6 +186,103 @@ namespace Team1922.MVVM.ViewModels
             
         }
 
+        private void AddPWMOutput(PWMOutput pwmOutput, bool addToModel)
+        {
+            if (pwmOutput == null)
+                throw new ArgumentNullException("pwmOutput");
+            if(addToModel)
+                _subsystemModel.PWMOutput.Add(pwmOutput);
+            var provider = new PWMOutputViewModel();
+            provider.SetPWMOutput(pwmOutput);
+            _pwmOutputProviders.Items.Add(provider);
+        }
+
+        private void AddAnalogInput(AnalogInput analogInput, bool addToModel)
+        {
+            if (analogInput == null)
+                throw new ArgumentNullException("analogInput");
+            if (addToModel)
+                _subsystemModel.AnalogInput.Add(analogInput);
+            var provider = new AnalogInputViewModel();
+            provider.SetAnalogInput(analogInput);
+            _analogInputProviders.Items.Add(provider);
+        }
+
+        private void AddQuadEncoder(QuadEncoder quadEncoder, bool addToModel)
+        {
+            if (quadEncoder == null)
+                throw new ArgumentNullException("quadEncoder");
+            if (addToModel)
+                _subsystemModel.QuadEncoder.Add(quadEncoder);
+
+            var provider = new QuadEncoderViewModel();
+            provider.SetQuadEncoder(quadEncoder);
+            _quadEncoderProviders.Items.Add(provider);
+        }
+
+        private void AddDigitalInput(DigitalInput digitalInput, bool addToModel)
+        {
+            if (digitalInput == null)
+                throw new ArgumentNullException("digitalInput");
+            if (addToModel)
+                _subsystemModel.DigitalInput.Add(digitalInput);
+            var provider = new DigitalInputViewModel();
+            provider.SetDigitalInput(digitalInput);
+            _digitalInputProviders.Items.Add(provider);
+        }
+
+        private void AddRelayOutput(RelayOutput relayOutput, bool addToModel)
+        {
+            if (relayOutput == null)
+                throw new ArgumentNullException("relayOutput");
+            if (addToModel)
+                _subsystemModel.RelayOutput.Add(relayOutput);
+            var provider = new RelayOutputViewModel();
+            provider.SetRelayOutput(relayOutput);
+            _relayOutputProviders.Items.Add(provider);
+        }
+
+        public void AddCANTalon(CANTalon canTalon, bool addToModel)
+        {
+            if (canTalon == null)
+                throw new ArgumentNullException("canTalon");
+            if (addToModel)
+                _subsystemModel.CANTalons.Add(canTalon);
+            var provider = new CANTalonViewModel();
+            provider.SetCANTalon(canTalon);
+            _canTalonProviders.Items.Add(provider);
+        }
+
+        public void AddPWMOutput(PWMOutput pwmOutput)
+        {
+            AddPWMOutput(pwmOutput, true);
+        }
+
+        public void AddDigitalInput(DigitalInput digitalInput)
+        {
+            AddDigitalInput(digitalInput, true);
+        }
+
+        public void AddAnalogInput(AnalogInput analogInput)
+        {
+            AddAnalogInput(analogInput, true);
+        }
+
+        public void AddQuadEncoder(QuadEncoder quadEncoder)
+        {
+            AddQuadEncoder(quadEncoder, true);
+        }
+
+        public void AddRelayOutput(RelayOutput relayOutput)
+        {
+            AddRelayOutput(relayOutput, true);
+        }
+
+        public void AddCANTalon(CANTalon canTalon)
+        {
+            AddCANTalon(canTalon, true);
+        }
+
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
         CompoundProviderList<IPWMOutputProvider> _pwmOutputProviders
@@ -234,6 +319,18 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 _children["_quadEncoderProviders"] = value;
+            }
+        }
+        CompoundProviderList<IDigitalInputProvider> _digitalInputProviders
+        {
+            get
+            {
+                return _children["_digitalInputProviders"] as CompoundProviderList<IDigitalInputProvider>;
+            }
+
+            set
+            {
+                _children["_digitalInputProviders"] = value;
             }
         }
         CompoundProviderList<IRelayOutputProvider> _relayOutputProviders

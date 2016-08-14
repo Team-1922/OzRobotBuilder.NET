@@ -22,6 +22,14 @@ namespace Team1922.MVVM.ViewModels
             AddEventHandlerCommand = new DelegateCommand(OnAddEventHandler);
             AddJoystickCommand = new DelegateCommand(OnAddJoystick);
 
+            AddPWMOutputCommand = new DelegateCommand(OnAddPWMOutput);
+            AddAnalogInputCommand = new DelegateCommand(OnAddAnalogInput);
+            AddQuadEncoderCommand = new DelegateCommand(OnAddQuadEncoder);
+            AddDigitalInputCommand = new DelegateCommand(OnAddDigitalInput);
+            AddRelayOutputCommand = new DelegateCommand(OnAddRelayOutput);
+            AddPWMOutputCommand = new DelegateCommand(OnAddCANTalon);
+
+
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems");
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("Event Handlers");
             _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks");
@@ -104,50 +112,42 @@ namespace Team1922.MVVM.ViewModels
 
         private void OnAddSubsystem()
         {
+            _robotModel.Subsystem.Add(new Subsystem());
             EventAggregator<AddSubsystemEvent>.Instance.Publish(this, new AddSubsystemEvent());
         }
         private void OnAddEventHandler()
         {
+            _robotModel.EventHandler.Add(new Models.EventHandler());
             EventAggregator<AddEventHandlerEvent>.Instance.Publish(this, new AddEventHandlerEvent());
         }
         private void OnAddJoystick()
         {
+            _robotModel.Joystick.Add(new Joystick());
             EventAggregator<AddJoystickEvent>.Instance.Publish(this, new AddJoystickEvent());
         }
         private void OnAddAnalogInput()
         {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddAnalogInputEvent>.Instance.Publish(this, new AddAnalogInputEvent(_selectedElement as Subsystem));
-            }
+            (_selectedElement as SubsystemViewModel)?.AddAnalogInput(new AnalogInput());
         }
         private void OnAddCANTalon()
         {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddCANTalonEvent>.Instance.Publish(this, new AddCANTalonEvent(_selectedElement as Subsystem));
-            }
+            (_selectedElement as SubsystemViewModel)?.AddCANTalon(new CANTalon());
         }
         private void OnAddDigitalInput()
         {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddDigitalInputEvent>.Instance.Publish(this, new AddDigitalInputEvent(_selectedElement as Subsystem));
-            }
+            (_selectedElement as SubsystemViewModel)?.AddDigitalInput(new DigitalInput());
         }
-        private void OnAddPWMMotorController()
+        private void OnAddPWMOutput()
         {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddPWMMotorControllerEvent>.Instance.Publish(this, new AddPWMMotorControllerEvent(_selectedElement as Subsystem));
-            }
+            (_selectedElement as SubsystemViewModel)?.AddPWMOutput(new PWMOutput());
         }
         private void OnAddQuadEncoder()
         {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddQuadEncoderEvent>.Instance.Publish(this, new AddQuadEncoderEvent(_selectedElement as Subsystem));
-            }
+            (_selectedElement as SubsystemViewModel)?.AddQuadEncoder(new QuadEncoder());
+        }
+        private void OnAddRelayOutput()
+        {
+            (_selectedElement as SubsystemViewModel)?.AddRelayOutput(new RelayOutput());
         }
 
         public void UpdateInputValues()
@@ -161,6 +161,13 @@ namespace Team1922.MVVM.ViewModels
         public ICommand AddSubsystemCommand { get; }
         public ICommand AddEventHandlerCommand { get; }
         public ICommand AddJoystickCommand { get; }
+
+        public ICommand AddPWMOutputCommand { get; }
+        public ICommand AddAnalogInputCommand { get; }
+        public ICommand AddDigitalInputCommand { get; }
+        public ICommand AddQuadEncoderCommand { get; }
+        public ICommand AddRelayOutputCommand { get; }
+        public ICommand AddCANTalonCommand { get; }
 
         public int TeamNumber
         {
