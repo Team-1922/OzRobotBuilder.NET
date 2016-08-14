@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
-using Team1922.MVVM.Services.ExpressionParser.Operations;
 
 namespace Team1922.MVVM.Services.ExpressionParser
 {
@@ -22,18 +21,18 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
         private void RegisterOperations()
         {
-            foreach(var operation in OperationInstances.DoubleOperations)
+            foreach(var operation in Operations.DoubleOperations)
             {
                 _binaryOperations.Add(operation);
             }
         }
 
         #region Private Helper Methods
+
         /// <summary>
         /// The operations which are allowed to be in the format "4+5"
         /// </summary>
-        //static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^)$");
-        static Regex _validNumber = new Regex(@"^[0-9]+$");
+        static Regex _specialOps = new Regex(@"^(\+|-|\*|\/|\%|\^)$");
         /// <summary>
         /// The regular expression for valid operation names
         /// </summary>
@@ -125,7 +124,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             {
                 //if this is not a new sub-group, just loop until the next operand
                 int begin = i;
-                while (i < expression.Length && _validNumber.IsMatch($"{expression[i]}")) ++i;
+                while (i < expression.Length && !_specialOps.IsMatch($"{expression[i]}")) ++i;
                 return new ExpressionToken(double.Parse(expression.Substring(begin, i - begin)));
             }
         }
@@ -223,42 +222,10 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// </summary>
         /// <param name="opName">the name of this operation, <see cref="IOperation.Name"/></param>
         /// <returns>the operation represented with <paramref name="op"/></returns>
-        private IOperation GetBinaryOperation(string expression, ref int i)
+        private IOperation GetBinaryOperation(string opName)
         {
-            //get the text representation of this operation
-            /*int opBegin = i;
-            while (_specialOps.IsMatch($"{expression[i]}") && (i > opBegin ? !_validSigns.IsMatch($"{expression[i]}") : true))
-            {
-
-            }
-            string opName = expression.Substring(opBegin, i - opBegin);*/
-
-            int beginIndex = i;
-            bool operationsRemaining = true;
-            string tmpName = expression.Substring(i,1);
-            IOperation currOp = null;
-            while(operationsRemaining)
-            {
-                operationsRemaining = false;
-                foreach(var operation in _binaryOperations)
-                {
-                    if (operation.Name.Contains(tmpName))
-                    {
-                        currOp = operation;
-                        operationsRemaining = true;
-                        tmpName += expression[++i];
-                        break;
-                    }
-                }
-            }
-
-            if(null == currOp)
-                throw new ArgumentException($"Binary Operation: \"{expression.Substring(beginIndex, i - beginIndex)}\" Is Invalid");
-            return currOp;
-
-
             //if there is NO space between the two elements, that means multiplication (i.e. two touching parentheses)
-            /*if (opName == "")
+            if (opName == "")
                 return _binaryOperations[2];//this should be multiplication
 
             //go through each binary operation and check if the string properly represents it
@@ -268,7 +235,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                     return operation;
             }
 
-            throw new ArgumentException($"Binary Operation: \"{opName}\" Is Invalid");*/
+            throw new ArgumentException($"Binary Operation: \"{opName}\" Is Invalid");
         }
         /// <summary>
         /// converts string expression into expression tree
@@ -298,8 +265,13 @@ namespace Team1922.MVVM.Services.ExpressionParser
                         return thisNode.Children[0];
                 }
 
+                //get the text representation of this operation
+                int opBegin = i;
+                while (_specialOps.IsMatch($"{expression[i]}") && (i > opBegin ? !_validSigns.IsMatch($"{expression[i]}") : true)) ++i;
+                string op = expression.Substring(opBegin, i - opBegin);
+
                 //Get the current operation
-                var currentOperation = GetBinaryOperation(expression, ref i);
+                var currentOperation = GetBinaryOperation(op);
 
                 //get the right operend
                 var rightOperand = GetOperand(expression, ref i);
@@ -409,19 +381,19 @@ namespace Team1922.MVVM.Services.ExpressionParser
             string condensed = new string((from ch in expression.Trim() where ch != ' ' select ch).ToArray());
             
             //return the grouped expression
-            //try
-            //{
+            try
+            {
                 var ret =  new Expression(expression, Group(condensed));
                 return ret;
-            //}
-            //catch(FormatException)
-            //{
-            //    throw new ArgumentException("Expression Contained Improperly Formatted Numbers");
-            //}
-            //catch(IndexOutOfRangeException)
-            //{
-            //    throw new ArgumentException("Expression Contained Malformed Syntax");
-            //}
+            }
+            catch(FormatException)
+            {
+                throw new ArgumentException("Expression Contained Improperly Formatted Numbers");
+            }
+            catch(IndexOutOfRangeException)
+            {
+                throw new ArgumentException("Expression Contained Malformed Syntax");
+            }
         }
 
         #endregion
