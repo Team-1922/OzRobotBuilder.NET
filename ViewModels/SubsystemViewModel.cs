@@ -252,6 +252,35 @@ namespace Team1922.MVVM.ViewModels
             provider.SetCANTalon(canTalon);
             _canTalonProviders.Items.Add(provider);
         }
+        public void AddPWMOutput(PWMOutput pwmOutput)
+        {
+            AddPWMOutput(pwmOutput, true);
+        }
+
+        public void AddDigitalInput(DigitalInput digitalInput)
+        {
+            AddDigitalInput(digitalInput, true);
+        }
+
+        public void AddAnalogInput(AnalogInput analogInput)
+        {
+            AddAnalogInput(analogInput, true);
+        }
+
+        public void AddQuadEncoder(QuadEncoder quadEncoder)
+        {
+            AddQuadEncoder(quadEncoder, true);
+        }
+
+        public void AddRelayOutput(RelayOutput relayOutput)
+        {
+            AddRelayOutput(relayOutput, true);
+        }
+
+        public void AddCANTalon(CANTalon canTalon)
+        {
+            AddCANTalon(canTalon, true);
+        }
 
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();

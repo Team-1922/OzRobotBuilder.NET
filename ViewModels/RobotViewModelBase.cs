@@ -204,6 +204,18 @@ namespace Team1922.MVVM.ViewModels
             provider.SetEventHandler(eventHandler);
             _eventHandlerProviders.Items.Add(provider);
         }
+        public void AddSubsystem(Subsystem subsystem)
+        {
+            AddSubsystem(subsystem, true);
+        }
+        public void AddJoystick(Joystick joystick)
+        {
+            AddJoystick(joystick, true);
+        }
+        public void AddEventHandler(Models.EventHandler eventHandler)
+        {
+            AddEventHandler(eventHandler, true);
+        }
 
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();

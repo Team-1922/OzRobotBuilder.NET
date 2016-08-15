@@ -13,7 +13,7 @@ namespace Team1922.MVVM.Contracts
     /// This interface defines an observable collection with basic and complex access; the built-in ObservableCollection class implelments all of these interfaces
     /// </summary>
     /// <typeparam name="T">the type of this collection</typeparam>
-    public interface IObservableCollection<T> : INotifyCollectionChanged, INotifyPropertyChanged, IList<T>, ICollection<T>, IEnumerable<T>, IEnumerable, IList, ICollection, IReadOnlyList<T>, IReadOnlyCollection<T>
+    public interface IObservableCollection<T> : INotifyCollectionChanged, INotifyPropertyChanged, IEnumerable<T>, IEnumerable
     {
     }
 }
