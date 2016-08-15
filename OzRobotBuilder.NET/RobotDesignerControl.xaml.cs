@@ -203,10 +203,12 @@ namespace Team1922.OzRobotBuilder.NET
         private void tvRobot_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             var viewModel = DataContext as ViewModel;
+            if (null == viewModel)
+                return;
 
             //open up the appropriate context menu
             ContextMenu cm = null;
-            if (viewModel.SelectedElement is IRobotProvider || viewModel == null)
+            if (viewModel.SelectedElement is IRobotProvider || viewModel.SelectedElement == null)
             {
                 cm = tvRobot.FindResource("cmRobot") as ContextMenu;
             }
