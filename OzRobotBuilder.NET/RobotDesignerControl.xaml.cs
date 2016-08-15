@@ -68,7 +68,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //var test = ((DataContext as ViewModel));
                 //var test1 = test?.SelectedElement as ViewModelBase;
                 //tbEditor.ItemsSource = (test.SelectedElement as ViewModelBase);
-                tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase).GetEditableKeyValueList();
+                tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase)?.GetEditableKeyValueList() ?? null;
                 //UpdateDataGrid();
             }
         }
@@ -220,6 +220,8 @@ namespace Team1922.OzRobotBuilder.NET
             else if(viewModel.SelectedElement is IJoystickProvider)
             {
             }
+            if (null == cm)
+                return;
             cm.PlacementTarget = sender as TreeView;
             cm.IsOpen = true;
         }

@@ -14,7 +14,7 @@
             <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <TreeView Name="tvRobot" SelectedItemChanged="tvRobot_SelectedItemChanged" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TreeView Name="tvRobot" SelectedItemChanged="tvRobot_SelectedItemChanged" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseRightButtonUp="tvRobot_MouseRightButtonUp">
             <TreeView.Resources>
                 <HierarchicalDataTemplate x:Key="HierarchialTemplate" ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
@@ -25,12 +25,12 @@
                     <MenuItem Header="Add Joystick" Command="{Binding AddJoystickCommand}"/>
                 </ContextMenu>
                 <ContextMenu x:Key="cmSubsystem" Name="SubsystemContextMenu">
-                    <MenuItem Header="Add PWM Output" Command="{Binding AddPWMOutputCommand}"/>
-                    <MenuItem Header="Add Analog Input" Command="{Binding AddAnalogInputCommand}"/>
-                    <MenuItem Header="Add Digital Input" Command="{Binding AddDigitalInputCommand}"/>
-                    <MenuItem Header="Add Quadrature Encoder" Command="{Binding AddQuadEncoderCommand}"/>
-                    <MenuItem Header="Add Relay Output" Command="{Binding AddRelayOutputCommand}"/>
-                    <MenuItem Header="Add CAN Talon (Talon SRX)" Command="{Binding AddCANTalonCommand}"/>
+                    <MenuItem Header="Add PWM Output" Command="{Binding AddPWMOutputCommand, Mode=OneWay}"/>
+                    <MenuItem Header="Add Analog Input" Command="{Binding AddAnalogInputCommand, Mode=OneWay}"/>
+                    <MenuItem Header="Add Digital Input" Command="{Binding AddDigitalInputCommand, Mode=OneWay}"/>
+                    <MenuItem Header="Add Quadrature Encoder" Command="{Binding AddQuadEncoderCommand, Mode=OneWay}"/>
+                    <MenuItem Header="Add Relay Output" Command="{Binding AddRelayOutputCommand, Mode=OneWay}"/>
+                    <MenuItem Header="Add CAN Talon (Talon SRX)" Command="{Binding AddCANTalonCommand, Mode=OneWay}"/>
                 </ContextMenu>
             </TreeView.Resources>
             <TreeViewItem Name="tviRobot" Header="Robot" ItemsSource="{Binding Children}" ItemTemplate="{StaticResource HierarchialTemplate}"/>
