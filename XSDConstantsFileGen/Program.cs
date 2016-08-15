@@ -59,6 +59,21 @@ using Team1922.MVVM.Models.XML;
             }
         }
 ";
+
+        static string DataErrorStringMethod =
+@"
+        // NOTE: this returns a string representation of the error
+        public static string DataErrorString(string attributeName, object value)
+        {
+            var facet = GetValidationObject(attributeName);
+            if(!facet.TestValue(value))
+            {
+                return facet.Stringify();
+            }
+            return string.Empty;
+        }
+";
+
         static string ClampMethod =
 @"
         public static double Clamp(string attributeName, double value)
@@ -121,6 +136,7 @@ using Team1922.MVVM.Models.XML;
             //finally write the lookup method into the class
             outputString.WriteLine(LookupMethod);
             outputString.WriteLine(ValidateMethod);
+            outputString.WriteLine(DataErrorStringMethod);
             outputString.WriteLine(ClampMethod);
 
             MakeLine("}", --tabCount, ref outputString);

@@ -49,6 +49,18 @@ namespace Team1922.MVVM.Models
         }
 
 
+        // NOTE: this returns a string representation of the error
+        public static string DataErrorString(string attributeName, object value)
+        {
+            var facet = GetValidationObject(attributeName);
+            if(!facet.TestValue(value))
+            {
+                return facet.Stringify();
+            }
+            return string.Empty;
+        }
+
+
         public static double Clamp(string attributeName, double value)
         {
             var facet = GetValidationObject(attributeName);
