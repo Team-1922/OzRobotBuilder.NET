@@ -17,17 +17,8 @@ namespace Team1922.MVVM.ViewModels
 
         public RobotViewModelBase()
         {
-            //GetBooksCommand = new DelegateCommand(OnGetBooks, CanGetBooks);
-            AddSubsystemCommand = new DelegateCommand(OnAddSubsystem);
-            AddContinuousCommandCommand = new DelegateCommand(OnAddContinuousCommand);
-            AddOnChangeEventHandlerCommand = new DelegateCommand(OnAddOnChangeEventHandler);
-            AddOnWithinRangeEventHandlerCommand = new DelegateCommand(OnAddOnWithinRangeEventHandler);
-            AddJoystickCommand = new DelegateCommand(OnAddJoystick);
-
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems");
-            _continuousCommandProviders = new CompoundProviderList<IContinuousCommandProvider>("Continuous Commands");
-            _onChangeEventHandlerProviders = new CompoundProviderList<IOnChangeEventHandlerProvider>("On Change Event Handlers");
-            _onWithinRangeEventHandlerProviders = new CompoundProviderList<IOnWithinRangeEventHandlerProvider>("On Within Rage Event Handlers");
+            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("Event Handlers");
             _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks");
         }
 
@@ -35,9 +26,7 @@ namespace Team1922.MVVM.ViewModels
         {
             //clear the old providers
             _subsystemProviders.Items.Clear();
-            _continuousCommandProviders.Items.Clear();
-            _onChangeEventHandlerProviders.Items.Clear();
-            _onWithinRangeEventHandlerProviders.Items.Clear();
+            _eventHandlerProviders.Items.Clear();
             _joystickProviders.Items.Clear();
 
             //setup the new providers
@@ -46,55 +35,21 @@ namespace Team1922.MVVM.ViewModels
             {
                 foreach (var subsystem in _robotModel.Subsystem)
                 {
-                    if (subsystem == null)
-                        continue;
-                    var provider = new SubsystemViewModel();
-                    provider.SetSubsystem(subsystem);
-                    _subsystemProviders.Items.Add(provider);
+                    AddSubsystem(subsystem, false);
                 }
             }
-            if (null != _robotModel.ContinuousCommand)
+            if (null != _robotModel.EventHandler)
             {
-                foreach (var continuousCommand in _robotModel.ContinuousCommand)
+                foreach (var eventHandler in _robotModel.EventHandler)
                 {
-                    if (continuousCommand == null)
-                        continue;
-                    var provider = new ContinuousCommandViewModel();
-                    provider.SetContinuousCommand(continuousCommand);
-                    _continuousCommandProviders.Items.Add(provider);
-                }
-            }
-            if (null != _robotModel.OnChangeEventHandler)
-            {
-                foreach (var onChangeEventHandler in _robotModel.OnChangeEventHandler)
-                {
-                    if (onChangeEventHandler == null)
-                        continue;
-                    var provider = new OnChangeEventHandlerViewModel();
-                    provider.SetOnChangeEventHandler(onChangeEventHandler);
-                    _onChangeEventHandlerProviders.Items.Add(provider);
-                }
-            }
-            if (null != _robotModel.OnWithinRangeEventHandler)
-            {
-                foreach (var onWithinRangeEventHandler in _robotModel.OnWithinRangeEventHandler)
-                {
-                    if (onWithinRangeEventHandler == null)
-                        continue;
-                    var provider = new OnWithinRangeEventHandlerViewModel();
-                    provider.SetOnWithinRangeEventHandler(onWithinRangeEventHandler);
-                    _onWithinRangeEventHandlerProviders.Items.Add(provider);
+                    AddEventHandler(eventHandler, false);
                 }
             }
             if (null != _robotModel.Joystick)
             {
                 foreach (var joystick in _robotModel.Joystick)
                 {
-                    if (joystick == null)
-                        continue;
-                    var provider = new JoystickViewModel();
-                    provider.SetJoystick(joystick);
-                    _joystickProviders.Items.Add(provider);
+                    AddJoystick(joystick, false);
                 }
             }
         }
@@ -121,77 +76,13 @@ namespace Team1922.MVVM.ViewModels
         {
             get { return _subsystemProviders.Items; }
         }
-        public IEnumerable<IContinuousCommandProvider> ContinuousCommands
+        public IEnumerable<IEventHandlerProvider> EventHandlers
         {
-            get { return _continuousCommandProviders.Items; }
-        }
-        public IEnumerable<IOnChangeEventHandlerProvider> OnChangeEventHandlers
-        {
-            get { return _onChangeEventHandlerProviders.Items; }
-        }
-        public IEnumerable<IOnWithinRangeEventHandlerProvider> OnWithinRangeEventHandlers
-        {
-            get { return _onWithinRangeEventHandlerProviders.Items; }
+            get { return _eventHandlerProviders.Items; }
         }
         public IEnumerable<IJoystickProvider> Joysticks
         {
             get { return _joystickProviders.Items; }
-        }
-
-        private void OnAddSubsystem()
-        {
-            EventAggregator<AddSubsystemEvent>.Instance.Publish(this, new AddSubsystemEvent());
-        }
-        private void OnAddContinuousCommand()
-        {
-            EventAggregator<AddContinuousCommandEvent>.Instance.Publish(this, new AddContinuousCommandEvent());
-        }
-        private void OnAddOnChangeEventHandler()
-        {
-            EventAggregator<AddOnChangeEventHandler>.Instance.Publish(this, new AddOnChangeEventHandler());
-        }
-        private void OnAddOnWithinRangeEventHandler()
-        {
-            EventAggregator<AddOnWithinRangeEventHandler>.Instance.Publish(this, new AddOnWithinRangeEventHandler());
-        }
-        private void OnAddJoystick()
-        {
-            EventAggregator<AddJoystickEvent>.Instance.Publish(this, new AddJoystickEvent());
-        }
-        private void OnAddAnalogInput()
-        {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddAnalogInputEvent>.Instance.Publish(this, new AddAnalogInputEvent(_selectedElement as Subsystem));
-            }
-        }
-        private void OnAddCANTalon()
-        {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddCANTalonEvent>.Instance.Publish(this, new AddCANTalonEvent(_selectedElement as Subsystem));
-            }
-        }
-        private void OnAddDigitalInput()
-        {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddDigitalInputEvent>.Instance.Publish(this, new AddDigitalInputEvent(_selectedElement as Subsystem));
-            }
-        }
-        private void OnAddPWMMotorController()
-        {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddPWMMotorControllerEvent>.Instance.Publish(this, new AddPWMMotorControllerEvent(_selectedElement as Subsystem));
-            }
-        }
-        private void OnAddQuadEncoder()
-        {
-            if (_selectedElement is Subsystem)
-            {
-                EventAggregator<AddQuadEncoderEvent>.Instance.Publish(this, new AddQuadEncoderEvent(_selectedElement as Subsystem));
-            }
         }
 
         public void UpdateInputValues()
@@ -201,12 +92,6 @@ namespace Team1922.MVVM.ViewModels
                 subsystem.UpdateInputValues();
             }
         }
-
-        public ICommand AddSubsystemCommand { get; }
-        public ICommand AddContinuousCommandCommand { get; }
-        public ICommand AddOnChangeEventHandlerCommand { get; }
-        public ICommand AddOnWithinRangeEventHandlerCommand { get; }
-        public ICommand AddJoystickCommand { get; }
 
         public int TeamNumber
         {
@@ -256,16 +141,12 @@ namespace Team1922.MVVM.ViewModels
             {
                 case "AnalogInputSampleRate":
                     return AnalogInputSampleRate.ToString();
-                case "ContinuousCommands":
-                    return ContinuousCommands.ToString();
                 case "Joysticks":
                     return Joysticks.ToString();
                 case "Name":
                     return Name;
-                case "OnChangeEventHandlers":
-                    return OnChangeEventHandlers.ToString();
-                case "OnWithinRangeEventHandlers":
-                    return OnWithinRangeEventHandlers.ToString();
+                case "EventHandlers":
+                    return EventHandlers.ToString();
                 case "Subsystems":
                     return Subsystems.ToString();
                 case "TeamNumber":
@@ -274,7 +155,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -289,6 +169,52 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
             
+        }
+
+        private void AddSubsystem(Subsystem subsystem, bool addToModel)
+        {
+            if (subsystem == null)
+                throw new ArgumentNullException("subsystem");
+            if (addToModel)
+                _robotModel.Subsystem.Add(subsystem);
+
+            var provider = new SubsystemViewModel();
+            provider.SetSubsystem(subsystem);
+            _subsystemProviders.Items.Add(provider);
+        }
+        private void AddJoystick(Joystick joystick, bool addToModel)
+        {
+            if (joystick == null)
+                throw new ArgumentNullException("joystick");
+            if (addToModel)
+                _robotModel.Joystick.Add(joystick);
+
+            var provider = new JoystickViewModel();
+            provider.SetJoystick(joystick);
+            _joystickProviders.Items.Add(provider);
+        }
+        private void AddEventHandler(Models.EventHandler eventHandler, bool addToModel)
+        {
+            if (eventHandler == null)
+                throw new ArgumentNullException("subsystem");
+            if (addToModel)
+                _robotModel.EventHandler.Add(eventHandler);
+
+            var provider = new EventHandlerViewModel();
+            provider.SetEventHandler(eventHandler);
+            _eventHandlerProviders.Items.Add(provider);
+        }
+        public void AddSubsystem(Subsystem subsystem)
+        {
+            AddSubsystem(subsystem, true);
+        }
+        public void AddJoystick(Joystick joystick)
+        {
+            AddJoystick(joystick, true);
+        }
+        public void AddEventHandler(Models.EventHandler eventHandler)
+        {
+            AddEventHandler(eventHandler, true);
         }
 
         #region Private Fields
@@ -306,40 +232,16 @@ namespace Team1922.MVVM.ViewModels
                 _children["_subsystemProviders"] = value;
             }
         }
-        CompoundProviderList<IContinuousCommandProvider> _continuousCommandProviders
+        CompoundProviderList<IEventHandlerProvider> _eventHandlerProviders
         {
             get
             {
-                return _children["_continuousCommandProviders"] as CompoundProviderList<IContinuousCommandProvider>;
+                return _children["_eventHandlerProviders"] as CompoundProviderList<IEventHandlerProvider>;
             }
 
             set
             {
-                _children["_continuousCommandProviders"] = value;
-            }
-        }
-        CompoundProviderList<IOnChangeEventHandlerProvider> _onChangeEventHandlerProviders
-        {
-            get
-            {
-                return _children["_onChangeEventHandlerProviders"] as CompoundProviderList<IOnChangeEventHandlerProvider>;
-            }
-
-            set
-            {
-                _children["_onChangeEventHandlerProviders"] = value;
-            }
-        }
-        CompoundProviderList<IOnWithinRangeEventHandlerProvider> _onWithinRangeEventHandlerProviders
-        {
-            get
-            {
-                return _children["_onWithinRangeEventHandlerProviders"] as CompoundProviderList<IOnWithinRangeEventHandlerProvider>;
-            }
-
-            set
-            {
-                _children["_onWithinRangeEventHandlerProviders"] = value;
+                _children["_eventHandlerProviders"] = value;
             }
         }
         CompoundProviderList<IJoystickProvider> _joystickProviders

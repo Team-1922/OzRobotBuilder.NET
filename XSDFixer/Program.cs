@@ -105,6 +105,24 @@ namespace XSDFixer
                                     }
                                 }
                             }
+                            //convert all arrays into lists
+                            else if(line.Contains("[]"))
+                            {
+                                var splitLine = line.Split(new char[] { ' ' }, StringSplitOptions.None);
+                                var modifiedLine = "";
+                                foreach(var token in splitLine)
+                                {
+                                    if(token.Contains("[]"))
+                                    {
+                                        modifiedLine += $"System.Collections.Generic.List<{token.Substring(0, token.Length - 2)}> ";
+                                    }
+                                    else
+                                    {
+                                        modifiedLine += $"{token} ";
+                                    }
+                                }
+                                WriteLine(modifiedLine);
+                            }
                             else
                             {
                                 WriteLine(line);

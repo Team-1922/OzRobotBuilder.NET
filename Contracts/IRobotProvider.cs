@@ -20,17 +20,9 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         IEnumerable<IJoystickProvider> Joysticks { get; }
         /// <summary>
-        /// This robot's on-change EventHandlers; all of the event handlers and commands might be merged
+        /// This robot's event handlers
         /// </summary>
-        IEnumerable<IOnChangeEventHandlerProvider> OnChangeEventHandlers { get; }
-        /// <summary>
-        /// This robot's on-within-range EventHandlers; all of the event handlers and commands might be merged
-        /// </summary>
-        IEnumerable<IOnWithinRangeEventHandlerProvider> OnWithinRangeEventHandlers { get; }
-        /// <summary>
-        /// This robot's continuous Commands; all of the event handlers and commands might be merged
-        /// </summary>
-        IEnumerable<IContinuousCommandProvider> ContinuousCommands { get; }
+        IEnumerable<IEventHandlerProvider> EventHandlers { get; }
         /// <summary>
         /// This robot's Team Number
         /// </summary>
@@ -45,5 +37,21 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="robot">the robot model instance</param>
         void SetRobot(Robot robot);
+
+        /// <summary>
+        /// Adds a model instance of a Subsystem
+        /// </summary>
+        /// <param name="subsystem">the Subsystem model instance</param>
+        void AddSubsystem(Subsystem subsystem);
+        /// <summary>
+        /// Adds a model instance of a Joystick
+        /// </summary>
+        /// <param name="joystick">the Joystick model instance</param>
+        void AddJoystick(Joystick joystick);
+        /// <summary>
+        /// Adds a model instance of a EventHandler
+        /// </summary>
+        /// <param name="eventHandler">the EventHandler model instance</param>
+        void AddEventHandler(Models.EventHandler eventHandler);
     }
 }

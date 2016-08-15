@@ -102,9 +102,7 @@
     <xs:sequence minOccurs="0">
       <xs:element name="Subsystem" type="tns:Subsystem" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="Joystick" type="tns:Joystick" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="OnChangeEventHandler" type="tns:OnChangeEventHandler" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="OnWithinRangeEventHandler" type="tns:OnWithinRangeEventHandler" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="ContinuousCommand" type="tns:ContinuousCommand" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="EventHandler" type="tns:EventHandler" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="TeamNumber" type="tns:TeamNumber" use="required"/>
     <xs:attribute name="AnalogInputSampleRate" type="tns:AnalogInputSampleRate" default="62500"/>
@@ -127,54 +125,15 @@
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="ID" type="tns:JoystickId" default="-1"/>
   </xs:complexType>
-  
-  
-  
-  <xs:simpleType name="EventTargetType">
-    <xs:restriction base="xs:string">
-      <!-- This is a arithmetic expression which is calculated at runtime, but validated on startup
-        Note that this can contain XPaths to other numerical values -->
-      <xs:enumeration value="ModifyValue"/>
-      <!--The full name and parameters of a C# method to call-->
-      <xs:enumeration value="FullCSMethod"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="EventTarget">
-    <xs:attribute name="Type" type="tns:EventTargetType" use="required"/>
-    <xs:attribute name="Path" type="tns:XPath"/><!--if this is empty and Type=ModifyValue; then this command will never run-->
-    <xs:attribute name="Value" type="xs:string" use="required"/>
-  </xs:complexType>
-  
-  <!-- Note that this is non less efficient than continuously updating a motor with say a joystick input -->
-  <xs:complexType name="OnChangeEventHandler">
-    <xs:all minOccurs="1">
-      <xs:element  name="EventTarget" type="tns:EventTarget"/>
-    </xs:all>
+    
+  <!--This is an all-purpose event handler-->
+  <xs:complexType name="EventHandler">
     <xs:attribute name="Name" type="xs:string" use="required"/>
-    <xs:attribute name="WatchPath" type="tns:XPath" use="required"/>
-    <xs:attribute name="MinDelta" type="xs:double" default="0"/><!--Triggers at ANY change; this could be slow-->
-  </xs:complexType>
-  <xs:complexType name="OnWithinRangeEventHandler">
-    <xs:all minOccurs="1">
-      <xs:element  name="EventTarget" type="tns:EventTarget"/>
-    </xs:all>
-    <xs:attribute name="Name" type="xs:string" use="required"/>
-    <xs:attribute name="WatchPath" type="tns:XPath" use="required"/>
-    <xs:attribute name="Min" type="xs:double" use="required"/>
-    <xs:attribute name="Max" type="xs:double" use="required"/>
-    <xs:attribute name="Invert" type="xs:boolean" default="false"/>
-  </xs:complexType>
-  
-  <!--The only difference between this and the OnChangeEventHandler is this one is guaranteed to be called every update cycle-->
-  <xs:complexType name="ContinuousCommand">
-    <xs:all minOccurs="1">
-      <xs:element  name="EventTarget" type="tns:EventTarget"/>
-    </xs:all>
-    <xs:attribute name="Name" type="xs:string" use="required"/>
-  </xs:complexType>
-
-  
-  
+    <xs:attribute name="Expression" type="xs:string" use="required"/>
+    <xs:attribute name="Condition" type="xs:string" use="required"/>
+    <!--State Values-->
+    <xs:attribute name="ConditionMet" type="xs:boolean" default="false"/>
+  </xs:complexType>  
   
   <xs:complexType name="Subsystem">
     <xs:sequence minOccurs="0">

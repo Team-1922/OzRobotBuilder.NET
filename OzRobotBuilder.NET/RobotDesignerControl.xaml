@@ -14,13 +14,31 @@
             <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <TreeView Name="tvRobot" SelectedItemChanged="tvRobot_SelectedItemChanged" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TreeView Name="tvRobot" 
+                  SelectedItemChanged="tvRobot_SelectedItemChanged" 
+                  MouseRightButtonUp="tvRobot_MouseRightButtonUp"
+                  Grid.Column="0" 
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch" >
             <TreeView.Resources>
                 <HierarchicalDataTemplate x:Key="HierarchialTemplate" ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
                 </HierarchicalDataTemplate>
+                <ContextMenu x:Key="cmRobot" Name="RobotContextMenu">
+                    <MenuItem Header="Add Subsystem" Click="cmRobot_AddSubsystem"/>
+                    <MenuItem Header="Add Event Handler" Click="cmRobot_AddEventHandler"/>
+                    <MenuItem Header="Add Joystick" Click="cmRobot_AddJoystick"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmSubsystem" Name="SubsystemContextMenu">
+                    <MenuItem Header="Add PWM Output" Click="cmSubsystem_AddPWMOutput"/>
+                    <MenuItem Header="Add Analog Input" Click="cmSubsystem_AddAnalogInput"/>
+                    <MenuItem Header="Add Digital Input" Click="cmSubsystem_AddDigitalInput"/>
+                    <MenuItem Header="Add Quadrature Encoder" Click="cmSubsystem_AddQuadEncoder"/>
+                    <MenuItem Header="Add Relay Output" Click="cmSubsystem_AddRelayOutput"/>
+                    <MenuItem Header="Add CAN Talon (Talon SRX)" Click="cmSubsystem_AddCANTalon"/>
+                </ContextMenu>
             </TreeView.Resources>
-            <TreeViewItem Name="tviRobot" Header="Robot" ItemsSource="{Binding Children}" ItemTemplate="{StaticResource HierarchialTemplate}"/>
+            <TreeViewItem Name="tviRobot" DataContext="{Binding}" Header="Robot" ItemsSource="{Binding Children}" ItemTemplate="{StaticResource HierarchialTemplate}"/>
         </TreeView>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
         <!--<TextBlock Name="tbSelectedItem" Grid.Column="2" Text="{Binding Path=SelectedItem.Name, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="24" Background="Green"/>-->

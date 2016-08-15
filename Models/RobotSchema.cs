@@ -28,15 +28,11 @@ namespace Team1922.MVVM.Models {
         "", IsNullable=false)]
     public partial class Robot {
         
-        private Subsystem[] subsystemField;
+        private System.Collections.Generic.List<Subsystem> subsystemField; 
         
-        private Joystick[] joystickField;
+        private System.Collections.Generic.List<Joystick> joystickField; 
         
-        private OnChangeEventHandler[] onChangeEventHandlerField;
-        
-        private OnWithinRangeEventHandler[] onWithinRangeEventHandlerField;
-        
-        private ContinuousCommand[] continuousCommandField;
+        private System.Collections.Generic.List<EventHandler> eventHandlerField; 
         
         private int teamNumberField;
         
@@ -48,7 +44,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Subsystem")]
-        public Subsystem[] Subsystem {
+        public System.Collections.Generic.List<Subsystem> Subsystem { 
             get {
                 return this.subsystemField;
             }
@@ -59,7 +55,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Joystick")]
-        public Joystick[] Joystick {
+        public System.Collections.Generic.List<Joystick> Joystick { 
             get {
                 return this.joystickField;
             }
@@ -69,35 +65,13 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("OnChangeEventHandler")]
-        public OnChangeEventHandler[] OnChangeEventHandler {
+        [System.Xml.Serialization.XmlElementAttribute("EventHandler")]
+        public System.Collections.Generic.List<EventHandler> EventHandler { 
             get {
-                return this.onChangeEventHandlerField;
+                return this.eventHandlerField;
             }
             set {
-                this.onChangeEventHandlerField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("OnWithinRangeEventHandler")]
-        public OnWithinRangeEventHandler[] OnWithinRangeEventHandler {
-            get {
-                return this.onWithinRangeEventHandlerField;
-            }
-            set {
-                this.onWithinRangeEventHandlerField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ContinuousCommand")]
-        public ContinuousCommand[] ContinuousCommand {
-            get {
-                return this.continuousCommandField;
-            }
-            set {
-                this.continuousCommandField = value;
+                this.eventHandlerField = value;
             }
         }
         
@@ -137,17 +111,17 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class Subsystem {
         
-        private PWMOutput[] pWMOutputField;
+        private System.Collections.Generic.List<PWMOutput> pWMOutputField; 
         
-        private AnalogInput[] analogInputField;
+        private System.Collections.Generic.List<AnalogInput> analogInputField; 
         
-        private QuadEncoder[] quadEncoderField;
+        private System.Collections.Generic.List<QuadEncoder> quadEncoderField; 
         
-        private DigitalInput[] digitalInputField;
+        private System.Collections.Generic.List<DigitalInput> digitalInputField; 
         
-        private RelayOutput[] relayOutputField;
+        private System.Collections.Generic.List<RelayOutput> relayOutputField; 
         
-        private CANTalon[] cANTalonsField;
+        private System.Collections.Generic.List<CANTalon> cANTalonsField; 
         
         private PIDControllerSoftware pIDControllerField;
         
@@ -163,7 +137,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PWMOutput")]
-        public PWMOutput[] PWMOutput {
+        public System.Collections.Generic.List<PWMOutput> PWMOutput { 
             get {
                 return this.pWMOutputField;
             }
@@ -174,7 +148,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AnalogInput")]
-        public AnalogInput[] AnalogInput {
+        public System.Collections.Generic.List<AnalogInput> AnalogInput { 
             get {
                 return this.analogInputField;
             }
@@ -185,7 +159,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("QuadEncoder")]
-        public QuadEncoder[] QuadEncoder {
+        public System.Collections.Generic.List<QuadEncoder> QuadEncoder { 
             get {
                 return this.quadEncoderField;
             }
@@ -196,7 +170,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DigitalInput")]
-        public DigitalInput[] DigitalInput {
+        public System.Collections.Generic.List<DigitalInput> DigitalInput { 
             get {
                 return this.digitalInputField;
             }
@@ -207,7 +181,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RelayOutput")]
-        public RelayOutput[] RelayOutput {
+        public System.Collections.Generic.List<RelayOutput> RelayOutput { 
             get {
                 return this.relayOutputField;
             }
@@ -218,7 +192,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CANTalons")]
-        public CANTalon[] CANTalons {
+        public System.Collections.Generic.List<CANTalon> CANTalons { 
             get {
                 return this.cANTalonsField;
             }
@@ -343,20 +317,18 @@ namespace Team1922.MVVM.Models {
 #endif
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
         "")]
-    public partial class ContinuousCommand {
-        
-        private EventTarget eventTargetField;
+    public partial class EventHandler {
         
         private string nameField;
         
-        /// <remarks/>
-        public EventTarget EventTarget {
-            get {
-                return this.eventTargetField;
-            }
-            set {
-                this.eventTargetField = value;
-            }
+        private string expressionField;
+        
+        private string conditionField;
+        
+        private bool conditionMetField;
+        
+        public EventHandler() {
+            this.conditionMetField = false;
         }
         
         /// <remarks/>
@@ -366,242 +338,45 @@ namespace Team1922.MVVM.Models {
                 return this.nameField;
             }
             set {
-				TypeRestrictions.Validate("ContinuousCommand.Name", value);
-                this.nameField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-#if NET461
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-#endif
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
-        "")]
-    public partial class EventTarget {
-        
-        private EventTargetType typeField;
-        
-        private string pathField;
-        
-        private string valueField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public EventTargetType Type {
-            get {
-                return this.typeField;
-            }
-            set {
-				TypeRestrictions.Validate("EventTarget.Type", value);
-                this.typeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Path {
-            get {
-                return this.pathField;
-            }
-            set {
-				TypeRestrictions.Validate("EventTarget.Path", value);
-                this.pathField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Value {
-            get {
-                return this.valueField;
-            }
-            set {
-				TypeRestrictions.Validate("EventTarget.Value", value);
-                this.valueField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
-        "")]
-    public enum EventTargetType {
-        
-        /// <remarks/>
-        ModifyValue,
-        
-        /// <remarks/>
-        FullCSMethod,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-#if NET461
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-#endif
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
-        "")]
-    public partial class OnWithinRangeEventHandler {
-        
-        private EventTarget eventTargetField;
-        
-        private string nameField;
-        
-        private string watchPathField;
-        
-        private double minField;
-        
-        private double maxField;
-        
-        private bool invertField;
-        
-        public OnWithinRangeEventHandler() {
-            this.invertField = false;
-        }
-        
-        /// <remarks/>
-        public EventTarget EventTarget {
-            get {
-                return this.eventTargetField;
-            }
-            set {
-                this.eventTargetField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-				TypeRestrictions.Validate("OnWithinRangeEventHandler.Name", value);
+				TypeRestrictions.Validate("EventHandler.Name", value);
                 this.nameField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string WatchPath {
+        public string Expression {
             get {
-                return this.watchPathField;
+                return this.expressionField;
             }
             set {
-				TypeRestrictions.Validate("OnWithinRangeEventHandler.WatchPath", value);
-                this.watchPathField = value;
+				TypeRestrictions.Validate("EventHandler.Expression", value);
+                this.expressionField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public double Min {
+        public string Condition {
             get {
-                return this.minField;
+                return this.conditionField;
             }
             set {
-				TypeRestrictions.Validate("OnWithinRangeEventHandler.Min", value);
-                this.minField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public double Max {
-            get {
-                return this.maxField;
-            }
-            set {
-				TypeRestrictions.Validate("OnWithinRangeEventHandler.Max", value);
-                this.maxField = value;
+				TypeRestrictions.Validate("EventHandler.Condition", value);
+                this.conditionField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool Invert {
+        public bool ConditionMet {
             get {
-                return this.invertField;
+                return this.conditionMetField;
             }
             set {
-				TypeRestrictions.Validate("OnWithinRangeEventHandler.Invert", value);
-                this.invertField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-#if NET461
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-#endif
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
-        "")]
-    public partial class OnChangeEventHandler {
-        
-        private EventTarget eventTargetField;
-        
-        private string nameField;
-        
-        private string watchPathField;
-        
-        private double minDeltaField;
-        
-        public OnChangeEventHandler() {
-            this.minDeltaField = 0D;
-        }
-        
-        /// <remarks/>
-        public EventTarget EventTarget {
-            get {
-                return this.eventTargetField;
-            }
-            set {
-                this.eventTargetField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Name {
-            get {
-                return this.nameField;
-            }
-            set {
-				TypeRestrictions.Validate("OnChangeEventHandler.Name", value);
-                this.nameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string WatchPath {
-            get {
-                return this.watchPathField;
-            }
-            set {
-				TypeRestrictions.Validate("OnChangeEventHandler.WatchPath", value);
-                this.watchPathField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double MinDelta {
-            get {
-                return this.minDeltaField;
-            }
-            set {
-				TypeRestrictions.Validate("OnChangeEventHandler.MinDelta", value);
-                this.minDeltaField = value;
+				TypeRestrictions.Validate("EventHandler.ConditionMet", value);
+                this.conditionMetField = value;
             }
         }
     }
@@ -704,9 +479,9 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class Joystick {
         
-        private JoystickAxis[] axisField;
+        private System.Collections.Generic.List<JoystickAxis> axisField; 
         
-        private JoystickButton[] buttonField;
+        private System.Collections.Generic.List<JoystickButton> buttonField; 
         
         private string nameField;
         
@@ -718,7 +493,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Axis")]
-        public JoystickAxis[] Axis {
+        public System.Collections.Generic.List<JoystickAxis> Axis { 
             get {
                 return this.axisField;
             }
@@ -729,7 +504,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Button")]
-        public JoystickButton[] Button {
+        public System.Collections.Generic.List<JoystickButton> Button { 
             get {
                 return this.buttonField;
             }

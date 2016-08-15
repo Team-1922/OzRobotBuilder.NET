@@ -74,7 +74,7 @@ namespace Team1922.OzRobotBuilder.NET
         long _dirtyTime;
         EventHandler<XmlEditingScopeEventArgs> _editingScopeCompletedHandler;
         EventHandler<XmlEditingScopeEventArgs> _undoRedoCompletedHandler;
-        EventHandler _bufferReloadedHandler;
+        System.EventHandler _bufferReloadedHandler;
 
         LanguageService _xmlLanguageService;
 
@@ -105,7 +105,7 @@ namespace Team1922.OzRobotBuilder.NET
 
             _xmlModel = xmlModel;
             // BufferReloaded
-            _bufferReloadedHandler += new EventHandler(BufferReloaded);
+            _bufferReloadedHandler += new System.EventHandler(BufferReloaded);
             _xmlModel.BufferReloaded += _bufferReloadedHandler;
 
             SetRobot(LoadModelFromXmlModel());
@@ -391,7 +391,7 @@ namespace Team1922.OzRobotBuilder.NET
         /// <summary>
         /// Fired when all controls should be re-bound.
         /// </summary>
-        public event EventHandler ViewModelChanged;
+        public event System.EventHandler ViewModelChanged;
 
         private void BufferReloaded(object sender, EventArgs e)
         {

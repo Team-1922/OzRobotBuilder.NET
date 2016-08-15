@@ -6,6 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Contracts.Events
 {
+    [Obsolete]
     public class AddQuadEncoderEvent : AddSubsystemComponentEvent
     {
         public AddQuadEncoderEvent(Subsystem subsystem) : base(subsystem)

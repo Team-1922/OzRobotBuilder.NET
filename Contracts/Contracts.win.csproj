@@ -43,11 +43,9 @@
   <ItemGroup>
     <Compile Include="Events\AddAnalogInputEvent.cs" />
     <Compile Include="Events\AddCANTalonEvent.cs" />
-    <Compile Include="Events\AddContinuousCommandEvent.cs" />
+    <Compile Include="Events\AddEventHandlerEvent.cs" />
     <Compile Include="Events\AddDigitalInputEvent.cs" />
     <Compile Include="Events\AddJoystickEvent.cs" />
-    <Compile Include="Events\AddOnChangeEventHandler.cs" />
-    <Compile Include="Events\AddOnWithinRangeEventHandler.cs" />
     <Compile Include="Events\AddPWMMotorControllerEvent.cs" />
     <Compile Include="Events\AddQuadEncoderEvent.cs" />
     <Compile Include="Events\AddSubsystemComponentEvent.cs" />
@@ -60,11 +58,10 @@
     <Compile Include="ICANTalonProvider.cs" />
     <Compile Include="ICANTalonQuadEncoderProvider.cs" />
     <Compile Include="ICompoundProvider.cs" />
-    <Compile Include="IContinuousCommandProvider.cs" />
     <Compile Include="IDataAccessService.cs" />
     <Compile Include="IDigitalInputIOService.cs" />
     <Compile Include="IDigitalInputProvider.cs" />
-    <Compile Include="IEventTargetProvider.cs" />
+    <Compile Include="IEventHandlerProvider.cs" />
     <Compile Include="IExpression.cs" />
     <Compile Include="IExpressionParser.cs" />
     <Compile Include="IHierarchialAccess.cs" />
@@ -72,8 +69,6 @@
     <Compile Include="IInputService.cs" />
     <Compile Include="IJoystickIOService.cs" />
     <Compile Include="IJoystickProvider.cs" />
-    <Compile Include="IOnChangeEventHandlerProvider.cs" />
-    <Compile Include="IOnWithinRangeEventHandlerProvider.cs" />
     <Compile Include="IOperation.cs" />
     <Compile Include="IOutputService.cs" />
     <Compile Include="IPIDControllerSoftwareProvider.cs" />

@@ -25,6 +25,10 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         IEnumerable<IQuadEncoderProvider> QuadEncoders { get; }
         /// <summary>
+        /// This subsystem's Digital Inputs
+        /// </summary>
+        IEnumerable<IDigitalInputProvider> DigitalInputs { get; }
+        /// <summary>
         /// This subsystem's Relay Outputs
         /// </summary>
         IEnumerable<IRelayOutputProvider> RelayOutputs { get; }
@@ -50,5 +54,36 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="subsystem">the subsystem model instance</param>
         void SetSubsystem(Subsystem subsystem);
+
+        /// <summary>
+        /// Adds a model instance of a PWMOutput
+        /// </summary>
+        /// <param name="pwmOutput">the PWMOutput model instance</param>
+        void AddPWMOutput(PWMOutput pwmOutput);
+        /// <summary>
+        /// Adds a model instance of a DigitalInput
+        /// </summary>
+        /// <param name="digitalInput">the DigitalInput model instance</param>
+        void AddDigitalInput(DigitalInput digitalInput);
+        /// <summary>
+        /// Adds a model instance of a AnalogInput
+        /// </summary>
+        /// <param name="analogInput">the AnalogInput model instance</param>
+        void AddAnalogInput(AnalogInput analogInput);
+        /// <summary>
+        /// Adds a model instance of a QuadEncoder
+        /// </summary>
+        /// <param name="quadEncoder">the QuadEncoder model instance</param>
+        void AddQuadEncoder(QuadEncoder quadEncoder);
+        /// <summary>
+        /// Adds a model instance of a RelayOutput
+        /// </summary>
+        /// <param name="relayOutput">the RelayOutput model instance</param>
+        void AddRelayOutput(RelayOutput relayOutput);
+        /// <summary>
+        /// Adds a model instance of a CANTalon
+        /// </summary>
+        /// <param name="canTalon">the CANTalon model instance</param>
+        void AddCANTalon(CANTalon canTalon);
     }
 }
