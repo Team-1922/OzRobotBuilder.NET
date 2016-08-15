@@ -153,7 +153,7 @@ namespace Team1922.OzRobotBuilder.NET
             {
                 //var test = ((DataContext as ViewModel));
                 //var test1 = test?.SelectedElement as ViewModelBase;
-                //tbEditor.ItemsSource = (test.SelectedElement as ViewModelBase);
+                //tbEditor.ItemsSource = (test.SelectedElement as ViewModelBase);                
                 tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase)?.GetEditableKeyValueList() ?? null;
                 //UpdateDataGrid();
             }

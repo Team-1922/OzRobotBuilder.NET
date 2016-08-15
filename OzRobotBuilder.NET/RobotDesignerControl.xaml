@@ -56,7 +56,7 @@
                   CellEditEnding="tbEditor_CellEditEnding" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Property Name" IsReadOnly="True" Width="1*" Binding="{Binding Key, Mode=OneWay}"/>
-                <DataGridTextColumn Header="Value" IsReadOnly="False" Width="3*" Binding="{Binding Value, Mode=TwoWay}">
+                <DataGridTextColumn Header="Value" IsReadOnly="False" Width="3*" Binding="{Binding Value, Mode=TwoWay, ValidatesOnDataErrors=True}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="DataGridCell.ToolTip"

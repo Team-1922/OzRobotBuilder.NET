@@ -56,6 +56,14 @@ namespace Team1922.MVVM.ViewModels
             throw new ArgumentException($"\"{key}\" is Read-Only");
         }
 
+        public override string ModelTypeName
+        {
+            get
+            {
+                return "";
+            }
+        }
+
         public IEnumerable<IProvider> Children
         {
             get

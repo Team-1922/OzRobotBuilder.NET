@@ -110,6 +110,15 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _eventHandlerModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
+        }
+
         public void SetEventHandler(Models.EventHandler eventHandler)
         {
             _eventHandlerModel = eventHandler;

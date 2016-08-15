@@ -9,13 +9,14 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
+using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
     /// <summary>
     /// This is like <see cref="KeyValuePair{TKey, TValue}"/>, but the key is readonly and the value is read/write
     /// </summary>
-    public class VMKeyValuePair
+    public class VMKeyValuePair : IDataErrorInfo
     {
         public VMKeyValuePair(string key, ViewModelBase vm)
         {
@@ -41,6 +42,22 @@ namespace Team1922.MVVM.ViewModels
                 _vm[Key] = value;
             }
         }
+
+        string IDataErrorInfo.Error
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        string IDataErrorInfo.this[string columnName]
+        {
+            get
+            {
+                return (_vm as IDataErrorInfo)[Key];
+            }
+        }
     }
 
     public class VMKeyValueList : ObservableCollection<VMKeyValuePair>
@@ -51,7 +68,7 @@ namespace Team1922.MVVM.ViewModels
     /// This wraps the <see cref="BindableBase"/>, and the ability to access values based on a string key along
     /// with enumerate through it with read AND write access to the value
     /// </summary>
-    public abstract class ViewModelBase : BindableBase, IHierarchialAccess
+    public abstract class ViewModelBase : BindableBase, IHierarchialAccess, IDataErrorInfo
     {
         private List<string> _keys = new List<string>();
         VMKeyValueList _keyValueList = new VMKeyValueList();
@@ -257,13 +274,44 @@ namespace Team1922.MVVM.ViewModels
                     && x.Name != "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
                     && x.Name != "Count"
                     && x.Name != "IsReadOnly"
+                    && x.Name != "ModelTypeName"
                     select x.Name).ToList();
+        }
+        /// <summary>
+        /// In order for IDataErrorInfo to work correctly, we need the name of model type to lookup in the type restrictions
+        /// </summary>
+        /// <returns>The name of the model type without the namespace (i.e. "Robot")</returns>
+        public abstract string ModelTypeName { get; }
+        #endregion
+
+        #region IDataErrorInfo Support
+        Dictionary<string, string> _errorInfoMap = new Dictionary<string, string>();
+        string IDataErrorInfo.Error
+        {
+            get
+            {
+                string ret = "";
+                foreach(var pair in _errorInfoMap)
+                {
+                    if(pair.Value != "")
+                        ret += $"{pair.Value}{Environment.NewLine}";
+                }
+                return ret;
+            }
+        }
+
+        string IDataErrorInfo.this[string columnName]
+        {
+            get
+            {
+                return _errorInfoMap[columnName] = TypeRestrictions.DataErrorString($"{ModelTypeName}.{columnName}", this[columnName]);
+            }
         }
         #endregion
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
-        
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

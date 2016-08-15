@@ -358,7 +358,16 @@ namespace Team1922.MVVM.ViewModels
                 default:
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
-            
+
+        }
+
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _analogInputModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
         }
 
         /// <summary>

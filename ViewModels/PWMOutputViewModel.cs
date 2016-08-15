@@ -89,7 +89,16 @@ namespace Team1922.MVVM.ViewModels
                 default:
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
-            
+
+        }
+
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _pwmOutputModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
         }
     }
 }

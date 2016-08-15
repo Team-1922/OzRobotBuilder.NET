@@ -845,7 +845,16 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-        
+
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _canTalonModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
+        }
+
         #endregion
     }
 }

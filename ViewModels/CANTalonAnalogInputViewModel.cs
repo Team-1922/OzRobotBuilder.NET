@@ -146,7 +146,16 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
         }
-        
+
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _aiModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
+        }
+
 
         public void SetCANTalon(CANTalon canTalon)
         {

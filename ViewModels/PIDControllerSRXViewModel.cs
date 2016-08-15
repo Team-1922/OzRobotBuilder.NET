@@ -196,7 +196,16 @@ namespace Team1922.MVVM.ViewModels
                 default:
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
-            
+
+        }
+
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _pidControllerSRXModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
         }
 
         public void SetPIDController(PIDControllerSRX pidController)

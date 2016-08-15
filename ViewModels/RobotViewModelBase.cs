@@ -170,6 +170,14 @@ namespace Team1922.MVVM.ViewModels
             }
             
         }
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _robotModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
+        }
 
         private void AddSubsystem(Subsystem subsystem, bool addToModel)
         {
