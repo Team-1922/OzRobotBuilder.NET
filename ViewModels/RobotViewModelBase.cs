@@ -48,33 +48,21 @@ namespace Team1922.MVVM.ViewModels
             {
                 foreach (var subsystem in _robotModel.Subsystem)
                 {
-                    if (subsystem == null)
-                        continue;
-                    var provider = new SubsystemViewModel();
-                    provider.SetSubsystem(subsystem);
-                    _subsystemProviders.Items.Add(provider);
+                    AddSubsystem(subsystem, false);
                 }
             }
             if (null != _robotModel.EventHandler)
             {
-                foreach (var onWithinRangeEventHandler in _robotModel.EventHandler)
+                foreach (var eventHandler in _robotModel.EventHandler)
                 {
-                    if (onWithinRangeEventHandler == null)
-                        continue;
-                    var provider = new EventHandlerViewModel();
-                    provider.SetEventHandler(onWithinRangeEventHandler);
-                    _eventHandlerProviders.Items.Add(provider);
+                    AddEventHandler(eventHandler, false);
                 }
             }
             if (null != _robotModel.Joystick)
             {
                 foreach (var joystick in _robotModel.Joystick)
                 {
-                    if (joystick == null)
-                        continue;
-                    var provider = new JoystickViewModel();
-                    provider.SetJoystick(joystick);
-                    _joystickProviders.Items.Add(provider);
+                    AddJoystick(joystick, false);
                 }
             }
         }
@@ -246,6 +234,57 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
             
+        }
+
+        private void AddSubsystem(Subsystem subsystem, bool addToModel)
+        {
+            if (subsystem == null)
+                throw new ArgumentNullException("subsystem");
+            if (addToModel)
+                _robotModel.Subsystem.Add(subsystem);
+
+            var provider = new SubsystemViewModel();
+            provider.SetSubsystem(subsystem);
+            _subsystemProviders.Items.Add(provider);
+        }
+
+        private void AddJoystick(Joystick joystick, bool addToModel)
+        {
+            if (joystick == null)
+                throw new ArgumentNullException("joystick");
+            if (addToModel)
+                _robotModel.Joystick.Add(joystick);
+
+            var provider = new JoystickViewModel();
+            provider.SetJoystick(joystick);
+            _joystickProviders.Items.Add(provider);
+        }
+
+        private void AddEventHandler(Models.EventHandler eventHandler, bool addToModel)
+        {
+            if (eventHandler == null)
+                throw new ArgumentNullException("subsystem");
+            if (addToModel)
+                _robotModel.EventHandler.Add(eventHandler);
+
+            var provider = new EventHandlerViewModel();
+            provider.SetEventHandler(eventHandler);
+            _eventHandlerProviders.Items.Add(provider);
+        }
+
+        public void AddSubsystem(Subsystem subsystem)
+        {
+            AddSubsystem(subsystem, true);
+        }
+
+        public void AddJoystick(Joystick joystick)
+        {
+            AddJoystick(joystick, true);
+        }
+
+        public void AddEventHandler(Models.EventHandler eventHandler)
+        {
+            AddEventHandler(eventHandler, true);
         }
 
         #region Private Fields
