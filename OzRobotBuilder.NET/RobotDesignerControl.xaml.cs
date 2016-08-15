@@ -15,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -201,24 +202,26 @@ namespace Team1922.OzRobotBuilder.NET
 
         private void tvRobot_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            //call the left-click handler to make sure the item is selected
-            tvRobot.RaiseEvent(new RoutedEventArgs(MouseLeftButtonUpEvent));
-
             var viewModel = DataContext as ViewModel;
 
             //open up the appropriate context menu
-            if(viewModel.SelectedElement is ISubsystemProvider)
+            ContextMenu cm = null;
+            if (viewModel.SelectedElement is IRobotProvider || viewModel == null)
             {
-                
+                cm = tvRobot.FindResource("cmRobot") as ContextMenu;
+            }
+            if (viewModel.SelectedElement is ISubsystemProvider)
+            {
+                cm = tvRobot.FindResource("cmSubsystem") as ContextMenu;
             }
             else if(viewModel.SelectedElement is IEventHandlerProvider)
             {
-
             }
             else if(viewModel.SelectedElement is IJoystickProvider)
             {
-
             }
+            cm.PlacementTarget = sender as TreeView;
+            cm.IsOpen = true;
         }
     }
 }
