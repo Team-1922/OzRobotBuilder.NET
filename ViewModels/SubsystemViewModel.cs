@@ -88,30 +88,30 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public IEnumerable<IPWMOutputProvider> PWMOutputs
+        public IObservableCollection<IPWMOutputProvider> PWMOutputs
         {
             get { return _pwmOutputProviders.Items; }
         }
-        public IEnumerable<IAnalogInputProvider> AnalogInputs
+        public IObservableCollection<IAnalogInputProvider> AnalogInputs
         {
             get { return _analogInputProviders.Items; }
         }
-        public IEnumerable<IQuadEncoderProvider> QuadEncoders
+        public IObservableCollection<IQuadEncoderProvider> QuadEncoders
         {
             get { return _quadEncoderProviders.Items; }
         }
-        public IEnumerable<IDigitalInputProvider> DigitalInputs
+        public IObservableCollection<IDigitalInputProvider> DigitalInputs
         {
             get
             {
                 return _digitalInputProviders.Items;
             }
         }
-        public IEnumerable<IRelayOutputProvider> RelayOutputs
+        public IObservableCollection<IRelayOutputProvider> RelayOutputs
         {
             get { return _relayOutputProviders.Items; }
         }
-        public IEnumerable<ICANTalonProvider> CANTalons
+        public IObservableCollection<ICANTalonProvider> CANTalons
         {
             get { return _canTalonProviders.Items; }
         }
@@ -251,36 +251,6 @@ namespace Team1922.MVVM.ViewModels
             var provider = new CANTalonViewModel();
             provider.SetCANTalon(canTalon);
             _canTalonProviders.Items.Add(provider);
-        }
-
-        public void AddPWMOutput(PWMOutput pwmOutput)
-        {
-            AddPWMOutput(pwmOutput, true);
-        }
-
-        public void AddDigitalInput(DigitalInput digitalInput)
-        {
-            AddDigitalInput(digitalInput, true);
-        }
-
-        public void AddAnalogInput(AnalogInput analogInput)
-        {
-            AddAnalogInput(analogInput, true);
-        }
-
-        public void AddQuadEncoder(QuadEncoder quadEncoder)
-        {
-            AddQuadEncoder(quadEncoder, true);
-        }
-
-        public void AddRelayOutput(RelayOutput relayOutput)
-        {
-            AddRelayOutput(relayOutput, true);
-        }
-
-        public void AddCANTalon(CANTalon canTalon)
-        {
-            AddCANTalon(canTalon, true);
         }
 
         #region Private Fields

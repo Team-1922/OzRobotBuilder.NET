@@ -72,15 +72,15 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public IEnumerable<ISubsystemProvider> Subsystems
+        public IObservableCollection<ISubsystemProvider> Subsystems
         {
             get { return _subsystemProviders.Items; }
         }
-        public IEnumerable<IEventHandlerProvider> EventHandlers
+        public IObservableCollection<IEventHandlerProvider> EventHandlers
         {
             get { return _eventHandlerProviders.Items; }
         }
-        public IEnumerable<IJoystickProvider> Joysticks
+        public IObservableCollection<IJoystickProvider> Joysticks
         {
             get { return _joystickProviders.Items; }
         }
@@ -203,18 +203,6 @@ namespace Team1922.MVVM.ViewModels
             var provider = new EventHandlerViewModel();
             provider.SetEventHandler(eventHandler);
             _eventHandlerProviders.Items.Add(provider);
-        }
-        public void AddSubsystem(Subsystem subsystem)
-        {
-            AddSubsystem(subsystem, true);
-        }
-        public void AddJoystick(Joystick joystick)
-        {
-            AddJoystick(joystick, true);
-        }
-        public void AddEventHandler(Models.EventHandler eventHandler)
-        {
-            AddEventHandler(eventHandler, true);
         }
 
         #region Private Fields

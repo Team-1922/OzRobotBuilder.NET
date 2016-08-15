@@ -49,6 +49,7 @@
     <Compile Include="DigitalInputViewModel.cs" />
     <Compile Include="EventHandlerViewModel.cs" />
     <Compile Include="JoystickViewModel.cs" />
+    <Compile Include="ObservableCollection.cs" />
     <Compile Include="PIDControllerSoftwareViewModel.cs" />
     <Compile Include="PIDControllerSRXViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Models;
@@ -14,15 +15,15 @@ namespace Team1922.MVVM.Contracts
         /// <summary>
         /// This robot's subsystems
         /// </summary>
-        IEnumerable<ISubsystemProvider> Subsystems { get; }
+        IObservableCollection<ISubsystemProvider> Subsystems { get; }
         /// <summary>
         /// This robot's joysticks
         /// </summary>
-        IEnumerable<IJoystickProvider> Joysticks { get; }
+        IObservableCollection<IJoystickProvider> Joysticks { get; }
         /// <summary>
         /// This robot's event handlers
         /// </summary>
-        IEnumerable<IEventHandlerProvider> EventHandlers { get; }
+        IObservableCollection<IEventHandlerProvider> EventHandlers { get; }
         /// <summary>
         /// This robot's Team Number
         /// </summary>
@@ -37,21 +38,5 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="robot">the robot model instance</param>
         void SetRobot(Robot robot);
-
-        /// <summary>
-        /// Adds a model instance of a Subsystem
-        /// </summary>
-        /// <param name="subsystem">the Subsystem model instance</param>
-        void AddSubsystem(Subsystem subsystem);
-        /// <summary>
-        /// Adds a model instance of a Joystick
-        /// </summary>
-        /// <param name="joystick">the Joystick model instance</param>
-        void AddJoystick(Joystick joystick);
-        /// <summary>
-        /// Adds a model instance of a EventHandler
-        /// </summary>
-        /// <param name="eventHandler">the EventHandler model instance</param>
-        void AddEventHandler(Models.EventHandler eventHandler);
     }
 }

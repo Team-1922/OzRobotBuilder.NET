@@ -69,6 +69,7 @@
     <Compile Include="IInputService.cs" />
     <Compile Include="IJoystickIOService.cs" />
     <Compile Include="IJoystickProvider.cs" />
+    <Compile Include="IObservableCollection.cs" />
     <Compile Include="IOperation.cs" />
     <Compile Include="IOutputService.cs" />
     <Compile Include="IPIDControllerSoftwareProvider.cs" />
