@@ -17,19 +17,6 @@ namespace Team1922.MVVM.ViewModels
 
         public RobotViewModelBase()
         {
-            //GetBooksCommand = new DelegateCommand(OnGetBooks, CanGetBooks);
-            AddSubsystemCommand = new DelegateCommand(OnAddSubsystem);
-            AddEventHandlerCommand = new DelegateCommand(OnAddEventHandler);
-            AddJoystickCommand = new DelegateCommand(OnAddJoystick);
-
-            AddPWMOutputCommand = new DelegateCommand(OnAddPWMOutput);
-            AddAnalogInputCommand = new DelegateCommand(OnAddAnalogInput);
-            AddQuadEncoderCommand = new DelegateCommand(OnAddQuadEncoder);
-            AddDigitalInputCommand = new DelegateCommand(OnAddDigitalInput);
-            AddRelayOutputCommand = new DelegateCommand(OnAddRelayOutput);
-            AddPWMOutputCommand = new DelegateCommand(OnAddCANTalon);
-
-
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems");
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("Event Handlers");
             _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks");
@@ -98,46 +85,6 @@ namespace Team1922.MVVM.ViewModels
             get { return _joystickProviders.Items; }
         }
 
-        private void OnAddSubsystem()
-        {
-            _robotModel.Subsystem.Add(new Subsystem());
-            EventAggregator<AddSubsystemEvent>.Instance.Publish(this, new AddSubsystemEvent());
-        }
-        private void OnAddEventHandler()
-        {
-            _robotModel.EventHandler.Add(new Models.EventHandler());
-            EventAggregator<AddEventHandlerEvent>.Instance.Publish(this, new AddEventHandlerEvent());
-        }
-        private void OnAddJoystick()
-        {
-            _robotModel.Joystick.Add(new Joystick());
-            EventAggregator<AddJoystickEvent>.Instance.Publish(this, new AddJoystickEvent());
-        }
-        private void OnAddAnalogInput()
-        {
-            (_selectedElement as SubsystemViewModel)?.AddAnalogInput(new AnalogInput());
-        }
-        private void OnAddCANTalon()
-        {
-            (_selectedElement as SubsystemViewModel)?.AddCANTalon(new CANTalon());
-        }
-        private void OnAddDigitalInput()
-        {
-            (_selectedElement as SubsystemViewModel)?.AddDigitalInput(new DigitalInput());
-        }
-        private void OnAddPWMOutput()
-        {
-            (_selectedElement as SubsystemViewModel)?.AddPWMOutput(new PWMOutput());
-        }
-        private void OnAddQuadEncoder()
-        {
-            (_selectedElement as SubsystemViewModel)?.AddQuadEncoder(new QuadEncoder());
-        }
-        private void OnAddRelayOutput()
-        {
-            (_selectedElement as SubsystemViewModel)?.AddRelayOutput(new RelayOutput());
-        }
-
         public void UpdateInputValues()
         {
             foreach(var subsystem in _subsystemProviders.Items)
@@ -145,17 +92,6 @@ namespace Team1922.MVVM.ViewModels
                 subsystem.UpdateInputValues();
             }
         }
-
-        public ICommand AddSubsystemCommand { get; }
-        public ICommand AddEventHandlerCommand { get; }
-        public ICommand AddJoystickCommand { get; }
-
-        public ICommand AddPWMOutputCommand { get; }
-        public ICommand AddAnalogInputCommand { get; }
-        public ICommand AddDigitalInputCommand { get; }
-        public ICommand AddQuadEncoderCommand { get; }
-        public ICommand AddRelayOutputCommand { get; }
-        public ICommand AddCANTalonCommand { get; }
 
         public int TeamNumber
         {
@@ -219,7 +155,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -247,7 +182,6 @@ namespace Team1922.MVVM.ViewModels
             provider.SetSubsystem(subsystem);
             _subsystemProviders.Items.Add(provider);
         }
-
         private void AddJoystick(Joystick joystick, bool addToModel)
         {
             if (joystick == null)
@@ -259,7 +193,6 @@ namespace Team1922.MVVM.ViewModels
             provider.SetJoystick(joystick);
             _joystickProviders.Items.Add(provider);
         }
-
         private void AddEventHandler(Models.EventHandler eventHandler, bool addToModel)
         {
             if (eventHandler == null)
@@ -271,17 +204,14 @@ namespace Team1922.MVVM.ViewModels
             provider.SetEventHandler(eventHandler);
             _eventHandlerProviders.Items.Add(provider);
         }
-
         public void AddSubsystem(Subsystem subsystem)
         {
             AddSubsystem(subsystem, true);
         }
-
         public void AddJoystick(Joystick joystick)
         {
             AddJoystick(joystick, true);
         }
-
         public void AddEventHandler(Models.EventHandler eventHandler)
         {
             AddEventHandler(eventHandler, true);

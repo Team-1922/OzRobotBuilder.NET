@@ -25,6 +25,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Contracts.Events;
+using Team1922.MVVM.Framework;
+using Team1922.MVVM.Models;
 using Team1922.MVVM.ViewModels;
 
 namespace Team1922.OzRobotBuilder.NET
@@ -36,6 +39,17 @@ namespace Team1922.OzRobotBuilder.NET
     {
         public RobotDesignerControl()
         {
+            /*AddSubsystemCommand = new DelegateCommand(OnAddSubsystem);
+            AddEventHandlerCommand = new DelegateCommand(OnAddEventHandler);
+            AddJoystickCommand = new DelegateCommand(OnAddJoystick);
+
+            AddPWMOutputCommand = new DelegateCommand(OnAddPWMOutput);
+            AddAnalogInputCommand = new DelegateCommand(OnAddAnalogInput);
+            AddQuadEncoderCommand = new DelegateCommand(OnAddQuadEncoder);
+            AddDigitalInputCommand = new DelegateCommand(OnAddDigitalInput);
+            AddRelayOutputCommand = new DelegateCommand(OnAddRelayOutput);
+            AddPWMOutputCommand = new DelegateCommand(OnAddCANTalon);*/
+
             InitializeComponent();
         }
 
@@ -51,7 +65,7 @@ namespace Team1922.OzRobotBuilder.NET
                 MessageBox.Show(e.Message);
             }
             // wait until we're initialized to handle events
-            viewModel.ViewModelChanged += new EventHandler(ViewModelChanged);
+            viewModel.ViewModelChanged += new System.EventHandler(ViewModelChanged);
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
@@ -61,31 +75,6 @@ namespace Team1922.OzRobotBuilder.NET
             public string Value { get; set; }
         }
         private List<TestStruct> _tempList = new List<TestStruct>() { new TestStruct() { Key = "Hello", Value = "World" } };
-        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "SelectedElement")
-            {
-                //var test = ((DataContext as ViewModel));
-                //var test1 = test?.SelectedElement as ViewModelBase;
-                //tbEditor.ItemsSource = (test.SelectedElement as ViewModelBase);
-                tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase)?.GetEditableKeyValueList() ?? null;
-                //UpdateDataGrid();
-            }
-        }
-        /// <summary>
-        /// I decided to continue making measurable progress, I am switching to manual data
-        /// binding for the datagrid, becuase it is being just too cumbersome
-        /// </summary>
-        /*private void UpdateDataGrid()
-        {
-            var selectedItem = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase);
-            if (null == selectedItem)
-                return;
-            foreach (var pair in selectedItem)
-            {
-                tbEditor.
-            }
-        }*/
 
         internal void DoIdle()
         {
@@ -99,56 +88,6 @@ namespace Team1922.OzRobotBuilder.NET
             }
         }
 
-        private void ViewModelChanged(object sender, EventArgs e)
-        {
-            // this gets called when the view model is updated because the Xml Document was updated
-            // since we don't get individual PropertyChanged events, just re-set the DataContext
-            ViewModel viewModel = DataContext as ViewModel;
-            DataContext = null; // first, set to null so that we see the change and rebind
-            DataContext = viewModel;
-        }
-
-        private void tvRobot_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            ViewModel viewModel = DataContext as ViewModel;
-            viewModel.SelectedElement = e.NewValue as IProvider;
-        }
-
-        private void tbEditor_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            /*var selectedItemText = ((KeyValuePair<string, string>)(tbEditor.SelectedCells?.First().Item)).Key;
-            if ("" == selectedItemText)
-                return;
-
-            //open up the child selected if it is a child
-            var parent = (DataContext as ViewModel)?.SelectedElement as ICompoundProvider;
-            if (null != parent)
-            {
-                var children = parent.Children;
-                if (null != children)
-                {
-                    foreach (var child in children)
-                    {
-                        if (null == child)
-                        {
-                            continue;
-                        }
-                        if (child.Name == selectedItemText)
-                        {
-                            SelectChild(child.Name);
-                            return;
-                        }
-                    }
-                }
-            }
-
-            //edit it if it is not a child
-            var selectedItemProvider = (DataContext as ViewModel)?.SelectedElement as IProvider;
-            if(null != selectedItemProvider)
-            {
-
-            }*/
-        }
         public static int GetRowIndex(DataGridCell dataGridCell)
         {
             // Use reflection to get DataGridCell.RowDataItem property value.
@@ -192,6 +131,70 @@ namespace Team1922.OzRobotBuilder.NET
             }
         }
 
+        #region Event Handlers
+        private void ViewModelChanged(object sender, EventArgs e)
+        {
+            // this gets called when the view model is updated because the Xml Document was updated
+            // since we don't get individual PropertyChanged events, just re-set the DataContext
+            ViewModel viewModel = DataContext as ViewModel;
+            DataContext = null; // first, set to null so that we see the change and rebind
+            DataContext = viewModel;
+        }
+
+        private void tvRobot_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            ViewModel viewModel = DataContext as ViewModel;
+            viewModel.SelectedElement = e.NewValue as IProvider;
+        }
+        
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SelectedElement")
+            {
+                //var test = ((DataContext as ViewModel));
+                //var test1 = test?.SelectedElement as ViewModelBase;
+                //tbEditor.ItemsSource = (test.SelectedElement as ViewModelBase);
+                tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase)?.GetEditableKeyValueList() ?? null;
+                //UpdateDataGrid();
+            }
+        }
+
+        private void tbEditor_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            /*var selectedItemText = ((KeyValuePair<string, string>)(tbEditor.SelectedCells?.First().Item)).Key;
+            if ("" == selectedItemText)
+                return;
+
+            //open up the child selected if it is a child
+            var parent = (DataContext as ViewModel)?.SelectedElement as ICompoundProvider;
+            if (null != parent)
+            {
+                var children = parent.Children;
+                if (null != children)
+                {
+                    foreach (var child in children)
+                    {
+                        if (null == child)
+                        {
+                            continue;
+                        }
+                        if (child.Name == selectedItemText)
+                        {
+                            SelectChild(child.Name);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            //edit it if it is not a child
+            var selectedItemProvider = (DataContext as ViewModel)?.SelectedElement as IProvider;
+            if(null != selectedItemProvider)
+            {
+
+            }*/
+        }
+
         private void tbEditor_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             if(e.EditAction == DataGridEditAction.Commit)
@@ -227,5 +230,115 @@ namespace Team1922.OzRobotBuilder.NET
             cm.PlacementTarget = sender as TreeView;
             cm.IsOpen = true;
         }
+
+        private void cmRobot_AddSubsystem(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            (DataContext as ViewModel)?.AddSubsystem(new Subsystem());
+            EventAggregator<AddSubsystemEvent>.Instance.Publish(this, new AddSubsystemEvent());
+        }
+        private void cmRobot_AddEventHandler(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            (DataContext as ViewModel)?.AddEventHandler(new MVVM.Models.EventHandler());
+            EventAggregator<AddEventHandlerEvent>.Instance.Publish(this, new AddEventHandlerEvent());
+        }
+        private void cmRobot_AddJoystick(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            (DataContext as ViewModel)?.AddJoystick(new Joystick());
+            EventAggregator<AddJoystickEvent>.Instance.Publish(this, new AddJoystickEvent());
+        }
+
+        private void cmSubsystem_AddPWMOutput(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddPWMOutput(new PWMOutput());
+        }
+
+        private void cmSubsystem_AddAnalogInput(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddAnalogInput(new AnalogInput());
+        }
+
+        private void cmSubsystem_AddDigitalInput(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddDigitalInput(new DigitalInput());
+        }
+
+        private void cmSubsystem_AddQuadEncoder(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddQuadEncoder(new QuadEncoder());
+        }
+
+        private void cmSubsystem_AddRelayOutput(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddRelayOutput(new RelayOutput());
+        }
+
+        private void cmSubsystem_AddCANTalon(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModel)
+                return;
+            ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddCANTalon(new CANTalon());
+        }
+        #endregion
+
+        #region Commands
+        //public ICommand AddSubsystemCommand { get; }
+        //public ICommand AddEventHandlerCommand { get; }
+        //public ICommand AddJoystickCommand { get; }
+
+        //public ICommand AddPWMOutputCommand { get; }
+        //public ICommand AddAnalogInputCommand { get; }
+        //public ICommand AddDigitalInputCommand { get; }
+        //public ICommand AddQuadEncoderCommand { get; }
+        //public ICommand AddRelayOutputCommand { get; }
+        //public ICommand AddCANTalonCommand { get; }
+        #endregion
+
+        #region Command Methods
+        private void OnAddSubsystem()
+        {
+        }
+        private void OnAddEventHandler()
+        {
+        }
+        private void OnAddJoystick()
+        {
+        }
+        private void OnAddAnalogInput()
+        {
+        }
+        private void OnAddCANTalon()
+        {
+        }
+        private void OnAddDigitalInput()
+        {
+        }
+        private void OnAddPWMOutput()
+        {
+        }
+        private void OnAddQuadEncoder()
+        {
+        }
+        private void OnAddRelayOutput()
+        {
+        }
+        #endregion
+
     }
+
 }
