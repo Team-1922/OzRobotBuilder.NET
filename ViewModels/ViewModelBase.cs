@@ -16,7 +16,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// This is like <see cref="KeyValuePair{TKey, TValue}"/>, but the key is readonly and the value is read/write
     /// </summary>
-    public class VMKeyValuePair : IDataErrorInfo
+    public class VMKeyValuePair : IDataErrorInfo, INotifyPropertyChanged
     {
         public VMKeyValuePair(string key, ViewModelBase vm)
         {
@@ -28,8 +28,19 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("vm", "ViewModel on VMKeyValuePair must not be null");
             _vm = vm;
             Key = key;
+            _vm.PropertyChanged += _vm_PropertyChanged;
         }
+
+        private void _vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == Key)
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
+        }
+
         ViewModelBase _vm;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public string Key { get; private set; }
         public string Value
         {

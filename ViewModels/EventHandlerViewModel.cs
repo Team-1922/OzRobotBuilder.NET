@@ -31,17 +31,7 @@ namespace Team1922.MVVM.ViewModels
                 //this throws an exception AFTER the condition variable is set, becuase it would be annoying
                 //  if the text in the box gets deleted after the user types it in and it is wrong; this could be a pretty big
                 //  set of text too
-                try
-                {
-                    _conditionExpressionParsingErrors = "";
-                    _conditionExpression = ExpressionParserService.Instance.ParseExpression(value);
-                }
-                catch (Exception e)
-                {
-                    _conditionExpressionParsingErrors = e.Message;
-                    if (TypeRestrictions.ThrowsExceptionsOnValidationFailure)
-                        throw;
-                }
+                UpdateConditionExpression(value);
             }
         }
 
@@ -60,17 +50,23 @@ namespace Team1922.MVVM.ViewModels
                 //this throws an exception AFTER the expression variable is set, becuase it would be annoying
                 //  if the text in the box gets deleted after the user types it in and it is wrong; this could be a pretty big
                 //  set of text too
-                try
-                {
-                    _expressionParsingErrors = "";
-                    _expression = ExpressionParserService.Instance.ParseExpression(value);
-                }
-                catch(Exception e)
-                {
-                    _expressionParsingErrors = e.Message;
-                    if (TypeRestrictions.ThrowsExceptionsOnValidationFailure)
-                        throw;
-                }
+                UpdateExpressionExpression(value);
+            }
+        }
+
+        public double ExpressionEvaluated
+        {
+            get
+            {
+                return _expression?.Evaluate() ?? double.NaN;
+            }
+        }
+
+        public double ConditionEvaluated
+        {
+            get
+            {
+                return _conditionExpression?.Evaluate() ?? double.NaN;
             }
         }
 
@@ -107,6 +103,10 @@ namespace Team1922.MVVM.ViewModels
                     return Expression;
                 case "Condition":
                     return Condition;
+                case "ConditionEvaluated":
+                    return ConditionEvaluated.ToString();
+                case "ExpressionEvaluated":
+                    return ExpressionEvaluated.ToString();
                 case "ConditionMet":
                     return ConditionMet.ToString();
                 default:
@@ -161,6 +161,46 @@ namespace Team1922.MVVM.ViewModels
         public void SetEventHandler(Models.EventHandler eventHandler)
         {
             _eventHandlerModel = eventHandler;
+            UpdateConditionExpression(_eventHandlerModel.Condition);
+            UpdateExpressionExpression(_eventHandlerModel.Expression);
+
+        }
+
+        private void UpdateConditionExpression(string value)
+        {
+            try
+            {
+                _conditionExpressionParsingErrors = "";
+                _conditionExpression = ExpressionParserService.Instance.ParseExpression(value);
+
+                //trigger the change event for the evaluated property
+                string blank = "";
+                SetProperty(ref blank, value, "ConditionEvaluated");
+            }
+            catch (Exception e)
+            {
+                _conditionExpressionParsingErrors = e.Message;
+                if (TypeRestrictions.ThrowsExceptionsOnValidationFailure)
+                    throw;
+            }
+        }
+        private void UpdateExpressionExpression(string value)
+        {
+            try
+            {
+                _expressionParsingErrors = "";
+                _expression = ExpressionParserService.Instance.ParseExpression(value);
+
+                //trigger the change event for the evaluated property
+                string blank = "";
+                SetProperty(ref blank, value, "ExpressionEvaluated");
+            }
+            catch (Exception e)
+            {
+                _expressionParsingErrors = e.Message;
+                if (TypeRestrictions.ThrowsExceptionsOnValidationFailure)
+                    throw;
+            }
         }
     }
 }
