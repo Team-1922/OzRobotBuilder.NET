@@ -170,7 +170,7 @@ namespace Team1922.MVVM.ViewModels
             if (thisMember.Length == 1)
             {
                 if (read)
-                    return GetValue(key);
+                    return GetValue(key) ?? "";
                 else
                     SetValue(key, value);
                 return "";

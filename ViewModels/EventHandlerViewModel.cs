@@ -33,6 +33,7 @@ namespace Team1922.MVVM.ViewModels
                 //  set of text too
                 try
                 {
+                    _conditionExpressionParsingErrors = "";
                     _conditionExpression = ExpressionParserService.Instance.ParseExpression(value);
                 }
                 catch (Exception e)
@@ -61,6 +62,7 @@ namespace Team1922.MVVM.ViewModels
                 //  set of text too
                 try
                 {
+                    _expressionParsingErrors = "";
                     _expression = ExpressionParserService.Instance.ParseExpression(value);
                 }
                 catch(Exception e)
@@ -102,9 +104,9 @@ namespace Team1922.MVVM.ViewModels
                 case "Name":
                     return Name;
                 case "Expression":
-                    return Expression.ToString();
+                    return Expression;
                 case "Condition":
-                    return Condition.ToString();
+                    return Condition;
                 case "ConditionMet":
                     return ConditionMet.ToString();
                 default:
