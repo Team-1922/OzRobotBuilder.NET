@@ -12,7 +12,9 @@ namespace Team1922.MVVM.ViewModels
     {
         private Models.EventHandler _eventHandlerModel;
         private IExpression _conditionExpression;
+        private string _conditionExpressionParsingErrors = "";
         private IExpression _expression;
+        private string _expressionParsingErrors = "";
 
         public string Condition
         {
@@ -29,7 +31,16 @@ namespace Team1922.MVVM.ViewModels
                 //this throws an exception AFTER the condition variable is set, becuase it would be annoying
                 //  if the text in the box gets deleted after the user types it in and it is wrong; this could be a pretty big
                 //  set of text too
-                _conditionExpression = ExpressionParserService.Instance.ParseExpression(value);
+                try
+                {
+                    _conditionExpression = ExpressionParserService.Instance.ParseExpression(value);
+                }
+                catch (Exception e)
+                {
+                    _conditionExpressionParsingErrors = e.Message;
+                    if (TypeRestrictions.ThrowsExceptionsOnValidationFailure)
+                        throw;
+                }
             }
         }
 
@@ -48,7 +59,16 @@ namespace Team1922.MVVM.ViewModels
                 //this throws an exception AFTER the expression variable is set, becuase it would be annoying
                 //  if the text in the box gets deleted after the user types it in and it is wrong; this could be a pretty big
                 //  set of text too
-                _expression = ExpressionParserService.Instance.ParseExpression(value);
+                try
+                {
+                    _expression = ExpressionParserService.Instance.ParseExpression(value);
+                }
+                catch(Exception e)
+                {
+                    _expressionParsingErrors = e.Message;
+                    if (TypeRestrictions.ThrowsExceptionsOnValidationFailure)
+                        throw;
+                }
             }
         }
 
@@ -117,6 +137,23 @@ namespace Team1922.MVVM.ViewModels
                 var brokenName = _eventHandlerModel.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
             }
+        }
+
+        protected override string GetErrorString(string attribName)
+        {
+            string firstErrors = base.GetErrorString(attribName);
+            if (firstErrors != "")
+                return firstErrors;
+
+            if(attribName == "Expression")
+            {
+                return _expressionParsingErrors ?? "";
+            }
+            else if (attribName == "Condition")
+            {
+                return _conditionExpressionParsingErrors ?? "";
+            }
+            return "";
         }
 
         public void SetEventHandler(Models.EventHandler eventHandler)
