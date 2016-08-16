@@ -18,7 +18,7 @@ namespace Team1922.MVVM.ViewModels
         public RobotViewModelBase()
         {
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems");
-            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("Event Handlers");
+            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("EventHandlers");
             _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks");
         }
 
