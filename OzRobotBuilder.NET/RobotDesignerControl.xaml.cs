@@ -236,21 +236,18 @@ namespace Team1922.OzRobotBuilder.NET
             if (!(DataContext is ViewModel))
                 return;
             (DataContext as ViewModel)?.AddSubsystem(new Subsystem() { Name = "NewSubsystem" });
-            EventAggregator<AddSubsystemEvent>.Instance.Publish(this, new AddSubsystemEvent());
         }
         private void cmRobot_AddEventHandler(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             (DataContext as ViewModel)?.AddEventHandler(new MVVM.Models.EventHandler() { Name = "NewEventHandler" });
-            EventAggregator<AddEventHandlerEvent>.Instance.Publish(this, new AddEventHandlerEvent());
         }
         private void cmRobot_AddJoystick(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             (DataContext as ViewModel)?.AddJoystick(new Joystick() { Name = "NewJoystick" });
-            EventAggregator<AddJoystickEvent>.Instance.Publish(this, new AddJoystickEvent());
         }
 
         private void cmSubsystem_AddPWMOutput(object sender, RoutedEventArgs e)

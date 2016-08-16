@@ -1,5 +1,4 @@
-﻿using Team1922.MVVM.Contracts.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using Team1922.MVVM.Models;
 using System.Windows.Input;
 using System.ComponentModel;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Contracts.Events;
 
 namespace Team1922.MVVM.ViewModels
 {

@@ -41,15 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\AddAnalogInputEvent.cs" />
-    <Compile Include="Events\AddCANTalonEvent.cs" />
-    <Compile Include="Events\AddEventHandlerEvent.cs" />
-    <Compile Include="Events\AddDigitalInputEvent.cs" />
-    <Compile Include="Events\AddJoystickEvent.cs" />
-    <Compile Include="Events\AddPWMMotorControllerEvent.cs" />
-    <Compile Include="Events\AddQuadEncoderEvent.cs" />
-    <Compile Include="Events\AddSubsystemComponentEvent.cs" />
-    <Compile Include="Events\AddSubsystemEvent.cs" />
     <Compile Include="Events\ItemSelectEvent.cs" />
     <Compile Include="IAnalogInputIOService.cs" />
     <Compile Include="IAnalogInputProvider.cs" />
@@ -87,17 +78,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Contracts.win.project.json" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Models\Models.win.csproj">
       <Project>{47b66599-e6f8-46a1-9731-05a099a04fc3}</Project>
       <Name>Models.win</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MVVMFramework\MVVMFramework.win.csproj">
-      <Project>{f22008c9-1d99-4bee-93e2-88e2cf5ee938}</Project>
-      <Name>MVVMFramework.win</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Contracts.win.project.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

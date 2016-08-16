@@ -60,6 +60,7 @@
       <DependentUpon>RobotSchema.xsd</DependentUpon>
     </Compile>
     <Compile Include="Subsystem.cs" />
+    <Compile Include="TypeRestrictions.cs" />
     <Compile Include="XML\AndFacet.cs" />
     <Compile Include="XML\DoubleNumericFacet.cs" />
     <Compile Include="XML\EnumerationFacet.cs" />
@@ -81,12 +82,6 @@
   <ItemGroup>
     <None Include="Models.win.project.json" />
     <None Include="RobotSchema.xsd" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MVVMFramework\MVVMFramework.win.csproj">
-      <Project>{f22008c9-1d99-4bee-93e2-88e2cf5ee938}</Project>
-      <Name>MVVMFramework.win</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

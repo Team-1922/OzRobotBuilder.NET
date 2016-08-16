@@ -14,8 +14,39 @@
 // 
 namespace Team1922.MVVM.Models {
     using System.Xml.Serialization;
+
+
+
+
+
+
+
+
+
+
+
+
+    //TODO: change the validation to be in the viewmodel
+    // BUT HOW WILL THE MODEL THROW ERRORS UPON LOADING?
     
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]

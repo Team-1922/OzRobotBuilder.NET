@@ -282,6 +282,16 @@ namespace Team1922.MVVM.ViewModels
         /// </summary>
         /// <returns>The name of the model type without the namespace (i.e. "Robot")</returns>
         public abstract string ModelTypeName { get; }
+        /// <summary>
+        /// This allows the consumer to define custom methods of getting an error string.  If this is not overridden,
+        /// then the regular TypeRestriction method is used
+        /// </summary>
+        /// <param name="attribName">the name of the attribute to check; NOTE: the class name is not included in "attribName"</param>
+        /// <returns>the error string</returns>
+        protected virtual string GetErrorString(string attribName)
+        {
+            return TypeRestrictions.DataErrorString($"{ModelTypeName}.{attribName}", this[attribName]);
+        }
         #endregion
 
         #region IDataErrorInfo Support
@@ -304,7 +314,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _errorInfoMap[columnName] = TypeRestrictions.DataErrorString($"{ModelTypeName}.{columnName}", this[columnName]);
+                return _errorInfoMap[columnName] = GetErrorString(columnName);
             }
         }
         #endregion

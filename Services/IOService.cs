@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
-using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.Services
 {
@@ -25,18 +24,6 @@ namespace Team1922.MVVM.Services
                     throw new NullReferenceException("IO Service Null! Call IOService.Init(IRobotIOService) before accessing IOService.Instance");
                 return _instance;
             }
-        }
-        /// <summary>
-        /// Clamps the attribute if clamping is enabled.
-        /// </summary>
-        /// <param name="attributeName">the attribute name of the value to clamp</param>
-        /// <param name="value">the clamped value if clamping is enabled</param>
-        /// <returns></returns>
-        public static double Clamp(string attributeName, double value)
-        {
-            if (_clampValues)
-                return TypeRestrictions.Clamp(attributeName, value);
-            return value;
         }
         /// <summary>
         /// Called by the consuming program before accessing ANY IO

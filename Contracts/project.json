@@ -1,8 +1,7 @@
 {
   "version": "1.0.0-*",
   "dependencies": {
-    "Models": "1.0.0-*",
-    "MVVMFramework": "1.0.0-*"
+    "Models": "1.0.0-*"
   },
   "frameworks": {
     "netstandard1.5": {

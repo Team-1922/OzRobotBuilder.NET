@@ -35,7 +35,6 @@ using Team1922.MVVM.ViewModels;
 using Team1922.MVVM.Models;
 using System.Windows;
 using Team1922.MVVM.Framework;
-using Team1922.MVVM.Contracts.Events;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -107,15 +106,12 @@ namespace Team1922.OzRobotBuilder.NET
             _bufferReloadedHandler += new System.EventHandler(BufferReloaded);
             _xmlModel.BufferReloaded += _bufferReloadedHandler;
 
+            //make sure to set the type restrictions NOT to throw exceptions on validation.  This allows the user to preserve edits that have issues
+            //  and fix them later
+            TypeRestrictions.ThrowsExceptionsOnValidationFailure = false;
             SetRobot(LoadModelFromXmlModel());
 
             //EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
-        }
-
-        private void MyItemSelectEvent(object sender, ItemSelectEvent args)
-        {
-            if(args.SelectedElement != null)
-                MessageBox.Show($"Item Selected: {SelectedElement.GetType().ToString()}");
         }
 
         public void Close()

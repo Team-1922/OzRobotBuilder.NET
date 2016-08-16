@@ -134,10 +134,10 @@ using Team1922.MVVM.Models.XML;
             MakeLine("private static IFacet _alwaysTrueFacet = new FacetCollection(new IFacet[]{ new PatternFacet(\"^.*$\") });", tabCount, ref outputString);
             
             //finally write the lookup method into the class
-            outputString.WriteLine(LookupMethod);
-            outputString.WriteLine(ValidateMethod);
-            outputString.WriteLine(DataErrorStringMethod);
-            outputString.WriteLine(ClampMethod);
+            //outputString.WriteLine(LookupMethod);
+            //outputString.WriteLine(ValidateMethod);
+            //outputString.WriteLine(DataErrorStringMethod);
+            //outputString.WriteLine(ClampMethod);
 
             MakeLine("}", --tabCount, ref outputString);
 
