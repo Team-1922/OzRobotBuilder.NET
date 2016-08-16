@@ -30,7 +30,7 @@ namespace Team1922.MVVM.Services
         /// Called by the consumer to register the one global data access class
         /// </summary>
         /// <param name="dataAccess">the global data instance</param>
-        public static void Init(ref IHierarchialAccess dataAccess)
+        public static void Init(IHierarchialAccess dataAccess)
         {
             if (_instance != null)
                 throw new Exception("DataAccess Service Is Already Initialized!");

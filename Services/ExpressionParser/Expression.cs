@@ -18,7 +18,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
 
         public double Evaluate()
         {
-            return _rootNode.Evaluate();
+            return _rootNode?.Evaluate() ?? 0;
         }
 
         public string GetString()

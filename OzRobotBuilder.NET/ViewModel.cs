@@ -35,6 +35,7 @@ using Team1922.MVVM.ViewModels;
 using Team1922.MVVM.Models;
 using System.Windows;
 using Team1922.MVVM.Framework;
+using Team1922.MVVM.Services;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -109,7 +110,12 @@ namespace Team1922.OzRobotBuilder.NET
             //make sure to set the type restrictions NOT to throw exceptions on validation.  This allows the user to preserve edits that have issues
             //  and fix them later
             TypeRestrictions.ThrowsExceptionsOnValidationFailure = false;
+
             SetRobot(LoadModelFromXmlModel());
+
+            //set the global model instance
+            DataAccessService.Init(this);
+            
 
             //EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
         }
