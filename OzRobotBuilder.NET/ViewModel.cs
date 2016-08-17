@@ -77,7 +77,7 @@ namespace Team1922.OzRobotBuilder.NET
 
         LanguageService _xmlLanguageService;
 
-        public ViewModel(XmlStore xmlStore, XmlModel xmlModel, IServiceProvider provider, IVsTextLines buffer)
+        public ViewModel(XmlStore xmlStore, XmlModel xmlModel, IServiceProvider provider, IVsTextLines buffer) : base(null)
         {
             if (xmlModel == null)
                 throw new ArgumentNullException("xmlModel");
@@ -111,11 +111,7 @@ namespace Team1922.OzRobotBuilder.NET
             //  and fix them later
             TypeRestrictions.ThrowsExceptionsOnValidationFailure = false;
 
-            SetRobot(LoadModelFromXmlModel());
-
-            //set the global model instance
-            DataAccessService.Init(this);
-            
+            SetRobot(LoadModelFromXmlModel());            
 
             //EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
         }

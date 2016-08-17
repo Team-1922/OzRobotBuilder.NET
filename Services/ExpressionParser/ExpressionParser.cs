@@ -53,7 +53,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <param name="expression">the expression to loop through</param>
         /// <param name="i">the current index of <paramref name="expression"/></param>
         /// <returns>a node representing the operand</returns>
-        private ExpressionNodeBase GetOperand(string expression, ref int i)
+        private ExpressionNodeBase GetOperand(string expression, IHierarchialAccess data, ref int i)
         {
             //if this starts with unary "-" operator
             if(expression[i] == '-')
@@ -65,7 +65,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 OperationExpressionNode node = new OperationExpressionNode();
                 node.Operation = _unaryMinusOperation;
                 node.Children.Add(new ExpressionToken(0));//this is to get the BinaryOperation class not to complain
-                node.Children.Add(GetOperand(expression, ref i));
+                node.Children.Add(GetOperand(expression, data, ref i));
                 return node;
             }
 
@@ -75,7 +75,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 //if so, take this subgroup, and recurse
                 var returnExpression = GetGroupStatement(expression, ref i);
                 
-                return Group(returnExpression);
+                return Group(returnExpression, data);
             }
             //is this data-access?
             else if(expression[i] == '[')
@@ -88,13 +88,13 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 //get the path within the brackets
                 var path = GetGroupStatement(expression, ref i, '[', ']');
 
-                return new DataAccessExpressionNode(path, OperationInstances.ReadOperation);
+                return new DataAccessExpressionNode(path, OperationInstances.ReadOperation, data);
             }
             else if(expression[i] == '+')
             {
                 //if the operand starts with a + sign, this means nothing; it is redundant
                 i++;
-                return GetOperand(expression, ref i);
+                return GetOperand(expression, data, ref i);
             }
             else if(_validOpName.IsMatch($"{expression[i]}"))
             {
@@ -127,7 +127,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 foreach (var param in paramList)
                 {
                     j = 0;
-                    node.Children.Add(GetOperand(param, ref j));
+                    node.Children.Add(GetOperand(param, data, ref j));
                     Console.WriteLine(param);
                 }
                 return node;
@@ -254,7 +254,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// </summary>
         /// <param name="expression">the expression to convert</param>
         /// <returns>the converted expression</returns>
-        private ExpressionNodeBase Group(string expression)
+        private ExpressionNodeBase Group(string expression, IHierarchialAccess data)
         {
             //create the root node
             ExpressionNodeBase tree = null;
@@ -270,7 +270,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 if (first)
                 {
                     //get the left operand
-                    thisNode.Children.Add(GetOperand(expression, ref i));
+                    thisNode.Children.Add(GetOperand(expression, data, ref i));
 
                     //this keeps groups with ONLY a single parenthetical expression from throwing exceptions
                     if (i >= expression.Length)
@@ -286,11 +286,11 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 var currentOperation = GetBinaryOperation(op);
 
                 //get the right operend
-                var rightOperand = GetOperand(expression, ref i);
+                var rightOperand = GetOperand(expression, data, ref i);
 
                 if (currentOperation is DataAccessWriteOperation)
                 {
-                    var newNode = new DataWriteExpressionNode(currentOperation as DataAccessWriteOperation);
+                    var newNode = new DataWriteExpressionNode(currentOperation as DataAccessWriteOperation, data);
                     newNode.Children.AddRange(thisNode.Children);
                     thisNode = newNode;
                 }
@@ -383,11 +383,11 @@ namespace Team1922.MVVM.Services.ExpressionParser
             _operations.Add(operation);
         }
 
-        public bool TryParseExpression(string expression, out IExpression compiledExpression)
+        public bool TryParseExpression(string expression, IHierarchialAccess data, out IExpression compiledExpression)
         {
             try
             {
-                compiledExpression = ParseExpression(expression);
+                compiledExpression = ParseExpression(expression, data);
                 return true;
             }
             catch(Exception)
@@ -397,7 +397,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
         
-        public IExpression ParseExpression(string expression)
+        public IExpression ParseExpression(string expression, IHierarchialAccess data)
         {
             //start by removing all of the spaces
             string condensed = new string((from ch in expression.Trim() where ch != ' ' select ch).ToArray());
@@ -405,7 +405,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             //return the grouped expression
             try
             {
-                var ret =  new Expression(expression, Group(condensed));
+                var ret =  new Expression(expression, Group(condensed, data));
                 return ret;
             }
             catch(FormatException)

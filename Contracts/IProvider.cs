@@ -24,5 +24,9 @@ namespace Team1922.MVVM.Contracts
         /// <param name="key">the name of the property to update</param>
         /// <returns>the value of the property</returns>
         string this[string key] { get; set; }
+        /// <summary>
+        /// This is the top-level parent this class belongs to
+        /// </summary>
+        IHierarchialAccess TopParent { get; }
     }
 }

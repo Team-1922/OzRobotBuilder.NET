@@ -13,6 +13,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
     internal class DataAccessExpressionNode : ExpressionNodeBase
     {
         private DataAccessOperation _operation;
+        IHierarchialAccess _data;
 
         public string Path { get; }
 
@@ -20,10 +21,11 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// Constructs a new instance with the given data and path
         /// </summary>
         /// <param name="path">the location (path) of that data to access</param>
-        public DataAccessExpressionNode(string path, DataAccessOperation operation)
+        public DataAccessExpressionNode(string path, DataAccessOperation operation, IHierarchialAccess data)
         {
             _operation = operation;
             Path = path;
+            _data = data;
         }
 
         /// <summary>
@@ -32,7 +34,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <returns>the data at <see cref="_path"/> in <see cref="_dataRoot"/></returns>
         public override double Evaluate()
         {
-            return _operation.Perform(Path);
+            return _operation.Perform(Path, _data);
         }
     }
 }

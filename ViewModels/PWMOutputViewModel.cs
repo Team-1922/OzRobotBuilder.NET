@@ -10,6 +10,10 @@ namespace Team1922.MVVM.ViewModels
     {
         protected PWMOutput _pwmOutputModel;
 
+        public PWMOutputViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         public void SetPWMOutput(PWMOutput pwmOutput)
         {
             _pwmOutputModel = pwmOutput;

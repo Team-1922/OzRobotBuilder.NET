@@ -12,6 +12,10 @@ namespace Team1922.MVVM.ViewModels
     /// </summary>
     internal class CANTalonViewModel : ViewModelBase, ICANTalonProvider
     {
+        public CANTalonViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         /// <summary>
         /// The CANTalon model reference
         /// </summary>
@@ -603,22 +607,22 @@ namespace Team1922.MVVM.ViewModels
 
             if (null != _canTalonModel.QuadEncoder)
             {
-                _quadEncoderProvider = new CANTalonQuadEncoderViewModel();
+                _quadEncoderProvider = new CANTalonQuadEncoderViewModel(TopParent);
                 _quadEncoderProvider.SetCANTalon(canTalon);
             }
             if (null != _canTalonModel.AnalogInput)
             {
-                _analogInputProvider = new CANTalonAnalogInputViewModel();
+                _analogInputProvider = new CANTalonAnalogInputViewModel(TopParent);
                 _analogInputProvider.SetCANTalon(canTalon);
             }
             if (null != _canTalonModel.PIDConfig0)
             {
-                _pidConfig0Provider = new PIDControllerSRXViewModel();
+                _pidConfig0Provider = new PIDControllerSRXViewModel(TopParent);
                 _pidConfig0Provider.SetPIDController(canTalon.PIDConfig0);
             }
             if (null != _canTalonModel.PIDConfig1)
             {
-                _pidConfig1Provider = new PIDControllerSRXViewModel();
+                _pidConfig1Provider = new PIDControllerSRXViewModel(TopParent);
                 _pidConfig1Provider.SetPIDController(canTalon.PIDConfig1);
             }
         }
@@ -640,6 +644,7 @@ namespace Team1922.MVVM.ViewModels
 
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+
         ICANTalonQuadEncoderProvider _quadEncoderProvider
         {
             get

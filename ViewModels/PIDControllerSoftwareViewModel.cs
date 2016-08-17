@@ -10,6 +10,10 @@ namespace Team1922.MVVM.ViewModels
     {
         PIDControllerSoftware _pidControllerSoftwareModel;
 
+        public PIDControllerSoftwareViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         public bool Continuous
         {
             get

@@ -10,6 +10,10 @@ namespace Team1922.MVVM.ViewModels
     {
         RelayOutput _relayOutputModel;
 
+        public RelayOutputViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         public RelayDirection Direction
         {
             get

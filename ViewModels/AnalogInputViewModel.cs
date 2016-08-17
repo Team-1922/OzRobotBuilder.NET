@@ -13,6 +13,8 @@ namespace Team1922.MVVM.ViewModels
     /// </summary>
     internal class AnalogInputViewModel : ViewModelBase, IAnalogInputProvider
     {
+        public AnalogInputViewModel(IHierarchialAccess data) : base(data) { }
+
         /// <summary>
         /// the reference to the model object
         /// </summary>

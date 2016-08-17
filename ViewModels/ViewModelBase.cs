@@ -85,8 +85,11 @@ namespace Team1922.MVVM.ViewModels
         VMKeyValueList _keyValueList = new VMKeyValueList();
         //private int _enumeratorIndex = -1;
 
-        protected ViewModelBase()
+        IHierarchialAccess _topParent;
+
+        protected ViewModelBase(IHierarchialAccess topParent)
         {
+            _topParent = topParent;
             UpdateKeyValueList();
         }
 
@@ -106,6 +109,14 @@ namespace Team1922.MVVM.ViewModels
         public VMKeyValueList GetEditableKeyValueList()
         {
             return _keyValueList;
+        }
+
+        public IHierarchialAccess TopParent
+        {
+            get
+            {
+                return _topParent;
+            }
         }
 
         #region IHierarchialAccess Methods
@@ -286,6 +297,7 @@ namespace Team1922.MVVM.ViewModels
                     && x.Name != "Count"
                     && x.Name != "IsReadOnly"
                     && x.Name != "ModelTypeName"
+                    && x.Name != "TopParent"
                     select x.Name).ToList();
         }
         /// <summary>

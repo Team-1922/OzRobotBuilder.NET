@@ -15,11 +15,11 @@ namespace Team1922.MVVM.ViewModels
     {
         protected Robot _robotModel;
 
-        public RobotViewModelBase()
+        public RobotViewModelBase(IHierarchialAccess topParent) : base(topParent)
         {
-            _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems");
-            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("EventHandlers");
-            _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks");
+            _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems", topParent);
+            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("EventHandlers", topParent);
+            _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks", topParent);
         }
 
         public void SetRobot(Robot robot)
@@ -186,7 +186,7 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 _robotModel.Subsystem.Add(subsystem);
 
-            var provider = new SubsystemViewModel();
+            var provider = new SubsystemViewModel(this);
             provider.SetSubsystem(subsystem);
             _subsystemProviders.Items.Add(provider);
         }
@@ -197,7 +197,7 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 _robotModel.Joystick.Add(joystick);
 
-            var provider = new JoystickViewModel();
+            var provider = new JoystickViewModel(this);
             provider.SetJoystick(joystick);
             _joystickProviders.Items.Add(provider);
         }
@@ -208,7 +208,7 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 _robotModel.EventHandler.Add(eventHandler);
 
-            var provider = new EventHandlerViewModel();
+            var provider = new EventHandlerViewModel(this);
             provider.SetEventHandler(eventHandler);
             _eventHandlerProviders.Items.Add(provider);
         }

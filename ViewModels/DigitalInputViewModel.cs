@@ -13,6 +13,10 @@ namespace Team1922.MVVM.ViewModels
     {
         DigitalInput _digitalInputModel;
 
+        public DigitalInputViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         public int ID
         {
             get

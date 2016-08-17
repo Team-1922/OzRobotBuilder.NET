@@ -10,6 +10,10 @@ namespace Team1922.MVVM.ViewModels
     {
         PIDControllerSRX _pidControllerSRXModel;
 
+        public PIDControllerSRXViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         public int AllowableCloseLoopError
         {
             get

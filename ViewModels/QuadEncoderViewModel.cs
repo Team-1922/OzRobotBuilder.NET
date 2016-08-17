@@ -10,6 +10,10 @@ namespace Team1922.MVVM.ViewModels
     {
         QuadEncoder _quadEncoderModel;
 
+        public QuadEncoderViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         public double ConversionRatio
         {
             get

@@ -16,6 +16,10 @@ namespace Team1922.MVVM.ViewModels
         private IExpression _expression;
         private string _expressionParsingErrors = "";
 
+        public EventHandlerViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         public string Condition
         {
             get
@@ -171,7 +175,7 @@ namespace Team1922.MVVM.ViewModels
             try
             {
                 _conditionExpressionParsingErrors = "";
-                _conditionExpression = ExpressionParserService.Instance.ParseExpression(value);
+                _conditionExpression = ExpressionParserService.Instance.ParseExpression(value, TopParent);
 
                 //trigger the change event for the evaluated property
                 string blank = "";
@@ -189,7 +193,7 @@ namespace Team1922.MVVM.ViewModels
             try
             {
                 _expressionParsingErrors = "";
-                _expression = ExpressionParserService.Instance.ParseExpression(value);
+                _expression = ExpressionParserService.Instance.ParseExpression(value, TopParent);
 
                 //trigger the change event for the evaluated property
                 string blank = "";

@@ -11,6 +11,10 @@ namespace Team1922.MVVM.ViewModels
         CANTalonAnalogInput _aiModel;
         int _canTalonID;
 
+        public CANTalonAnalogInputViewModel(IHierarchialAccess topParent) : base(topParent)
+        {
+        }
+
         public double ConversionRatio
         {
             get

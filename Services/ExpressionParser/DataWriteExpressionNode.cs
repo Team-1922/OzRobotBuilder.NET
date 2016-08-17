@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Services.ExpressionParser.Operations;
 
 namespace Team1922.MVVM.Services.ExpressionParser
@@ -12,16 +13,19 @@ namespace Team1922.MVVM.Services.ExpressionParser
     internal class DataWriteExpressionNode : ExpressionNodeBase
     {
         DataAccessWriteOperation _writeOperation;
-        public DataWriteExpressionNode(DataAccessWriteOperation operation)
+        IHierarchialAccess _data;
+
+        public DataWriteExpressionNode(DataAccessWriteOperation operation, IHierarchialAccess data)
         {
             _writeOperation = operation;
+            _data = data;
         }
 
         public override double Evaluate()
         {
             if (Children[0] is DataAccessExpressionNode)
             {
-                _writeOperation.Perform((Children[0] as DataAccessExpressionNode).Path, Children[1].Evaluate());
+                _writeOperation.Perform((Children[0] as DataAccessExpressionNode).Path, Children[1].Evaluate(), _data);
                 return Children[1].Evaluate();
             }
             else
