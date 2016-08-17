@@ -44,7 +44,7 @@ namespace Team1922.OzRobotBuilder.NET
         #region Fields
         private RobotDesignerPackage _thisPackage;
         private string _fileName = string.Empty;
-        private RobotDesignerControl _vsDesignerControl;
+        private RobotDesignerControl _robotDesignerControl;
         private IVsTextLines _textBuffer;
         private uint _componentId;
         private IOleUndoManager _undoManager;
@@ -97,7 +97,6 @@ namespace Team1922.OzRobotBuilder.NET
 
             base.OnClose();
         }
-        #endregion
 
         /// <summary>
         /// Called after the WindowPane has been sited with an IServiceProvider from the environment
@@ -156,8 +155,8 @@ namespace Team1922.OzRobotBuilder.NET
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on 
             // the object returned by the Content property.
-            _vsDesignerControl = new RobotDesignerControl(new ViewModel(_store, _model, this, _textBuffer));
-            Content = _vsDesignerControl;
+            _robotDesignerControl = new RobotDesignerControl(new ViewModel(_store, _model, this, _textBuffer));
+            Content = _robotDesignerControl;
 
             RegisterIndependentView(true);
 
@@ -245,6 +244,7 @@ namespace Team1922.OzRobotBuilder.NET
             // Check ff the call to NotifyDocChanged failed.
             ErrorHandler.ThrowOnFailure(hr);
         }
+        #endregion
 
         /// <summary>
         /// Helper function used to add commands using IMenuCommandService
@@ -419,9 +419,9 @@ namespace Team1922.OzRobotBuilder.NET
 
         int IOleComponent.FDoIdle(uint grfidlef)
         {
-            if (_vsDesignerControl != null)
+            if (_robotDesignerControl != null)
             {
-                _vsDesignerControl.DoIdle();
+                _robotDesignerControl.DoIdle();
             }
             return VSConstants.S_OK;
         }
@@ -451,7 +451,6 @@ namespace Team1922.OzRobotBuilder.NET
         void IOleComponent.OnEnterState(uint uStateID, int fEnter) { }
         void IOleComponent.OnLoseActivation() { }
         void IOleComponent.Terminate() { }
-
         #endregion
     }
 }
