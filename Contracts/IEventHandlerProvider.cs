@@ -32,5 +32,11 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="eventHandler">the event handler model instance</param>
         void SetEventHandler(Models.EventHandler eventHandler);
+
+        /// <summary>
+        /// Executes expression if the condition is met.
+        /// </summary>
+        /// <param name="force">whether or not to force the expression to execute regardless of if the condition is met</param>
+        void Execute(bool force);
     }
 }

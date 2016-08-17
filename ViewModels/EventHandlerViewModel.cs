@@ -160,6 +160,14 @@ namespace Team1922.MVVM.ViewModels
 
         }
 
+        public void Execute(bool force)
+        {
+            if(force || ConditionMet)
+            {
+                _expression?.Evaluate();
+            }
+        }
+
         private void UpdateConditionExpression(string value)
         {
             try
