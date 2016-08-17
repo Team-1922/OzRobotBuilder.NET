@@ -58,14 +58,6 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public double ExpressionEvaluated
-        {
-            get
-            {
-                return _expression?.Evaluate() ?? double.NaN;
-            }
-        }
-
         public double ConditionEvaluated
         {
             get
@@ -109,8 +101,6 @@ namespace Team1922.MVVM.ViewModels
                     return Condition;
                 case "ConditionEvaluated":
                     return ConditionEvaluated.ToString();
-                case "ExpressionEvaluated":
-                    return ExpressionEvaluated.ToString();
                 case "ConditionMet":
                     return ConditionMet.ToString();
                 default:
