@@ -360,6 +360,57 @@ namespace Team1922.MVVM.Services.ExpressionParser
         {
             throw new Exception("Unsuccessful ExpressionNode Cast!");
         }
+        /// <summary>
+        /// This traverses the expression node tree to compress any nodes which are constant (i.e. do not access the model).  Also this 
+        /// overload takes a ref parameter so that if the entire tree can be simplified into a single number it will be
+        /// </summary>
+        /// <param name="tree"></param>
+        private void OptimizeExpressionTree(ref ExpressionNodeBase tree)
+        {
+            if (ContainsDataAccessNodes(tree))
+                OptimizeExpressionTree(tree);
+            else
+                tree = new ExpressionToken(tree.Evaluate());
+        }
+        /// <summary>
+        /// This traverses the expression node tree to compress any nodes which are constant (i.e. do not access the model)
+        /// </summary>
+        /// <param name="tree">the tree to traverse</param>
+        private void OptimizeExpressionTree(ExpressionNodeBase tree)
+        {
+            if (tree == null)
+                return;
+            for(int i = 0; i < tree.Children.Count; ++i)
+            {
+                //if this contains data access nodes, then continue recursing
+                if (ContainsDataAccessNodes(tree.Children[i]))
+                    OptimizeExpressionTree(tree.Children[i]);
+                else//if it does not contain any of these nodes, evaluate the child and insert a token in its place
+                    tree.Children[i] = new ExpressionToken(tree.Children[i].Evaluate());
+            }
+        }
+        /// <summary>
+        /// Used to determine whether this branch of a tree can be compressed into a single token node
+        /// </summary>
+        /// <param name="tree">the tree to search</param>
+        /// <returns>Whether any element in this tree contains a <see cref="DataAccessExpressionNode"/> or a <see cref="DataWriteExpressionNode"/></returns>
+        private bool ContainsDataAccessNodes(ExpressionNodeBase tree)
+        {
+            if (tree == null)
+                throw new ArgumentNullException("tree");
+            if (tree is DataAccessExpressionNode || tree is DataWriteExpressionNode)
+                return true;
+            foreach(var child in tree.Children)
+            {
+                if(child is DataAccessExpressionNode || child is DataWriteExpressionNode)
+                {
+                    return true;
+                }
+                if (ContainsDataAccessNodes(child))
+                    return true;
+            }
+            return false;
+        }
         #endregion
 
         #region IExpressionParser Methods
@@ -405,8 +456,14 @@ namespace Team1922.MVVM.Services.ExpressionParser
             //return the grouped expression
             try
             {
-                var ret =  new Expression(expression, Group(condensed, data));
-                return ret;
+                //first create the tree
+                var tree = Group(condensed, data);
+                
+                //then optimize away any branches with only constants
+                OptimizeExpressionTree(ref tree);
+
+                //finally create and return the expression
+                return new Expression(expression, tree);
             }
             catch(FormatException)
             {
