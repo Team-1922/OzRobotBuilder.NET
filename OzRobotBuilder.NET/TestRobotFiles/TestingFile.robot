@@ -4,7 +4,7 @@
           xsi:schemaLocation="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd ../Models/RobotSchema.xsd"
        TeamNumber="1922">
   <Subsystem Name="TestSubsystem" ID="0">
-    <PWMOutput Name="TestMotorModified" ID="0"/>
+    <PWMOutput Name="TestMotorReModified" ID="0"/>
     <AnalogInput Name="TestInput" ID="0"/>
   </Subsystem>
 </Robot>

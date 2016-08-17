@@ -75,14 +75,13 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
+    <None Include="TestRobotFiles\TestingFile.robot" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Package.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="TestTemplates\CSharpClassTest.vstemplate" />
-    <Content Include="TestTemplates\WpfApplicationTest.vstemplate" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EditorPane.resx" />
@@ -196,6 +195,7 @@
       <Name>ViewModels.win</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup>
