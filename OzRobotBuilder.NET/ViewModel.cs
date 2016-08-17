@@ -47,8 +47,6 @@ namespace Team1922.OzRobotBuilder.NET
         public static string InvalidRobotData = "The robot file you are attempting to load is invalid";
         public static string SynchronizeBuffer = "Synchronize XML file with view";
         public static string ReformatBuffer = "Reformat";
-        public static string ValidationFieldMaxLength = "{0} must be {1} characters or less.";
-        public static string ValidationRequiredField = "{0} is a required value.";
     }
 
     /// <summary>
