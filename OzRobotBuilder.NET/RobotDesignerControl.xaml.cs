@@ -199,7 +199,8 @@ namespace Team1922.OzRobotBuilder.NET
         {
             if(e.EditAction == DataGridEditAction.Commit)
             {
-                var test = (e.EditingElement as TextBox).Text;
+                // TODO: if there was no actual change, then DON"T do this
+                (DataContext as ViewModel).DesignerDirty = true;
             }
         }
 
