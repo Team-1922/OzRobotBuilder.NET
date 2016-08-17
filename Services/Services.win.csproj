@@ -41,8 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess.cs" />
-    <Compile Include="DataAccessService.cs" />
     <Compile Include="ExpressionParserService.cs" />
     <Compile Include="ExpressionParser\BinaryOperation.cs" />
     <Compile Include="ExpressionParser\DataAccessExpressionNode.cs" />
