@@ -143,6 +143,9 @@ namespace Team1922.OzRobotBuilder.NET
 
         private void tvRobot_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (null == DataContext)
+                return;
+
             ViewModel viewModel = DataContext as ViewModel;
             viewModel.SelectedElement = e.NewValue as IProvider;
         }

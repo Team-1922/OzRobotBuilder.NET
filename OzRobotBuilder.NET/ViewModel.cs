@@ -195,7 +195,7 @@ namespace Team1922.OzRobotBuilder.NET
                     }
                     else if (BufferDirty)
                     {
-                        LoadModelFromXmlModel();
+                        SetRobot(LoadModelFromXmlModel());
                     }
                 }
             }
