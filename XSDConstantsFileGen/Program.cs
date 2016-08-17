@@ -107,7 +107,7 @@ using Team1922.MVVM.Models.XML;
             outputString.WriteLine("{");
 
             //write the class declaration
-            MakeLine("public static class TypeRestrictions", tabCount, ref outputString);
+            MakeLine("public static partial class TypeRestrictions", tabCount, ref outputString);
             MakeLine("{", tabCount++, ref outputString);
 
             //generate the Type Facet Dictionary
