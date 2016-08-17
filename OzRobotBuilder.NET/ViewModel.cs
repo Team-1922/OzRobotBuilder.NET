@@ -41,10 +41,10 @@ namespace Team1922.OzRobotBuilder.NET
 {
     public class ResourceInfo
     {
-        public static string ErrorMessageBoxTitle = "VsTemplateDesigner";
+        public static string ErrorMessageBoxTitle = "OzRobotBuilder.NET";
         public static string FieldNameDescription = "Description";
         public static string FieldNameId = "ID";
-        public static string InvalidVsTemplateData = "The vstemplate file you are attempting to load is missing TemplateData";
+        public static string InvalidRobotData = "The robot file you are attempting to load is invalid";
         public static string SynchronizeBuffer = "Synchronize XML file with view";
         public static string ReformatBuffer = "Reformat";
         public static string ValidationFieldMaxLength = "{0} must be {1} characters or less.";
@@ -59,10 +59,6 @@ namespace Team1922.OzRobotBuilder.NET
     /// </summary>
     public class ViewModel : RobotViewModelBase
     {
-        const int MaxIdLength = 100;
-        const int MaxProductNameLength = 60;
-        const int MaxDescriptionLength = 1024;
-
         XmlModel _xmlModel;
         XmlStore _xmlStore;
 
@@ -218,14 +214,14 @@ namespace Team1922.OzRobotBuilder.NET
 
                 if (ret == null)
                 {
-                    throw new Exception(ResourceInfo.InvalidVsTemplateData);
+                    throw new Exception(ResourceInfo.InvalidRobotData);
                 }
             }
             catch (Exception e)
             {
                 //Display error message
                 ErrorHandler.ThrowOnFailure(VsShellUtilities.ShowMessageBox(_serviceProvider,
-                    ResourceInfo.InvalidVsTemplateData + e.Message,
+                    ResourceInfo.InvalidRobotData + e.Message,
                     ResourceInfo.ErrorMessageBoxTitle,
                     OLEMSGICON.OLEMSGICON_CRITICAL,
                     OLEMSGBUTTON.OLEMSGBUTTON_OK,
