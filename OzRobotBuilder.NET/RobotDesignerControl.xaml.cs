@@ -117,6 +117,12 @@ namespace Team1922.OzRobotBuilder.NET
         private void DeleteSelectedItem()
         {
             //TODO: add actual logic to this
+            //
+            //
+            //  Methods for removing items from the viewmodels exist and these properly remove the model instances too
+            //     What needs to be done now is a way to remove both the item from a compoundproviderlist and its associated model instance
+            //
+            //
             MessageBox.Show("Deleted Selected Item");
         }
 
