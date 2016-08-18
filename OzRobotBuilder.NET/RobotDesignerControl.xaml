@@ -28,6 +28,7 @@
                     <MenuItem Header="Add Subsystem" Click="cmRobot_AddSubsystem"/>
                     <MenuItem Header="Add Event Handler" Click="cmRobot_AddEventHandler"/>
                     <MenuItem Header="Add Joystick" Click="cmRobot_AddJoystick"/>
+                    <MenuItem Header="Add RobotMap Element" Click="cm_AddRobotMapElement"/>
                 </ContextMenu>
                 <ContextMenu x:Key="cmSubsystem" Name="SubsystemContextMenu">
                     <MenuItem Header="Add PWM Output" Click="cmSubsystem_AddPWMOutput"/>
@@ -36,6 +37,18 @@
                     <MenuItem Header="Add Quadrature Encoder" Click="cmSubsystem_AddQuadEncoder"/>
                     <MenuItem Header="Add Relay Output" Click="cmSubsystem_AddRelayOutput"/>
                     <MenuItem Header="Add CAN Talon (Talon SRX)" Click="cmSubsystem_AddCANTalon"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmSubsystems" Name="SubsystemsContextMenu">
+                    <MenuItem Header="Add Subsystem" Click="cmRobot_AddSubsystem"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmEventHandlers" Name="EventHandlersContextMenu">
+                    <MenuItem Header="Add RobotMap Element" Click="cm_AddRobotMapElement"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmJoysticks" Name="JoysticksContextMenu">
+                    <MenuItem Header="Add Joystick" Click="cmRobot_AddJoystick"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmRobotMap" Name="RobotMapContextMenu">
+                    <MenuItem Header="Add RobotMap Element" Click="cm_AddRobotMapElement"/>
                 </ContextMenu>
             </TreeView.Resources>
             <TreeViewItem Name="tviRobot" DataContext="{Binding}" Header="Robot" ItemsSource="{Binding Children}" ItemTemplate="{StaticResource HierarchialTemplate}"/>

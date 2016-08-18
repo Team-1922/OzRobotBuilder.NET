@@ -131,6 +131,14 @@ namespace Team1922.OzRobotBuilder.NET
             }
         }
 
+        private void SetDesignerDirty()
+        {
+            if(DataContext is ViewModel)
+            {
+                (DataContext as ViewModel).DesignerDirty = true;
+            }
+        }
+
         #region Event Handlers
         private void ViewModelChanged(object sender, EventArgs e)
         {
@@ -203,7 +211,7 @@ namespace Team1922.OzRobotBuilder.NET
             if(e.EditAction == DataGridEditAction.Commit)
             {
                 // TODO: if there was no actual change, then DON"T do this
-                (DataContext as ViewModel).DesignerDirty = true;
+                SetDesignerDirty();
             }
         }
 
@@ -219,7 +227,19 @@ namespace Team1922.OzRobotBuilder.NET
             {
                 cm = tvRobot.FindResource("cmRobot") as ContextMenu;
             }
-            if (viewModel.SelectedElement is ISubsystemProvider)
+            else if(viewModel.SelectedElement is IEnumerable<ISubsystemProvider>)
+            {
+                cm = tvRobot.FindResource("cmSubsystems") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IEventHandlerProvider>)
+            {
+                cm = tvRobot.FindResource("cmEventHandlers") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IJoystickProvider>)
+            {
+                cm = tvRobot.FindResource("cmJoysticks") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is ISubsystemProvider)
             {
                 cm = tvRobot.FindResource("cmSubsystem") as ContextMenu;
             }
@@ -228,6 +248,10 @@ namespace Team1922.OzRobotBuilder.NET
             }
             else if(viewModel.SelectedElement is IJoystickProvider)
             {
+            }
+            else if(viewModel.SelectedElement is IRobotMapProvider)
+            {
+                cm = tvRobot.FindResource("cmRobotMap") as ContextMenu;
             }
             if (null == cm)
                 return;
@@ -252,6 +276,13 @@ namespace Team1922.OzRobotBuilder.NET
             if (!(DataContext is ViewModel))
                 return;
             (DataContext as ViewModel)?.AddJoystick(new Joystick() { Name = "NewJoystick" });
+        }
+
+        private void cm_AddRobotMapElement(object sender, RoutedEventArgs e)
+        {
+            if(!(DataContext is ViewModel))
+                return;
+            ((DataContext as ViewModel)?.SelectedElement as IRobotMapProvider)?.AddEntry("","");
         }
 
         private void cmSubsystem_AddPWMOutput(object sender, RoutedEventArgs e)

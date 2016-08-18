@@ -86,10 +86,64 @@ namespace Team1922.MVVM.ViewModels
             _robotModel = robot;
             UpdateKeyValueList();
         }
+
+        public void AddEntry(string key, string value)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (value == null)
+                throw new ArgumentNullException("value");
+            //this means the key should be auto-generated
+            if(key=="")
+            {
+                key = GetUnusedKey();
+            }
+            _robotModel.RobotMap.Add(new RobotMapEntry { Key = key, Value = value });
+            UpdateKeyValueList();
+        }
         #endregion
 
         #region Private Members
+        /// <summary>
+        /// Used internally for adding blank entries; checks if <paramref name="key"/> exists in the map
+        /// </summary>
+        /// <param name="key">the key to check</param>
+        /// <returns>whether <paramref name="key"/> exists in the map</returns>
+        private bool ContainsKey(string key)
+        {
+            //loop through each item in the map
+            foreach(var item in _robotModel.RobotMap)
+            {
+                //then compare the keys
+                if (item.Key == key)
+                    return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Used internally for adding new blank entries
+        /// </summary>
+        /// <returns>a key guaranteed not to be in the map already</returns>
+        private string GetUnusedKey()
+        {
+            //start with a base name
+            string baseName = "NewKey";
+            string name = baseName;
+            int i = 0;
 
+            //until we find an unused name
+            while(ContainsKey(name))
+            {
+                //create the name-number composite and increment the number
+                name = baseName + i;
+                i++;
+
+                //this is mostly to make sure this while loop does not go on forever
+                if (i > 100)
+                    throw new Exception("Too Many Auto-Generated RobotMap Entries");
+            }
+            return name;
+        }
         #endregion
     }
 }
