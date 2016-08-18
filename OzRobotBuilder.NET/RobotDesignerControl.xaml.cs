@@ -264,18 +264,21 @@ namespace Team1922.OzRobotBuilder.NET
             if (!(DataContext is ViewModel))
                 return;
             (DataContext as ViewModel)?.AddSubsystem(new Subsystem() { Name = "NewSubsystem" });
+            SetDesignerDirty();
         }
         private void cmRobot_AddEventHandler(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             (DataContext as ViewModel)?.AddEventHandler(new MVVM.Models.EventHandler() { Name = "NewEventHandler" });
+            SetDesignerDirty();
         }
         private void cmRobot_AddJoystick(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             (DataContext as ViewModel)?.AddJoystick(new Joystick() { Name = "NewJoystick" });
+            SetDesignerDirty();
         }
 
         private void cm_AddRobotMapElement(object sender, RoutedEventArgs e)
@@ -283,48 +286,49 @@ namespace Team1922.OzRobotBuilder.NET
             if(!(DataContext is ViewModel))
                 return;
             ((DataContext as ViewModel)?.SelectedElement as IRobotMapProvider)?.AddEntry("","");
+            SetDesignerDirty();
         }
-
         private void cmSubsystem_AddPWMOutput(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddPWMOutput(new PWMOutput() { Name = "NewPWMOutput" });
+            SetDesignerDirty();
         }
-
         private void cmSubsystem_AddAnalogInput(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddAnalogInput(new AnalogInput() { Name = "NewAnalogInput" });
+            SetDesignerDirty();
         }
-
         private void cmSubsystem_AddDigitalInput(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddDigitalInput(new DigitalInput() { Name = "NewDigitalInput" });
+            SetDesignerDirty();
         }
-
         private void cmSubsystem_AddQuadEncoder(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddQuadEncoder(new QuadEncoder() { Name = "NewQuadEncoder" });
+            SetDesignerDirty();
         }
-
         private void cmSubsystem_AddRelayOutput(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddRelayOutput(new RelayOutput() { Name = "NewRelayOutput" });
+            SetDesignerDirty();
         }
-
         private void cmSubsystem_AddCANTalon(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is ViewModel))
                 return;
             ((DataContext as ViewModel)?.SelectedElement as ISubsystemProvider)?.AddCANTalon(new CANTalon() { Name = "NewCANTalon" });
+            SetDesignerDirty();
         }
         #endregion
 
