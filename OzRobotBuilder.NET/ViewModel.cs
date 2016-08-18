@@ -36,6 +36,7 @@ using Team1922.MVVM.Models;
 using System.Windows;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Services;
+using Team1922.MVVM.Contracts.Events;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -70,6 +71,19 @@ namespace Team1922.OzRobotBuilder.NET
         System.EventHandler _bufferReloadedHandler;
 
         LanguageService _xmlLanguageService;
+
+        private INotifyPropertyChanged _selectedElement;
+        public INotifyPropertyChanged SelectedElement
+        {
+            get { return _selectedElement; }
+            set
+            {
+                if (SetProperty(ref _selectedElement, value))
+                {
+                    EventAggregator<ItemSelectEvent>.Instance.Publish(this, new ItemSelectEvent { SelectedElement = _selectedElement });
+                }
+            }
+        }
 
         public ViewModel(XmlStore xmlStore, XmlModel xmlModel, IServiceProvider provider, IVsTextLines buffer)
         {

@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\AddRobotMapEntryEvent.cs" />
-    <Compile Include="Events\ItemSelectEvent.cs" />
     <Compile Include="IAnalogInputIOService.cs" />
     <Compile Include="IAnalogInputProvider.cs" />
     <Compile Include="ICANTalonAnalogInputProvider.cs" />

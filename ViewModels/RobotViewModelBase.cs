@@ -21,75 +21,8 @@ namespace Team1922.MVVM.ViewModels
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("EventHandlers", this);
             _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks", this);
         }
-
-        public void SetRobot(Robot robot)
-        {
-            //clear the old providers
-            _subsystemProviders.Items.Clear();
-            _eventHandlerProviders.Items.Clear();
-            _joystickProviders.Items.Clear();
-
-            //setup the new providers
-            _robotModel = robot;
-            if (null != _robotModel.Subsystem)
-            {
-                foreach (var subsystem in _robotModel.Subsystem)
-                {
-                    AddSubsystem(subsystem, false);
-                }
-            }
-            if (null != _robotModel.EventHandler)
-            {
-                foreach (var eventHandler in _robotModel.EventHandler)
-                {
-                    AddEventHandler(eventHandler, false);
-                }
-            }
-            if (null != _robotModel.Joystick)
-            {
-                foreach (var joystick in _robotModel.Joystick)
-                {
-                    AddJoystick(joystick, false);
-                }
-            }
-            if (null != _robotModel.RobotMap)
-            {
-                _robotMapProvider = new RobotMapViewModel(this);
-                _robotMapProvider.SetRobot(_robotModel);
-            }
-        }
-
-        protected override List<string> GetOverrideKeys()
-        {
-            return _keys;
-        }
-
-        private INotifyPropertyChanged _selectedElement;
-        public INotifyPropertyChanged SelectedElement
-        {
-            get { return _selectedElement; }
-            set
-            {
-                if (SetProperty(ref _selectedElement, value))
-                {
-                    EventAggregator<ItemSelectEvent>.Instance.Publish(this, new ItemSelectEvent { SelectedElement = _selectedElement });
-                }
-            }
-        }
-
-        public IObservableCollection<ISubsystemProvider> Subsystems
-        {
-            get { return _subsystemProviders.Items; }
-        }
-        public IObservableCollection<IEventHandlerProvider> EventHandlers
-        {
-            get { return _eventHandlerProviders.Items; }
-        }
-        public IObservableCollection<IJoystickProvider> Joysticks
-        {
-            get { return _joystickProviders.Items; }
-        }
-
+        
+        #region IInputProvider
         public void UpdateInputValues()
         {
             foreach(var subsystem in _subsystemProviders.Items)
@@ -97,33 +30,9 @@ namespace Team1922.MVVM.ViewModels
                 subsystem.UpdateInputValues();
             }
         }
+        #endregion
 
-        public int TeamNumber
-        {
-            get
-            {
-                return _robotModel.TeamNumber;
-            }
-
-            set
-            {
-                _robotModel.TeamNumber = value;
-            }
-        }
-
-        public int AnalogInputSampleRate
-        {
-            get
-            {
-                return _robotModel.AnalogInputSampleRate;
-            }
-
-            set
-            {
-                _robotModel.AnalogInputSampleRate = value;
-            }
-        }
-
+        #region ICompoundProvider
         public IEnumerable<IProvider> Children
         {
             get
@@ -131,15 +40,13 @@ namespace Team1922.MVVM.ViewModels
                 return _children.Values;
             }
         }
+        #endregion
 
-        public string Name
+        #region ViewModelBase
+        protected override List<string> GetOverrideKeys()
         {
-            get
-            {
-                return "Robot";
-            }
+            return _keys;
         }
-
         protected override string GetValue(string key)
         {
             switch(key)
@@ -183,7 +90,103 @@ namespace Team1922.MVVM.ViewModels
                 return brokenName[brokenName.Length - 1];
             }
         }
+        #endregion
 
+        #region IRobotProvider
+        public IObservableCollection<ISubsystemProvider> Subsystems
+        {
+            get { return _subsystemProviders.Items; }
+        }
+        public IObservableCollection<IEventHandlerProvider> EventHandlers
+        {
+            get { return _eventHandlerProviders.Items; }
+        }
+        public IObservableCollection<IJoystickProvider> Joysticks
+        {
+            get { return _joystickProviders.Items; }
+        }
+        public void AddSubsystem(Subsystem subsystem)
+        {
+            AddSubsystem(subsystem, true);
+        }
+        public void AddJoystick(Joystick joystick)
+        {
+            AddJoystick(joystick, true);
+        }
+        public void AddEventHandler(Models.EventHandler eventHandler)
+        {
+            AddEventHandler(eventHandler, true);
+        }
+        public string Name
+        {
+            get
+            {
+                return "Robot";
+            }
+        }
+        public int TeamNumber
+        {
+            get
+            {
+                return _robotModel.TeamNumber;
+            }
+
+            set
+            {
+                _robotModel.TeamNumber = value;
+            }
+        }
+        public int AnalogInputSampleRate
+        {
+            get
+            {
+                return _robotModel.AnalogInputSampleRate;
+            }
+
+            set
+            {
+                _robotModel.AnalogInputSampleRate = value;
+            }
+        }
+        public void SetRobot(Robot robot)
+        {
+            //clear the old providers
+            _subsystemProviders.Items.Clear();
+            _eventHandlerProviders.Items.Clear();
+            _joystickProviders.Items.Clear();
+
+            //setup the new providers
+            _robotModel = robot;
+            if (null != _robotModel.Subsystem)
+            {
+                foreach (var subsystem in _robotModel.Subsystem)
+                {
+                    AddSubsystem(subsystem, false);
+                }
+            }
+            if (null != _robotModel.EventHandler)
+            {
+                foreach (var eventHandler in _robotModel.EventHandler)
+                {
+                    AddEventHandler(eventHandler, false);
+                }
+            }
+            if (null != _robotModel.Joystick)
+            {
+                foreach (var joystick in _robotModel.Joystick)
+                {
+                    AddJoystick(joystick, false);
+                }
+            }
+            if (null != _robotModel.RobotMap)
+            {
+                _robotMapProvider = new RobotMapViewModel(this);
+                _robotMapProvider.SetRobot(_robotModel);
+            }
+        }
+        #endregion
+
+        #region Private Methods
         private void AddSubsystem(Subsystem subsystem, bool addToModel)
         {
             if (subsystem == null)
@@ -217,18 +220,7 @@ namespace Team1922.MVVM.ViewModels
             provider.SetEventHandler(eventHandler);
             _eventHandlerProviders.Items.Add(provider);
         }
-        public void AddSubsystem(Subsystem subsystem)
-        {
-            AddSubsystem(subsystem, true);
-        }
-        public void AddJoystick(Joystick joystick)
-        {
-            AddJoystick(joystick, true);
-        }
-        public void AddEventHandler(Models.EventHandler eventHandler)
-        {
-            AddEventHandler(eventHandler, true);
-        }
+        #endregion
 
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();

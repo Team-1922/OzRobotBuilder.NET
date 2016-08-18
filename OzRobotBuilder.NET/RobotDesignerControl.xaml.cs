@@ -66,7 +66,7 @@ namespace Team1922.OzRobotBuilder.NET
             }
             // wait until we're initialized to handle events
             viewModel.ViewModelChanged += new System.EventHandler(ViewModelChanged);
-            viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            EventAggregator<ItemSelectEvent>.Instance.Event += OnItemSelect;
         }
 
         internal struct TestStruct
@@ -158,16 +158,9 @@ namespace Team1922.OzRobotBuilder.NET
             viewModel.SelectedElement = e.NewValue as IProvider;
         }
         
-        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "SelectedElement")
-            {
-                //var test = ((DataContext as ViewModel));
-                //var test1 = test?.SelectedElement as ViewModelBase;
-                //tbEditor.ItemsSource = (test.SelectedElement as ViewModelBase);                
-                tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase)?.GetEditableKeyValueList() ?? null;
-                //UpdateDataGrid();
-            }
+        private void OnItemSelect(object sender, ItemSelectEvent e)
+        {            
+            tbEditor.ItemsSource = ((DataContext as ViewModel)?.SelectedElement as ViewModelBase)?.GetEditableKeyValueList() ?? null;
         }
 
         private void tbEditor_MouseDoubleClick(object sender, MouseButtonEventArgs e)

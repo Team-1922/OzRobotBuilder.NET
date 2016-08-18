@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="EditorFactory.cs" />
     <Compile Include="EditorPane.cs" />
+    <Compile Include="ItemSelectEvent.cs" />
     <Compile Include="Properties\Guids.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
