@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\AddRobotMapEntryEvent.cs" />
     <Compile Include="Events\ItemSelectEvent.cs" />
     <Compile Include="IAnalogInputIOService.cs" />
     <Compile Include="IAnalogInputProvider.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="IRelayOutputIOService.cs" />
     <Compile Include="IRelayOutputProvider.cs" />
     <Compile Include="IRobotIOService.cs" />
+    <Compile Include="IRobotMapProvider.cs" />
     <Compile Include="IRobotProvider.cs" />
     <Compile Include="ISubsystemProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
