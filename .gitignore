@@ -4,6 +4,7 @@
 # Don't commit testing files
 TestApp/
 TestApp_/
+TestAppWebHost/
 
 # Don't commit the nuget packages
 localPackages/
