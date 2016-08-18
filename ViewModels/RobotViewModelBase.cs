@@ -15,11 +15,11 @@ namespace Team1922.MVVM.ViewModels
     {
         protected Robot _robotModel;
 
-        public RobotViewModelBase(IHierarchialAccess topParent) : base(topParent)
+        public RobotViewModelBase() : base(null)
         {
-            _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems", topParent);
-            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("EventHandlers", topParent);
-            _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks", topParent);
+            _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems", this);
+            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("EventHandlers", this);
+            _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks", this);
         }
 
         public void SetRobot(Robot robot)
@@ -51,6 +51,11 @@ namespace Team1922.MVVM.ViewModels
                 {
                     AddJoystick(joystick, false);
                 }
+            }
+            if (null != _robotModel.RobotMap)
+            {
+                _robotMapProvider = new RobotMapViewModel(this);
+                _robotMapProvider.SetRobot(_robotModel);
             }
         }
 
@@ -227,7 +232,19 @@ namespace Team1922.MVVM.ViewModels
 
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
-        readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "ContinuousCommands", "Joysticks", "Name", "OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
+        readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "EventHandlers", "Joysticks", "RobotMap", "Name", "OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
+        IRobotMapProvider _robotMapProvider
+        {
+            get
+            {
+                return _children["_robotMapProvider"] as IRobotMapProvider;
+            }
+            
+            set
+            {
+                _children["_robotMapProvider"] = value;
+            }
+        }
         CompoundProviderList<ISubsystemProvider> _subsystemProviders
         {
             get

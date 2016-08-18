@@ -15,6 +15,7 @@
 namespace Team1922.MVVM.Models {
     using System.Xml.Serialization;
     
+    
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -32,6 +33,8 @@ namespace Team1922.MVVM.Models {
         private System.Collections.Generic.List<Joystick> joystickField; 
         
         private System.Collections.Generic.List<EventHandler> eventHandlerField; 
+        
+        private System.Collections.Generic.List<RobotMapEntry> robotMapField; 
         
         private int teamNumberField;
         
@@ -71,6 +74,17 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.eventHandlerField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayItemAttribute("Entry", IsNullable=false)]
+        public System.Collections.Generic.List<RobotMapEntry> RobotMap { 
+            get {
+                return this.robotMapField;
+            }
+            set {
+                this.robotMapField = value;
             }
         }
         
@@ -303,6 +317,45 @@ namespace Team1922.MVVM.Models {
             }
             set {
 				TypeRestrictions.Validate("PWMOutput.Value", value);
+                this.valueField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class RobotMapEntry {
+        
+        private string keyField;
+        
+        private string valueField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Key {
+            get {
+                return this.keyField;
+            }
+            set {
+				TypeRestrictions.Validate("RobotMapEntry.Key", value);
+                this.keyField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Value {
+            get {
+                return this.valueField;
+            }
+            set {
+				TypeRestrictions.Validate("RobotMapEntry.Value", value);
                 this.valueField = value;
             }
         }

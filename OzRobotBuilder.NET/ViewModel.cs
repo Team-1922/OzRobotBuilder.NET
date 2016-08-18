@@ -71,7 +71,7 @@ namespace Team1922.OzRobotBuilder.NET
 
         LanguageService _xmlLanguageService;
 
-        public ViewModel(XmlStore xmlStore, XmlModel xmlModel, IServiceProvider provider, IVsTextLines buffer) : base(null)
+        public ViewModel(XmlStore xmlStore, XmlModel xmlModel, IServiceProvider provider, IVsTextLines buffer)
         {
             if (xmlModel == null)
                 throw new ArgumentNullException("xmlModel");

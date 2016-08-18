@@ -103,6 +103,7 @@
       <xs:element name="Subsystem" type="tns:Subsystem" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="Joystick" type="tns:Joystick" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="EventHandler" type="tns:EventHandler" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="RobotMap" type="tns:RobotMap" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="TeamNumber" type="tns:TeamNumber" use="required"/>
     <xs:attribute name="AnalogInputSampleRate" type="tns:AnalogInputSampleRate" default="62500"/>
@@ -133,7 +134,17 @@
     <xs:attribute name="Condition" type="xs:string" use="required"/>
     <!--State Values-->
     <xs:attribute name="ConditionMet" type="xs:boolean" default="false"/>
-  </xs:complexType>  
+  </xs:complexType>
+
+  <xs:complexType name="RobotMapEntry">
+    <xs:attribute name="Key" use="required"/>
+    <xs:attribute name="Value" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="RobotMap">
+    <xs:sequence minOccurs="0">
+      <xs:element name="Entry" type="tns:RobotMapEntry" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
   
   <xs:complexType name="Subsystem">
     <xs:sequence minOccurs="0">
