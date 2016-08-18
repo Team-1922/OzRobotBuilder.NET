@@ -88,31 +88,6 @@ namespace Team1922.OzRobotBuilder.NET
             }
         }
 
-        public static int GetRowIndex(DataGridCell dataGridCell)
-        {
-            // Use reflection to get DataGridCell.RowDataItem property value.
-            PropertyInfo rowDataItemProperty = dataGridCell.GetType().GetProperty("RowDataItem", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            DataGrid dataGrid = GetDataGridFromChild(dataGridCell);
-
-            return dataGrid.Items.IndexOf(rowDataItemProperty.GetValue(dataGridCell, null));
-        }
-        public static DataGrid GetDataGridFromChild(DependencyObject dataGridPart)
-        {
-            if (VisualTreeHelper.GetParent(dataGridPart) == null)
-            {
-                throw new NullReferenceException("Control is null.");
-            }
-            if (VisualTreeHelper.GetParent(dataGridPart) is DataGrid)
-            {
-                return (DataGrid)VisualTreeHelper.GetParent(dataGridPart);
-            }
-            else
-            {
-                return GetDataGridFromChild(VisualTreeHelper.GetParent(dataGridPart));
-            }
-        }
-
         private void SelectChild(string childName)
         {
             var children = (tvRobot.SelectedItem as TreeViewItem)?.Items;
