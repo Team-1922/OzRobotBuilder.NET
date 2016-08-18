@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -9,7 +10,7 @@ using Team1922.MVVM.Contracts;
 namespace Team1922.MVVM.ViewModels
 {
 
-    class CompoundProviderList<T> : ViewModelBase, ICompoundProvider where T : IProvider
+    class CompoundProviderList<T> : ViewModelBase, IEnumerable<T>, ICompoundProvider where T : IProvider
     {
         public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
 
@@ -84,5 +85,17 @@ namespace Team1922.MVVM.ViewModels
                 return (from child in Children select child).ToDictionary(child => child.Name, child => (child.ToString() ?? "null"));
             }
         }
+
+        #region IEnumerable<T>
+        public IEnumerator<T> GetEnumerator()
+        {
+            return Items.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Items.GetEnumerator();
+        }
+        #endregion
     }
 }

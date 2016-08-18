@@ -114,6 +114,12 @@ namespace Team1922.OzRobotBuilder.NET
             }
         }
 
+        private void DeleteSelectedItem()
+        {
+            //TODO: add actual logic to this
+            MessageBox.Show("Deleted Selected Item");
+        }
+
         #region Event Handlers
         private void ViewModelChanged(object sender, EventArgs e)
         {
@@ -174,6 +180,19 @@ namespace Team1922.OzRobotBuilder.NET
             }*/
         }
 
+        private void tvRobot_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                DeleteSelectedItem();
+            }
+        }
+
+        private void tvRobot_DeleteSelected(object sender, RoutedEventArgs e)
+        {
+            DeleteSelectedItem();
+        }
+
         private void tbEditor_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             if(e.EditAction == DataGridEditAction.Commit)
@@ -213,9 +232,11 @@ namespace Team1922.OzRobotBuilder.NET
             }
             else if(viewModel.SelectedElement is IEventHandlerProvider)
             {
+                cm = tvRobot.FindResource("cmEventHandler") as ContextMenu;
             }
             else if(viewModel.SelectedElement is IJoystickProvider)
             {
+                cm = tvRobot.FindResource("cmJoystick") as ContextMenu;
             }
             else if(viewModel.SelectedElement is IRobotMapProvider)
             {
@@ -342,7 +363,6 @@ namespace Team1922.OzRobotBuilder.NET
         {
         }
         #endregion
-
     }
 
 }
