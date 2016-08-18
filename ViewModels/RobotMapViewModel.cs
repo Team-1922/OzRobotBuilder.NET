@@ -54,7 +54,9 @@ namespace Team1922.MVVM.ViewModels
                     return;
                 }
             }
-            throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+            //this view-model should automatically add a new entry if none exists; this is so it functions much like a dictionary
+            //throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+            AddEntry(key, value);
         }
 
         protected override List<string> GetOverrideKeys()
