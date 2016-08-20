@@ -14,7 +14,7 @@ namespace Team1922.MVVM.ViewModels
     {
         public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
 
-        public CompoundProviderList(string name, IHierarchialAccess topParent) : base(topParent)
+        public CompoundProviderList(string name, IProvider parent) : base(parent)
         {
             Name = name;
             Items.CollectionChanged += Items_CollectionChanged;

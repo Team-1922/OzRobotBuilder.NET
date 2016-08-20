@@ -28,5 +28,9 @@ namespace Team1922.MVVM.Contracts
         /// This is the top-level parent this class belongs to
         /// </summary>
         IHierarchialAccess TopParent { get; }
+        /// <summary>
+        /// The parent this provider belongs to
+        /// </summary>
+        IProvider Parent { get; }
     }
 }

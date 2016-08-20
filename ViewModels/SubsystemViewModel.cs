@@ -12,15 +12,15 @@ namespace Team1922.MVVM.ViewModels
     {
         protected Subsystem _subsystemModel;
         
-        public SubsystemViewModel(IHierarchialAccess topParent) : base(topParent)
+        public SubsystemViewModel(IRobotProvider parent) : base(parent)
         {
-            _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider>("PWMOutputs", topParent);
-            _analogInputProviders = new CompoundProviderList<IAnalogInputProvider>("AnalogInputs", topParent);
-            _quadEncoderProviders = new CompoundProviderList<IQuadEncoderProvider>("QuadEncoders", topParent);
-            _digitalInputProviders = new CompoundProviderList<IDigitalInputProvider>("DigitalInputs", topParent);
-            _relayOutputProviders = new CompoundProviderList<IRelayOutputProvider>("RelayOutputs", topParent);
-            _canTalonProviders = new CompoundProviderList<ICANTalonProvider>("CANTalons", topParent);
-            PIDController = new PIDControllerSoftwareViewModel(topParent);
+            _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider>("PWMOutputs", this);
+            _analogInputProviders = new CompoundProviderList<IAnalogInputProvider>("AnalogInputs", this);
+            _quadEncoderProviders = new CompoundProviderList<IQuadEncoderProvider>("QuadEncoders", this);
+            _digitalInputProviders = new CompoundProviderList<IDigitalInputProvider>("DigitalInputs", this);
+            _relayOutputProviders = new CompoundProviderList<IRelayOutputProvider>("RelayOutputs", this);
+            _canTalonProviders = new CompoundProviderList<ICANTalonProvider>("CANTalons", this);
+            PIDController = new PIDControllerSoftwareViewModel(this);
         }
 
         public void SetSubsystem(Subsystem subsystem)
@@ -158,6 +158,8 @@ namespace Team1922.MVVM.ViewModels
                     return Name;
                 case "PIDController":
                     return PIDController.ToString();
+                case "DigitalInputs":
+                    return DigitalInputs.ToString();
                 case "PWMOutputs":
                     return PWMOutputs.ToString();
                 case "QuadEncoders":
@@ -200,7 +202,7 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("pwmOutput");
             if(addToModel)
                 _subsystemModel.PWMOutput.Add(pwmOutput);
-            var provider = new PWMOutputViewModel(TopParent);
+            var provider = new PWMOutputViewModel(this);
             provider.SetPWMOutput(pwmOutput);
             provider.Name = _pwmOutputProviders.GetUnusedKey(provider.Name);
             _pwmOutputProviders.Items.Add(provider);
@@ -212,7 +214,7 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("analogInput");
             if (addToModel)
                 _subsystemModel.AnalogInput.Add(analogInput);
-            var provider = new AnalogInputViewModel(TopParent);
+            var provider = new AnalogInputViewModel(this);
             provider.SetAnalogInput(analogInput);
             provider.Name = _analogInputProviders.GetUnusedKey(provider.Name);
             _analogInputProviders.Items.Add(provider);
@@ -225,7 +227,7 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 _subsystemModel.QuadEncoder.Add(quadEncoder);
 
-            var provider = new QuadEncoderViewModel(TopParent);
+            var provider = new QuadEncoderViewModel(this);
             provider.SetQuadEncoder(quadEncoder);
             provider.Name = _quadEncoderProviders.GetUnusedKey(provider.Name);
             _quadEncoderProviders.Items.Add(provider);
@@ -237,7 +239,7 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("digitalInput");
             if (addToModel)
                 _subsystemModel.DigitalInput.Add(digitalInput);
-            var provider = new DigitalInputViewModel(TopParent);
+            var provider = new DigitalInputViewModel(this);
             provider.SetDigitalInput(digitalInput);
             provider.Name = _digitalInputProviders.GetUnusedKey(provider.Name);
             _digitalInputProviders.Items.Add(provider);
@@ -249,7 +251,7 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("relayOutput");
             if (addToModel)
                 _subsystemModel.RelayOutput.Add(relayOutput);
-            var provider = new RelayOutputViewModel(TopParent);
+            var provider = new RelayOutputViewModel(this);
             provider.SetRelayOutput(relayOutput);
             provider.Name = _relayOutputProviders.GetUnusedKey(provider.Name);
             _relayOutputProviders.Items.Add(provider);
@@ -261,7 +263,7 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("canTalon");
             if (addToModel)
                 _subsystemModel.CANTalons.Add(canTalon);
-            var provider = new CANTalonViewModel(TopParent);
+            var provider = new CANTalonViewModel(this);
             provider.SetCANTalon(canTalon);
             provider.Name = _canTalonProviders.GetUnusedKey(provider.Name);
             _canTalonProviders.Items.Add(provider);

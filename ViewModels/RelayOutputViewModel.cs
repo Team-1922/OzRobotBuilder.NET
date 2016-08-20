@@ -10,7 +10,7 @@ namespace Team1922.MVVM.ViewModels
     {
         RelayOutput _relayOutputModel;
 
-        public RelayOutputViewModel(IHierarchialAccess topParent) : base(topParent)
+        public RelayOutputViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 

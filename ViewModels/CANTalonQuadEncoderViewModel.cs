@@ -11,7 +11,7 @@ namespace Team1922.MVVM.ViewModels
         CANTalonQuadEncoder _quadEncoderModel;
         int _canTalonID;
 
-        public CANTalonQuadEncoderViewModel(IHierarchialAccess topParent) : base(topParent)
+        public CANTalonQuadEncoderViewModel(ICANTalonProvider parent) : base(parent)
         {
         }
 
