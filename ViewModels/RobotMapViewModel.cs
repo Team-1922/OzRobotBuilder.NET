@@ -13,7 +13,7 @@ namespace Team1922.MVVM.ViewModels
     {
         private Robot _robotModel;
 
-        public RobotMapViewModel(IHierarchialAccess topParent) : base(topParent)
+        public RobotMapViewModel(IRobotProvider parent) : base(parent)
         {
             EventAggregator<AddRobotMapEntryEvent>.Instance.Event += OnAddNewEntry;
         }

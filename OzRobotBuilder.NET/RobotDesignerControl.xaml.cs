@@ -114,10 +114,93 @@ namespace Team1922.OzRobotBuilder.NET
             }
         }
 
+        private bool PreDelete()
+        {
+            return MessageBox.Show("Are you sure you want to delete this item?  This action is currently irreversible!", "Delete Item", MessageBoxButton.YesNo) == MessageBoxResult.Yes ? true : false;
+        }
+        private void PostDelete()
+        {
+            tviRobot.IsSelected = true;//reset the selection TODO: make this set to the next nearest node instead of the root
+        }
         private void DeleteSelectedItem()
         {
-            //TODO: add actual logic to this
-            MessageBox.Show("Deleted Selected Item");
+            var vm = (DataContext as ViewModel);
+            var selectedItem = vm.SelectedElement;
+            if(selectedItem is ISubsystemProvider)
+            {
+                if (!PreDelete())
+                    return;
+                vm.RemoveSubsystem((selectedItem as ISubsystemProvider).Name);
+                PostDelete();
+            }
+            else if(selectedItem is IEventHandlerProvider)
+            {
+                if (!PreDelete())
+                    return;
+                vm.RemoveEventHandler((selectedItem as IEventHandlerProvider).Name);
+                PostDelete();
+            }
+            else if(selectedItem is IJoystickProvider)
+            {
+                if (!PreDelete())
+                    return;
+                vm.RemoveJoystick((selectedItem as IJoystickProvider).Name);
+                PostDelete();
+            }
+            else if(selectedItem is IAnalogInputProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IAnalogInputProvider).Parent as ISubsystemProvider;
+                sub.RemoveAnalogInput((selectedItem as IAnalogInputProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is ICANTalonProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as ICANTalonProvider).Parent as ISubsystemProvider;
+                sub.RemoveCANTalon((selectedItem as ICANTalonProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is IDigitalInputProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IDigitalInputProvider).Parent as ISubsystemProvider;
+                sub.RemoveQuadEncoder((selectedItem as IDigitalInputProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is IPWMOutputProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IPWMOutputProvider).Parent as ISubsystemProvider;
+                sub.RemovePWMOutput((selectedItem as IPWMOutputProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is IQuadEncoderProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IQuadEncoderProvider).Parent as ISubsystemProvider;
+                sub.RemoveQuadEncoder((selectedItem as IQuadEncoderProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is IRelayOutputProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IRelayOutputProvider).Parent as ISubsystemProvider;
+                sub.RemoveRelayOutput((selectedItem as IRelayOutputProvider).Name);
+                PostDelete();
+            }
         }
 
         #region Event Handlers

@@ -184,6 +184,53 @@ namespace Team1922.MVVM.ViewModels
                 _robotMapProvider.SetRobot(_robotModel);
             }
         }
+        public void RemoveSubsystem(string name)
+        {
+            for (int i = 0; i < _subsystemProviders.Items.Count; ++i)
+            {
+                if (_subsystemProviders.Items[i].Name == name)
+                {
+                    //remove the provider
+                    _subsystemProviders.Items.RemoveAt(i);
+
+                    //remove the model instance
+                    _robotModel.Subsystem.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        public void RemoveJoystick(string name)
+        {
+            for (int i = 0; i < _joystickProviders.Items.Count; ++i)
+            {
+                if (_joystickProviders.Items[i].Name == name)
+                {
+                    //remove the provider
+                    _joystickProviders.Items.RemoveAt(i);
+
+                    //remove the model instance
+                    _robotModel.Joystick.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        public void RemoveEventHandler(string name)
+        {
+            for (int i = 0; i < _eventHandlerProviders.Items.Count; ++i)
+            {
+                if (_eventHandlerProviders.Items[i].Name == name)
+                {
+                    //remove the provider
+                    _eventHandlerProviders.Items.RemoveAt(i);
+
+                    //remove the model instance
+                    _robotModel.EventHandler.RemoveAt(i);
+                    break;
+                }
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -196,6 +243,7 @@ namespace Team1922.MVVM.ViewModels
 
             var provider = new SubsystemViewModel(this);
             provider.SetSubsystem(subsystem);
+            provider.Name = _subsystemProviders.GetUnusedKey(provider.Name);
             _subsystemProviders.Items.Add(provider);
         }
         private void AddJoystick(Joystick joystick, bool addToModel)
@@ -207,6 +255,7 @@ namespace Team1922.MVVM.ViewModels
 
             var provider = new JoystickViewModel(this);
             provider.SetJoystick(joystick);
+            provider.Name = _joystickProviders.GetUnusedKey(provider.Name);
             _joystickProviders.Items.Add(provider);
         }
         private void AddEventHandler(Models.EventHandler eventHandler, bool addToModel)
@@ -218,6 +267,7 @@ namespace Team1922.MVVM.ViewModels
 
             var provider = new EventHandlerViewModel(this);
             provider.SetEventHandler(eventHandler);
+            provider.Name = _eventHandlerProviders.GetUnusedKey(provider.Name);
             _eventHandlerProviders.Items.Add(provider);
         }
         #endregion

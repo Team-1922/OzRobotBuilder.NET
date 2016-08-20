@@ -15,7 +15,7 @@ namespace Team1922.MVVM.ViewModels
     {
         Joystick _joystickModel;
 
-        public JoystickViewModel(IHierarchialAccess topParent) : base(topParent)
+        public JoystickViewModel(IRobotProvider parent) : base(parent)
         {
             _axes.CollectionChanged += _axes_CollectionChanged;
             _buttons.CollectionChanged += _buttons_CollectionChanged;
