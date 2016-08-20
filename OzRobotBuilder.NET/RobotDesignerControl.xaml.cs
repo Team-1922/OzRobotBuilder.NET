@@ -131,18 +131,21 @@ namespace Team1922.OzRobotBuilder.NET
                 if (!PreDelete())
                     return;
                 vm.RemoveSubsystem((selectedItem as ISubsystemProvider).Name);
+                PostDelete();
             }
             else if(selectedItem is IEventHandlerProvider)
             {
                 if (!PreDelete())
                     return;
                 vm.RemoveEventHandler((selectedItem as IEventHandlerProvider).Name);
+                PostDelete();
             }
             else if(selectedItem is IJoystickProvider)
             {
                 if (!PreDelete())
                     return;
                 vm.RemoveJoystick((selectedItem as IJoystickProvider).Name);
+                PostDelete();
             }
             else if(selectedItem is IAnalogInputProvider)
             {
@@ -151,6 +154,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //get the subsystem this belongs to
                 var sub = (selectedItem as IAnalogInputProvider).Parent as ISubsystemProvider;
                 sub.RemoveAnalogInput((selectedItem as IAnalogInputProvider).Name);
+                PostDelete();
             }
             else if (selectedItem is ICANTalonProvider)
             {
@@ -159,6 +163,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //get the subsystem this belongs to
                 var sub = (selectedItem as ICANTalonProvider).Parent as ISubsystemProvider;
                 sub.RemoveCANTalon((selectedItem as ICANTalonProvider).Name);
+                PostDelete();
             }
             else if (selectedItem is IDigitalInputProvider)
             {
@@ -167,6 +172,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //get the subsystem this belongs to
                 var sub = (selectedItem as IDigitalInputProvider).Parent as ISubsystemProvider;
                 sub.RemoveQuadEncoder((selectedItem as IDigitalInputProvider).Name);
+                PostDelete();
             }
             else if (selectedItem is IPWMOutputProvider)
             {
@@ -175,6 +181,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //get the subsystem this belongs to
                 var sub = (selectedItem as IPWMOutputProvider).Parent as ISubsystemProvider;
                 sub.RemovePWMOutput((selectedItem as IPWMOutputProvider).Name);
+                PostDelete();
             }
             else if (selectedItem is IQuadEncoderProvider)
             {
@@ -183,6 +190,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //get the subsystem this belongs to
                 var sub = (selectedItem as IQuadEncoderProvider).Parent as ISubsystemProvider;
                 sub.RemoveQuadEncoder((selectedItem as IQuadEncoderProvider).Name);
+                PostDelete();
             }
             else if (selectedItem is IRelayOutputProvider)
             {
@@ -191,6 +199,7 @@ namespace Team1922.OzRobotBuilder.NET
                 //get the subsystem this belongs to
                 var sub = (selectedItem as IRelayOutputProvider).Parent as ISubsystemProvider;
                 sub.RemoveRelayOutput((selectedItem as IRelayOutputProvider).Name);
+                PostDelete();
             }
         }
 
