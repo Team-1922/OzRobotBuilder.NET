@@ -116,7 +116,7 @@ namespace Team1922.OzRobotBuilder.NET
 
         private bool PreDelete()
         {
-            return MessageBox.Show("Are you sure you want to delete this item?", "Delete Item", MessageBoxButton.YesNo) == MessageBoxResult.Yes ? true : false;
+            return MessageBox.Show("Are you sure you want to delete this item?  This action is currently irreversible!", "Delete Item", MessageBoxButton.YesNo) == MessageBoxResult.Yes ? true : false;
         }
         private void PostDelete()
         {
