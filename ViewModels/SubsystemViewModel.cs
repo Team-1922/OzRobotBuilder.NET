@@ -23,6 +23,7 @@ namespace Team1922.MVVM.ViewModels
             PIDController = new PIDControllerSoftwareViewModel(this);
         }
 
+        #region ISubsystemProvider
         public void SetSubsystem(Subsystem subsystem)
         {
             //cleanup the old providers
@@ -117,83 +118,10 @@ namespace Team1922.MVVM.ViewModels
             get { return _canTalonProviders.Items; }
         }
         public IPIDControllerSoftwareProvider PIDController { get; }
-        public string Name
-        {
-            get { return _subsystemModel.Name; }
-            set { _subsystemModel.Name = value; }
-        }
         public bool SoftwarePIDEnabled
         {
             get { return _subsystemModel.SoftwarePIDEnabled; }
             set { _subsystemModel.SoftwarePIDEnabled = value; }
-        }
-
-        public IEnumerable<IProvider> Children
-        {
-            get
-            {
-                return _children.Values;
-            }
-        }
-
-        public int ID
-        {
-            get
-            {
-                return _subsystemModel.ID;
-            }
-        }
-
-        protected override string GetValue(string key)
-        {
-            switch(key)
-            {
-                case "AnalogInputs":
-                    return AnalogInputs.ToString();
-                case "CANTalons":
-                    return CANTalons.ToString();
-                case "ID":
-                    return ID.ToString();
-                case "Name":
-                    return Name;
-                case "PIDController":
-                    return PIDController.ToString();
-                case "DigitalInputs":
-                    return DigitalInputs.ToString();
-                case "PWMOutputs":
-                    return PWMOutputs.ToString();
-                case "QuadEncoders":
-                    return QuadEncoders.ToString();
-                case "RelayOutputs":
-                    return RelayOutputs.ToString();
-                case "SoftwarePIDEnabled":
-                    return SoftwarePIDEnabled.ToString();
-                default:
-                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-            }
-        }
-        protected override void SetValue(string key, string value)
-        {
-            switch(key)
-            {
-                case "Name":
-                    Name = value;
-                    break;
-                case "SoftwarePIDEnabled":
-                    SoftwarePIDEnabled = SafeCastBool(value);
-                    break;
-                default:
-                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-            }
-
-        }
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _subsystemModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
         }
 
         private void AddPWMOutput(PWMOutput pwmOutput, bool addToModel)
@@ -393,6 +321,95 @@ namespace Team1922.MVVM.ViewModels
                 }
             }
         }
+        public int ID
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        #endregion
+
+        #region ICompoundProvider
+        public IEnumerable<IProvider> Children
+        {
+            get
+            {
+                return _children.Values;
+            }
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get { return _subsystemModel.Name; }
+            set { _subsystemModel.Name = value; }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_subsystemModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetSubsystem(JsonDeserialize<Subsystem>(text));
+        }
+        #endregion
+
+        #region ViewModelBase
+
+        protected override string GetValue(string key)
+        {
+            switch (key)
+            {
+                case "AnalogInputs":
+                    return JsonSerialize(AnalogInputs);
+                case "CANTalons":
+                    return JsonSerialize(CANTalons);
+                case "ID":
+                    return ID.ToString();
+                case "Name":
+                    return Name;
+                case "PIDController":
+                    return JsonSerialize(PIDController);
+                case "DigitalInputs":
+                    return JsonSerialize(DigitalInputs);
+                case "PWMOutputs":
+                    return JsonSerialize(PWMOutputs);
+                case "QuadEncoders":
+                    return JsonSerialize(QuadEncoders);
+                case "RelayOutputs":
+                    return JsonSerialize(RelayOutputs);
+                case "SoftwarePIDEnabled":
+                    return SoftwarePIDEnabled.ToString();
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            }
+        }
+        protected override void SetValue(string key, string value)
+        {
+            switch (key)
+            {
+                case "Name":
+                    Name = value;
+                    break;
+                case "SoftwarePIDEnabled":
+                    SoftwarePIDEnabled = SafeCastBool(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+            }
+
+        }
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _subsystemModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
+        }
+        #endregion
 
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();

@@ -22,6 +22,7 @@ namespace Team1922.MVVM.ViewModels
         /// </summary>
         protected AnalogInput _analogInputModel;
 
+        #region IAnalogInputProvider
         /// <summary>
         /// The AccumulatorCenter property of the model
         /// </summary>
@@ -145,24 +146,6 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _analogInputModel.ID;
                 SetProperty(ref temp, value);
                 _analogInputModel.ID = temp;
-            }
-        }
-
-        /// <summary>
-        /// The AccumulatorCenter property of the model
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _analogInputModel.Name;
-            }
-
-            set
-            {
-                var temp = _analogInputModel.Name;
-                SetProperty(ref temp, value);
-                _analogInputModel.Name = temp;
             }
         }
 
@@ -291,7 +274,76 @@ namespace Team1922.MVVM.ViewModels
                 _analogInputModel.AverageValue = temp;
             }
         }
+
+        /// <summary>
+        /// Resets the hardware analog input accumulator
+        /// </summary>
+        public void ResetAccumulator()
+        {
+            IOService.Instance.AnalogInputs[ID].ResetAccumulator();
+        }
         
+        /// <summary>
+        /// Sets the analog input model instance for this viewmodel
+        /// </summary>
+        /// <param name="analogInput">the analog input model instance</param>
+        public void SetAnalogInput(AnalogInput analogInput)
+        {
+            _analogInputModel = analogInput;
+        }
+        #endregion
+
+        #region IInputProvider
+        /// <summary>
+        /// Updates the attached analog input model instance with the IO service
+        /// </summary>
+        public void UpdateInputValues()
+        {
+            IAnalogInputIOService thisIOService = IOService.Instance.AnalogInputs[ID];
+
+            RawAverageValue = thisIOService.AverageValue;
+            AverageValue = RawAverageValue * ConversionRatio + SensorOffset;
+
+            RawAccumulatorValue = thisIOService.AccumulatorValue;
+            AccumulatorValue = RawAccumulatorValue * ConversionRatio + SensorOffset;
+
+            RawValue = (int)thisIOService.Value;
+            Value = RawValue * ConversionRatio + SensorOffset;
+
+            AccumulatorCount = thisIOService.AccumulatorCount;
+        }
+        #endregion
+
+        #region IProvider
+
+        /// <summary>
+        /// The AccumulatorCenter property of the model
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _analogInputModel.Name;
+            }
+
+            set
+            {
+                var temp = _analogInputModel.Name;
+                SetProperty(ref temp, value);
+                _analogInputModel.Name = temp;
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_analogInputModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetAnalogInput(JsonDeserialize<AnalogInput>(text));
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
@@ -373,41 +425,6 @@ namespace Team1922.MVVM.ViewModels
                 return brokenName[brokenName.Length - 1];
             }
         }
-
-        /// <summary>
-        /// Resets the hardware analog input accumulator
-        /// </summary>
-        public void ResetAccumulator()
-        {
-            IOService.Instance.AnalogInputs[ID].ResetAccumulator();
-        }
-        
-        /// <summary>
-        /// Sets the analog input model instance for this viewmodel
-        /// </summary>
-        /// <param name="analogInput">the analog input model instance</param>
-        public void SetAnalogInput(AnalogInput analogInput)
-        {
-            _analogInputModel = analogInput;
-        }
-
-        /// <summary>
-        /// Updates the attached analog input model instance with the IO service
-        /// </summary>
-        public void UpdateInputValues()
-        {
-            IAnalogInputIOService thisIOService = IOService.Instance.AnalogInputs[ID];
-
-            RawAverageValue = thisIOService.AverageValue;
-            AverageValue = RawAverageValue * ConversionRatio + SensorOffset;
-
-            RawAccumulatorValue = thisIOService.AccumulatorValue;
-            AccumulatorValue = RawAccumulatorValue * ConversionRatio + SensorOffset;
-
-            RawValue = (int)thisIOService.Value;
-            Value = RawValue * ConversionRatio + SensorOffset;
-
-            AccumulatorCount = thisIOService.AccumulatorCount;
-        }
+        #endregion
     }
 }

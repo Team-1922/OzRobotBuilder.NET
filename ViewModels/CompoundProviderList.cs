@@ -20,20 +20,6 @@ namespace Team1922.MVVM.ViewModels
             Items.CollectionChanged += Items_CollectionChanged;
         }
 
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            UpdateKeyValueList();
-        }
-
-        private T FindByName(string name)
-        {
-            foreach(var item in Items)
-            {
-                if (item.Name == name)
-                    return item;
-            }
-            throw new Exception();
-        }
 
         public IReadOnlyDictionary<string, string> Properties
         {
@@ -91,18 +77,19 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override string GetValue(string key)
         {
-            try
-            {
-                return FindByName(key).ToString();
-            }
-            catch(Exception)
-            {
-                throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-            }
+            return JsonSerialize(FindByName(key));
         }
 
         protected override void SetValue(string key, string value)
         {
+            for(int i = 0; i < Items.Count; ++i)
+            {
+                if (Items[i].Name == key)
+                {
+                    Items[i] = JsonDeserialize<T>(value);
+                    return;
+                }
+            }
             throw new ArgumentException($"\"{key}\" is Read-Only");
         }
 
@@ -130,6 +117,26 @@ namespace Team1922.MVVM.ViewModels
         {
             get;
         }
+        public string GetModelJson()
+        {
+            // TODO: this is not entirely correct; it does not actually serialize the list, however it gets close
+            //  perhaps it makes sense for this class to hold a reference to the list of model objects
+            var ret = new List<string>();
+            foreach(var item in Items)
+            {
+                ret.Add(item.GetModelJson());
+            }
+            return JsonSerialize(ret);
+        }
+        public void SetModelJson(string text)
+        {
+            Items.Clear();
+            var items = JsonDeserialize<List<string>>(text);
+            foreach(var item in items)
+            {
+                Items.Add(JsonDeserialize<T>(item));
+            }
+        }
         #endregion
 
         #region IEnumerable<T>
@@ -141,6 +148,23 @@ namespace Team1922.MVVM.ViewModels
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Items.GetEnumerator();
+        }
+        #endregion
+
+        #region Private Methods
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateKeyValueList();
+        }
+
+        private T FindByName(string name)
+        {
+            foreach (var item in Items)
+            {
+                if (item.Name == name)
+                    return item;
+            }
+            throw new ArgumentException($"\"{name}\" Does Not Exist");
         }
         #endregion
     }

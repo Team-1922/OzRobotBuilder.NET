@@ -1,7 +1,8 @@
 {
   "version": "1.0.0-*",
   "dependencies": {
-    "Models": "1.0.0-*"
+    "Models": "1.0.0-*",
+    "Newtonsoft.Json": "9.0.1"
   },
   "frameworks": {
     "netstandard1.5": {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -279,6 +280,14 @@ namespace Team1922.MVVM.ViewModels
             else
                 throw new ArgumentException("Value Entered Not Boolean");
         }
+        protected string JsonSerialize(object obj)
+        {
+            return JsonConvert.SerializeObject(obj, _settings);
+        }
+        protected T JsonDeserialize<T>(string text)
+        {
+            return JsonConvert.DeserializeObject<T>(text, _settings);
+        }
         #endregion
 
         #region Abstract & Virtual Methods
@@ -384,6 +393,10 @@ namespace Team1922.MVVM.ViewModels
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
+        #endregion
+
+        #region Private Fields
+        static JsonSerializerSettings _settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
         #endregion
     }
 }

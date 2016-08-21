@@ -14,6 +14,7 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
+        #region IQuadEncoderProvider
         public double ConversionRatio
         {
             get
@@ -56,21 +57,6 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _quadEncoderModel.ID1;
                 SetProperty(ref temp, value);
                 _quadEncoderModel.ID1 = temp;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return _quadEncoderModel.Name;
-            }
-
-            set
-            {
-                var temp = _quadEncoderModel.Name;
-                SetProperty(ref temp, value);
-                _quadEncoderModel.Name = temp;
             }
         }
 
@@ -134,6 +120,54 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void SetQuadEncoder(QuadEncoder quadEncoder)
+        {
+            _quadEncoderModel = quadEncoder;
+        }
+        #endregion
+
+        #region IInputProvider
+        public void UpdateInputValues()
+        {
+            var thisInput = IOService.Instance.DigitalInputs[ID] as IQuadEncoderIOService;
+            if (null == thisInput)
+                //this means this digital input was not constructed with the quad encoder IO Service
+                return;//TODO: throw an exception or log
+
+            RawValue = (long)thisInput.Value;
+            Value = RawValue * ConversionRatio;
+
+            RawVelocity = thisInput.Velocity;
+            Velocity = RawVelocity * ConversionRatio;
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return _quadEncoderModel.Name;
+            }
+
+            set
+            {
+                var temp = _quadEncoderModel.Name;
+                SetProperty(ref temp, value);
+                _quadEncoderModel.Name = temp;
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_quadEncoderModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetQuadEncoder(JsonDeserialize<QuadEncoder>(text));
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
@@ -202,24 +236,6 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-
-        public void SetQuadEncoder(QuadEncoder quadEncoder)
-        {
-            _quadEncoderModel = quadEncoder;
-        }
-
-        public void UpdateInputValues()
-        {
-            var thisInput = IOService.Instance.DigitalInputs[ID] as IQuadEncoderIOService;
-            if (null == thisInput)
-                //this means this digital input was not constructed with the quad encoder IO Service
-                return;//TODO: throw an exception or log
-
-            RawValue = (long)thisInput.Value;
-            Value = RawValue * ConversionRatio;
-
-            RawVelocity = thisInput.Velocity;
-            Velocity = RawVelocity * ConversionRatio;
-        }
+        #endregion
     }
 }

@@ -14,6 +14,7 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
+        #region IPIDControllerSRXProvider
         public int AllowableCloseLoopError
         {
             get
@@ -134,6 +135,13 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void SetPIDController(PIDControllerSRX pidController)
+        {
+            _pidControllerSRXModel = pidController;
+        }
+        #endregion
+
+        #region IProvider
         public string Name
         {
             get
@@ -141,7 +149,17 @@ namespace Team1922.MVVM.ViewModels
                 return "PID Controller";
             }
         }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_pidControllerSRXModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetPIDController(JsonDeserialize<PIDControllerSRX>(text));
+        }
+        #endregion
 
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
@@ -211,10 +229,6 @@ namespace Team1922.MVVM.ViewModels
                 return brokenName[brokenName.Length - 1];
             }
         }
-
-        public void SetPIDController(PIDControllerSRX pidController)
-        {
-            _pidControllerSRXModel = pidController;
-        }
+        #endregion
     }
 }

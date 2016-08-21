@@ -18,11 +18,46 @@ namespace Team1922.MVVM.ViewModels
             EventAggregator<AddRobotMapEntryEvent>.Instance.Event += OnAddNewEntry;
         }
 
-        private void OnAddNewEntry(object arg1, AddRobotMapEntryEvent arg2)
+        #region IRobotMapProvider
+        public void SetRobot(Robot robot)
         {
-            //update the key value list every time a new value is added to keep the datagrid up to date
+            _robotModel = robot;
             UpdateKeyValueList();
         }
+
+        public void AddEntry(string key, string value)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (value == null)
+                throw new ArgumentNullException("value");
+            //this means the key should be auto-generated
+            if(key=="")
+            {
+                key = GetUnusedKey();
+            }
+            _robotModel.RobotMap.Add(new RobotMapEntry { Key = key, Value = value });
+            UpdateKeyValueList();
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return "RobotMap";
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_robotModel.RobotMap);
+        }
+        public void SetModelJson(string text)
+        {
+            _robotModel.RobotMap = JsonDeserialize<List<RobotMapEntry>>(text);
+        }
+        #endregion
 
         #region ViewModelBase
         public override string ModelTypeName
@@ -74,33 +109,10 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region IRobotMapProvider
-        public string Name
+        #region Private Methods
+        private void OnAddNewEntry(object arg1, AddRobotMapEntryEvent arg2)
         {
-            get
-            {
-                return "RobotMap";
-            }
-        }
-
-        public void SetRobot(Robot robot)
-        {
-            _robotModel = robot;
-            UpdateKeyValueList();
-        }
-
-        public void AddEntry(string key, string value)
-        {
-            if (key == null)
-                throw new ArgumentNullException("key");
-            if (value == null)
-                throw new ArgumentNullException("value");
-            //this means the key should be auto-generated
-            if(key=="")
-            {
-                key = GetUnusedKey();
-            }
-            _robotModel.RobotMap.Add(new RobotMapEntry { Key = key, Value = value });
+            //update the key value list every time a new value is added to keep the datagrid up to date
             UpdateKeyValueList();
         }
         #endregion

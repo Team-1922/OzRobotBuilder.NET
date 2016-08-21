@@ -15,6 +15,7 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
+        #region ICANTalonQuadEncoderProvider
         public double ConversionRatio
         {
             get
@@ -104,7 +105,14 @@ namespace Team1922.MVVM.ViewModels
                 _quadEncoderModel.Velocity = temp;
             }
         }
+        public void SetCANTalon(CANTalon canTalon)
+        {
+            _quadEncoderModel = canTalon.QuadEncoder;
+            _canTalonID = canTalon.ID;
+        }
+        #endregion
 
+        #region IProvider
         public string Name
         {
             get
@@ -112,7 +120,17 @@ namespace Team1922.MVVM.ViewModels
                 return "Quadrature Encoder";
             }
         }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_quadEncoderModel);
+        }
+        public void SetModelJson(string text)
+        {
+            _quadEncoderModel = JsonDeserialize<CANTalonQuadEncoder>(text);
+        }
+        #endregion
 
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch(key)
@@ -159,13 +177,9 @@ namespace Team1922.MVVM.ViewModels
                 return brokenName[brokenName.Length - 1];
             }
         }
-
-        public void SetCANTalon(CANTalon canTalon)
-        {
-            _quadEncoderModel = canTalon.QuadEncoder;
-            _canTalonID = canTalon.ID;
-        }
-
+        #endregion
+        
+        #region IInputProvider
         public void UpdateInputValues()
         {
             RawVelocity = IOService.Instance.CANTalons[_canTalonID].EncoderVelocity;
@@ -174,5 +188,6 @@ namespace Team1922.MVVM.ViewModels
             RawValue = IOService.Instance.CANTalons[_canTalonID].EncoderValue;
             Value = RawValue * ConversionRatio + SensorOffset;
         }
+        #endregion
     }
 }

@@ -21,76 +21,6 @@ namespace Team1922.MVVM.ViewModels
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("EventHandlers", this);
             _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks", this);
         }
-        
-        #region IInputProvider
-        public void UpdateInputValues()
-        {
-            foreach(var subsystem in _subsystemProviders.Items)
-            {
-                subsystem.UpdateInputValues();
-            }
-        }
-        #endregion
-
-        #region ICompoundProvider
-        public IEnumerable<IProvider> Children
-        {
-            get
-            {
-                return _children.Values;
-            }
-        }
-        #endregion
-
-        #region ViewModelBase
-        protected override List<string> GetOverrideKeys()
-        {
-            return _keys;
-        }
-        protected override string GetValue(string key)
-        {
-            switch(key)
-            {
-                case "AnalogInputSampleRate":
-                    return AnalogInputSampleRate.ToString();
-                case "Joysticks":
-                    return Joysticks.ToString();
-                case "Name":
-                    return Name;
-                case "EventHandlers":
-                    return EventHandlers.ToString();
-                case "Subsystems":
-                    return Subsystems.ToString();
-                case "TeamNumber":
-                    return TeamNumber.ToString();
-                default:
-                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-            }
-        }
-        protected override void SetValue(string key, string value)
-        {
-            switch (key)
-            {
-                case "AnalogInputSampleRate":
-                    AnalogInputSampleRate = SafeCastInt(value);
-                    break;
-                case "TeamNumber":
-                    TeamNumber = SafeCastInt(value);
-                    break;
-                default:
-                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-            }
-            
-        }
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _robotModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-        #endregion
 
         #region IRobotProvider
         public IObservableCollection<ISubsystemProvider> Subsystems
@@ -116,13 +46,6 @@ namespace Team1922.MVVM.ViewModels
         public void AddEventHandler(Models.EventHandler eventHandler)
         {
             AddEventHandler(eventHandler, true);
-        }
-        public string Name
-        {
-            get
-            {
-                return "Robot";
-            }
         }
         public int TeamNumber
         {
@@ -229,6 +152,94 @@ namespace Team1922.MVVM.ViewModels
                     _robotModel.EventHandler.RemoveAt(i);
                     break;
                 }
+            }
+        }
+        #endregion
+        
+        #region IInputProvider
+        public void UpdateInputValues()
+        {
+            foreach(var subsystem in _subsystemProviders.Items)
+            {
+                subsystem.UpdateInputValues();
+            }
+        }
+        #endregion
+
+        #region ICompoundProvider
+        public IEnumerable<IProvider> Children
+        {
+            get
+            {
+                return _children.Values;
+            }
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return "Robot";
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_robotModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetRobot(JsonDeserialize<Robot>(text));
+        }
+        #endregion
+
+        #region ViewModelBase
+        protected override List<string> GetOverrideKeys()
+        {
+            return _keys;
+        }
+        protected override string GetValue(string key)
+        {
+            switch(key)
+            {
+                case "AnalogInputSampleRate":
+                    return AnalogInputSampleRate.ToString();
+                case "Joysticks":
+                    return Joysticks.ToString();
+                case "Name":
+                    return Name;
+                case "EventHandlers":
+                    return EventHandlers.ToString();
+                case "Subsystems":
+                    return Subsystems.ToString();
+                case "TeamNumber":
+                    return TeamNumber.ToString();
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            }
+        }
+        protected override void SetValue(string key, string value)
+        {
+            switch (key)
+            {
+                case "AnalogInputSampleRate":
+                    AnalogInputSampleRate = SafeCastInt(value);
+                    break;
+                case "TeamNumber":
+                    TeamNumber = SafeCastInt(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+            }
+            
+        }
+        public override string ModelTypeName
+        {
+            get
+            {
+                var brokenName = _robotModel.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
             }
         }
         #endregion

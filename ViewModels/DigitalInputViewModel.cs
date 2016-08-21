@@ -17,6 +17,7 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
+        #region IDigitalInputProvider
         public int ID
         {
             get
@@ -31,22 +32,6 @@ namespace Team1922.MVVM.ViewModels
                 _digitalInputModel.ID = temp;
             }
         }
-
-        public string Name
-        {
-            get
-            {
-                return _digitalInputModel.Name;
-            }
-
-            set
-            {
-                var temp = _digitalInputModel.Name;
-                SetProperty(ref temp, value);
-                _digitalInputModel.Name = temp;
-            }
-        }
-
         public bool Value
         {
             get
@@ -62,6 +47,45 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void SetDigitalInput(DigitalInput digitalInput)
+        {
+            _digitalInputModel = digitalInput;
+        }
+        #endregion
+
+        #region IInputProvider
+        public void UpdateInputValues()
+        {
+            Value = IOService.Instance.DigitalInputs[ID].ValueAsBool;
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return _digitalInputModel.Name;
+            }
+
+            set
+            {
+                var temp = _digitalInputModel.Name;
+                SetProperty(ref temp, value);
+                _digitalInputModel.Name = temp;
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_digitalInputModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetDigitalInput(JsonDeserialize<DigitalInput>(text));
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
@@ -101,15 +125,6 @@ namespace Team1922.MVVM.ViewModels
                 return brokenName[brokenName.Length - 1];
             }
         }
-
-        public void SetDigitalInput(DigitalInput digitalInput)
-        {
-            _digitalInputModel = digitalInput;
-        }
-
-        public void UpdateInputValues()
-        {
-            Value = IOService.Instance.DigitalInputs[ID].ValueAsBool;
-        }
+        #endregion
     }
 }

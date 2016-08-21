@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Team1922.WebFramework
 {
@@ -21,7 +22,7 @@ namespace Team1922.WebFramework
             {
                 return new NotFoundResult();
             }
-            catch(Exception)
+            catch(Exception e)
             {
                 return new StatusCodeResult(500);
             }

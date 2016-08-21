@@ -15,6 +15,7 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
+        #region ICANTalonAnalogInputProvider
         public double ConversionRatio
         {
             get
@@ -105,6 +106,25 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void SetCANTalon(CANTalon canTalon)
+        {
+            _aiModel = canTalon.AnalogInput;
+            _canTalonID = canTalon.ID;
+        }
+        #endregion
+
+        #region IInputProvider
+        public void UpdateInputValues()
+        {
+            RawVelocity = IOService.Instance.CANTalons[_canTalonID].AnalogVelocity;
+            Velocity = RawVelocity * ConversionRatio + SensorOffset;
+
+            RawValue = IOService.Instance.CANTalons[_canTalonID].AnalogValue;
+            Value = RawValue * ConversionRatio + SensorOffset;
+        }
+        #endregion
+
+        #region IProvider
         public string Name
         {
             get
@@ -112,7 +132,17 @@ namespace Team1922.MVVM.ViewModels
                 return "Analog Input";
             }
         }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_aiModel);
+        }
+        public void SetModelJson(string text)
+        {
+            _aiModel = JsonDeserialize<CANTalonAnalogInput>(text);
+        }
+        #endregion
 
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
                 switch (key)
@@ -160,20 +190,6 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-
-        public void SetCANTalon(CANTalon canTalon)
-        {
-            _aiModel = canTalon.AnalogInput;
-            _canTalonID = canTalon.ID;
-        }
-
-        public void UpdateInputValues()
-        {
-            RawVelocity = IOService.Instance.CANTalons[_canTalonID].AnalogVelocity;
-            Velocity = RawVelocity * ConversionRatio + SensorOffset;
-
-            RawValue = IOService.Instance.CANTalons[_canTalonID].AnalogValue;
-            Value = RawValue * ConversionRatio + SensorOffset;
-        }
+        #endregion
     }
 }

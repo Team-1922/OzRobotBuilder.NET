@@ -21,7 +21,7 @@ namespace Team1922.MVVM.ViewModels
         /// </summary>
         protected CANTalon _canTalonModel;
 
-
+        #region ICANTalonProvider
         /// <summary>
         /// The QuadEncoder property of the CANTalon model
         /// </summary>
@@ -271,24 +271,6 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _canTalonModel.ID;
                 SetProperty(ref temp, value);
                 _canTalonModel.ID = temp;
-            }
-        }
-
-        /// <summary>
-        /// The Name property of the CANTalon model
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _canTalonModel.Name;
-            }
-
-            set
-            {
-                var temp = _canTalonModel.Name;
-                SetProperty(ref temp, value);
-                _canTalonModel.Name = temp;
             }
         }
 
@@ -585,14 +567,6 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public IEnumerable<IProvider> Children
-        {
-            get
-            {
-                return _children.Values;
-            }
-        }
-
         /// <summary>
         /// Set the CANTalon model reference
         /// </summary>
@@ -626,7 +600,19 @@ namespace Team1922.MVVM.ViewModels
                 _pidConfig1Provider.SetPIDController(canTalon.PIDConfig1);
             }
         }
+        #endregion
 
+        #region ICompoundProvider
+        public IEnumerable<IProvider> Children
+        {
+            get
+            {
+                return _children.Values;
+            }
+        }
+        #endregion
+
+        #region IInputProvider
         /// <summary>
         /// Called every update cycle to update input values from the <see cref="IRobotIOService"/>
         /// </summary>
@@ -641,6 +627,35 @@ namespace Team1922.MVVM.ViewModels
             ForwardSoftLimit = IOService.Instance.CANTalons[ID].ForwardSoftLimit;
             ReverseSoftLimit = IOService.Instance.CANTalons[ID].ReverseSoftLimit;
         }
+        #endregion
+
+        #region IProvider
+        /// <summary>
+        /// The Name property of the CANTalon model
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _canTalonModel.Name;
+            }
+
+            set
+            {
+                var temp = _canTalonModel.Name;
+                SetProperty(ref temp, value);
+                _canTalonModel.Name = temp;
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_canTalonModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetCANTalon(JsonDeserialize<CANTalon>(text));
+        }
+        #endregion
 
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();

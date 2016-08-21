@@ -20,6 +20,7 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
+        #region IEventHandlerProvider
         public string Condition
         {
             get
@@ -66,6 +67,24 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public bool ConditionMet
+        {
+            get
+            {
+                return _conditionExpression != null ? _conditionExpression.Evaluate() > 1 : false;
+            }
+        }
+
+        public void SetEventHandler(Models.EventHandler eventHandler)
+        {
+            _eventHandlerModel = eventHandler;
+            UpdateConditionExpression(_eventHandlerModel.Condition);
+            UpdateExpressionExpression(_eventHandlerModel.Expression);
+
+        }
+        #endregion
+
+        #region IProvider
         public string Name
         {
             get
@@ -80,15 +99,17 @@ namespace Team1922.MVVM.ViewModels
                 _eventHandlerModel.Expression = temp;
             }
         }
-
-        public bool ConditionMet
+        public string GetModelJson()
         {
-            get
-            {
-                return _conditionExpression != null ? _conditionExpression.Evaluate() > 1 : false;
-            }
+            return JsonSerialize(_eventHandlerModel);
         }
+        public void SetModelJson(string text)
+        {
+            SetEventHandler(JsonDeserialize<Models.EventHandler>(text));
+        }
+        #endregion
 
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
@@ -151,14 +172,7 @@ namespace Team1922.MVVM.ViewModels
             }
             return "";
         }
-
-        public void SetEventHandler(Models.EventHandler eventHandler)
-        {
-            _eventHandlerModel = eventHandler;
-            UpdateConditionExpression(_eventHandlerModel.Condition);
-            UpdateExpressionExpression(_eventHandlerModel.Expression);
-
-        }
+        #endregion
 
         public void Execute(bool force)
         {

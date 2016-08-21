@@ -14,6 +14,7 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
+        #region IRelayOutputProvider
         public RelayDirection Direction
         {
             get
@@ -41,21 +42,6 @@ namespace Team1922.MVVM.ViewModels
                 var temp = _relayOutputModel.ID;
                 SetProperty(ref temp, value);
                 _relayOutputModel.ID = temp;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return _relayOutputModel.Name;
-            }
-
-            set
-            {
-                var temp = _relayOutputModel.Name;
-                SetProperty(ref temp, value);
-                _relayOutputModel.Name = temp;
             }
         }
 
@@ -113,6 +99,38 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void SetRelayOutput(RelayOutput relayOutput)
+        {
+            _relayOutputModel = relayOutput;
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return _relayOutputModel.Name;
+            }
+
+            set
+            {
+                var temp = _relayOutputModel.Name;
+                SetProperty(ref temp, value);
+                _relayOutputModel.Name = temp;
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_relayOutputModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetRelayOutput(JsonDeserialize<RelayOutput>(text));
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch(key)
@@ -160,10 +178,6 @@ namespace Team1922.MVVM.ViewModels
                 return brokenName[brokenName.Length - 1];
             }
         }
-
-        public void SetRelayOutput(RelayOutput relayOutput)
-        {
-            _relayOutputModel = relayOutput;
-        }
+        #endregion
     }
 }

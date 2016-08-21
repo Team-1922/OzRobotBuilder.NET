@@ -14,6 +14,7 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
+        #region IPWMOutputProvider
         public void SetPWMOutput(PWMOutput pwmOutput)
         {
             _pwmOutputModel = pwmOutput;
@@ -33,20 +34,6 @@ namespace Team1922.MVVM.ViewModels
                 _pwmOutputModel.ID = temp;
             }
         }
-        public string Name
-        {
-            get
-            {
-                return _pwmOutputModel.Name;
-            }
-
-            set
-            {
-                var temp = _pwmOutputModel.Name;
-                SetProperty(ref temp, value);
-                _pwmOutputModel.Name = temp;
-            }
-        }
         public double Value
         {
             get
@@ -61,7 +48,34 @@ namespace Team1922.MVVM.ViewModels
                 _pwmOutputModel.Value = temp;
             }
         }
+        #endregion
 
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return _pwmOutputModel.Name;
+            }
+
+            set
+            {
+                var temp = _pwmOutputModel.Name;
+                SetProperty(ref temp, value);
+                _pwmOutputModel.Name = temp;
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(_pwmOutputModel);
+        }
+        public void SetModelJson(string text)
+        {
+            SetPWMOutput(JsonDeserialize<PWMOutput>(text));
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch(key)
@@ -104,5 +118,6 @@ namespace Team1922.MVVM.ViewModels
                 return brokenName[brokenName.Length - 1];
             }
         }
+        #endregion
     }
 }
