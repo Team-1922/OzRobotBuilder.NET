@@ -363,25 +363,26 @@ namespace Team1922.MVVM.ViewModels
             switch (key)
             {
                 case "AnalogInputs":
-                    return JsonSerialize(AnalogInputs);
+                    return _analogInputProviders.GetModelJson();
                 case "CANTalons":
-                    return JsonSerialize(CANTalons);
+                    return _canTalonProviders.GetModelJson();
+                case "PIDController":
+                    return PIDController.GetModelJson();
+                case "DigitalInputs":
+                    return _digitalInputProviders.GetModelJson();
+                case "PWMOutputs":
+                    return _pwmOutputProviders.GetModelJson();
+                case "QuadEncoders":
+                    return _quadEncoderProviders.GetModelJson();
+                case "RelayOutputs":
+                    return _relayOutputProviders.GetModelJson();
+
+                case "SoftwarePIDEnabled":
+                    return SoftwarePIDEnabled.ToString();
                 case "ID":
                     return ID.ToString();
                 case "Name":
                     return Name;
-                case "PIDController":
-                    return JsonSerialize(PIDController);
-                case "DigitalInputs":
-                    return JsonSerialize(DigitalInputs);
-                case "PWMOutputs":
-                    return JsonSerialize(PWMOutputs);
-                case "QuadEncoders":
-                    return JsonSerialize(QuadEncoders);
-                case "RelayOutputs":
-                    return JsonSerialize(RelayOutputs);
-                case "SoftwarePIDEnabled":
-                    return SoftwarePIDEnabled.ToString();
                 default:
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
@@ -390,6 +391,28 @@ namespace Team1922.MVVM.ViewModels
         {
             switch (key)
             {
+                case "AnalogInputs":
+                    _analogInputProviders.SetModelJson(value);
+                    break;
+                case "CANTalons":
+                    _canTalonProviders.SetModelJson(value);
+                    break;
+                case "PIDController":
+                    PIDController.SetModelJson(value);
+                    break;
+                case "DigitalInputs":
+                    _digitalInputProviders.SetModelJson(value);
+                    break;
+                case "PWMOutputs":
+                    _pwmOutputProviders.SetModelJson(value);
+                    break;
+                case "QuadEncoders":
+                    _quadEncoderProviders.SetModelJson(value);
+                    break;
+                case "RelayOutputs":
+                    _relayOutputProviders.SetModelJson(value);
+                    break;
+
                 case "Name":
                     Name = value;
                     break;

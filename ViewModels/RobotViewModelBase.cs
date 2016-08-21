@@ -205,16 +205,19 @@ namespace Team1922.MVVM.ViewModels
             {
                 case "AnalogInputSampleRate":
                     return AnalogInputSampleRate.ToString();
+                case "TeamNumber":
+                    return TeamNumber.ToString();
+
                 case "Joysticks":
-                    return Joysticks.ToString();
+                    return _joystickProviders.GetModelJson();
                 case "Name":
                     return Name;
                 case "EventHandlers":
-                    return EventHandlers.ToString();
+                    return _eventHandlerProviders.GetModelJson();
                 case "Subsystems":
-                    return Subsystems.ToString();
-                case "TeamNumber":
-                    return TeamNumber.ToString();
+                    return _subsystemProviders.GetModelJson();
+                case "RobotMap":
+                    return _robotMapProvider.GetModelJson();
                 default:
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
@@ -228,6 +231,19 @@ namespace Team1922.MVVM.ViewModels
                     break;
                 case "TeamNumber":
                     TeamNumber = SafeCastInt(value);
+                    break;
+
+                case "Joysticks":
+                    _joystickProviders.SetModelJson(value);
+                    break;
+                case "EventHandlers":
+                    _eventHandlerProviders.SetModelJson(value);
+                    break;
+                case "Subsystems":
+                    _subsystemProviders.SetModelJson(value);
+                    break;
+                case "RobotMap":
+                    _robotMapProvider.SetModelJson(value);
                     break;
                 default:
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");

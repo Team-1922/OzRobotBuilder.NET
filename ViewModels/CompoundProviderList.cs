@@ -77,7 +77,7 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override string GetValue(string key)
         {
-            return JsonSerialize(FindByName(key));
+            return FindByName(key).GetModelJson();
         }
 
         protected override void SetValue(string key, string value)
@@ -86,7 +86,7 @@ namespace Team1922.MVVM.ViewModels
             {
                 if (Items[i].Name == key)
                 {
-                    Items[i] = JsonDeserialize<T>(value);
+                    Items[i].SetModelJson(value);
                     return;
                 }
             }

@@ -657,65 +657,20 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region Private Fields
-        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
-
-        ICANTalonQuadEncoderProvider _quadEncoderProvider
-        {
-            get
-            {
-                return _children["_quadEncoderProvider"] as ICANTalonQuadEncoderProvider;
-            }
-
-            set
-            {
-                _children["_quadEncoderProvider"] = value;
-            }
-        }
-        ICANTalonAnalogInputProvider _analogInputProvider
-        {
-            get
-            {
-                return _children["_analogInputProvider"] as ICANTalonAnalogInputProvider;
-            }
-
-            set
-            {
-                _children["_analogInputProvider"] = value;
-            }
-        }
-        IPIDControllerSRXProvider _pidConfig0Provider
-        {
-            get
-            {
-                return _children["_pidConfig0Provider"] as IPIDControllerSRXProvider;
-            }
-
-            set
-            {
-                _children["_pidConfig0Provider"] = value;
-            }
-        }
-        IPIDControllerSRXProvider _pidConfig1Provider
-        {
-            get
-            {
-                return _children["_pidConfig1Provider"] as IPIDControllerSRXProvider;
-            }
-
-            set
-            {
-                _children["_pidConfig1Provider"] = value;
-            }
-        }
-
-
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
             {
+                case "PIDConfig0":
+                    return _pidConfig0Provider.GetModelJson();
+                case "PIDConfig1":
+                    return _pidConfig1Provider.GetModelJson();
+                case "QuadEncoder":
+                    return _quadEncoderProvider.GetModelJson();
                 case "AnalogInput":
-                    return "Analog Input Config";
+                    return _analogInputProvider.GetModelJson();
+
                 case "ControlMode":
                     return ControlMode.ToString();
                 case "EnabledPIDProfile":
@@ -746,12 +701,6 @@ namespace Team1922.MVVM.ViewModels
                     return PeakForwardVoltage.ToString();
                 case "PeakReverseVoltage":
                     return PeakReverseVoltage.ToString();
-                case "PIDConfig0":
-                    return "PIDConfiguration 0";
-                case "PIDConfig1":
-                    return "PIDConfiguration 1";
-                case "QuadEncoder":
-                    return "Quadrature Encoder";
                 case "ReverseClosedLoopOutput":
                     return ReverseClosedLoopOutput.ToString();
                 case "ReverseLimitSwitch":
@@ -783,6 +732,19 @@ namespace Team1922.MVVM.ViewModels
         {
             switch (key)
             {
+                case "PIDConfig0":
+                    _pidConfig0Provider.SetModelJson(value);
+                    break;
+                case "PIDConfig1":
+                    _pidConfig1Provider.SetModelJson(value);
+                    break;
+                case "QuadEncoder":
+                    _quadEncoderProvider.SetModelJson(value);
+                    break;
+                case "AnalogInput":
+                    _analogInputProvider.SetModelJson(value);
+                    break;
+
                 case "ControlMode":
                     ControlMode = SafeCastEnum<CANTalonControlMode>(value);
                     break;
@@ -875,6 +837,59 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        #endregion
+
+        #region Private Fields
+        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+
+        ICANTalonQuadEncoderProvider _quadEncoderProvider
+        {
+            get
+            {
+                return _children["_quadEncoderProvider"] as ICANTalonQuadEncoderProvider;
+            }
+
+            set
+            {
+                _children["_quadEncoderProvider"] = value;
+            }
+        }
+        ICANTalonAnalogInputProvider _analogInputProvider
+        {
+            get
+            {
+                return _children["_analogInputProvider"] as ICANTalonAnalogInputProvider;
+            }
+
+            set
+            {
+                _children["_analogInputProvider"] = value;
+            }
+        }
+        IPIDControllerSRXProvider _pidConfig0Provider
+        {
+            get
+            {
+                return _children["_pidConfig0Provider"] as IPIDControllerSRXProvider;
+            }
+
+            set
+            {
+                _children["_pidConfig0Provider"] = value;
+            }
+        }
+        IPIDControllerSRXProvider _pidConfig1Provider
+        {
+            get
+            {
+                return _children["_pidConfig1Provider"] as IPIDControllerSRXProvider;
+            }
+
+            set
+            {
+                _children["_pidConfig1Provider"] = value;
+            }
+        }
         #endregion
     }
 }
