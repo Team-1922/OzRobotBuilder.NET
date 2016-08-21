@@ -175,6 +175,10 @@
       <Project>{3112a258-4d51-4c9f-8acb-640ae351ee01}</Project>
       <Name>Contracts.win</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FakeIOService\FakeIOService.win.csproj">
+      <Project>{a84eb028-205d-414b-b331-39ace0ea6b01}</Project>
+      <Name>FakeIOService.win</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Models.win.csproj">
       <Project>{47b66599-e6f8-46a1-9731-05a099a04fc3}</Project>
       <Name>Models.win</Name>

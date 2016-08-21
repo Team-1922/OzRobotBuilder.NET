@@ -114,6 +114,95 @@ namespace Team1922.OzRobotBuilder.NET
             }
         }
 
+        private bool PreDelete()
+        {
+            return MessageBox.Show("Are you sure you want to delete this item?  This action is currently irreversible!", "Delete Item", MessageBoxButton.YesNo) == MessageBoxResult.Yes ? true : false;
+        }
+        private void PostDelete()
+        {
+            tviRobot.IsSelected = true;//reset the selection TODO: make this set to the next nearest node instead of the root
+        }
+        private void DeleteSelectedItem()
+        {
+            var vm = (DataContext as ViewModel);
+            var selectedItem = vm.SelectedElement;
+            if(selectedItem is ISubsystemProvider)
+            {
+                if (!PreDelete())
+                    return;
+                vm.RemoveSubsystem((selectedItem as ISubsystemProvider).Name);
+                PostDelete();
+            }
+            else if(selectedItem is IEventHandlerProvider)
+            {
+                if (!PreDelete())
+                    return;
+                vm.RemoveEventHandler((selectedItem as IEventHandlerProvider).Name);
+                PostDelete();
+            }
+            else if(selectedItem is IJoystickProvider)
+            {
+                if (!PreDelete())
+                    return;
+                vm.RemoveJoystick((selectedItem as IJoystickProvider).Name);
+                PostDelete();
+            }
+            else if(selectedItem is IAnalogInputProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IAnalogInputProvider).Parent as ISubsystemProvider;
+                sub.RemoveAnalogInput((selectedItem as IAnalogInputProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is ICANTalonProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as ICANTalonProvider).Parent as ISubsystemProvider;
+                sub.RemoveCANTalon((selectedItem as ICANTalonProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is IDigitalInputProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IDigitalInputProvider).Parent as ISubsystemProvider;
+                sub.RemoveQuadEncoder((selectedItem as IDigitalInputProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is IPWMOutputProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IPWMOutputProvider).Parent as ISubsystemProvider;
+                sub.RemovePWMOutput((selectedItem as IPWMOutputProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is IQuadEncoderProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IQuadEncoderProvider).Parent as ISubsystemProvider;
+                sub.RemoveQuadEncoder((selectedItem as IQuadEncoderProvider).Name);
+                PostDelete();
+            }
+            else if (selectedItem is IRelayOutputProvider)
+            {
+                if (!PreDelete())
+                    return;
+                //get the subsystem this belongs to
+                var sub = (selectedItem as IRelayOutputProvider).Parent as ISubsystemProvider;
+                sub.RemoveRelayOutput((selectedItem as IRelayOutputProvider).Name);
+                PostDelete();
+            }
+        }
+
         #region Event Handlers
         private void ViewModelChanged(object sender, EventArgs e)
         {
@@ -174,6 +263,19 @@ namespace Team1922.OzRobotBuilder.NET
             }*/
         }
 
+        private void tvRobot_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                DeleteSelectedItem();
+            }
+        }
+
+        private void tvRobot_DeleteSelected(object sender, RoutedEventArgs e)
+        {
+            DeleteSelectedItem();
+        }
+
         private void tbEditor_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             if(e.EditAction == DataGridEditAction.Commit)
@@ -211,11 +313,37 @@ namespace Team1922.OzRobotBuilder.NET
             {
                 cm = tvRobot.FindResource("cmSubsystem") as ContextMenu;
             }
+            else if(viewModel.SelectedElement is IEnumerable<IAnalogInputProvider>)
+            {
+                cm = tvRobot.FindResource("cmAnalogInputs") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<ICANTalonProvider>)
+            {
+                cm = tvRobot.FindResource("cmCANTalons") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IDigitalInputProvider>)
+            {
+                cm = tvRobot.FindResource("cmDigitalInputs") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IPWMOutputProvider>)
+            {
+                cm = tvRobot.FindResource("cmPWMOutputs") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IQuadEncoderProvider>)
+            {
+                cm = tvRobot.FindResource("cmQuadEncoders") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IRelayOutputProvider>)
+            {
+                cm = tvRobot.FindResource("cmRelayOutputs") as ContextMenu;
+            }
             else if(viewModel.SelectedElement is IEventHandlerProvider)
             {
+                cm = tvRobot.FindResource("cmEventHandler") as ContextMenu;
             }
             else if(viewModel.SelectedElement is IJoystickProvider)
             {
+                cm = tvRobot.FindResource("cmJoystick") as ContextMenu;
             }
             else if(viewModel.SelectedElement is IRobotMapProvider)
             {
@@ -342,7 +470,6 @@ namespace Team1922.OzRobotBuilder.NET
         {
         }
         #endregion
-
     }
 
 }

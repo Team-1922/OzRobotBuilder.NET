@@ -12,7 +12,7 @@ namespace Team1922.MVVM.ViewModels
     /// </summary>
     internal class CANTalonViewModel : ViewModelBase, ICANTalonProvider
     {
-        public CANTalonViewModel(IHierarchialAccess topParent) : base(topParent)
+        public CANTalonViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 
@@ -607,22 +607,22 @@ namespace Team1922.MVVM.ViewModels
 
             if (null != _canTalonModel.QuadEncoder)
             {
-                _quadEncoderProvider = new CANTalonQuadEncoderViewModel(TopParent);
+                _quadEncoderProvider = new CANTalonQuadEncoderViewModel(this);
                 _quadEncoderProvider.SetCANTalon(canTalon);
             }
             if (null != _canTalonModel.AnalogInput)
             {
-                _analogInputProvider = new CANTalonAnalogInputViewModel(TopParent);
+                _analogInputProvider = new CANTalonAnalogInputViewModel(this);
                 _analogInputProvider.SetCANTalon(canTalon);
             }
             if (null != _canTalonModel.PIDConfig0)
             {
-                _pidConfig0Provider = new PIDControllerSRXViewModel(TopParent);
+                _pidConfig0Provider = new PIDControllerSRXViewModel(this);
                 _pidConfig0Provider.SetPIDController(canTalon.PIDConfig0);
             }
             if (null != _canTalonModel.PIDConfig1)
             {
-                _pidConfig1Provider = new PIDControllerSRXViewModel(TopParent);
+                _pidConfig1Provider = new PIDControllerSRXViewModel(this);
                 _pidConfig1Provider.SetPIDController(canTalon.PIDConfig1);
             }
         }

@@ -10,7 +10,7 @@ namespace Team1922.MVVM.ViewModels
     {
         QuadEncoder _quadEncoderModel;
 
-        public QuadEncoderViewModel(IHierarchialAccess topParent) : base(topParent)
+        public QuadEncoderViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 

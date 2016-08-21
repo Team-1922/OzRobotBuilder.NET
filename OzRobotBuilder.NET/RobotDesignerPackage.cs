@@ -18,6 +18,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
+using Team1922.MVVM.Services;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -85,6 +86,9 @@ namespace Team1922.OzRobotBuilder.NET
         protected override void Initialize()
         {
             base.Initialize();
+
+            //initialize the IO Service
+            IOService.Init(new FakeIOService.FakeRobotIOService(), false);
 
             //Create Editor Factory. Note that the base Package class will call Dispose on it.
             base.RegisterEditorFactory(new EditorFactory(this));

@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{47B66599-E6F8-46A1-9731-05A099A04FC3}</ProjectGuid>
+    <ProjectGuid>{A84EB028-205D-414B-B331-39ACE0EA6B01}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Team1922.MVVM.Models</RootNamespace>
-    <AssemblyName>Models</AssemblyName>
+    <RootNamespace>Team1922.FakeIOService</RootNamespace>
+    <AssemblyName>FakeIOService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Models.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,48 +41,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseTypes\AnalogInput.cs" />
-    <Compile Include="BaseTypes\CANTalon.cs" />
-    <Compile Include="BaseTypes\DigitalInput.cs" />
-    <Compile Include="BaseTypes\PIDController.cs" />
-    <Compile Include="BaseTypes\PWMOutput.cs" />
-    <Compile Include="BaseTypes\QuadEncoder.cs" />
-    <Compile Include="BaseTypes\RelayOutput.cs" />
-    <Compile Include="ContinuousCommand.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="Interfaces.cs" />
-    <Compile Include="Joystick.cs" />
-    <Compile Include="OnChangeEventHandler.cs" />
-    <Compile Include="OnWithinRangeEventHandler.cs" />
+    <Compile Include="FakeAnalogInputIOService.cs" />
+    <Compile Include="FakeCANTalonIOService.cs" />
+    <Compile Include="FakeDigitalInputIOService.cs" />
+    <Compile Include="FakeJoystickIOService.cs" />
+    <Compile Include="FakePWMOutputIOService.cs" />
+    <Compile Include="FakeQuadEncoderIOService.cs" />
+    <Compile Include="FakeRelayOutputIOService.cs" />
+    <Compile Include="FakeRobotIOService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Restrictions.cs" />
-    <Compile Include="Robot.cs" />
-    <Compile Include="RobotSchema.cs">
-      <DependentUpon>RobotSchema.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Subsystem.cs" />
-    <Compile Include="TypeRestrictions.cs" />
-    <Compile Include="XML\AndFacet.cs" />
-    <Compile Include="XML\DoubleNumericFacet.cs" />
-    <Compile Include="XML\EnumerationFacet.cs" />
-    <Compile Include="XML\FacetCollection.cs" />
-    <Compile Include="XML\FacetList.cs" />
-    <Compile Include="XML\FractionDigitsFacet.cs" />
-    <Compile Include="XML\IFacet.cs" />
-    <Compile Include="XML\IntegerNumericFacet.cs" />
-    <Compile Include="XML\LengthFacet.cs" />
-    <Compile Include="XML\MaxExclusiveFacet.cs" />
-    <Compile Include="XML\MaxInclusiveFacet.cs" />
-    <Compile Include="XML\MaxLengthFacet.cs" />
-    <Compile Include="XML\MinExclusiveFacet.cs" />
-    <Compile Include="XML\MinInclusiveFacet.cs" />
-    <Compile Include="XML\MinLengthFacet.cs" />
-    <Compile Include="XML\PatternFacet.cs" />
-    <Compile Include="XML\TotalDigitsFacet.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models.win.project.json" />
-    <None Include="RobotSchema.xsd" />
+    <ProjectReference Include="..\Contracts\Contracts.win.csproj">
+      <Project>{3112a258-4d51-4c9f-8acb-640ae351ee01}</Project>
+      <Name>Contracts.win</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.win.csproj">
+      <Project>{47b66599-e6f8-46a1-9731-05a099a04fc3}</Project>
+      <Name>Models.win</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

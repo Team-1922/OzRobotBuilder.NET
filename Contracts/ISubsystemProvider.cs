@@ -59,30 +59,36 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="pwmOutput">the PWMOutput model instance</param>
         void AddPWMOutput(PWMOutput pwmOutput);
+        void RemovePWMOutput(string name);
         /// <summary>
         /// Adds a model instance of a DigitalInput
         /// </summary>
         /// <param name="digitalInput">the DigitalInput model instance</param>
         void AddDigitalInput(DigitalInput digitalInput);
+        void RemoveDigitalInput(string name);
         /// <summary>
         /// Adds a model instance of a AnalogInput
         /// </summary>
         /// <param name="analogInput">the AnalogInput model instance</param>
         void AddAnalogInput(AnalogInput analogInput);
+        void RemoveAnalogInput(string name);
         /// <summary>
         /// Adds a model instance of a QuadEncoder
         /// </summary>
         /// <param name="quadEncoder">the QuadEncoder model instance</param>
         void AddQuadEncoder(QuadEncoder quadEncoder);
+        void RemoveQuadEncoder(string name);
         /// <summary>
         /// Adds a model instance of a RelayOutput
         /// </summary>
         /// <param name="relayOutput">the RelayOutput model instance</param>
         void AddRelayOutput(RelayOutput relayOutput);
+        void RemoveRelayOutput(string name);
         /// <summary>
         /// Adds a model instance of a CANTalon
         /// </summary>
         /// <param name="canTalon">the CANTalon model instance</param>
         void AddCANTalon(CANTalon canTalon);
+        void RemoveCANTalon(string name);
     }
 }

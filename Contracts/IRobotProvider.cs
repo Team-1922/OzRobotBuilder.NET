@@ -44,15 +44,18 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="subsystem">the Subsystem model instance</param>
         void AddSubsystem(Subsystem subsystem);
+        void RemoveSubsystem(string name);
         /// <summary>
         /// Adds a model instance of a Joystick
         /// </summary>
         /// <param name="joystick">the Joystick model instance</param>
         void AddJoystick(Joystick joystick);
+        void RemoveJoystick(string name);
         /// <summary>
         /// Adds a model instance of a EventHandler
         /// </summary>
         /// <param name="eventHandler">the EventHandler model instance</param>
         void AddEventHandler(Models.EventHandler eventHandler);
+        void RemoveEventHandler(string name);
     }
 }

@@ -119,7 +119,8 @@ namespace Team1922.OzRobotBuilder.NET
             //  and fix them later
             TypeRestrictions.ThrowsExceptionsOnValidationFailure = false;
 
-            SetRobot(LoadModelFromXmlModel());            
+            SetRobot(LoadModelFromXmlModel());
+            IOService.Instance.SetRobot(_robotModel);          
 
             //EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
         }

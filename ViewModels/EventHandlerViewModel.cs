@@ -16,7 +16,7 @@ namespace Team1922.MVVM.ViewModels
         private IExpression _expression;
         private string _expressionParsingErrors = "";
 
-        public EventHandlerViewModel(IHierarchialAccess topParent) : base(topParent)
+        public EventHandlerViewModel(IRobotProvider parent) : base(parent)
         {
         }
 

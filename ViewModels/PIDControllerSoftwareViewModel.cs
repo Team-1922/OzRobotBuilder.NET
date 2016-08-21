@@ -10,7 +10,7 @@ namespace Team1922.MVVM.ViewModels
     {
         PIDControllerSoftware _pidControllerSoftwareModel;
 
-        public PIDControllerSoftwareViewModel(IHierarchialAccess topParent) : base(topParent)
+        public PIDControllerSoftwareViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 

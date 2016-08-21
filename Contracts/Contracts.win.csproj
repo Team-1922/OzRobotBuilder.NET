@@ -58,6 +58,7 @@
     <Compile Include="IHierarchialAccess.cs" />
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IInputService.cs" />
+    <Compile Include="IIOService.cs" />
     <Compile Include="IJoystickIOService.cs" />
     <Compile Include="IJoystickProvider.cs" />
     <Compile Include="IObservableCollection.cs" />
