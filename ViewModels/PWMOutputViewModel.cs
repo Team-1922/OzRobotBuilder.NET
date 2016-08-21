@@ -6,7 +6,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class PWMOutputViewModel : ViewModelBase, IPWMOutputProvider
+    internal class PWMOutputViewModel : ViewModelBase<PWMOutput>, IPWMOutputProvider
     {
         protected PWMOutput _pwmOutputModel;
 
@@ -65,14 +65,6 @@ namespace Team1922.MVVM.ViewModels
                 _pwmOutputModel.Name = temp;
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_pwmOutputModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetPWMOutput(JsonDeserialize<PWMOutput>(text));
-        }
         #endregion
 
         #region ViewModelBase
@@ -116,6 +108,19 @@ namespace Team1922.MVVM.ViewModels
             {
                 var brokenName = _pwmOutputModel.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
+            }
+        }
+
+        protected override PWMOutput ModelInstance
+        {
+            get
+            {
+                return _pwmOutputModel;
+            }
+
+            set
+            {
+                SetPWMOutput(value);
             }
         }
         #endregion

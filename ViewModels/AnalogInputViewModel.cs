@@ -11,7 +11,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// The viewmodel for all analog inputs
     /// </summary>
-    internal class AnalogInputViewModel : ViewModelBase, IAnalogInputProvider
+    internal class AnalogInputViewModel : ViewModelBase<AnalogInput>, IAnalogInputProvider
     {
         public AnalogInputViewModel(ISubsystemProvider parent) : base(parent)
         {
@@ -333,14 +333,6 @@ namespace Team1922.MVVM.ViewModels
                 _analogInputModel.Name = temp;
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_analogInputModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetAnalogInput(JsonDeserialize<AnalogInput>(text));
-        }
         #endregion
 
         #region ViewModelBase
@@ -423,6 +415,19 @@ namespace Team1922.MVVM.ViewModels
             {
                 var brokenName = _analogInputModel.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
+            }
+        }
+
+        protected override AnalogInput ModelInstance
+        {
+            get
+            {
+                return _analogInputModel;
+            }
+
+            set
+            {
+                SetAnalogInput(value);
             }
         }
         #endregion

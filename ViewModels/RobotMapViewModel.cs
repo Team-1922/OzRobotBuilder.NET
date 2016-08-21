@@ -9,7 +9,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class RobotMapViewModel : ViewModelBase, IRobotMapProvider
+    internal class RobotMapViewModel : ViewModelBase<List<RobotMapEntry>>, IRobotMapProvider
     {
         private Robot _robotModel;
 
@@ -48,14 +48,6 @@ namespace Team1922.MVVM.ViewModels
             {
                 return "RobotMap";
             }
-        }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_robotModel.RobotMap);
-        }
-        public void SetModelJson(string text)
-        {
-            _robotModel.RobotMap = JsonDeserialize<List<RobotMapEntry>>(text);
         }
         #endregion
 
@@ -106,6 +98,19 @@ namespace Team1922.MVVM.ViewModels
                 ret.Add(item.Key);
             }
             return ret;
+        }
+
+        protected override List<RobotMapEntry> ModelInstance
+        {
+            get
+            {
+                return _robotModel.RobotMap;
+            }
+
+            set
+            {
+                _robotModel.RobotMap = value;
+            }
         }
         #endregion
 

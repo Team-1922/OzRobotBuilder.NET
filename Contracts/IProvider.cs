@@ -43,4 +43,8 @@ namespace Team1922.MVVM.Contracts
         /// <param name="text">the json text to deserialize</param>
         void SetModelJson(string text);
     }
+    public interface IProvider<ModelType> : IProvider
+    {
+        void SetModelInstance(ModelType instance);
+    }
 }

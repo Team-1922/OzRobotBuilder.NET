@@ -10,7 +10,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// The viewmodel for each CANTalon instance
     /// </summary>
-    internal class CANTalonViewModel : ViewModelBase, ICANTalonProvider
+    internal class CANTalonViewModel : ViewModelBase<CANTalon>, ICANTalonProvider
     {
         public CANTalonViewModel(ISubsystemProvider parent) : base(parent)
         {
@@ -837,6 +837,18 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        protected override CANTalon ModelInstance
+        {
+            get
+            {
+                return _canTalonModel;
+            }
+
+            set
+            {
+                SetCANTalon(value);
+            }
+        }
         #endregion
 
         #region Private Fields

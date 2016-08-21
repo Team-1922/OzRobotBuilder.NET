@@ -6,7 +6,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class RelayOutputViewModel : ViewModelBase, IRelayOutputProvider
+    internal class RelayOutputViewModel : ViewModelBase<RelayOutput>, IRelayOutputProvider
     {
         RelayOutput _relayOutputModel;
 
@@ -120,14 +120,6 @@ namespace Team1922.MVVM.ViewModels
                 _relayOutputModel.Name = temp;
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_relayOutputModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetRelayOutput(JsonDeserialize<RelayOutput>(text));
-        }
         #endregion
 
         #region ViewModelBase
@@ -176,6 +168,19 @@ namespace Team1922.MVVM.ViewModels
             {
                 var brokenName = _relayOutputModel.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
+            }
+        }
+
+        protected override RelayOutput ModelInstance
+        {
+            get
+            {
+                return _relayOutputModel;
+            }
+
+            set
+            {
+                SetRelayOutput(_relayOutputModel);
             }
         }
         #endregion

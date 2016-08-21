@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class PIDControllerSoftwareViewModel : ViewModelBase, IPIDControllerSoftwareProvider
+    internal class PIDControllerSoftwareViewModel : ViewModelBase<PIDControllerSoftware>, IPIDControllerSoftwareProvider
     {
         PIDControllerSoftware _pidControllerSoftwareModel;
 
@@ -134,14 +134,6 @@ namespace Team1922.MVVM.ViewModels
                 return "PID Controller";
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_pidControllerSoftwareModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetPIDController(JsonDeserialize<PIDControllerSoftware>(text));
-        }
         #endregion
 
         #region ViewModelBase
@@ -207,6 +199,19 @@ namespace Team1922.MVVM.ViewModels
             {
                 var brokenName = _pidControllerSoftwareModel.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
+            }
+        }
+
+        protected override PIDControllerSoftware ModelInstance
+        {
+            get
+            {
+                return _pidControllerSoftwareModel;
+            }
+
+            set
+            {
+                SetPIDController(value);
             }
         }
         #endregion

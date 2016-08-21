@@ -112,6 +112,7 @@ namespace Team1922.MVVM.ViewModels
             return _keyValueList;
         }
 
+        #region IProvider
         public IHierarchialAccess TopParent
         {
             get
@@ -119,7 +120,6 @@ namespace Team1922.MVVM.ViewModels
                 return Parent?.TopParent ?? this;
             }
         }
-
         public IProvider Parent
         {
             get
@@ -127,6 +127,7 @@ namespace Team1922.MVVM.ViewModels
                 return _parent;
             }
         }
+        #endregion
 
         #region IHierarchialAccess Methods
         /// <summary>
@@ -399,4 +400,32 @@ namespace Team1922.MVVM.ViewModels
         static JsonSerializerSettings _settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
         #endregion
     }
+
+    public abstract class ViewModelBase<ModelType> : ViewModelBase
+    {
+        public ViewModelBase(IProvider parent) : base(parent)
+        {
+        }
+
+        protected abstract ModelType ModelInstance { get; set; }
+
+        public string GetModelJson()
+        {
+            return JsonSerialize(ModelInstance);
+        }
+        public void SetModelJson(string text)
+        {
+            try
+            {
+                //deserialize the model
+                ModelInstance = JsonDeserialize<ModelType>(text);
+            }
+            catch(Exception e)
+            {
+                //this means an exception was thrown while loading (whether bad json, OR type validation)
+                throw new ArgumentException("Invalid Json", "text");
+            }
+        }
+    }
+
 }

@@ -9,7 +9,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class DigitalInputViewModel : ViewModelBase, IDigitalInputProvider
+    internal class DigitalInputViewModel : ViewModelBase<DigitalInput>, IDigitalInputProvider
     {
         DigitalInput _digitalInputModel;
 
@@ -75,14 +75,6 @@ namespace Team1922.MVVM.ViewModels
                 _digitalInputModel.Name = temp;
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_digitalInputModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetDigitalInput(JsonDeserialize<DigitalInput>(text));
-        }
         #endregion
 
         #region ViewModelBase
@@ -123,6 +115,19 @@ namespace Team1922.MVVM.ViewModels
             {
                 var brokenName = _digitalInputModel.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
+            }
+        }
+
+        protected override DigitalInput ModelInstance
+        {
+            get
+            {
+                return _digitalInputModel;
+            }
+
+            set
+            {
+                SetDigitalInput(value);
             }
         }
         #endregion

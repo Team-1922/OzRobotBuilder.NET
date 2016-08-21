@@ -11,7 +11,7 @@ using Team1922.MVVM.Services;
 namespace Team1922.MVVM.ViewModels
 {
 
-    internal class JoystickViewModel : ViewModelBase, IJoystickProvider
+    internal class JoystickViewModel : ViewModelBase<Joystick>, IJoystickProvider
     {
         Joystick _joystickModel;
 
@@ -85,14 +85,6 @@ namespace Team1922.MVVM.ViewModels
                 _joystickModel.Name = value;
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_joystickModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetJoystick(JsonDeserialize<Joystick>(text));
-        }
         #endregion
 
         #region ViewModelBase
@@ -152,6 +144,19 @@ namespace Team1922.MVVM.ViewModels
                 ret.Add($"Axes[{i}]");
             }
             return ret;
+        }
+
+        protected override Joystick ModelInstance
+        {
+            get
+            {
+                return _joystickModel;
+            }
+
+            set
+            {
+                SetJoystick(value);
+            }
         }
         #endregion
 

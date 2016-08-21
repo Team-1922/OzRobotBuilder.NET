@@ -6,7 +6,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class CANTalonAnalogInputViewModel : ViewModelBase, ICANTalonAnalogInputProvider
+    internal class CANTalonAnalogInputViewModel : ViewModelBase<CANTalonAnalogInput>, ICANTalonAnalogInputProvider
     {
         CANTalonAnalogInput _aiModel;
         int _canTalonID;
@@ -132,14 +132,6 @@ namespace Team1922.MVVM.ViewModels
                 return "Analog Input";
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_aiModel);
-        }
-        public void SetModelJson(string text)
-        {
-            _aiModel = JsonDeserialize<CANTalonAnalogInput>(text);
-        }
         #endregion
 
         #region ViewModelBase
@@ -190,6 +182,18 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        protected override CANTalonAnalogInput ModelInstance
+        {
+            get
+            {
+                return _aiModel;
+            }
+
+            set
+            {
+                _aiModel = value;
+            }
+        }
         #endregion
     }
 }

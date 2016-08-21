@@ -6,7 +6,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class QuadEncoderViewModel : ViewModelBase, IQuadEncoderProvider
+    internal class QuadEncoderViewModel : ViewModelBase<QuadEncoder>, IQuadEncoderProvider
     {
         QuadEncoder _quadEncoderModel;
 
@@ -157,14 +157,6 @@ namespace Team1922.MVVM.ViewModels
                 _quadEncoderModel.Name = temp;
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_quadEncoderModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetQuadEncoder(JsonDeserialize<QuadEncoder>(text));
-        }
         #endregion
 
         #region ViewModelBase
@@ -236,6 +228,18 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        protected override QuadEncoder ModelInstance
+        {
+            get
+            {
+                return _quadEncoderModel;
+            }
+
+            set
+            {
+                SetQuadEncoder(value);
+            }
+        }
         #endregion
     }
 }

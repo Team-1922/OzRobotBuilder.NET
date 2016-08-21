@@ -6,7 +6,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class PIDControllerSRXViewModel : ViewModelBase, IPIDControllerSRXProvider
+    internal class PIDControllerSRXViewModel : ViewModelBase<PIDControllerSRX>, IPIDControllerSRXProvider
     {
         PIDControllerSRX _pidControllerSRXModel;
 
@@ -149,14 +149,6 @@ namespace Team1922.MVVM.ViewModels
                 return "PID Controller";
             }
         }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_pidControllerSRXModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetPIDController(JsonDeserialize<PIDControllerSRX>(text));
-        }
         #endregion
 
         #region ViewModelBase
@@ -227,6 +219,19 @@ namespace Team1922.MVVM.ViewModels
             {
                 var brokenName = _pidControllerSRXModel.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
+            }
+        }
+
+        protected override PIDControllerSRX ModelInstance
+        {
+            get
+            {
+                return _pidControllerSRXModel;
+            }
+
+            set
+            {
+                SetPIDController(value);
             }
         }
         #endregion

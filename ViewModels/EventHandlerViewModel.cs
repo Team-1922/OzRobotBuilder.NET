@@ -8,7 +8,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class EventHandlerViewModel : ViewModelBase, IEventHandlerProvider
+    internal class EventHandlerViewModel : ViewModelBase<Models.EventHandler>, IEventHandlerProvider
     {
         private Models.EventHandler _eventHandlerModel;
         private IExpression _conditionExpression;
@@ -171,6 +171,19 @@ namespace Team1922.MVVM.ViewModels
                 return _conditionExpressionParsingErrors ?? "";
             }
             return "";
+        }
+
+        protected override Models.EventHandler ModelInstance
+        {
+            get
+            {
+                return _eventHandlerModel;
+            }
+
+            set
+            {
+                SetEventHandler(value);
+            }
         }
         #endregion
 

@@ -6,7 +6,7 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class CANTalonQuadEncoderViewModel : ViewModelBase, ICANTalonQuadEncoderProvider
+    internal class CANTalonQuadEncoderViewModel : ViewModelBase<CANTalonQuadEncoder>, ICANTalonQuadEncoderProvider
     {
         CANTalonQuadEncoder _quadEncoderModel;
         int _canTalonID;
@@ -177,8 +177,21 @@ namespace Team1922.MVVM.ViewModels
                 return brokenName[brokenName.Length - 1];
             }
         }
+
+        protected override CANTalonQuadEncoder ModelInstance
+        {
+            get
+            {
+                return _quadEncoderModel;
+            }
+
+            set
+            {
+                _quadEncoderModel = value;
+            }
+        }
         #endregion
-        
+
         #region IInputProvider
         public void UpdateInputValues()
         {
