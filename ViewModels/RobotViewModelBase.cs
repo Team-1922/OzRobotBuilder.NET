@@ -11,7 +11,7 @@ using Team1922.MVVM.Contracts.Events;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public abstract class RobotViewModelBase : ViewModelBase, IRobotProvider
+    public class RobotViewModelBase : ViewModelBase, IRobotProvider
     {
         protected Robot _robotModel;
 
