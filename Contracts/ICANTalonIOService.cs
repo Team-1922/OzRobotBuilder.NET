@@ -20,10 +20,6 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         PIDControllerSRX PIDConfig1 { get; }
         /// <summary>
-        /// The CAN ID
-        /// </summary>
-        int ID { get; set; }
-        /// <summary>
         /// The enabled PID profile (0=false;1=true)
         /// </summary>
         bool EnabledPIDProfile { get; set; }

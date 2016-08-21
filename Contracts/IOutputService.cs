@@ -11,7 +11,7 @@ namespace Team1922.MVVM.Contracts
     /// Typically the consumer will back either <see cref="Value"/> or <see cref="ValueAsBool"/>
     /// with access to the output and just use the other as a conversion
     /// </summary>
-    public interface IOutputService
+    public interface IOutputService : IIOService
     {
         /// <summary>
         /// the value the robot has for this Output

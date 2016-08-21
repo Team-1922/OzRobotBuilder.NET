@@ -313,6 +313,30 @@ namespace Team1922.OzRobotBuilder.NET
             {
                 cm = tvRobot.FindResource("cmSubsystem") as ContextMenu;
             }
+            else if(viewModel.SelectedElement is IEnumerable<IAnalogInputProvider>)
+            {
+                cm = tvRobot.FindResource("cmAnalogInputs") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<ICANTalonProvider>)
+            {
+                cm = tvRobot.FindResource("cmCANTalons") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IDigitalInputProvider>)
+            {
+                cm = tvRobot.FindResource("cmDigitalInputs") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IPWMOutputProvider>)
+            {
+                cm = tvRobot.FindResource("cmPWMOutputs") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IQuadEncoderProvider>)
+            {
+                cm = tvRobot.FindResource("cmQuadEncoders") as ContextMenu;
+            }
+            else if (viewModel.SelectedElement is IEnumerable<IRelayOutputProvider>)
+            {
+                cm = tvRobot.FindResource("cmRelayOutputs") as ContextMenu;
+            }
             else if(viewModel.SelectedElement is IEventHandlerProvider)
             {
                 cm = tvRobot.FindResource("cmEventHandler") as ContextMenu;

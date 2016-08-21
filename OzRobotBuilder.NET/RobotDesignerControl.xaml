@@ -32,12 +32,12 @@
                     <MenuItem Header="Add RobotMap Element" Click="cm_AddRobotMapElement"/>
                 </ContextMenu>
                 <ContextMenu x:Key="cmSubsystem" Name="SubsystemContextMenu">
-                    <MenuItem Header="Add PWM Output" Click="cmSubsystem_AddPWMOutput"/>
                     <MenuItem Header="Add Analog Input" Click="cmSubsystem_AddAnalogInput"/>
+                    <MenuItem Header="Add CAN Talon (Talon SRX)" Click="cmSubsystem_AddCANTalon"/>
                     <MenuItem Header="Add Digital Input" Click="cmSubsystem_AddDigitalInput"/>
+                    <MenuItem Header="Add PWM Output" Click="cmSubsystem_AddPWMOutput"/>
                     <MenuItem Header="Add Quadrature Encoder" Click="cmSubsystem_AddQuadEncoder"/>
                     <MenuItem Header="Add Relay Output" Click="cmSubsystem_AddRelayOutput"/>
-                    <MenuItem Header="Add CAN Talon (Talon SRX)" Click="cmSubsystem_AddCANTalon"/>
                     <Separator/>
                     <MenuItem Header="Delete" Click="tvRobot_DeleteSelected"/>
                 </ContextMenu>
@@ -58,6 +58,24 @@
                 </ContextMenu>
                 <ContextMenu x:Key="cmRobotMap" Name="RobotMapContextMenu">
                     <MenuItem Header="Add RobotMap Element" Click="cm_AddRobotMapElement"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmAnalogInputs" Name="AnalogInputsContextMenu">
+                    <MenuItem Header="Add Analog Input" Click="cmSubsystem_AddAnalogInput"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmCANTalons" Name="CANTalonsContextMenu">
+                    <MenuItem Header="Add CAN Talon (Talon SRX)" Click="cmSubsystem_AddCANTalon"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmDigitalInputs" Name="DigitalInputsContextMenu">
+                    <MenuItem Header="Add Digital Input" Click="cmSubsystem_AddDigitalInput"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmPWMOutputs" Name="PWMOutputsContextMenu">
+                    <MenuItem Header="Add PWM Output" Click="cmSubsystem_AddPWMOutput"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmQuadEncoders" Name="QuadEncodersContextMenu">
+                    <MenuItem Header="Add Quadrature Encoder" Click="cmSubsystem_AddQuadEncoder"/>
+                </ContextMenu>
+                <ContextMenu x:Key="cmRelayOutputs" Name="RelayOutputsContextMenu">
+                    <MenuItem Header="Add Relay Output" Click="cmSubsystem_AddRelayOutput"/>
                 </ContextMenu>
             </TreeView.Resources>
             <TreeViewItem Name="tviRobot" DataContext="{Binding}" Header="Robot" ItemsSource="{Binding Children}" ItemTemplate="{StaticResource HierarchialTemplate}"/>
