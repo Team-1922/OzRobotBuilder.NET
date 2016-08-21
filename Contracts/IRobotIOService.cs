@@ -38,6 +38,11 @@ namespace Team1922.MVVM.Contracts
         IReadOnlyDictionary<int, IJoystickIOService> Joysticks { get; }
 
         /// <summary>
+        /// the global analog input sample rate
+        /// </summary>
+        int AnalogInputSampleRate { get; set; }
+
+        /// <summary>
         /// This is called once at the beginning of the application for construction purposes
         /// </summary>
         /// <param name="robotModel">the <see cref="Robot"/> to construct this Service with</param>

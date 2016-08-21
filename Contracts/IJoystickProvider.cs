@@ -14,11 +14,11 @@ namespace Team1922.MVVM.Contracts
         /// <summary>
         /// The state of the joystick axes
         /// </summary>
-        IReadOnlyDictionary<uint, double> Axes { get; }
+        IReadOnlyDictionary<int, double> Axes { get; }
         /// <summary>
         /// The state of the joystick buttons
         /// </summary>
-        IReadOnlyDictionary<uint, bool> Buttons { get; }
+        IReadOnlyDictionary<int, bool> Buttons { get; }
         /// <summary>
         /// The id of the this joystick in the driver station
         /// </summary>

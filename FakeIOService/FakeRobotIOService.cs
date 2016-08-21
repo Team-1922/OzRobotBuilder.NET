@@ -15,7 +15,7 @@ namespace Team1922.FakeIOService
         {
             get
             {
-                throw new NotImplementedException();
+                return _analogInputIOServices;
             }
         }
 
@@ -23,7 +23,7 @@ namespace Team1922.FakeIOService
         {
             get
             {
-                throw new NotImplementedException();
+                return _canTalonIOServices;
             }
         }
 
@@ -31,7 +31,7 @@ namespace Team1922.FakeIOService
         {
             get
             {
-                throw new NotImplementedException();
+                return _digitalInputIOServices;
             }
         }
 
@@ -39,7 +39,7 @@ namespace Team1922.FakeIOService
         {
             get
             {
-                throw new NotImplementedException();
+                return _joystickIOServices;
             }
         }
 
@@ -47,7 +47,7 @@ namespace Team1922.FakeIOService
         {
             get
             {
-                throw new NotImplementedException();
+                return _pwmOutputIOServices;
             }
         }
 
@@ -55,14 +55,48 @@ namespace Team1922.FakeIOService
         {
             get
             {
-                throw new NotImplementedException();
+                return _relayOutputIOServices;
             }
         }
 
         public void SetRobot(Robot robotModel)
         {
-            //TODO: go through each item in the model and add them to the appropriate dictionaries
+            AnalogInputSampleRate = robotModel.AnalogInputSampleRate;
+            foreach(var subsystem in robotModel.Subsystem)
+            {
+                foreach(var analogInput in subsystem.AnalogInput)
+                {
+                    AddAnalogInput(analogInput);
+                }
+                foreach (var canTalon in subsystem.CANTalons)
+                {
+                    AddCANTalon(canTalon);
+                }
+                foreach (var digitalInput in subsystem.DigitalInput)
+                {
+                    AddDigitalInput(digitalInput);
+                }
+                foreach (var pwmOutput in subsystem.PWMOutput)
+                {
+                    AddPWMOutput(pwmOutput);
+                }
+                foreach (var relayOutput in subsystem.RelayOutput)
+                {
+                    AddRelayOutput(relayOutput);
+                }
+                foreach(var quadEncoder in subsystem.QuadEncoder)
+                {
+                    AddQuadEncoder(quadEncoder);
+                }
+            }
+            foreach(var joystick in robotModel.Joystick)
+            {
+                AddJoystick(joystick);
+            }
         }
+
+        //TODO: this is global here, but what if multiple robot files are open at once?
+        public int AnalogInputSampleRate { get; set; }
 
         public void AddPWMOutput(PWMOutput pwmOutput)
         {

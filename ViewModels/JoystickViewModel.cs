@@ -51,7 +51,7 @@ namespace Team1922.MVVM.ViewModels
             return ret;
         }
 
-        public IReadOnlyDictionary<uint, double> Axes
+        public IReadOnlyDictionary<int, double> Axes
         {
             get
             {
@@ -59,7 +59,7 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
-        public IReadOnlyDictionary<uint, bool> Buttons
+        public IReadOnlyDictionary<int, bool> Buttons
         {
             get
             {
@@ -101,8 +101,8 @@ namespace Team1922.MVVM.ViewModels
             if (axisTester.IsMatch(key))
             {
                 //get the second to last character
-                uint index;
-                bool success = uint.TryParse(key.Substring(key.Length - 2, 1), out index);
+                int index;
+                bool success = int.TryParse(key.Substring(key.Length - 2, 1), out index);
                 if (success)
                 {
                     output = _axes[index].ToString();
@@ -117,8 +117,8 @@ namespace Team1922.MVVM.ViewModels
             if (buttonTester.IsMatch(key))
             {
                 //get the second to last character
-                uint index;
-                bool success = uint.TryParse(key.Substring(key.Length - 2, 1), out index);
+                int index;
+                bool success = int.TryParse(key.Substring(key.Length - 2, 1), out index);
                 if (success)
                 {
                     output = _buttons[index].ToString();
@@ -180,19 +180,19 @@ namespace Team1922.MVVM.ViewModels
         public void UpdateInputValues()
         {
             var thisJoystickIOService = IOService.Instance.Joysticks[ID];
-            for(uint i = 1; i <= 12; ++i)
+            for(int i = 1; i <= 12; ++i)
             {
                 _buttons[i] = thisJoystickIOService.Buttons[i];
             }
-            for(uint i = 1; i <= 5; ++i)
+            for(int i = 1; i <= 5; ++i)
             {
                 _axes[i] = thisJoystickIOService.Axes[i];
             }
         }
 
         #region Private Fields
-        ReadonlyObservableDictionary<uint, double> _axes = new ReadonlyObservableDictionary<uint, double>();
-        ReadonlyObservableDictionary<uint, bool> _buttons = new ReadonlyObservableDictionary<uint, bool>();
+        ReadonlyObservableDictionary<int, double> _axes = new ReadonlyObservableDictionary<int, double>();
+        ReadonlyObservableDictionary<int, bool> _buttons = new ReadonlyObservableDictionary<int, bool>();
         #endregion
     }
 }
