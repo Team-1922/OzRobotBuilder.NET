@@ -40,7 +40,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeAnalogInputIOService.cs" />
+    <Compile Include="FakeCANTalonIOService.cs" />
+    <Compile Include="FakeDigitalInputIOService.cs" />
+    <Compile Include="FakeJoystickIOService.cs" />
+    <Compile Include="FakePWMOutputIOService.cs" />
+    <Compile Include="FakeQuadEncoderIOService.cs" />
+    <Compile Include="FakeRelayOutputIOService.cs" />
+    <Compile Include="FakeRobotIOService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.win.csproj">
+      <Project>{3112a258-4d51-4c9f-8acb-640ae351ee01}</Project>
+      <Name>Contracts.win</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.win.csproj">
+      <Project>{47b66599-e6f8-46a1-9731-05a099a04fc3}</Project>
+      <Name>Models.win</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

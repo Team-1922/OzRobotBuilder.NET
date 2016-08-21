@@ -15,5 +15,9 @@ namespace Team1922.MVVM.Contracts
         /// simple velocity of the encoder (encoder units/second)
         /// </summary>
         double Velocity { get; }
+        /// <summary>
+        /// the second ID of this quadrature encoder
+        /// </summary>
+        int ID1 { get; }
     }
 }

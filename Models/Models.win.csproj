@@ -45,8 +45,9 @@
     <Compile Include="BaseTypes\CANTalon.cs" />
     <Compile Include="BaseTypes\DigitalInput.cs" />
     <Compile Include="BaseTypes\PIDController.cs" />
-    <Compile Include="BaseTypes\PWMMotorController.cs" />
+    <Compile Include="BaseTypes\PWMOutput.cs" />
     <Compile Include="BaseTypes\QuadEncoder.cs" />
+    <Compile Include="BaseTypes\RelayOutput.cs" />
     <Compile Include="ContinuousCommand.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Interfaces.cs" />

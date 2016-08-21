@@ -63,6 +63,11 @@ namespace Team1922.MVVM.Contracts
         /// <param name="digitalInput">the model instance holding the necessary construction data</param>
         void AddDigitalInput(DigitalInput digitalInput);
         /// <summary>
+        /// constructs the IOService attached to the given QuadEncoder
+        /// </summary>
+        /// <param name="quadEncoder"></param>
+        void AddQuadEncoder(QuadEncoder quadEncoder);
+        /// <summary>
         /// constructs the IOService attached to the given CANTalon
         /// </summary>
         /// <param name="canTalon">the model instance holding the necessary construction data</param>
@@ -72,5 +77,36 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="joystick">the model instance holding the necessary construction data</param>
         void AddJoystick(Joystick joystick);
+
+        /// <summary>
+        /// Removes an AnalogInput instance
+        /// </summary>
+        /// <param name="id">the input id of the instance to remove</param>
+        void RemoveAnalogInput(int id);
+        /// <summary>
+        /// Removes a CANTalon instance
+        /// </summary>
+        /// <param name="id">the input id of the instance to remove</param>
+        void RemoveCANTalon(int id);
+        /// <summary>
+        /// Removes a DigitalInput instance
+        /// </summary>
+        /// <param name="id">the input id of the instance to remove</param>
+        void RemoveDigitalInput(int id);
+        /// <summary>
+        /// Removes a QuadEncoder instance
+        /// </summary>
+        /// <param name="id">the input id of the instance to remove</param>
+        void RemoveQuadEncoder(int id0, int id1);
+        /// <summary>
+        /// Removes a PWMOutput instance
+        /// </summary>
+        /// <param name="id">the input id of the instance to remove</param>
+        void RemovePWMOutput(int id);
+        /// <summary>
+        /// Removes a RelayOutput instance
+        /// </summary>
+        /// <param name="id">the input id of the instance to remove</param>
+        void RemoveRelayOutput(int id);
     }
 }

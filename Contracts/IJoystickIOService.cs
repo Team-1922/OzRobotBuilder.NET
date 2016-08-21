@@ -5,7 +5,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for joystick IO services
     /// </summary>
-    public interface IJoystickIOService
+    public interface IJoystickIOService : IIOService
     {
         /// <summary>
         /// The axis states
@@ -15,9 +15,5 @@ namespace Team1922.MVVM.Contracts
         /// the button states
         /// </summary>
         IReadOnlyDictionary<uint, bool> Buttons { get; }
-        /// <summary>
-        /// the id of this in the driver station
-        /// </summary>
-        int ID { get; }
     }
 }
