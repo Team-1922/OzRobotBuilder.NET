@@ -18,9 +18,9 @@ namespace WebFramework
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            return new ObjectResult("value");
         }
 
     }
