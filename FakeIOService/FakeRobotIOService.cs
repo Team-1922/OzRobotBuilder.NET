@@ -66,78 +66,67 @@ namespace Team1922.FakeIOService
 
         public void AddPWMOutput(PWMOutput pwmOutput)
         {
-            var service = new FakePWMOutputIOService();
-            service.Value = pwmOutput.Value;
-            _pwmOutputIOServices[pwmOutput.ID] = service;
+            _pwmOutputIOServices[pwmOutput.ID] = new FakePWMOutputIOService(pwmOutput);
         }
 
         public void AddAnalogInput(AnalogInput analogInput)
         {
-            throw new NotImplementedException();
+            _analogInputIOServices[analogInput.ID] = new FakeAnalogInputIOService(analogInput);
         }
 
         public void AddRelayOutput(RelayOutput relayOutput)
         {
-            var service = new FakeRelayOutputIOService();
-            service.ValueAsBool = relayOutput.GetForwardValueBool();
-            service.ReverseValueAsBool = relayOutput.GetReverseValueBool();
-            _relayOutputIOServices[relayOutput.ID] = service;
+            _relayOutputIOServices[relayOutput.ID] = new FakeRelayOutputIOService(relayOutput);
         }
 
         public void AddDigitalInput(DigitalInput digitalInput)
         {
-            var service = new FakeDigitalInputIOService();
-            service.ValueAsBool = digitalInput.Value;
-            _digitalInputIOServices[digitalInput.ID] = service;
+            _digitalInputIOServices[digitalInput.ID] = new FakeDigitalInputIOService(digitalInput);
         }
 
         public void AddQuadEncoder(QuadEncoder quadEncoder)
         {
-            var service = new FakeQuadEncoderIOService();
-            service.Value = quadEncoder.RawValue;
-            service.Velocity = quadEncoder.RawVelocity;
-            _digitalInputIOServices[quadEncoder.ID] = service;
-            _digitalInputIOServices[quadEncoder.ID1] = service;
+            _digitalInputIOServices[quadEncoder.ID] = _digitalInputIOServices[quadEncoder.ID1] = new FakeQuadEncoderIOService(quadEncoder);
         }
 
         public void AddCANTalon(CANTalon canTalon)
         {
-            throw new NotImplementedException();
+            _canTalonIOServices[canTalon.ID] = new FakeCANTalonIOService(canTalon);
         }
 
         public void AddJoystick(Joystick joystick)
         {
-            var service = new FakeJoystickIOService();
+            _joystickIOServices[joystick.ID] = new FakeJoystickIOService(joystick);
         }
 
         public void RemoveAnalogInput(int id)
         {
-            throw new NotImplementedException();
+            _analogInputIOServices[id] = null;
         }
 
         public void RemoveCANTalon(int id)
         {
-            throw new NotImplementedException();
+            _canTalonIOServices[id] = null;
         }
 
         public void RemoveDigitalInput(int id)
         {
-            throw new NotImplementedException();
+            _digitalInputIOServices[id] = null;
         }
 
         public void RemoveQuadEncoder(int id0, int id1)
         {
-            throw new NotImplementedException();
+            _digitalInputIOServices[id0] = _digitalInputIOServices[id1] = null;
         }
 
         public void RemovePWMOutput(int id)
         {
-            throw new NotImplementedException();
+            _pwmOutputIOServices[id] = null;
         }
 
         public void RemoveRelayOutput(int id)
         {
-            throw new NotImplementedException();
+            _relayOutputIOServices[id] = null;
         }
         #endregion
 

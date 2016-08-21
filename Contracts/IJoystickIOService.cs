@@ -10,10 +10,10 @@ namespace Team1922.MVVM.Contracts
         /// <summary>
         /// The axis states
         /// </summary>
-        IReadOnlyDictionary<uint, double> Axes { get; }
+        IReadOnlyDictionary<int, double> Axes { get; }
         /// <summary>
         /// the button states
         /// </summary>
-        IReadOnlyDictionary<uint, bool> Buttons { get; }
+        IReadOnlyDictionary<int, bool> Buttons { get; }
     }
 }
