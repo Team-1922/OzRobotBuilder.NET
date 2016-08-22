@@ -361,7 +361,7 @@ namespace Team1922.MVVM.ViewModels
                     && x.Name != "ModelTypeName"
                     && x.Name != "TopParent"
                     && x.Name != "Parent"
-                    && x.Name != "ModelInstance"
+                    && x.Name != "ModelReference"
                     select x.Name).ToList();
         }
         /// <summary>

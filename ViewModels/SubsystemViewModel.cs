@@ -9,9 +9,7 @@ using Team1922.MVVM.Models;
 namespace Team1922.MVVM.ViewModels
 {
     internal class SubsystemViewModel : ViewModelBase<Subsystem>, ISubsystemProvider
-    {
-        protected Subsystem _subsystemModel;
-        
+    {        
         public SubsystemViewModel(IRobotProvider parent) : base(parent)
         {
             _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider, PWMOutput>("PWMOutputs", this, (PWMOutput modelReference) => { return new PWMOutputViewModel(this) { ModelReference = modelReference }; });
@@ -70,8 +68,8 @@ namespace Team1922.MVVM.ViewModels
         public IPIDControllerSoftwareProvider PIDController { get; }
         public bool SoftwarePIDEnabled
         {
-            get { return _subsystemModel.SoftwarePIDEnabled; }
-            set { _subsystemModel.SoftwarePIDEnabled = value; }
+            get { return ModelReference.SoftwarePIDEnabled; }
+            set { ModelReference.SoftwarePIDEnabled = value; }
         }
 
         private void AddPWMOutput(PWMOutput pwmOutput, bool addToModel)
@@ -79,7 +77,7 @@ namespace Team1922.MVVM.ViewModels
             if (pwmOutput == null)
                 throw new ArgumentNullException("pwmOutput");
             if(addToModel)
-                _subsystemModel.PWMOutput.Add(pwmOutput);
+                ModelReference.PWMOutput.Add(pwmOutput);
             var provider = new PWMOutputViewModel(this);
             provider.ModelReference = pwmOutput;
             provider.Name = _pwmOutputProviders.GetUnusedKey(provider.Name);
@@ -91,7 +89,7 @@ namespace Team1922.MVVM.ViewModels
             if (analogInput == null)
                 throw new ArgumentNullException("analogInput");
             if (addToModel)
-                _subsystemModel.AnalogInput.Add(analogInput);
+                ModelReference.AnalogInput.Add(analogInput);
             var provider = new AnalogInputViewModel(this);
             provider.ModelReference = analogInput;
             provider.Name = _analogInputProviders.GetUnusedKey(provider.Name);
@@ -103,7 +101,7 @@ namespace Team1922.MVVM.ViewModels
             if (quadEncoder == null)
                 throw new ArgumentNullException("quadEncoder");
             if (addToModel)
-                _subsystemModel.QuadEncoder.Add(quadEncoder);
+                ModelReference.QuadEncoder.Add(quadEncoder);
 
             var provider = new QuadEncoderViewModel(this);
             provider.ModelReference = quadEncoder;
@@ -116,7 +114,7 @@ namespace Team1922.MVVM.ViewModels
             if (digitalInput == null)
                 throw new ArgumentNullException("digitalInput");
             if (addToModel)
-                _subsystemModel.DigitalInput.Add(digitalInput);
+                ModelReference.DigitalInput.Add(digitalInput);
             var provider = new DigitalInputViewModel(this);
             provider.ModelReference = digitalInput;
             provider.Name = _digitalInputProviders.GetUnusedKey(provider.Name);
@@ -128,7 +126,7 @@ namespace Team1922.MVVM.ViewModels
             if (relayOutput == null)
                 throw new ArgumentNullException("relayOutput");
             if (addToModel)
-                _subsystemModel.RelayOutput.Add(relayOutput);
+                ModelReference.RelayOutput.Add(relayOutput);
             var provider = new RelayOutputViewModel(this);
             provider.ModelReference = relayOutput;
             provider.Name = _relayOutputProviders.GetUnusedKey(provider.Name);
@@ -140,7 +138,7 @@ namespace Team1922.MVVM.ViewModels
             if (canTalon == null)
                 throw new ArgumentNullException("canTalon");
             if (addToModel)
-                _subsystemModel.CANTalons.Add(canTalon);
+                ModelReference.CANTalons.Add(canTalon);
             var provider = new CANTalonViewModel(this);
             provider.SetCANTalon(canTalon);
             provider.Name = _canTalonProviders.GetUnusedKey(provider.Name);
@@ -187,7 +185,7 @@ namespace Team1922.MVVM.ViewModels
                     _pwmOutputProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.PWMOutput.RemoveAt(i);
+                    ModelReference.PWMOutput.RemoveAt(i);
                     break;
                 }
             }
@@ -203,7 +201,7 @@ namespace Team1922.MVVM.ViewModels
                     _digitalInputProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.DigitalInput.RemoveAt(i);
+                    ModelReference.DigitalInput.RemoveAt(i);
                     break;
                 }
             }
@@ -219,7 +217,7 @@ namespace Team1922.MVVM.ViewModels
                     _analogInputProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.AnalogInput.RemoveAt(i);
+                    ModelReference.AnalogInput.RemoveAt(i);
                     break;
                 }
             }
@@ -235,7 +233,7 @@ namespace Team1922.MVVM.ViewModels
                     _quadEncoderProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.QuadEncoder.RemoveAt(i);
+                    ModelReference.QuadEncoder.RemoveAt(i);
                     break;
                 }
             }
@@ -251,7 +249,7 @@ namespace Team1922.MVVM.ViewModels
                     _relayOutputProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.RelayOutput.RemoveAt(i);
+                    ModelReference.RelayOutput.RemoveAt(i);
                     break;
                 }
             }
@@ -267,7 +265,7 @@ namespace Team1922.MVVM.ViewModels
                     _canTalonProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.CANTalons.RemoveAt(i);
+                    ModelReference.CANTalons.RemoveAt(i);
                     break;
                 }
             }
@@ -294,8 +292,8 @@ namespace Team1922.MVVM.ViewModels
         #region IProvider
         public string Name
         {
-            get { return _subsystemModel.Name; }
-            set { _subsystemModel.Name = value; }
+            get { return ModelReference.Name; }
+            set { ModelReference.Name = value; }
         }
         #endregion
 
@@ -368,35 +366,28 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override void OnModelChange()
         {
-            //cleanup the old providers
-            _pwmOutputProviders.Items.Clear();
-            _analogInputProviders.Items.Clear();
-            _quadEncoderProviders.Items.Clear();
-            _relayOutputProviders.Items.Clear();
-            _canTalonProviders.Items.Clear();
-
             //setup the new providers
-            PIDController.ModelReference = _subsystemModel.PIDController;
+            PIDController.ModelReference = ModelReference.PIDController;
 
-            if (null != _subsystemModel.PWMOutput)
+            if (null != ModelReference.PWMOutput)
             {
-                _pwmOutputProviders.ModelReference = _subsystemModel.PWMOutput;
+                _pwmOutputProviders.ModelReference = ModelReference.PWMOutput;
             }
-            if (null != _subsystemModel.AnalogInput)
+            if (null != ModelReference.AnalogInput)
             {
-                _analogInputProviders.ModelReference = _subsystemModel.AnalogInput;
+                _analogInputProviders.ModelReference = ModelReference.AnalogInput;
             }
-            if (null != _subsystemModel.QuadEncoder)
+            if (null != ModelReference.QuadEncoder)
             {
-                _quadEncoderProviders.ModelReference = _subsystemModel.QuadEncoder;
+                _quadEncoderProviders.ModelReference = ModelReference.QuadEncoder;
             }
-            if (null != _subsystemModel.RelayOutput)
+            if (null != ModelReference.RelayOutput)
             {
-                _relayOutputProviders.ModelReference = _subsystemModel.RelayOutput;
+                _relayOutputProviders.ModelReference = ModelReference.RelayOutput;
             }
-            if (null != _subsystemModel.CANTalons)
+            if (null != ModelReference.CANTalons)
             {
-                _canTalonProviders.ModelReference = _subsystemModel.CANTalons;
+                _canTalonProviders.ModelReference = ModelReference.CANTalons;
             }
         }
         #endregion
