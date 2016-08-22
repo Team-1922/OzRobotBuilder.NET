@@ -54,7 +54,6 @@ namespace Team1922.MVVM.ViewModels
             }
             throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
         }
-
         protected override void SetValue(string key, string value)
         {
             for(int i = 0; i < ModelReference.Count; ++i)
@@ -69,7 +68,6 @@ namespace Team1922.MVVM.ViewModels
             //throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             AddEntry(key, value);
         }
-
         protected override List<string> GetOverrideKeys()
         {
             //be careful here; this may be called before construction completes/model instance set

@@ -99,7 +99,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -115,16 +114,6 @@ namespace Team1922.MVVM.ViewModels
             }
 
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = ModelReference.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-
         protected override List<string> GetOverrideKeys()
         {
             var ret = new List<string>() { "Name", "ID" };

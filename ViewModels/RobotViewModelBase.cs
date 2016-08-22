@@ -15,9 +15,9 @@ namespace Team1922.MVVM.ViewModels
     {
         public RobotViewModelBase() : base(null)
         {
-            _subsystemProviders = new CompoundProviderList<ISubsystemProvider, Subsystem>("Subsystems", this);
-            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider, Models.EventHandler>("EventHandlers", this);
-            _joystickProviders = new CompoundProviderList<IJoystickProvider, Joystick>("Joysticks", this);
+            _subsystemProviders = new CompoundProviderList<ISubsystemProvider, Subsystem>("Subsystems", this, (Subsystem model) => { return new SubsystemViewModel(this) { ModelReference = model }; });
+            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider, Models.EventHandler>("EventHandlers", this, (Models.EventHandler model) => { return new EventHandlerViewModel(this) { ModelReference = model }; });
+            _joystickProviders = new CompoundProviderList<IJoystickProvider, Joystick>("Joysticks", this, (Joystick model) => { return new JoystickViewModel(this) { ModelReference = model }; });
         }
 
         #region IRobotProvider
@@ -102,7 +102,7 @@ namespace Team1922.MVVM.ViewModels
             if (null != ModelReference.RobotMap)
             {
                 _robotMapProvider = new RobotMapViewModel(this);
-                _robotMapProvider.SetRobot(ModelReference);
+                _robotMapProvider.ModelReference = ModelReference.RobotMap;
             }
         }
         public void RemoveSubsystem(string name)
@@ -251,7 +251,7 @@ namespace Team1922.MVVM.ViewModels
                 ModelReference.Subsystem.Add(subsystem);
 
             var provider = new SubsystemViewModel(this);
-            provider.SetSubsystem(subsystem);
+            provider.ModelReference = subsystem;
             provider.Name = _subsystemProviders.GetUnusedKey(provider.Name);
             _subsystemProviders.Items.Add(provider);
         }
@@ -263,7 +263,7 @@ namespace Team1922.MVVM.ViewModels
                 ModelReference.Joystick.Add(joystick);
 
             var provider = new JoystickViewModel(this);
-            provider.SetJoystick(joystick);
+            provider.ModelReference = joystick;
             provider.Name = _joystickProviders.GetUnusedKey(provider.Name);
             _joystickProviders.Items.Add(provider);
         }
@@ -275,7 +275,7 @@ namespace Team1922.MVVM.ViewModels
                 ModelReference.EventHandler.Add(eventHandler);
 
             var provider = new EventHandlerViewModel(this);
-            provider.SetEventHandler(eventHandler);
+            provider.ModelReference = eventHandler;
             provider.Name = _eventHandlerProviders.GetUnusedKey(provider.Name);
             _eventHandlerProviders.Items.Add(provider);
         }

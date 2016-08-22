@@ -81,7 +81,7 @@ namespace Team1922.MVVM.ViewModels
             if(addToModel)
                 _subsystemModel.PWMOutput.Add(pwmOutput);
             var provider = new PWMOutputViewModel(this);
-            provider.SetPWMOutput(pwmOutput);
+            provider.ModelReference = pwmOutput;
             provider.Name = _pwmOutputProviders.GetUnusedKey(provider.Name);
             _pwmOutputProviders.Items.Add(provider);
         }
@@ -93,7 +93,7 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 _subsystemModel.AnalogInput.Add(analogInput);
             var provider = new AnalogInputViewModel(this);
-            provider.SetAnalogInput(analogInput);
+            provider.ModelReference = analogInput;
             provider.Name = _analogInputProviders.GetUnusedKey(provider.Name);
             _analogInputProviders.Items.Add(provider);
         }
@@ -106,7 +106,7 @@ namespace Team1922.MVVM.ViewModels
                 _subsystemModel.QuadEncoder.Add(quadEncoder);
 
             var provider = new QuadEncoderViewModel(this);
-            provider.SetQuadEncoder(quadEncoder);
+            provider.ModelReference = quadEncoder;
             provider.Name = _quadEncoderProviders.GetUnusedKey(provider.Name);
             _quadEncoderProviders.Items.Add(provider);
         }
@@ -118,7 +118,7 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 _subsystemModel.DigitalInput.Add(digitalInput);
             var provider = new DigitalInputViewModel(this);
-            provider.SetDigitalInput(digitalInput);
+            provider.ModelReference = digitalInput;
             provider.Name = _digitalInputProviders.GetUnusedKey(provider.Name);
             _digitalInputProviders.Items.Add(provider);
         }
@@ -130,7 +130,7 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 _subsystemModel.RelayOutput.Add(relayOutput);
             var provider = new RelayOutputViewModel(this);
-            provider.SetRelayOutput(relayOutput);
+            provider.ModelReference = relayOutput;
             provider.Name = _relayOutputProviders.GetUnusedKey(provider.Name);
             _relayOutputProviders.Items.Add(provider);
         }
@@ -300,7 +300,6 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ViewModelBase
-
         protected override string GetValue(string key)
         {
             switch (key)
@@ -366,14 +365,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
 
-        }
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _subsystemModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
         }
         protected override void OnModelChange()
         {

@@ -393,14 +393,6 @@ namespace Team1922.MVVM.ViewModels
             }
 
         }
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = ModelReference.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
         protected override void OnModelChange()
         {
             //TODO: update the IO Service

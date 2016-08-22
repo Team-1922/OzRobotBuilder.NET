@@ -10,10 +10,6 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class EventHandlerViewModel : ViewModelBase<Models.EventHandler>, IEventHandlerProvider
     {
-        private IExpression _conditionExpression;
-        private string _conditionExpressionParsingErrors = "";
-        private IExpression _expression;
-        private string _expressionParsingErrors = "";
 
         public EventHandlerViewModel(IRobotProvider parent) : base(parent)
         {
@@ -73,6 +69,14 @@ namespace Team1922.MVVM.ViewModels
                 return _conditionExpression != null ? _conditionExpression.Evaluate() > 1 : false;
             }
         }
+
+        public void Execute(bool force)
+        {
+            if(force || ConditionMet)
+            {
+                _expression?.Evaluate();
+            }
+        }
         #endregion
 
         #region IProvider
@@ -111,7 +115,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -129,16 +132,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = ModelReference.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-
         protected override string GetErrorString(string attribName)
         {
             string firstErrors = base.GetErrorString(attribName);
@@ -162,14 +155,7 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        public void Execute(bool force)
-        {
-            if(force || ConditionMet)
-            {
-                _expression?.Evaluate();
-            }
-        }
-
+        #region Private Methods
         private void UpdateConditionExpression(string value)
         {
             try
@@ -206,5 +192,13 @@ namespace Team1922.MVVM.ViewModels
                     throw;
             }
         }
+        #endregion
+
+        #region Private Fields
+        private IExpression _conditionExpression;
+        private string _conditionExpressionParsingErrors = "";
+        private IExpression _expression;
+        private string _expressionParsingErrors = "";
+        #endregion
     }
 }

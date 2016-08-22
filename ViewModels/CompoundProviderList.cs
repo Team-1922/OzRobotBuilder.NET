@@ -81,7 +81,6 @@ namespace Team1922.MVVM.ViewModels
         {
             return FindByName(key).GetModelJson();
         }
-
         protected override void SetValue(string key, string value)
         {
             for(int i = 0; i < Items.Count; ++i)
@@ -93,14 +92,6 @@ namespace Team1922.MVVM.ViewModels
                 }
             }
             throw new ArgumentException($"\"{key}\" is Read-Only");
-        }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                return "";
-            }
         }
         protected override void OnModelChange()
         {

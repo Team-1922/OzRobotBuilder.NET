@@ -696,7 +696,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -796,15 +795,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = ModelReference.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
         protected override void OnModelChange()
         {
             _quadEncoderProvider = null;
@@ -815,22 +805,22 @@ namespace Team1922.MVVM.ViewModels
             if (null != ModelReference.QuadEncoder)
             {
                 _quadEncoderProvider = new CANTalonQuadEncoderViewModel(this);
-                _quadEncoderProvider.SetCANTalon(canTalon);
+                _quadEncoderProvider.ModelReference = ModelReference.QuadEncoder;
             }
             if (null != ModelReference.AnalogInput)
             {
                 _analogInputProvider = new CANTalonAnalogInputViewModel(this);
-                _analogInputProvider.SetCANTalon(canTalon);
+                _analogInputProvider.ModelReference = ModelReference.AnalogInput;
             }
             if (null != ModelReference.PIDConfig0)
             {
                 _pidConfig0Provider = new PIDControllerSRXViewModel(this);
-                _pidConfig0Provider.SetPIDController(canTalon.PIDConfig0);
+                _pidConfig0Provider.ModelReference = ModelReference.PIDConfig0;
             }
             if (null != ModelReference.PIDConfig1)
             {
                 _pidConfig1Provider = new PIDControllerSRXViewModel(this);
-                _pidConfig1Provider.SetPIDController(canTalon.PIDConfig1);
+                _pidConfig1Provider.ModelReference = ModelReference.PIDConfig1;
             }
         }
         #endregion
@@ -838,7 +828,7 @@ namespace Team1922.MVVM.ViewModels
         #region Private Fields
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
 
-        CANTalonQuadEncoderViewModel _quadEncoderProvider
+        ICANTalonQuadEncoderProvider _quadEncoderProvider
         {
             get
             {
@@ -850,7 +840,7 @@ namespace Team1922.MVVM.ViewModels
                 _children["_quadEncoderProvider"] = value;
             }
         }
-        CANTalonAnalogInputViewModel _analogInputProvider
+        ICANTalonAnalogInputProvider _analogInputProvider
         {
             get
             {

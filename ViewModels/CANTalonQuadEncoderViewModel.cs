@@ -8,8 +8,6 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class CANTalonQuadEncoderViewModel : ViewModelBase<CANTalonQuadEncoder>, ICANTalonQuadEncoderProvider
     {
-        int _canTalonID;
-
         public CANTalonQuadEncoderViewModel(ICANTalonProvider parent) : base(parent)
         {
         }
@@ -127,7 +125,7 @@ namespace Team1922.MVVM.ViewModels
         #region ViewModelBase
         protected override string GetValue(string key)
         {
-            switch(key)
+            switch (key)
             {
                 case "ConversionRatio":
                     return ConversionRatio.ToString();
@@ -147,10 +145,9 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
-            switch(key)
+            switch (key)
             {
                 case "ConversionRatio":
                     ConversionRatio = SafeCastDouble(value);
@@ -162,16 +159,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = ModelReference.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-
         protected override void OnModelChange()
         {
             _canTalonID = (Parent as CANTalonViewModel).ID;
@@ -187,6 +174,10 @@ namespace Team1922.MVVM.ViewModels
             RawValue = IOService.Instance.CANTalons[_canTalonID].EncoderValue;
             Value = RawValue * ConversionRatio + SensorOffset;
         }
+        #endregion
+
+        #region Private Fields
+        int _canTalonID;
         #endregion
     }
 }
