@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Contracts
     /// A service contract for a class which represents access between an outside view and an
     /// analog input model.
     /// </summary>
-    public interface IAnalogInputProvider : IInputProvider
+    public interface IAnalogInputProvider : IInputProvider, IProvider<AnalogInput>
     {
         /// <summary>
         /// The ID property of the model
@@ -72,10 +72,5 @@ namespace Team1922.MVVM.Contracts
         /// Resets the hardware analog input accumulator
         /// </summary>
         void ResetAccumulator();
-        /// <summary>
-        /// Sets the analog input model instance for this viewmodel
-        /// </summary>
-        /// <param name="analogInput">the analog input model instance</param>
-        void SetAnalogInput(AnalogInput analogInput);
     }
 }

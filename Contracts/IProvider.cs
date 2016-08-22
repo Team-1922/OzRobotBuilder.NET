@@ -42,9 +42,20 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="text">the json text to deserialize</param>
         void SetModelJson(string text);
+        /// <summary>
+        /// The model instance of this class
+        /// </summary>
+        //object ModelReference { get; set; }
     }
+    /// <summary>
+    /// This gives the provider a strongly-typed model instance associated with it.
+    /// </summary>
+    /// <typeparam name="ModelType">the type of the model</typeparam>
     public interface IProvider<ModelType> : IProvider
     {
-        void SetModelInstance(ModelType instance);
+        /// <summary>
+        /// a strongly typed model reference
+        /// </summary>
+        ModelType ModelReference { get; set; }
     }
 }

@@ -8,44 +8,37 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class PWMOutputViewModel : ViewModelBase<PWMOutput>, IPWMOutputProvider
     {
-        protected PWMOutput _pwmOutputModel;
-
         public PWMOutputViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 
         #region IPWMOutputProvider
-        public void SetPWMOutput(PWMOutput pwmOutput)
-        {
-            _pwmOutputModel = pwmOutput;
-        }
-
         public int ID
         {
             get
             {
-                return _pwmOutputModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _pwmOutputModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _pwmOutputModel.ID = temp;
+                ModelReference.ID = temp;
             }
         }
         public double Value
         {
             get
             {
-                return _pwmOutputModel.Value;
+                return ModelReference.Value;
             }
 
             set
             {
-                var temp = _pwmOutputModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, IOService.Instance.PWMOutputs[ID].Value = TypeRestrictions.Clamp("PWMOutput.Value", value));
-                _pwmOutputModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
         #endregion
@@ -55,14 +48,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pwmOutputModel.Name;
+                return ModelReference.Name;
             }
 
             set
             {
-                var temp = _pwmOutputModel.Name;
+                var temp = ModelReference.Name;
                 SetProperty(ref temp, value);
-                _pwmOutputModel.Name = temp;
+                ModelReference.Name = temp;
             }
         }
         #endregion
@@ -106,23 +99,11 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                var brokenName = _pwmOutputModel.GetType().ToString().Split('.');
+                var brokenName = ModelReference.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
             }
         }
-
-        protected override PWMOutput ModelInstance
-        {
-            get
-            {
-                return _pwmOutputModel;
-            }
-
-            set
-            {
-                SetPWMOutput(value);
-            }
-        }
+        
         #endregion
     }
 }

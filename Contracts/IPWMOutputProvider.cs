@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for PWM output viewmodels
     /// </summary>
-    public interface IPWMOutputProvider : IProvider
+    public interface IPWMOutputProvider : IProvider<PWMOutput>
     {
         /// <summary>
         /// This PWM output's hardware ID
@@ -23,11 +23,5 @@ namespace Team1922.MVVM.Contracts
         /// This PWM output's output value (-1 to 1)
         /// </summary>
         double Value { get; set; }
-
-        /// <summary>
-        /// Sets the model instance of this PWM output provider
-        /// </summary>
-        /// <param name="pwmOutput">the PWM output model instance</param>
-        void SetPWMOutput(PWMOutput pwmOutput);
     }
 }

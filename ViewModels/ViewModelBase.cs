@@ -92,6 +92,7 @@ namespace Team1922.MVVM.ViewModels
         {
             _parent = parent;
             UpdateKeyValueList();
+            PropertyChanged += ViewModelBase_PropertyChanged;
         }
 
         protected void UpdateKeyValueList()
@@ -125,6 +126,44 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _parent;
+            }
+        }
+        public string GetModelJson()
+        {
+            return JsonSerialize(ModelReference);
+        }
+        public void SetModelJson(string text)
+        {
+            try
+            {
+                //deserialize the model
+                ModelReference = JsonDeserialize(text);
+            }
+            catch (Exception e)
+            {
+                //this means an exception was thrown while loading (whether bad json, OR type validation)
+                throw new ArgumentException("Invalid Json", "text");
+            }
+        }
+        private object _modelReference;
+        public object ModelReference
+        {
+            get
+            {
+                return _modelReference;
+            }
+
+            set
+            {
+                SetProperty(ref _modelReference, value);
+            }
+        }
+        public string ModelTypeName
+        {
+            get
+            {
+                var brokenName = ModelReference.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
             }
         }
         #endregion
@@ -289,6 +328,10 @@ namespace Team1922.MVVM.ViewModels
         {
             return JsonConvert.DeserializeObject<T>(text, _settings);
         }
+        protected object JsonDeserialize(string text)
+        {
+            return JsonConvert.DeserializeObject(text, _settings);
+        }
         #endregion
 
         #region Abstract & Virtual Methods
@@ -317,13 +360,14 @@ namespace Team1922.MVVM.ViewModels
                     && x.Name != "ModelTypeName"
                     && x.Name != "TopParent"
                     && x.Name != "Parent"
+                    && x.Name != "ModelInstance"
                     select x.Name).ToList();
         }
         /// <summary>
         /// In order for IDataErrorInfo to work correctly, we need the name of model type to lookup in the type restrictions
         /// </summary>
         /// <returns>The name of the model type without the namespace (i.e. "Robot")</returns>
-        public abstract string ModelTypeName { get; }
+        //public abstract string ModelTypeName { get; }
         /// <summary>
         /// This allows the consumer to define custom methods of getting an error string.  If this is not overridden,
         /// then the regular TypeRestriction method is used
@@ -334,6 +378,7 @@ namespace Team1922.MVVM.ViewModels
         {
             return TypeRestrictions.DataErrorString($"{ModelTypeName}.{attribName}", this[attribName]);
         }
+        protected virtual void OnModelChange() { }
         #endregion
 
         #region IDataErrorInfo Support
@@ -351,7 +396,6 @@ namespace Team1922.MVVM.ViewModels
                 return ret;
             }
         }
-
         string IDataErrorInfo.this[string columnName]
         {
             get
@@ -396,6 +440,14 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
+        #region Private Methods
+        private void ViewModelBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ModelReference")
+                OnModelChange();
+        }
+        #endregion
+
         #region Private Fields
         static JsonSerializerSettings _settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
         #endregion
@@ -407,23 +459,16 @@ namespace Team1922.MVVM.ViewModels
         {
         }
 
-        protected abstract ModelType ModelInstance { get; set; }
-
-        public string GetModelJson()
+        public virtual new ModelType ModelReference
         {
-            return JsonSerialize(ModelInstance);
-        }
-        public void SetModelJson(string text)
-        {
-            try
+            get
             {
-                //deserialize the model
-                ModelInstance = JsonDeserialize<ModelType>(text);
+                return (ModelType)base.ModelReference;
             }
-            catch(Exception e)
+
+            set
             {
-                //this means an exception was thrown while loading (whether bad json, OR type validation)
-                throw new ArgumentException("Invalid Json", "text");
+                base.ModelReference = value;
             }
         }
     }

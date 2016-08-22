@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for relay output viewmodels
     /// </summary>
-    public interface IRelayOutputProvider : IProvider
+    public interface IRelayOutputProvider : IProvider<RelayOutput>
     {
         /// <summary>
         /// This relay's hardware ID
@@ -27,11 +27,5 @@ namespace Team1922.MVVM.Contracts
         /// The direction(s) this relay is set to
         /// </summary>
         RelayValue Value { get; set; }
-
-        /// <summary>
-        /// Set the model instance of this relay output provider
-        /// </summary>
-        /// <param name="relayOutput">the relay output model instance</param>
-        void SetRelayOutput(RelayOutput relayOutput);
     }
 }

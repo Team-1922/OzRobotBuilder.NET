@@ -11,15 +11,13 @@ using Team1922.MVVM.Contracts.Events;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class RobotViewModelBase : ViewModelBase, IRobotProvider
+    public class RobotViewModelBase : ViewModelBase<Robot>, IRobotProvider
     {
-        protected Robot _robotModel;
-
         public RobotViewModelBase() : base(null)
         {
-            _subsystemProviders = new CompoundProviderList<ISubsystemProvider>("Subsystems", this);
-            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider>("EventHandlers", this);
-            _joystickProviders = new CompoundProviderList<IJoystickProvider>("Joysticks", this);
+            _subsystemProviders = new CompoundProviderList<ISubsystemProvider, Subsystem>("Subsystems", this);
+            _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider, Models.EventHandler>("EventHandlers", this);
+            _joystickProviders = new CompoundProviderList<IJoystickProvider, Joystick>("Joysticks", this);
         }
 
         #region IRobotProvider
@@ -51,24 +49,24 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _robotModel.TeamNumber;
+                return ModelReference.TeamNumber;
             }
 
             set
             {
-                _robotModel.TeamNumber = value;
+                ModelReference.TeamNumber = value;
             }
         }
         public int AnalogInputSampleRate
         {
             get
             {
-                return _robotModel.AnalogInputSampleRate;
+                return ModelReference.AnalogInputSampleRate;
             }
 
             set
             {
-                _robotModel.AnalogInputSampleRate = value;
+                ModelReference.AnalogInputSampleRate = value;
             }
         }
         public void SetRobot(Robot robot)
@@ -79,32 +77,32 @@ namespace Team1922.MVVM.ViewModels
             _joystickProviders.Items.Clear();
 
             //setup the new providers
-            _robotModel = robot;
-            if (null != _robotModel.Subsystem)
+            ModelReference = robot;
+            if (null != ModelReference.Subsystem)
             {
-                foreach (var subsystem in _robotModel.Subsystem)
+                foreach (var subsystem in ModelReference.Subsystem)
                 {
                     AddSubsystem(subsystem, false);
                 }
             }
-            if (null != _robotModel.EventHandler)
+            if (null != ModelReference.EventHandler)
             {
-                foreach (var eventHandler in _robotModel.EventHandler)
+                foreach (var eventHandler in ModelReference.EventHandler)
                 {
                     AddEventHandler(eventHandler, false);
                 }
             }
-            if (null != _robotModel.Joystick)
+            if (null != ModelReference.Joystick)
             {
-                foreach (var joystick in _robotModel.Joystick)
+                foreach (var joystick in ModelReference.Joystick)
                 {
                     AddJoystick(joystick, false);
                 }
             }
-            if (null != _robotModel.RobotMap)
+            if (null != ModelReference.RobotMap)
             {
                 _robotMapProvider = new RobotMapViewModel(this);
-                _robotMapProvider.SetRobot(_robotModel);
+                _robotMapProvider.SetRobot(ModelReference);
             }
         }
         public void RemoveSubsystem(string name)
@@ -117,7 +115,7 @@ namespace Team1922.MVVM.ViewModels
                     _subsystemProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _robotModel.Subsystem.RemoveAt(i);
+                    ModelReference.Subsystem.RemoveAt(i);
                     break;
                 }
             }
@@ -133,7 +131,7 @@ namespace Team1922.MVVM.ViewModels
                     _joystickProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _robotModel.Joystick.RemoveAt(i);
+                    ModelReference.Joystick.RemoveAt(i);
                     break;
                 }
             }
@@ -149,7 +147,7 @@ namespace Team1922.MVVM.ViewModels
                     _eventHandlerProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _robotModel.EventHandler.RemoveAt(i);
+                    ModelReference.EventHandler.RemoveAt(i);
                     break;
                 }
             }
@@ -183,14 +181,6 @@ namespace Team1922.MVVM.ViewModels
             {
                 return "Robot";
             }
-        }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_robotModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetRobot(JsonDeserialize<Robot>(text));
         }
         #endregion
 
@@ -250,14 +240,6 @@ namespace Team1922.MVVM.ViewModels
             }
             
         }
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _robotModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
         #endregion
 
         #region Private Methods
@@ -266,7 +248,7 @@ namespace Team1922.MVVM.ViewModels
             if (subsystem == null)
                 throw new ArgumentNullException("subsystem");
             if (addToModel)
-                _robotModel.Subsystem.Add(subsystem);
+                ModelReference.Subsystem.Add(subsystem);
 
             var provider = new SubsystemViewModel(this);
             provider.SetSubsystem(subsystem);
@@ -278,7 +260,7 @@ namespace Team1922.MVVM.ViewModels
             if (joystick == null)
                 throw new ArgumentNullException("joystick");
             if (addToModel)
-                _robotModel.Joystick.Add(joystick);
+                ModelReference.Joystick.Add(joystick);
 
             var provider = new JoystickViewModel(this);
             provider.SetJoystick(joystick);
@@ -290,7 +272,7 @@ namespace Team1922.MVVM.ViewModels
             if (eventHandler == null)
                 throw new ArgumentNullException("subsystem");
             if (addToModel)
-                _robotModel.EventHandler.Add(eventHandler);
+                ModelReference.EventHandler.Add(eventHandler);
 
             var provider = new EventHandlerViewModel(this);
             provider.SetEventHandler(eventHandler);
@@ -314,11 +296,11 @@ namespace Team1922.MVVM.ViewModels
                 _children["_robotMapProvider"] = value;
             }
         }
-        CompoundProviderList<ISubsystemProvider> _subsystemProviders
+        CompoundProviderList<ISubsystemProvider, Subsystem> _subsystemProviders
         {
             get
             {
-                return _children["_subsystemProviders"] as CompoundProviderList<ISubsystemProvider>;
+                return _children["_subsystemProviders"] as CompoundProviderList<ISubsystemProvider, Subsystem>;
             }
 
             set
@@ -326,11 +308,11 @@ namespace Team1922.MVVM.ViewModels
                 _children["_subsystemProviders"] = value;
             }
         }
-        CompoundProviderList<IEventHandlerProvider> _eventHandlerProviders
+        CompoundProviderList<IEventHandlerProvider, Models.EventHandler> _eventHandlerProviders
         {
             get
             {
-                return _children["_eventHandlerProviders"] as CompoundProviderList<IEventHandlerProvider>;
+                return _children["_eventHandlerProviders"] as CompoundProviderList<IEventHandlerProvider, Models.EventHandler>;
             }
 
             set
@@ -338,11 +320,11 @@ namespace Team1922.MVVM.ViewModels
                 _children["_eventHandlerProviders"] = value;
             }
         }
-        CompoundProviderList<IJoystickProvider> _joystickProviders
+        CompoundProviderList<IJoystickProvider, Joystick> _joystickProviders
         {
             get
             {
-                return _children["_joystickProviders"] as CompoundProviderList<IJoystickProvider>;
+                return _children["_joystickProviders"] as CompoundProviderList<IJoystickProvider, Joystick>;
             }
 
             set

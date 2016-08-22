@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for joystick viewmodels
     /// </summary>
-    public interface IJoystickProvider : IInputProvider
+    public interface IJoystickProvider : IInputProvider, IProvider<Joystick>
     {
         /// <summary>
         /// The state of the joystick axes
@@ -23,11 +23,5 @@ namespace Team1922.MVVM.Contracts
         /// The id of the this joystick in the driver station
         /// </summary>
         int ID { get; set; }
-
-        /// <summary>
-        /// Sets the model instance for this joystick provider
-        /// </summary>
-        /// <param name="joystick">the joystick model instance</param>
-        void SetJoystick(Joystick joystick);
     }
 }

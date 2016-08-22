@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for the robot viewmodel
     /// </summary>
-    public interface IRobotProvider : IInputProvider, ICompoundProvider
+    public interface IRobotProvider : IInputProvider, ICompoundProvider, IProvider<Robot>
     {
         /// <summary>
         /// This robot's subsystems
@@ -32,12 +32,6 @@ namespace Team1922.MVVM.Contracts
         /// This robot's Analog Input sample rate
         /// </summary>
         int AnalogInputSampleRate { get; set; }
-
-        /// <summary>
-        /// Sets the model instance of this robot provider
-        /// </summary>
-        /// <param name="robot">the robot model instance</param>
-        void SetRobot(Robot robot);
 
         /// <summary>
         /// Adds a model instance of a Subsystem

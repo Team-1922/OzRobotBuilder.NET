@@ -13,8 +13,6 @@ namespace Team1922.MVVM.ViewModels
 
     internal class JoystickViewModel : ViewModelBase<Joystick>, IJoystickProvider
     {
-        Joystick _joystickModel;
-
         public JoystickViewModel(IRobotProvider parent) : base(parent)
         {
             _axes.CollectionChanged += _axes_CollectionChanged;
@@ -42,18 +40,13 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _joystickModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                _joystickModel.ID = value;
+                ModelReference.ID = value;
             }
-        }
-
-        public void SetJoystick(Joystick joystick)
-        {
-            _joystickModel = joystick;
         }
         #endregion
 
@@ -77,12 +70,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _joystickModel.Name;
+                return ModelReference.Name;
             }
 
             set
             {
-                _joystickModel.Name = value;
+                ModelReference.Name = value;
             }
         }
         #endregion
@@ -127,7 +120,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                var brokenName = _joystickModel.GetType().ToString().Split('.');
+                var brokenName = ModelReference.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
             }
         }
@@ -144,19 +137,6 @@ namespace Team1922.MVVM.ViewModels
                 ret.Add($"Axes[{i}]");
             }
             return ret;
-        }
-
-        protected override Joystick ModelInstance
-        {
-            get
-            {
-                return _joystickModel;
-            }
-
-            set
-            {
-                SetJoystick(value);
-            }
         }
         #endregion
 

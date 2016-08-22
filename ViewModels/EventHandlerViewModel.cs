@@ -10,7 +10,6 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class EventHandlerViewModel : ViewModelBase<Models.EventHandler>, IEventHandlerProvider
     {
-        private Models.EventHandler _eventHandlerModel;
         private IExpression _conditionExpression;
         private string _conditionExpressionParsingErrors = "";
         private IExpression _expression;
@@ -25,14 +24,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _eventHandlerModel.Condition;
+                return ModelReference.Condition;
             }
 
             set
             {
-                var temp = _eventHandlerModel.Condition;
+                var temp = ModelReference.Condition;
                 SetProperty(ref temp, value);
-                _eventHandlerModel.Condition = temp;
+                ModelReference.Condition = temp;
                 //this throws an exception AFTER the condition variable is set, becuase it would be annoying
                 //  if the text in the box gets deleted after the user types it in and it is wrong; this could be a pretty big
                 //  set of text too
@@ -44,14 +43,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _eventHandlerModel.Expression;
+                return ModelReference.Expression;
             }
 
             set
             {
-                var temp = _eventHandlerModel.Expression;
+                var temp = ModelReference.Expression;
                 SetProperty(ref temp, value);
-                _eventHandlerModel.Expression = temp;
+                ModelReference.Expression = temp;
                 //this throws an exception AFTER the expression variable is set, becuase it would be annoying
                 //  if the text in the box gets deleted after the user types it in and it is wrong; this could be a pretty big
                 //  set of text too
@@ -74,14 +73,6 @@ namespace Team1922.MVVM.ViewModels
                 return _conditionExpression != null ? _conditionExpression.Evaluate() > 1 : false;
             }
         }
-
-        public void SetEventHandler(Models.EventHandler eventHandler)
-        {
-            _eventHandlerModel = eventHandler;
-            UpdateConditionExpression(_eventHandlerModel.Condition);
-            UpdateExpressionExpression(_eventHandlerModel.Expression);
-
-        }
         #endregion
 
         #region IProvider
@@ -89,23 +80,15 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _eventHandlerModel.Name;
+                return ModelReference.Name;
             }
 
             set
             {
-                var temp = _eventHandlerModel.Name;
+                var temp = ModelReference.Name;
                 SetProperty(ref temp, value);
-                _eventHandlerModel.Expression = temp;
+                ModelReference.Expression = temp;
             }
-        }
-        public string GetModelJson()
-        {
-            return JsonSerialize(_eventHandlerModel);
-        }
-        public void SetModelJson(string text)
-        {
-            SetEventHandler(JsonDeserialize<Models.EventHandler>(text));
         }
         #endregion
 
@@ -151,7 +134,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                var brokenName = _eventHandlerModel.GetType().ToString().Split('.');
+                var brokenName = ModelReference.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
             }
         }
@@ -172,18 +155,10 @@ namespace Team1922.MVVM.ViewModels
             }
             return "";
         }
-
-        protected override Models.EventHandler ModelInstance
+        protected override void OnModelChange()
         {
-            get
-            {
-                return _eventHandlerModel;
-            }
-
-            set
-            {
-                SetEventHandler(value);
-            }
+            UpdateConditionExpression(ModelReference.Condition);
+            UpdateExpressionExpression(ModelReference.Expression);
         }
         #endregion
 

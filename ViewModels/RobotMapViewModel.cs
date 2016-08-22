@@ -11,20 +11,12 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class RobotMapViewModel : ViewModelBase<List<RobotMapEntry>>, IRobotMapProvider
     {
-        private Robot _robotModel;
-
         public RobotMapViewModel(IRobotProvider parent) : base(parent)
         {
             EventAggregator<AddRobotMapEntryEvent>.Instance.Event += OnAddNewEntry;
         }
 
         #region IRobotMapProvider
-        public void SetRobot(Robot robot)
-        {
-            _robotModel = robot;
-            UpdateKeyValueList();
-        }
-
         public void AddEntry(string key, string value)
         {
             if (key == null)
@@ -36,7 +28,7 @@ namespace Team1922.MVVM.ViewModels
             {
                 key = GetUnusedKey();
             }
-            _robotModel.RobotMap.Add(new RobotMapEntry { Key = key, Value = value });
+            ModelReference.Add(new RobotMapEntry { Key = key, Value = value });
             UpdateKeyValueList();
         }
         #endregion
@@ -52,18 +44,10 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ViewModelBase
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _robotModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
 
         protected override string GetValue(string key)
         {
-            foreach(var item in _robotModel.RobotMap)
+            foreach(var item in ModelReference)
             {
                 if (item.Key == key)
                     return item.Value;
@@ -73,11 +57,11 @@ namespace Team1922.MVVM.ViewModels
 
         protected override void SetValue(string key, string value)
         {
-            for(int i = 0; i < _robotModel.RobotMap.Count; ++i)
+            for(int i = 0; i < ModelReference.Count; ++i)
             {
-                if (_robotModel.RobotMap[i].Key == key)
+                if (ModelReference[i].Key == key)
                 {
-                    _robotModel.RobotMap[i].Value = value;
+                    ModelReference[i].Value = value;
                     return;
                 }
             }
@@ -89,28 +73,19 @@ namespace Team1922.MVVM.ViewModels
         protected override List<string> GetOverrideKeys()
         {
             //be careful here; this may be called before construction completes/model instance set
-            if (null == _robotModel)
+            if (null == ModelReference)
                 return new List<string>();
 
             List<string> ret = new List<string>();
-            foreach(var item in _robotModel.RobotMap)
+            foreach(var item in ModelReference)
             {
                 ret.Add(item.Key);
             }
             return ret;
         }
-
-        protected override List<RobotMapEntry> ModelInstance
+        protected override void OnModelChange()
         {
-            get
-            {
-                return _robotModel.RobotMap;
-            }
-
-            set
-            {
-                _robotModel.RobotMap = value;
-            }
+            UpdateKeyValueList();
         }
         #endregion
 
@@ -131,7 +106,7 @@ namespace Team1922.MVVM.ViewModels
         private bool ContainsKey(string key)
         {
             //loop through each item in the map
-            foreach(var item in _robotModel.RobotMap)
+            foreach(var item in ModelReference)
             {
                 //then compare the keys
                 if (item.Key == key)

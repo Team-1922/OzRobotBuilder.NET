@@ -8,7 +8,6 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class CANTalonQuadEncoderViewModel : ViewModelBase<CANTalonQuadEncoder>, ICANTalonQuadEncoderProvider
     {
-        CANTalonQuadEncoder _quadEncoderModel;
         int _canTalonID;
 
         public CANTalonQuadEncoderViewModel(ICANTalonProvider parent) : base(parent)
@@ -20,14 +19,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.ConversionRatio;
+                return ModelReference.ConversionRatio;
             }
 
             set
             {
-                var temp = _quadEncoderModel.ConversionRatio;
+                var temp = ModelReference.ConversionRatio;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.ConversionRatio = temp;
+                ModelReference.ConversionRatio = temp;
             }
         }
 
@@ -35,14 +34,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.RawValue;
+                return ModelReference.RawValue;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.RawValue;
+                var temp = ModelReference.RawValue;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.RawValue = temp;
+                ModelReference.RawValue = temp;
             }
         }
 
@@ -50,14 +49,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.RawVelocity;
+                return ModelReference.RawVelocity;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.RawVelocity;
+                var temp = ModelReference.RawVelocity;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.RawVelocity = temp;
+                ModelReference.RawVelocity = temp;
             }
         }
 
@@ -65,14 +64,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.SensorOffset;
+                return ModelReference.SensorOffset;
             }
 
             set
             {
-                var temp = _quadEncoderModel.SensorOffset;
+                var temp = ModelReference.SensorOffset;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.SensorOffset = temp;
+                ModelReference.SensorOffset = temp;
             }
         }
 
@@ -80,14 +79,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.Value;
+                return ModelReference.Value;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
 
@@ -95,20 +94,15 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.Velocity;
+                return ModelReference.Velocity;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.Velocity;
+                var temp = ModelReference.Velocity;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.Velocity = temp;
+                ModelReference.Velocity = temp;
             }
-        }
-        public void SetCANTalon(CANTalon canTalon)
-        {
-            _quadEncoderModel = canTalon.QuadEncoder;
-            _canTalonID = canTalon.ID;
         }
         #endregion
 
@@ -122,11 +116,11 @@ namespace Team1922.MVVM.ViewModels
         }
         public string GetModelJson()
         {
-            return JsonSerialize(_quadEncoderModel);
+            return JsonSerialize(ModelReference);
         }
         public void SetModelJson(string text)
         {
-            _quadEncoderModel = JsonDeserialize<CANTalonQuadEncoder>(text);
+            ModelReference = JsonDeserialize<CANTalonQuadEncoder>(text);
         }
         #endregion
 
@@ -173,22 +167,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                var brokenName = _quadEncoderModel.GetType().ToString().Split('.');
+                var brokenName = ModelReference.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
             }
         }
 
-        protected override CANTalonQuadEncoder ModelInstance
+        protected override void OnModelChange()
         {
-            get
-            {
-                return _quadEncoderModel;
-            }
-
-            set
-            {
-                _quadEncoderModel = value;
-            }
+            _canTalonID = (Parent as CANTalonViewModel).ID;
         }
         #endregion
 

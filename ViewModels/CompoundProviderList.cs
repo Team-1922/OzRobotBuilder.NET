@@ -10,14 +10,16 @@ using Team1922.MVVM.Contracts;
 namespace Team1922.MVVM.ViewModels
 {
 
-    class CompoundProviderList<T> : ViewModelBase, IEnumerable<T>, ICompoundProvider where T : IProvider
+    class CompoundProviderList<ProviderType, ModelType> : ViewModelBase<List<ModelType>>, IEnumerable<ProviderType>, ICompoundProvider where ProviderType : IProvider<ModelType>
     {
-        public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
+        //NOTE: if items here are manually added/removed, make SURE they are added to the model
+        public ObservableCollection<ProviderType> Items { get; } = new ObservableCollection<ProviderType>();
 
-        public CompoundProviderList(string name, IProvider parent) : base(parent)
+        public CompoundProviderList(string name, IProvider parent, Func<ModelType, ProviderType> constructNewItem) : base(parent)
         {
             Name = name;
             Items.CollectionChanged += Items_CollectionChanged;
+            _constructNewItem = constructNewItem;
         }
 
 
@@ -100,6 +102,14 @@ namespace Team1922.MVVM.ViewModels
                 return "";
             }
         }
+        protected override void OnModelChange()
+        {
+            Items.Clear();
+            foreach(var item in ModelReference)
+            {
+                Items.Add(_constructNewItem(item));
+            }
+        }
         #endregion
 
         #region ICompoundProvider
@@ -135,14 +145,14 @@ namespace Team1922.MVVM.ViewModels
             //var items = JsonDeserialize<List<string>>(text);
             //foreach(var item in items)
             //{
-            //    Items.Add(JsonDeserialize<T>(item));
+            //    Items.Add(JsonDeserialize<ProviderType>(item));
             //}
             throw new InvalidOperationException("Cannot Set Json Representation of CompoundProviderList");
         }
         #endregion
 
-        #region IEnumerable<T>
-        public IEnumerator<T> GetEnumerator()
+        #region IEnumerable<ProviderType>
+        public IEnumerator<ProviderType> GetEnumerator()
         {
             return Items.GetEnumerator();
         }
@@ -159,7 +169,7 @@ namespace Team1922.MVVM.ViewModels
             UpdateKeyValueList();
         }
 
-        private T FindByName(string name)
+        private ProviderType FindByName(string name)
         {
             foreach (var item in Items)
             {
@@ -168,6 +178,10 @@ namespace Team1922.MVVM.ViewModels
             }
             throw new ArgumentException($"\"{name}\" Does Not Exist");
         }
+        #endregion
+
+        #region Private Fields
+        Func<ModelType, ProviderType> _constructNewItem;
         #endregion
     }
 }

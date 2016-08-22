@@ -11,8 +11,6 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class DigitalInputViewModel : ViewModelBase<DigitalInput>, IDigitalInputProvider
     {
-        DigitalInput _digitalInputModel;
-
         public DigitalInputViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
@@ -22,34 +20,29 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _digitalInputModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _digitalInputModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _digitalInputModel.ID = temp;
+                ModelReference.ID = temp;
             }
         }
         public bool Value
         {
             get
             {
-                return _digitalInputModel.Value;
+                return ModelReference.Value;
             }
 
             private set
             {
-                var temp = _digitalInputModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _digitalInputModel.Value = temp;
+                ModelReference.Value = temp;
             }
-        }
-
-        public void SetDigitalInput(DigitalInput digitalInput)
-        {
-            _digitalInputModel = digitalInput;
         }
         #endregion
 
@@ -65,14 +58,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _digitalInputModel.Name;
+                return ModelReference.Name;
             }
 
             set
             {
-                var temp = _digitalInputModel.Name;
+                var temp = ModelReference.Name;
                 SetProperty(ref temp, value);
-                _digitalInputModel.Name = temp;
+                ModelReference.Name = temp;
             }
         }
         #endregion
@@ -113,21 +106,8 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                var brokenName = _digitalInputModel.GetType().ToString().Split('.');
+                var brokenName = ModelReference.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
-            }
-        }
-
-        protected override DigitalInput ModelInstance
-        {
-            get
-            {
-                return _digitalInputModel;
-            }
-
-            set
-            {
-                SetDigitalInput(value);
             }
         }
         #endregion

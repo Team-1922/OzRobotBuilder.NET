@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for CANTalon pid controller config viewmodels
     /// </summary>
-    public interface IPIDControllerSRXProvider : IProvider
+    public interface IPIDControllerSRXProvider : IProvider<PIDControllerSRX>
     {
         /// <summary>
         /// The proportional constant
@@ -43,11 +43,5 @@ namespace Team1922.MVVM.Contracts
         /// The differentiation level (i.e. position, speed) of this controller
         /// </summary>
         CANTalonDifferentiationLevel SourceType { get; set; }
-
-        /// <summary>
-        /// Sets the model instance for this PIDControllerSRX provider
-        /// </summary>
-        /// <param name="pidController">the PIDControllerSRX model instance</param>
-        void SetPIDController(PIDControllerSRX pidController);
     }
 }

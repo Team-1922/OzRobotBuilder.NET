@@ -8,8 +8,6 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class RelayOutputViewModel : ViewModelBase<RelayOutput>, IRelayOutputProvider
     {
-        RelayOutput _relayOutputModel;
-
         public RelayOutputViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
@@ -19,14 +17,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _relayOutputModel.Direction;
+                return ModelReference.Direction;
             }
 
             set
             {
-                var temp = _relayOutputModel.Direction;
+                var temp = ModelReference.Direction;
                 SetProperty(ref temp, value);
-                _relayOutputModel.Direction = temp;
+                ModelReference.Direction = temp;
             }
         }
 
@@ -34,14 +32,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _relayOutputModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _relayOutputModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _relayOutputModel.ID = temp;
+                ModelReference.ID = temp;
             }
         }
 
@@ -49,7 +47,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _relayOutputModel.Value;
+                return ModelReference.Value;
             }
 
             set
@@ -93,15 +91,10 @@ namespace Team1922.MVVM.ViewModels
                         }
                         break;
                 }
-                var temp = _relayOutputModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _relayOutputModel.Value = temp;
+                ModelReference.Value = temp;
             }
-        }
-
-        public void SetRelayOutput(RelayOutput relayOutput)
-        {
-            _relayOutputModel = relayOutput;
         }
         #endregion
 
@@ -110,14 +103,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _relayOutputModel.Name;
+                return ModelReference.Name;
             }
 
             set
             {
-                var temp = _relayOutputModel.Name;
+                var temp = ModelReference.Name;
                 SetProperty(ref temp, value);
-                _relayOutputModel.Name = temp;
+                ModelReference.Name = temp;
             }
         }
         #endregion
@@ -166,21 +159,8 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                var brokenName = _relayOutputModel.GetType().ToString().Split('.');
+                var brokenName = ModelReference.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
-            }
-        }
-
-        protected override RelayOutput ModelInstance
-        {
-            get
-            {
-                return _relayOutputModel;
-            }
-
-            set
-            {
-                SetRelayOutput(_relayOutputModel);
             }
         }
         #endregion

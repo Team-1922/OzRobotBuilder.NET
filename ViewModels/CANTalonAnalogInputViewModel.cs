@@ -8,7 +8,6 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class CANTalonAnalogInputViewModel : ViewModelBase<CANTalonAnalogInput>, ICANTalonAnalogInputProvider
     {
-        CANTalonAnalogInput _aiModel;
         int _canTalonID;
 
         public CANTalonAnalogInputViewModel(ICANTalonProvider parent) : base(parent)
@@ -20,14 +19,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _aiModel.ConversionRatio;
+                return ModelReference.ConversionRatio;
             }
 
             set
             {
-                var temp = _aiModel.ConversionRatio;
+                var temp = ModelReference.ConversionRatio;
                 SetProperty(ref temp, value);
-                _aiModel.ConversionRatio = temp;
+                ModelReference.ConversionRatio = temp;
             }
         }
 
@@ -35,14 +34,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _aiModel.RawValue;
+                return ModelReference.RawValue;
             }
 
             private set
             {
-                var temp = _aiModel.RawValue;
+                var temp = ModelReference.RawValue;
                 SetProperty(ref temp, value);
-                _aiModel.RawValue = temp;
+                ModelReference.RawValue = temp;
             }
         }
 
@@ -50,14 +49,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _aiModel.RawVelocity;
+                return ModelReference.RawVelocity;
             }
 
             private set
             {
-                var temp = _aiModel.RawVelocity;
+                var temp = ModelReference.RawVelocity;
                 SetProperty(ref temp, value);
-                _aiModel.RawVelocity = temp;
+                ModelReference.RawVelocity = temp;
             }
         }
 
@@ -65,14 +64,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _aiModel.SensorOffset;
+                return ModelReference.SensorOffset;
             }
 
             set
             {
-                var temp = _aiModel.SensorOffset;
+                var temp = ModelReference.SensorOffset;
                 SetProperty(ref temp, value);
-                _aiModel.SensorOffset = temp;
+                ModelReference.SensorOffset = temp;
             }
         }
 
@@ -80,14 +79,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _aiModel.Value;
+                return ModelReference.Value;
             }
 
             private set
             {
-                var temp = _aiModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _aiModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
 
@@ -95,21 +94,15 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _aiModel.Velocity;
+                return ModelReference.Velocity;
             }
 
             private set
             {
-                var temp = _aiModel.Velocity;
+                var temp = ModelReference.Velocity;
                 SetProperty(ref temp, value);
-                _aiModel.Velocity = temp;
+                ModelReference.Velocity = temp;
             }
-        }
-
-        public void SetCANTalon(CANTalon canTalon)
-        {
-            _aiModel = canTalon.AnalogInput;
-            _canTalonID = canTalon.ID;
         }
         #endregion
 
@@ -177,22 +170,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                var brokenName = _aiModel.GetType().ToString().Split('.');
+                var brokenName = ModelReference.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
             }
         }
 
-        protected override CANTalonAnalogInput ModelInstance
+        protected override void OnModelChange()
         {
-            get
-            {
-                return _aiModel;
-            }
-
-            set
-            {
-                _aiModel = value;
-            }
+            _canTalonID = (Parent as CANTalonViewModel).ID;
         }
         #endregion
     }

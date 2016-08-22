@@ -5,7 +5,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The contract for exposing a <see cref="CANTalonQuadEncoder"/> in the model
     /// </summary>
-    public interface ICANTalonQuadEncoderProvider : IInputProvider
+    public interface ICANTalonQuadEncoderProvider : IInputProvider, IProvider<CANTalonQuadEncoder>
     {
         /// <summary>
         /// The raw encoder value (in encoder untis)
@@ -31,10 +31,5 @@ namespace Team1922.MVVM.Contracts
         /// The offset applied after the conversion (in user units)
         /// </summary>
         double SensorOffset { get; set; }
-        /// <summary>
-        /// Sets the CANTalon instance for this provider
-        /// </summary>
-        /// <param name="canTalon">the canTalon to retrieve the QuadEncoder from</param>
-        void SetCANTalon(CANTalon canTalon);
     }
 }

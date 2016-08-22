@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for subsystem viewmodels
     /// </summary>
-    public interface ISubsystemProvider : IInputProvider, ICompoundProvider
+    public interface ISubsystemProvider : IInputProvider, ICompoundProvider, IProvider<Subsystem>
     {
         /// <summary>
         /// This subsystem's PWM Outputs
@@ -47,12 +47,6 @@ namespace Team1922.MVVM.Contracts
         /// Whether this subsystem has a software PID controller.  This is not recommended, but is supported
         /// </summary>
         bool SoftwarePIDEnabled { get; set; }
-        
-        /// <summary>
-        /// Sets the model instance of this subsystem provider
-        /// </summary>
-        /// <param name="subsystem">the subsystem model instance</param>
-        void SetSubsystem(Subsystem subsystem);
 
         /// <summary>
         /// Adds a model instance of a PWMOutput

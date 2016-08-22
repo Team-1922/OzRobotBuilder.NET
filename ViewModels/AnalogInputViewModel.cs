@@ -16,12 +16,7 @@ namespace Team1922.MVVM.ViewModels
         public AnalogInputViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
-
-        /// <summary>
-        /// the reference to the model object
-        /// </summary>
-        protected AnalogInput _analogInputModel;
-
+        
         #region IAnalogInputProvider
         /// <summary>
         /// The AccumulatorCenter property of the model
@@ -30,14 +25,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AccumulatorCenter;
+                return ModelReference.AccumulatorCenter;
             }
 
             set
             {
-                var temp = _analogInputModel.AccumulatorCenter;
+                var temp = ModelReference.AccumulatorCenter;
                 SetProperty(ref temp, IOService.Instance.AnalogInputs[ID].AccumulatorCenter = value);
-                _analogInputModel.AccumulatorCenter = temp;
+                ModelReference.AccumulatorCenter = temp;
             }
         }
 
@@ -48,14 +43,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AccumulatorCount;
+                return ModelReference.AccumulatorCount;
             }
 
             private set
             {
-                var temp = _analogInputModel.AccumulatorCount;
+                var temp = ModelReference.AccumulatorCount;
                 SetProperty(ref temp, value);
-                _analogInputModel.AccumulatorCount = temp;
+                ModelReference.AccumulatorCount = temp;
             }
         }
 
@@ -66,14 +61,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AccumulatorDeadband;
+                return ModelReference.AccumulatorDeadband;
             }
 
             set
             {
-                var temp = _analogInputModel.AccumulatorDeadband;
+                var temp = ModelReference.AccumulatorDeadband;
                 SetProperty(ref temp, IOService.Instance.AnalogInputs[ID].AccumulatorDeadband = value);
-                _analogInputModel.AccumulatorDeadband = temp;
+                ModelReference.AccumulatorDeadband = temp;
             }
         }
 
@@ -84,14 +79,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AccumulatorValue;
+                return ModelReference.AccumulatorValue;
             }
 
             private set
             {
-                var temp = _analogInputModel.AccumulatorValue;
+                var temp = ModelReference.AccumulatorValue;
                 SetProperty(ref temp, value);
-                _analogInputModel.AccumulatorValue = temp;
+                ModelReference.AccumulatorValue = temp;
             }
         }
 
@@ -102,14 +97,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AverageBits;
+                return ModelReference.AverageBits;
             }
 
             set
             {
-                var temp = _analogInputModel.AverageBits;
+                var temp = ModelReference.AverageBits;
                 SetProperty(ref temp, IOService.Instance.AnalogInputs[ID].AverageBits = value);
-                _analogInputModel.AverageBits = temp;
+                ModelReference.AverageBits = temp;
             }
         }
 
@@ -120,14 +115,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.ConversionRatio;
+                return ModelReference.ConversionRatio;
             }
 
             set
             {
-                var temp = _analogInputModel.ConversionRatio;
+                var temp = ModelReference.ConversionRatio;
                 SetProperty(ref temp, value);
-                _analogInputModel.ConversionRatio = temp;
+                ModelReference.ConversionRatio = temp;
             }
         }
 
@@ -138,14 +133,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _analogInputModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _analogInputModel.ID = temp;
+                ModelReference.ID = temp;
             }
         }
 
@@ -156,14 +151,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.OversampleBits;
+                return ModelReference.OversampleBits;
             }
 
             set
             {
-                var temp = _analogInputModel.OversampleBits;
+                var temp = ModelReference.OversampleBits;
                 SetProperty(ref temp, IOService.Instance.AnalogInputs[ID].OversampleBits = value);
-                _analogInputModel.OversampleBits = temp;
+                ModelReference.OversampleBits = temp;
             }
         }
 
@@ -174,14 +169,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.RawValue;
+                return ModelReference.RawValue;
             }
 
             private set
             {
-                var temp = _analogInputModel.RawValue;
+                var temp = ModelReference.RawValue;
                 SetProperty(ref temp, value);
-                _analogInputModel.RawValue = temp;
+                ModelReference.RawValue = temp;
             }
         }
 
@@ -192,14 +187,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.RawAccumulatorValue;
+                return ModelReference.RawAccumulatorValue;
             }
 
             private set
             {
-                var temp = _analogInputModel.AccumulatorValue;
+                var temp = ModelReference.AccumulatorValue;
                 SetProperty(ref temp, value);
-                _analogInputModel.AccumulatorValue = temp;
+                ModelReference.AccumulatorValue = temp;
             }
         }
 
@@ -210,14 +205,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.RawAverageValue;
+                return ModelReference.RawAverageValue;
             }
 
             private set
             {
-                var temp = _analogInputModel.AverageValue;
+                var temp = ModelReference.AverageValue;
                 SetProperty(ref temp, value);
-                _analogInputModel.AverageValue = temp;
+                ModelReference.AverageValue = temp;
             }
         }
 
@@ -228,14 +223,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.SensorOffset;
+                return ModelReference.SensorOffset;
             }
 
             set
             {
-                var temp = _analogInputModel.SensorOffset;
+                var temp = ModelReference.SensorOffset;
                 SetProperty(ref temp, value);
-                _analogInputModel.SensorOffset = temp;
+                ModelReference.SensorOffset = temp;
             }
         }
 
@@ -246,14 +241,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.Value;
+                return ModelReference.Value;
             }
 
             private set
             {
-                var temp = _analogInputModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _analogInputModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
 
@@ -264,14 +259,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.AverageValue;
+                return ModelReference.AverageValue;
             }
 
             private set
             {
-                var temp = _analogInputModel.AverageValue;
+                var temp = ModelReference.AverageValue;
                 SetProperty(ref temp, value);
-                _analogInputModel.AverageValue = temp;
+                ModelReference.AverageValue = temp;
             }
         }
 
@@ -281,15 +276,6 @@ namespace Team1922.MVVM.ViewModels
         public void ResetAccumulator()
         {
             IOService.Instance.AnalogInputs[ID].ResetAccumulator();
-        }
-        
-        /// <summary>
-        /// Sets the analog input model instance for this viewmodel
-        /// </summary>
-        /// <param name="analogInput">the analog input model instance</param>
-        public void SetAnalogInput(AnalogInput analogInput)
-        {
-            _analogInputModel = analogInput;
         }
         #endregion
 
@@ -323,14 +309,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _analogInputModel.Name;
+                return ModelReference.Name;
             }
 
             set
             {
-                var temp = _analogInputModel.Name;
+                var temp = ModelReference.Name;
                 SetProperty(ref temp, value);
-                _analogInputModel.Name = temp;
+                ModelReference.Name = temp;
             }
         }
         #endregion
@@ -374,7 +360,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -408,27 +393,17 @@ namespace Team1922.MVVM.ViewModels
             }
 
         }
-
         public override string ModelTypeName
         {
             get
             {
-                var brokenName = _analogInputModel.GetType().ToString().Split('.');
+                var brokenName = ModelReference.GetType().ToString().Split('.');
                 return brokenName[brokenName.Length - 1];
             }
         }
-
-        protected override AnalogInput ModelInstance
+        protected override void OnModelChange()
         {
-            get
-            {
-                return _analogInputModel;
-            }
-
-            set
-            {
-                SetAnalogInput(value);
-            }
+            //TODO: update the IO Service
         }
         #endregion
     }
