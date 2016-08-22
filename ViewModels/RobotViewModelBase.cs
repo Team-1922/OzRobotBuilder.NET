@@ -69,42 +69,6 @@ namespace Team1922.MVVM.ViewModels
                 ModelReference.AnalogInputSampleRate = value;
             }
         }
-        public void SetRobot(Robot robot)
-        {
-            //clear the old providers
-            _subsystemProviders.Items.Clear();
-            _eventHandlerProviders.Items.Clear();
-            _joystickProviders.Items.Clear();
-
-            //setup the new providers
-            ModelReference = robot;
-            if (null != ModelReference.Subsystem)
-            {
-                foreach (var subsystem in ModelReference.Subsystem)
-                {
-                    AddSubsystem(subsystem, false);
-                }
-            }
-            if (null != ModelReference.EventHandler)
-            {
-                foreach (var eventHandler in ModelReference.EventHandler)
-                {
-                    AddEventHandler(eventHandler, false);
-                }
-            }
-            if (null != ModelReference.Joystick)
-            {
-                foreach (var joystick in ModelReference.Joystick)
-                {
-                    AddJoystick(joystick, false);
-                }
-            }
-            if (null != ModelReference.RobotMap)
-            {
-                _robotMapProvider = new RobotMapViewModel(this);
-                _robotMapProvider.ModelReference = ModelReference.RobotMap;
-            }
-        }
         public void RemoveSubsystem(string name)
         {
             for (int i = 0; i < _subsystemProviders.Items.Count; ++i)
@@ -239,6 +203,41 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
             
+        }
+        protected override void OnModelChange()
+        {
+            //clear the old providers
+            _subsystemProviders.Items.Clear();
+            _eventHandlerProviders.Items.Clear();
+            _joystickProviders.Items.Clear();
+
+            //setup the new providers
+            if (null != ModelReference.Subsystem)
+            {
+                foreach (var subsystem in ModelReference.Subsystem)
+                {
+                    AddSubsystem(subsystem, false);
+                }
+            }
+            if (null != ModelReference.EventHandler)
+            {
+                foreach (var eventHandler in ModelReference.EventHandler)
+                {
+                    AddEventHandler(eventHandler, false);
+                }
+            }
+            if (null != ModelReference.Joystick)
+            {
+                foreach (var joystick in ModelReference.Joystick)
+                {
+                    AddJoystick(joystick, false);
+                }
+            }
+            if (null != ModelReference.RobotMap)
+            {
+                _robotMapProvider = new RobotMapViewModel(this);
+                _robotMapProvider.ModelReference = ModelReference.RobotMap;
+            }
         }
         #endregion
 

@@ -119,8 +119,8 @@ namespace Team1922.OzRobotBuilder.NET
             //  and fix them later
             TypeRestrictions.ThrowsExceptionsOnValidationFailure = false;
 
-            SetRobot(LoadModelFromXmlModel());
-            IOService.Instance.SetRobot(_robotModel);          
+            ModelReference = LoadModelFromXmlModel();
+            IOService.Instance.SetRobot(ModelReference);          
 
             //EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
         }
@@ -204,7 +204,7 @@ namespace Team1922.OzRobotBuilder.NET
                     }
                     else if (BufferDirty)
                     {
-                        SetRobot(LoadModelFromXmlModel());
+                        ModelReference = LoadModelFromXmlModel();
                     }
                 }
             }
@@ -355,7 +355,7 @@ namespace Team1922.OzRobotBuilder.NET
                 XDocument documentFromDesignerState = new XDocument();
                 using (XmlWriter w = documentFromDesignerState.CreateWriter())
                 {
-                    serializer.Serialize(w, _robotModel);
+                    serializer.Serialize(w, ModelReference);
                 }
 
                 _synchronizing = true;
