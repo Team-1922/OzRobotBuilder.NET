@@ -6,27 +6,25 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class CANTalonQuadEncoderViewModel : ViewModelBase, ICANTalonQuadEncoderProvider
+    internal class CANTalonQuadEncoderViewModel : ViewModelBase<CANTalonQuadEncoder>, ICANTalonQuadEncoderProvider
     {
-        CANTalonQuadEncoder _quadEncoderModel;
-        int _canTalonID;
-
         public CANTalonQuadEncoderViewModel(ICANTalonProvider parent) : base(parent)
         {
         }
 
+        #region ICANTalonQuadEncoderProvider
         public double ConversionRatio
         {
             get
             {
-                return _quadEncoderModel.ConversionRatio;
+                return ModelReference.ConversionRatio;
             }
 
             set
             {
-                var temp = _quadEncoderModel.ConversionRatio;
+                var temp = ModelReference.ConversionRatio;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.ConversionRatio = temp;
+                ModelReference.ConversionRatio = temp;
             }
         }
 
@@ -34,14 +32,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.RawValue;
+                return ModelReference.RawValue;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.RawValue;
+                var temp = ModelReference.RawValue;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.RawValue = temp;
+                ModelReference.RawValue = temp;
             }
         }
 
@@ -49,14 +47,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.RawVelocity;
+                return ModelReference.RawVelocity;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.RawVelocity;
+                var temp = ModelReference.RawVelocity;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.RawVelocity = temp;
+                ModelReference.RawVelocity = temp;
             }
         }
 
@@ -64,14 +62,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.SensorOffset;
+                return ModelReference.SensorOffset;
             }
 
             set
             {
-                var temp = _quadEncoderModel.SensorOffset;
+                var temp = ModelReference.SensorOffset;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.SensorOffset = temp;
+                ModelReference.SensorOffset = temp;
             }
         }
 
@@ -79,14 +77,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.Value;
+                return ModelReference.Value;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
 
@@ -94,17 +92,19 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.Velocity;
+                return ModelReference.Velocity;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.Velocity;
+                var temp = ModelReference.Velocity;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.Velocity = temp;
+                ModelReference.Velocity = temp;
             }
         }
+        #endregion
 
+        #region IProvider
         public string Name
         {
             get
@@ -112,10 +112,20 @@ namespace Team1922.MVVM.ViewModels
                 return "Quadrature Encoder";
             }
         }
+        public string GetModelJson()
+        {
+            return JsonSerialize(ModelReference);
+        }
+        public void SetModelJson(string text)
+        {
+            ModelReference = JsonDeserialize<CANTalonQuadEncoder>(text);
+        }
+        #endregion
 
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
-            switch(key)
+            switch (key)
             {
                 case "ConversionRatio":
                     return ConversionRatio.ToString();
@@ -135,10 +145,9 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
-            switch(key)
+            switch (key)
             {
                 case "ConversionRatio":
                     ConversionRatio = SafeCastDouble(value);
@@ -150,22 +159,13 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
         }
-
-        public override string ModelTypeName
+        protected override void OnModelChange()
         {
-            get
-            {
-                var brokenName = _quadEncoderModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
+            _canTalonID = (Parent as CANTalonViewModel).ID;
         }
+        #endregion
 
-        public void SetCANTalon(CANTalon canTalon)
-        {
-            _quadEncoderModel = canTalon.QuadEncoder;
-            _canTalonID = canTalon.ID;
-        }
-
+        #region IInputProvider
         public void UpdateInputValues()
         {
             RawVelocity = IOService.Instance.CANTalons[_canTalonID].EncoderVelocity;
@@ -174,5 +174,10 @@ namespace Team1922.MVVM.ViewModels
             RawValue = IOService.Instance.CANTalons[_canTalonID].EncoderValue;
             Value = RawValue * ConversionRatio + SensorOffset;
         }
+        #endregion
+
+        #region Private Fields
+        int _canTalonID;
+        #endregion
     }
 }

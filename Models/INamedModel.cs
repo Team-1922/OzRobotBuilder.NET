@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace Team1922.MVVM.Models
 {
-    public partial class OnChangeEventHandler
+    public interface INamedModel
     {
+        string Name { get; set; }
     }
 }

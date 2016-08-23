@@ -32,5 +32,30 @@ namespace Team1922.MVVM.Contracts
         /// The parent this provider belongs to
         /// </summary>
         IProvider Parent { get; }
+        /// <summary>
+        /// Used for json serialization of models
+        /// </summary>
+        /// <returns>the json text of the model instance</returns>
+        string GetModelJson();
+        /// <summary>
+        /// Used for json deserialization of models
+        /// </summary>
+        /// <param name="text">the json text to deserialize</param>
+        void SetModelJson(string text);
+        /// <summary>
+        /// The model instance of this class
+        /// </summary>
+        //object ModelReference { get; set; }
+    }
+    /// <summary>
+    /// This gives the provider a strongly-typed model instance associated with it.
+    /// </summary>
+    /// <typeparam name="ModelType">the type of the model</typeparam>
+    public interface IProvider<ModelType> : IProvider
+    {
+        /// <summary>
+        /// a strongly typed model reference
+        /// </summary>
+        ModelType ModelReference { get; set; }
     }
 }

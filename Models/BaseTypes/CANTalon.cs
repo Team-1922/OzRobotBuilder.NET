@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Models
     /// All of the information which a Talon SRX can have
     /// This is the big kahuna of all of the primary data types
     /// </summary>
-    public partial class CANTalon
+    public partial class CANTalon : INamedModel
     {
     }
     /// <summary>

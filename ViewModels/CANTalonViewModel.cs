@@ -10,18 +10,13 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// The viewmodel for each CANTalon instance
     /// </summary>
-    internal class CANTalonViewModel : ViewModelBase, ICANTalonProvider
+    internal class CANTalonViewModel : ViewModelBase<CANTalon>, ICANTalonProvider
     {
         public CANTalonViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
-
-        /// <summary>
-        /// The CANTalon model reference
-        /// </summary>
-        protected CANTalon _canTalonModel;
-
-
+        
+        #region ICANTalonProvider
         /// <summary>
         /// The QuadEncoder property of the CANTalon model
         /// </summary>
@@ -73,14 +68,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ForwardLimitSwitch;
+                return ModelReference.ForwardLimitSwitch;
             }
 
             private set
             {
-                var temp = _canTalonModel.ForwardLimitSwitch;
+                var temp = ModelReference.ForwardLimitSwitch;
                 SetProperty(ref temp, value);
-                _canTalonModel.ForwardLimitSwitch = temp;
+                ModelReference.ForwardLimitSwitch = temp;
             }
         }
 
@@ -91,14 +86,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ReverseLimitSwitch;
+                return ModelReference.ReverseLimitSwitch;
             }
 
             private set
             {
-                var temp = _canTalonModel.ReverseLimitSwitch;
+                var temp = ModelReference.ReverseLimitSwitch;
                 SetProperty(ref temp, value);
-                _canTalonModel.ReverseLimitSwitch = temp;
+                ModelReference.ReverseLimitSwitch = temp;
             }
         }
 
@@ -109,14 +104,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ForwardSoftLimitTripped;
+                return ModelReference.ForwardSoftLimitTripped;
             }
 
             private set
             {
-                var temp = _canTalonModel.ForwardSoftLimitTripped;
+                var temp = ModelReference.ForwardSoftLimitTripped;
                 SetProperty(ref temp, value);
-                _canTalonModel.ForwardSoftLimitTripped = temp;
+                ModelReference.ForwardSoftLimitTripped = temp;
             }
         }
 
@@ -127,14 +122,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ReverseSoftLimitTripped;
+                return ModelReference.ReverseSoftLimitTripped;
             }
 
             private set
             {
-                var temp = _canTalonModel.ReverseSoftLimitTripped;
+                var temp = ModelReference.ReverseSoftLimitTripped;
                 SetProperty(ref temp, value);
-                _canTalonModel.ReverseSoftLimitTripped = temp;
+                ModelReference.ReverseSoftLimitTripped = temp;
             }
         }
 
@@ -145,14 +140,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ControlMode;
+                return ModelReference.ControlMode;
             }
 
             set
             {
-                var temp = _canTalonModel.ControlMode;
+                var temp = ModelReference.ControlMode;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ControlMode = value);
-                _canTalonModel.ControlMode = temp;
+                ModelReference.ControlMode = temp;
             }
         }
 
@@ -163,14 +158,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.EnabledPIDProfile;
+                return ModelReference.EnabledPIDProfile;
             }
 
             set
             {
-                var temp = _canTalonModel.EnabledPIDProfile;
+                var temp = ModelReference.EnabledPIDProfile;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].EnabledPIDProfile = value);
-                _canTalonModel.EnabledPIDProfile = temp;
+                ModelReference.EnabledPIDProfile = temp;
             }
         }
 
@@ -181,14 +176,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.FeedbackDevice;
+                return ModelReference.FeedbackDevice;
             }
 
             set
             {
-                var temp = _canTalonModel.FeedbackDevice;
+                var temp = ModelReference.FeedbackDevice;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].FeedbackDevice = value);
-                _canTalonModel.FeedbackDevice = temp;
+                ModelReference.FeedbackDevice = temp;
             }
         }
 
@@ -199,14 +194,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ForwardLimitSwitchEnabled;
+                return ModelReference.ForwardLimitSwitchEnabled;
             }
 
             set
             {
-                var temp = _canTalonModel.ForwardLimitSwitchEnabled;
+                var temp = ModelReference.ForwardLimitSwitchEnabled;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ForwardLimitSwitchEnabled = value);
-                _canTalonModel.ForwardLimitSwitchEnabled = temp;
+                ModelReference.ForwardLimitSwitchEnabled = temp;
             }
         }
 
@@ -217,12 +212,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ForwardSoftLimit;
+                return ModelReference.ForwardSoftLimit;
             }
 
             set
             {
-                var temp = _canTalonModel.ForwardSoftLimit;
+                var temp = ModelReference.ForwardSoftLimit;
                 switch(FeedbackDevice) //TODO: this might need some refining
                 {
                     case CANTalonFeedbackDevice.AnalogEncoder:
@@ -234,7 +229,7 @@ namespace Team1922.MVVM.ViewModels
                         break;
                 }
                 SetProperty(ref temp, value);
-                _canTalonModel.ForwardSoftLimit = temp;
+                ModelReference.ForwardSoftLimit = temp;
             }
         }
 
@@ -245,14 +240,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ForwardSoftLimitEnabled;
+                return ModelReference.ForwardSoftLimitEnabled;
             }
 
             set
             {
-                var temp = _canTalonModel.ForwardSoftLimitEnabled;
+                var temp = ModelReference.ForwardSoftLimitEnabled;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ForwardSoftLimitEnabled = value);
-                _canTalonModel.ForwardSoftLimitEnabled = temp;
+                ModelReference.ForwardSoftLimitEnabled = temp;
             }
         }
 
@@ -263,32 +258,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _canTalonModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _canTalonModel.ID = temp;
-            }
-        }
-
-        /// <summary>
-        /// The Name property of the CANTalon model
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _canTalonModel.Name;
-            }
-
-            set
-            {
-                var temp = _canTalonModel.Name;
-                SetProperty(ref temp, value);
-                _canTalonModel.Name = temp;
+                ModelReference.ID = temp;
             }
         }
 
@@ -299,14 +276,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.NeutralMode;
+                return ModelReference.NeutralMode;
             }
 
             set
             {
-                var temp = _canTalonModel.NeutralMode;
+                var temp = ModelReference.NeutralMode;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].NeutralMode = value);
-                _canTalonModel.NeutralMode = temp;
+                ModelReference.NeutralMode = temp;
             }
         }
 
@@ -317,14 +294,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.NominalForwardVoltage;
+                return ModelReference.NominalForwardVoltage;
             }
 
             set
             {
-                var temp = _canTalonModel.NominalForwardVoltage;
+                var temp = ModelReference.NominalForwardVoltage;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].NominalForwardVoltage = value);
-                _canTalonModel.NominalForwardVoltage = temp;
+                ModelReference.NominalForwardVoltage = temp;
             }
         }
 
@@ -335,14 +312,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.NominalReverseVoltage;
+                return ModelReference.NominalReverseVoltage;
             }
 
             set
             {
-                var temp = _canTalonModel.NominalReverseVoltage;
+                var temp = ModelReference.NominalReverseVoltage;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].NominalReverseVoltage = value);
-                _canTalonModel.NominalReverseVoltage = temp;
+                ModelReference.NominalReverseVoltage = temp;
             }
         }
 
@@ -353,14 +330,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.PeakForwardVoltage;
+                return ModelReference.PeakForwardVoltage;
             }
 
             set
             {
-                var temp = _canTalonModel.PeakForwardVoltage;
+                var temp = ModelReference.PeakForwardVoltage;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].PeakForwardVoltage = value);
-                _canTalonModel.PeakForwardVoltage = temp;
+                ModelReference.PeakForwardVoltage = temp;
             }
         }
 
@@ -371,14 +348,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.PeakReverseVoltage;
+                return ModelReference.PeakReverseVoltage;
             }
 
             set
             {
-                var temp = _canTalonModel.PeakReverseVoltage;
+                var temp = ModelReference.PeakReverseVoltage;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].PeakReverseVoltage = value);
-                _canTalonModel.PeakReverseVoltage = temp;
+                ModelReference.PeakReverseVoltage = temp;
             }
         }
 
@@ -389,14 +366,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ReverseClosedLoopOutput;
+                return ModelReference.ReverseClosedLoopOutput;
             }
 
             set
             {
-                var temp = _canTalonModel.ReverseClosedLoopOutput;
+                var temp = ModelReference.ReverseClosedLoopOutput;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseClosedLoopOutput = value);
-                _canTalonModel.ReverseClosedLoopOutput = temp;
+                ModelReference.ReverseClosedLoopOutput = temp;
             }
         }
 
@@ -407,14 +384,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ReverseLimitSwitchEnabled;
+                return ModelReference.ReverseLimitSwitchEnabled;
             }
 
             set
             {
-                var temp = _canTalonModel.ReverseLimitSwitchEnabled;
+                var temp = ModelReference.ReverseLimitSwitchEnabled;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseLimitSwitchEnabled = value);
-                _canTalonModel.ReverseLimitSwitchEnabled = temp;
+                ModelReference.ReverseLimitSwitchEnabled = temp;
             }
         }
 
@@ -425,14 +402,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ReversePercentVBusOutput;
+                return ModelReference.ReversePercentVBusOutput;
             }
 
             set
             {
-                var temp = _canTalonModel.ReversePercentVBusOutput;
+                var temp = ModelReference.ReversePercentVBusOutput;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReversePercentVBusOutput = value);
-                _canTalonModel.ReversePercentVBusOutput = temp;
+                ModelReference.ReversePercentVBusOutput = temp;
             }
         }
 
@@ -443,14 +420,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ReverseSensor;
+                return ModelReference.ReverseSensor;
             }
 
             set
             {
-                var temp = _canTalonModel.ReverseSensor;
+                var temp = ModelReference.ReverseSensor;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseSensor = value);
-                _canTalonModel.ReverseSensor = temp;
+                ModelReference.ReverseSensor = temp;
             }
         }
 
@@ -461,12 +438,12 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ReverseSoftLimit;
+                return ModelReference.ReverseSoftLimit;
             }
 
             set
             {
-                var temp = _canTalonModel.ReverseSoftLimit;
+                var temp = ModelReference.ReverseSoftLimit;
                 switch (FeedbackDevice) //TODO: this might need some refining
                 {
                     case CANTalonFeedbackDevice.AnalogEncoder:
@@ -478,7 +455,7 @@ namespace Team1922.MVVM.ViewModels
                         break;
                 }
                 SetProperty(ref temp, value);
-                _canTalonModel.ReverseSoftLimit = temp;
+                ModelReference.ReverseSoftLimit = temp;
             }
         }
 
@@ -489,14 +466,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ReverseSoftLimitEnabled;
+                return ModelReference.ReverseSoftLimitEnabled;
             }
 
             set
             {
-                var temp = _canTalonModel.ReverseSoftLimitEnabled;
+                var temp = ModelReference.ReverseSoftLimitEnabled;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseSoftLimitEnabled = value);
-                _canTalonModel.ReverseSoftLimitEnabled = temp;
+                ModelReference.ReverseSoftLimitEnabled = temp;
             }
         }
 
@@ -507,7 +484,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.Value;
+                return ModelReference.Value;
             }
 
             set
@@ -543,9 +520,9 @@ namespace Team1922.MVVM.ViewModels
                         }
                         break;
                 }
-                var temp = _canTalonModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _canTalonModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
 
@@ -556,14 +533,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ZeroSensorPositionOnIndexEnabled;
+                return ModelReference.ZeroSensorPositionOnIndexEnabled;
             }
 
             set
             {
-                var temp = _canTalonModel.ZeroSensorPositionOnIndexEnabled;
+                var temp = ModelReference.ZeroSensorPositionOnIndexEnabled;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ZeroSensorPositionOnIndexEnabled = value);
-                _canTalonModel.ZeroSensorPositionOnIndexEnabled = temp;
+                ModelReference.ZeroSensorPositionOnIndexEnabled = temp;
             }
         }
 
@@ -574,22 +551,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _canTalonModel.ZeroSensorPositionOnRisingEdge;
+                return ModelReference.ZeroSensorPositionOnRisingEdge;
             }
 
             set
             {
-                var temp = _canTalonModel.ZeroSensorPositionOnRisingEdge;
+                var temp = ModelReference.ZeroSensorPositionOnRisingEdge;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ZeroSensorPositionOnRisingEdge = value);
-                _canTalonModel.ZeroSensorPositionOnRisingEdge = temp;
-            }
-        }
-
-        public IEnumerable<IProvider> Children
-        {
-            get
-            {
-                return _children.Values;
+                ModelReference.ZeroSensorPositionOnRisingEdge = temp;
             }
         }
 
@@ -598,35 +567,21 @@ namespace Team1922.MVVM.ViewModels
         /// </summary>
         public void SetCANTalon(CANTalon canTalon)
         {
-            _canTalonModel = canTalon;
 
-            _quadEncoderProvider = null;
-            _analogInputProvider = null;
-            _pidConfig0Provider = null;
-            _pidConfig1Provider = null;
+        }
+        #endregion
 
-            if (null != _canTalonModel.QuadEncoder)
+        #region ICompoundProvider
+        public IEnumerable<IProvider> Children
+        {
+            get
             {
-                _quadEncoderProvider = new CANTalonQuadEncoderViewModel(this);
-                _quadEncoderProvider.SetCANTalon(canTalon);
-            }
-            if (null != _canTalonModel.AnalogInput)
-            {
-                _analogInputProvider = new CANTalonAnalogInputViewModel(this);
-                _analogInputProvider.SetCANTalon(canTalon);
-            }
-            if (null != _canTalonModel.PIDConfig0)
-            {
-                _pidConfig0Provider = new PIDControllerSRXViewModel(this);
-                _pidConfig0Provider.SetPIDController(canTalon.PIDConfig0);
-            }
-            if (null != _canTalonModel.PIDConfig1)
-            {
-                _pidConfig1Provider = new PIDControllerSRXViewModel(this);
-                _pidConfig1Provider.SetPIDController(canTalon.PIDConfig1);
+                return _children.Values;
             }
         }
+        #endregion
 
+        #region IInputProvider
         /// <summary>
         /// Called every update cycle to update input values from the <see cref="IRobotIOService"/>
         /// </summary>
@@ -641,66 +596,50 @@ namespace Team1922.MVVM.ViewModels
             ForwardSoftLimit = IOService.Instance.CANTalons[ID].ForwardSoftLimit;
             ReverseSoftLimit = IOService.Instance.CANTalons[ID].ReverseSoftLimit;
         }
+        #endregion
 
-        #region Private Fields
-        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
-
-        ICANTalonQuadEncoderProvider _quadEncoderProvider
+        #region IProvider
+        /// <summary>
+        /// The Name property of the CANTalon model
+        /// </summary>
+        public string Name
         {
             get
             {
-                return _children["_quadEncoderProvider"] as ICANTalonQuadEncoderProvider;
+                return ModelReference.Name;
             }
 
             set
             {
-                _children["_quadEncoderProvider"] = value;
+                var temp = ModelReference.Name;
+                SetProperty(ref temp, value);
+                ModelReference.Name = temp;
             }
         }
-        ICANTalonAnalogInputProvider _analogInputProvider
+        public string GetModelJson()
         {
-            get
-            {
-                return _children["_analogInputProvider"] as ICANTalonAnalogInputProvider;
-            }
-
-            set
-            {
-                _children["_analogInputProvider"] = value;
-            }
+            return JsonSerialize(ModelReference);
         }
-        IPIDControllerSRXProvider _pidConfig0Provider
+        public void SetModelJson(string text)
         {
-            get
-            {
-                return _children["_pidConfig0Provider"] as IPIDControllerSRXProvider;
-            }
-
-            set
-            {
-                _children["_pidConfig0Provider"] = value;
-            }
+            SetCANTalon(JsonDeserialize<CANTalon>(text));
         }
-        IPIDControllerSRXProvider _pidConfig1Provider
-        {
-            get
-            {
-                return _children["_pidConfig1Provider"] as IPIDControllerSRXProvider;
-            }
+        #endregion
 
-            set
-            {
-                _children["_pidConfig1Provider"] = value;
-            }
-        }
-
-
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
             {
+                case "PIDConfig0":
+                    return _pidConfig0Provider.GetModelJson();
+                case "PIDConfig1":
+                    return _pidConfig1Provider.GetModelJson();
+                case "QuadEncoder":
+                    return _quadEncoderProvider.GetModelJson();
                 case "AnalogInput":
-                    return "Analog Input Config";
+                    return _analogInputProvider.GetModelJson();
+
                 case "ControlMode":
                     return ControlMode.ToString();
                 case "EnabledPIDProfile":
@@ -731,12 +670,6 @@ namespace Team1922.MVVM.ViewModels
                     return PeakForwardVoltage.ToString();
                 case "PeakReverseVoltage":
                     return PeakReverseVoltage.ToString();
-                case "PIDConfig0":
-                    return "PIDConfiguration 0";
-                case "PIDConfig1":
-                    return "PIDConfiguration 1";
-                case "QuadEncoder":
-                    return "Quadrature Encoder";
                 case "ReverseClosedLoopOutput":
                     return ReverseClosedLoopOutput.ToString();
                 case "ReverseLimitSwitch":
@@ -763,11 +696,23 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
             {
+                case "PIDConfig0":
+                    _pidConfig0Provider.SetModelJson(value);
+                    break;
+                case "PIDConfig1":
+                    _pidConfig1Provider.SetModelJson(value);
+                    break;
+                case "QuadEncoder":
+                    _quadEncoderProvider.SetModelJson(value);
+                    break;
+                case "AnalogInput":
+                    _analogInputProvider.SetModelJson(value);
+                    break;
+
                 case "ControlMode":
                     ControlMode = SafeCastEnum<CANTalonControlMode>(value);
                     break;
@@ -850,16 +795,87 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
+        protected override void OnModelChange()
+        {
+            _quadEncoderProvider = null;
+            _analogInputProvider = null;
+            _pidConfig0Provider = null;
+            _pidConfig1Provider = null;
 
-        public override string ModelTypeName
+            if (null != ModelReference.QuadEncoder)
+            {
+                _quadEncoderProvider = new CANTalonQuadEncoderViewModel(this);
+                _quadEncoderProvider.ModelReference = ModelReference.QuadEncoder;
+            }
+            if (null != ModelReference.AnalogInput)
+            {
+                _analogInputProvider = new CANTalonAnalogInputViewModel(this);
+                _analogInputProvider.ModelReference = ModelReference.AnalogInput;
+            }
+            if (null != ModelReference.PIDConfig0)
+            {
+                _pidConfig0Provider = new PIDControllerSRXViewModel(this);
+                _pidConfig0Provider.ModelReference = ModelReference.PIDConfig0;
+            }
+            if (null != ModelReference.PIDConfig1)
+            {
+                _pidConfig1Provider = new PIDControllerSRXViewModel(this);
+                _pidConfig1Provider.ModelReference = ModelReference.PIDConfig1;
+            }
+        }
+        #endregion
+
+        #region Private Fields
+        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+
+        ICANTalonQuadEncoderProvider _quadEncoderProvider
         {
             get
             {
-                var brokenName = _canTalonModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
+                return _children["_quadEncoderProvider"] as ICANTalonQuadEncoderProvider;
+            }
+
+            set
+            {
+                _children["_quadEncoderProvider"] = value;
             }
         }
+        ICANTalonAnalogInputProvider _analogInputProvider
+        {
+            get
+            {
+                return _children["_analogInputProvider"] as ICANTalonAnalogInputProvider;
+            }
 
+            set
+            {
+                _children["_analogInputProvider"] = value;
+            }
+        }
+        IPIDControllerSRXProvider _pidConfig0Provider
+        {
+            get
+            {
+                return _children["_pidConfig0Provider"] as IPIDControllerSRXProvider;
+            }
+
+            set
+            {
+                _children["_pidConfig0Provider"] = value;
+            }
+        }
+        IPIDControllerSRXProvider _pidConfig1Provider
+        {
+            get
+            {
+                return _children["_pidConfig1Provider"] as IPIDControllerSRXProvider;
+            }
+
+            set
+            {
+                _children["_pidConfig1Provider"] = value;
+            }
+        }
         #endregion
     }
 }

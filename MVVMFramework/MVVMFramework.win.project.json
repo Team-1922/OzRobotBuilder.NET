@@ -1,10 +1,9 @@
 ﻿{
   "runtimes": {
-    "win": { } 
-   },
+    "win": {}
+  },
   "frameworks": {
-    "net461": {
-    
-    }
-  }
+    "net461": {}
+  },
+  "dependencies": {}
 }

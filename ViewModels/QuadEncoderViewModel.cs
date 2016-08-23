@@ -6,26 +6,25 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class QuadEncoderViewModel : ViewModelBase, IQuadEncoderProvider
+    internal class QuadEncoderViewModel : ViewModelBase<QuadEncoder>, IQuadEncoderProvider
     {
-        QuadEncoder _quadEncoderModel;
-
         public QuadEncoderViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 
+        #region IQuadEncoderProvider
         public double ConversionRatio
         {
             get
             {
-                return _quadEncoderModel.ConversionRatio;
+                return ModelReference.ConversionRatio;
             }
 
             set
             {
-                var temp = _quadEncoderModel.ConversionRatio;
+                var temp = ModelReference.ConversionRatio;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.ConversionRatio = temp;
+                ModelReference.ConversionRatio = temp;
             }
         }
 
@@ -33,14 +32,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _quadEncoderModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.ID = temp;
+                ModelReference.ID = temp;
             }
         }
 
@@ -48,29 +47,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.ID1;
+                return ModelReference.ID1;
             }
 
             set
             {
-                var temp = _quadEncoderModel.ID1;
+                var temp = ModelReference.ID1;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.ID1 = temp;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return _quadEncoderModel.Name;
-            }
-
-            set
-            {
-                var temp = _quadEncoderModel.Name;
-                SetProperty(ref temp, value);
-                _quadEncoderModel.Name = temp;
+                ModelReference.ID1 = temp;
             }
         }
 
@@ -78,14 +62,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.RawValue;
+                return ModelReference.RawValue;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.RawValue;
+                var temp = ModelReference.RawValue;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.RawValue = temp;
+                ModelReference.RawValue = temp;
             }
         }
 
@@ -93,14 +77,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.RawVelocity;
+                return ModelReference.RawVelocity;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.RawVelocity;
+                var temp = ModelReference.RawVelocity;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.RawVelocity = temp;
+                ModelReference.RawVelocity = temp;
             }
         }
 
@@ -108,14 +92,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.Value;
+                return ModelReference.Value;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
 
@@ -123,17 +107,52 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _quadEncoderModel.Velocity;
+                return ModelReference.Velocity;
             }
 
             private set
             {
-                var temp = _quadEncoderModel.Velocity;
+                var temp = ModelReference.Velocity;
                 SetProperty(ref temp, value);
-                _quadEncoderModel.Velocity = temp;
+                ModelReference.Velocity = temp;
             }
         }
+        #endregion
 
+        #region IInputProvider
+        public void UpdateInputValues()
+        {
+            var thisInput = IOService.Instance.DigitalInputs[ID] as IQuadEncoderIOService;
+            if (null == thisInput)
+                //this means this digital input was not constructed with the quad encoder IO Service
+                return;//TODO: throw an exception or log
+
+            RawValue = (long)thisInput.Value;
+            Value = RawValue * ConversionRatio;
+
+            RawVelocity = thisInput.Velocity;
+            Velocity = RawVelocity * ConversionRatio;
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return ModelReference.Name;
+            }
+
+            set
+            {
+                var temp = ModelReference.Name;
+                SetProperty(ref temp, value);
+                ModelReference.Name = temp;
+            }
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
@@ -158,7 +177,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -192,34 +210,6 @@ namespace Team1922.MVVM.ViewModels
             }
 
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _quadEncoderModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-
-
-        public void SetQuadEncoder(QuadEncoder quadEncoder)
-        {
-            _quadEncoderModel = quadEncoder;
-        }
-
-        public void UpdateInputValues()
-        {
-            var thisInput = IOService.Instance.DigitalInputs[ID] as IQuadEncoderIOService;
-            if (null == thisInput)
-                //this means this digital input was not constructed with the quad encoder IO Service
-                return;//TODO: throw an exception or log
-
-            RawValue = (long)thisInput.Value;
-            Value = RawValue * ConversionRatio;
-
-            RawVelocity = thisInput.Velocity;
-            Velocity = RawVelocity * ConversionRatio;
-        }
+        #endregion
     }
 }

@@ -6,26 +6,25 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class RelayOutputViewModel : ViewModelBase, IRelayOutputProvider
+    internal class RelayOutputViewModel : ViewModelBase<RelayOutput>, IRelayOutputProvider
     {
-        RelayOutput _relayOutputModel;
-
         public RelayOutputViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 
+        #region IRelayOutputProvider
         public RelayDirection Direction
         {
             get
             {
-                return _relayOutputModel.Direction;
+                return ModelReference.Direction;
             }
 
             set
             {
-                var temp = _relayOutputModel.Direction;
+                var temp = ModelReference.Direction;
                 SetProperty(ref temp, value);
-                _relayOutputModel.Direction = temp;
+                ModelReference.Direction = temp;
             }
         }
 
@@ -33,29 +32,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _relayOutputModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _relayOutputModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _relayOutputModel.ID = temp;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return _relayOutputModel.Name;
-            }
-
-            set
-            {
-                var temp = _relayOutputModel.Name;
-                SetProperty(ref temp, value);
-                _relayOutputModel.Name = temp;
+                ModelReference.ID = temp;
             }
         }
 
@@ -63,7 +47,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _relayOutputModel.Value;
+                return ModelReference.Value;
             }
 
             set
@@ -107,12 +91,31 @@ namespace Team1922.MVVM.ViewModels
                         }
                         break;
                 }
-                var temp = _relayOutputModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _relayOutputModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
+        #endregion
 
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return ModelReference.Name;
+            }
+
+            set
+            {
+                var temp = ModelReference.Name;
+                SetProperty(ref temp, value);
+                ModelReference.Name = temp;
+            }
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch(key)
@@ -129,7 +132,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -151,19 +153,6 @@ namespace Team1922.MVVM.ViewModels
             }
 
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _relayOutputModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-
-        public void SetRelayOutput(RelayOutput relayOutput)
-        {
-            _relayOutputModel = relayOutput;
-        }
+        #endregion
     }
 }

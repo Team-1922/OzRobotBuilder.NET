@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Team1922.MVVM.Models
 {
-    public partial class RelayOutput
+    public partial class RelayOutput : INamedModel
     {
         /// <summary>
         /// Gets the boolean state of the forward value

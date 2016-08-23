@@ -6,26 +6,26 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class PIDControllerSRXViewModel : ViewModelBase, IPIDControllerSRXProvider
+    //This is broken in a few ways; namely not being bound to the IO service at all
+    internal class PIDControllerSRXViewModel : ViewModelBase<PIDControllerSRX>, IPIDControllerSRXProvider
     {
-        PIDControllerSRX _pidControllerSRXModel;
-
         public PIDControllerSRXViewModel(ICANTalonProvider parent) : base(parent)
         {
         }
 
+        #region IPIDControllerSRXProvider
         public int AllowableCloseLoopError
         {
             get
             {
-                return _pidControllerSRXModel.AllowableCloseLoopError;
+                return ModelReference.AllowableCloseLoopError;
             }
 
             set
             {
-                var temp = _pidControllerSRXModel.AllowableCloseLoopError;
+                var temp = ModelReference.AllowableCloseLoopError;
                 SetProperty(ref temp, value);
-                _pidControllerSRXModel.AllowableCloseLoopError = temp;
+                ModelReference.AllowableCloseLoopError = temp;
             }
         }
 
@@ -33,14 +33,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSRXModel.CloseLoopRampRate;
+                return ModelReference.CloseLoopRampRate;
             }
 
             set
             {
-                var temp = _pidControllerSRXModel.CloseLoopRampRate;
+                var temp = ModelReference.CloseLoopRampRate;
                 SetProperty(ref temp, value);
-                _pidControllerSRXModel.CloseLoopRampRate = temp;
+                ModelReference.CloseLoopRampRate = temp;
             }
         }
 
@@ -48,14 +48,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSRXModel.P;
+                return ModelReference.P;
             }
 
             set
             {
-                var temp = _pidControllerSRXModel.P;
+                var temp = ModelReference.P;
                 SetProperty(ref temp, value);
-                _pidControllerSRXModel.P = temp;
+                ModelReference.P = temp;
             }
         }
 
@@ -63,14 +63,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSRXModel.I;
+                return ModelReference.I;
             }
 
             set
             {
-                var temp = _pidControllerSRXModel.I;
+                var temp = ModelReference.I;
                 SetProperty(ref temp, value);
-                _pidControllerSRXModel.I = temp;
+                ModelReference.I = temp;
             }
         }
 
@@ -78,14 +78,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSRXModel.D;
+                return ModelReference.D;
             }
 
             set
             {
-                var temp = _pidControllerSRXModel.D;
+                var temp = ModelReference.D;
                 SetProperty(ref temp, value);
-                _pidControllerSRXModel.D = temp;
+                ModelReference.D = temp;
             }
         }
 
@@ -93,14 +93,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSRXModel.F;
+                return ModelReference.F;
             }
 
             set
             {
-                var temp = _pidControllerSRXModel.F;
+                var temp = ModelReference.F;
                 SetProperty(ref temp, value);
-                _pidControllerSRXModel.F = temp;
+                ModelReference.F = temp;
             }
         }
 
@@ -108,14 +108,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSRXModel.IZone;
+                return ModelReference.IZone;
             }
 
             set
             {
-                var temp = _pidControllerSRXModel.IZone;
+                var temp = ModelReference.IZone;
                 SetProperty(ref temp, value);
-                _pidControllerSRXModel.IZone = temp;
+                ModelReference.IZone = temp;
             }
         }
 
@@ -123,17 +123,19 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSRXModel.SourceType;
+                return ModelReference.SourceType;
             }
 
             set
             {
-                var temp = _pidControllerSRXModel.SourceType;
+                var temp = ModelReference.SourceType;
                 SetProperty(ref temp, value);
-                _pidControllerSRXModel.SourceType = temp;
+                ModelReference.SourceType = temp;
             }
         }
+        #endregion
 
+        #region IProvider
         public string Name
         {
             get
@@ -141,7 +143,9 @@ namespace Team1922.MVVM.ViewModels
                 return "PID Controller";
             }
         }
+        #endregion
 
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
@@ -168,7 +172,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -202,19 +205,6 @@ namespace Team1922.MVVM.ViewModels
             }
 
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _pidControllerSRXModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-
-        public void SetPIDController(PIDControllerSRX pidController)
-        {
-            _pidControllerSRXModel = pidController;
-        }
+        #endregion
     }
 }

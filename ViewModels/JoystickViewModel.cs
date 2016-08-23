@@ -11,46 +11,15 @@ using Team1922.MVVM.Services;
 namespace Team1922.MVVM.ViewModels
 {
 
-    internal class JoystickViewModel : ViewModelBase, IJoystickProvider
+    internal class JoystickViewModel : ViewModelBase<Joystick>, IJoystickProvider
     {
-        Joystick _joystickModel;
-
         public JoystickViewModel(IRobotProvider parent) : base(parent)
         {
             _axes.CollectionChanged += _axes_CollectionChanged;
             _buttons.CollectionChanged += _buttons_CollectionChanged;
         }
 
-        private void _buttons_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if(e != null && e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                OnPropertyChanged($"Buttons[{e.NewStartingIndex}]");
-            }
-        }
-
-        private void _axes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e != null && e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                OnPropertyChanged($"Axes[{e.NewStartingIndex}]");
-            }
-        }
-
-        protected override List<string> GetOverrideKeys()
-        {
-            var ret = new List<string>(){ "Name", "ID" };
-            for(int i = 1; i <= 12; ++i)
-            {
-                ret.Add($"Buttons[{i}]");
-            }
-            for (int i = 1; i <= 6; ++i)
-            {
-                ret.Add($"Axes[{i}]");
-            }
-            return ret;
-        }
-
+        #region IJoystickProvider
         public IReadOnlyDictionary<int, double> Axes
         {
             get
@@ -71,30 +40,96 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _joystickModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                _joystickModel.ID = value;
+                ModelReference.ID = value;
             }
         }
+        #endregion
 
+        #region IInputProvider
+        public void UpdateInputValues()
+        {
+            var thisJoystickIOService = IOService.Instance.Joysticks[ID];
+            for(int i = 1; i <= 12; ++i)
+            {
+                _buttons[i] = thisJoystickIOService.Buttons[i];
+            }
+            for(int i = 1; i <= 5; ++i)
+            {
+                _axes[i] = thisJoystickIOService.Axes[i];
+            }
+        }
+        #endregion
+
+        #region IProvider
         public string Name
         {
             get
             {
-                return _joystickModel.Name;
+                return ModelReference.Name;
             }
 
             set
             {
-                _joystickModel.Name = value;
+                ModelReference.Name = value;
             }
         }
+        #endregion
 
-        private Regex axisTester = new Regex("^Axes\\[([1-9]|1[0-2])\\]$");
-        private Regex buttonTester = new Regex("^Buttons\\[([1-9]|1[0-2])\\]$");
+        #region ViewModelBase
+        protected override string GetValue(string key)
+        {
+            string ret;
+            if (GetAxis(key, out ret))
+                return ret;
+            if (GetButton(key, out ret))
+                return ret;
+
+            switch (key)
+            {
+                case "Name":
+                    return Name;
+                case "ID":
+                    return ID.ToString();
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            }
+        }
+        protected override void SetValue(string key, string value)
+        {
+            switch (key)
+            {
+                case "Name":
+                    Name = value;
+                    break;
+                case "ID":
+                    ID = SafeCastInt(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+            }
+
+        }
+        protected override List<string> GetOverrideKeys()
+        {
+            var ret = new List<string>() { "Name", "ID" };
+            for (int i = 1; i <= 12; ++i)
+            {
+                ret.Add($"Buttons[{i}]");
+            }
+            for (int i = 1; i <= 6; ++i)
+            {
+                ret.Add($"Axes[{i}]");
+            }
+            return ret;
+        }
+        #endregion
+
+        #region Private Methods
         private bool GetAxis(string key, out string output)
         {
             //special situation where the axes/buttons can be referenced by index
@@ -128,71 +163,28 @@ namespace Team1922.MVVM.ViewModels
             return false;
         }
 
-        protected override string GetValue(string key)
+        private void _buttons_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            string ret;
-            if (GetAxis(key, out ret))
-                return ret;
-            if (GetButton(key, out ret))
-                return ret;
-
-            switch (key)
+            if(e != null && e.Action == NotifyCollectionChangedAction.Replace)
             {
-                case "Name":
-                    return Name;
-                case "ID":
-                    return ID.ToString();
-                default:
-                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+                OnPropertyChanged($"Buttons[{e.NewStartingIndex}]");
             }
         }
 
-        protected override void SetValue(string key, string value)
+        private void _axes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            switch (key)
+            if (e != null && e.Action == NotifyCollectionChangedAction.Replace)
             {
-                case "Name":
-                    Name = value;
-                    break;
-                case "ID":
-                    ID = SafeCastInt(value);
-                    break;
-                default:
-                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-            }
-
-        }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _joystickModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
+                OnPropertyChanged($"Axes[{e.NewStartingIndex}]");
             }
         }
-
-        public void SetJoystick(Joystick joystick)
-        {
-            _joystickModel = joystick;
-        }
-
-        public void UpdateInputValues()
-        {
-            var thisJoystickIOService = IOService.Instance.Joysticks[ID];
-            for(int i = 1; i <= 12; ++i)
-            {
-                _buttons[i] = thisJoystickIOService.Buttons[i];
-            }
-            for(int i = 1; i <= 5; ++i)
-            {
-                _axes[i] = thisJoystickIOService.Axes[i];
-            }
-        }
+        #endregion
 
         #region Private Fields
         ReadonlyObservableDictionary<int, double> _axes = new ReadonlyObservableDictionary<int, double>();
         ReadonlyObservableDictionary<int, bool> _buttons = new ReadonlyObservableDictionary<int, bool>();
+        private Regex axisTester = new Regex("^Axes\\[([1-9]|1[0-2])\\]$");
+        private Regex buttonTester = new Regex("^Buttons\\[([1-9]|1[0-2])\\]$");
         #endregion
     }
 }

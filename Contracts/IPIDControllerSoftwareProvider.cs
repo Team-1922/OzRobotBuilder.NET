@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for software pid controller viewmodels
     /// </summary>
-    public interface IPIDControllerSoftwareProvider : IProvider
+    public interface IPIDControllerSoftwareProvider : IProvider<PIDControllerSoftware>
     {
         /// <summary>
         /// The proportional constant
@@ -39,11 +39,5 @@ namespace Team1922.MVVM.Contracts
         /// Whether the input's end loops back to its beginning (i.e. continuous potentiometer)
         /// </summary>
         bool Continuous { get; set; }
-
-        /// <summary>
-        /// Set the model instance for this PIDControllerSoftware provider
-        /// </summary>
-        /// <param name="pidController">the PIDControllerSoftware model instance</param>
-        void SetPIDController(PIDControllerSoftware pidController);
     }
 }

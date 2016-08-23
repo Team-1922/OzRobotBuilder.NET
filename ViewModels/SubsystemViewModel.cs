@@ -8,71 +8,20 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class SubsystemViewModel : ViewModelBase, ISubsystemProvider
-    {
-        protected Subsystem _subsystemModel;
-        
+    internal class SubsystemViewModel : ViewModelBase<Subsystem>, ISubsystemProvider
+    {        
         public SubsystemViewModel(IRobotProvider parent) : base(parent)
         {
-            _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider>("PWMOutputs", this);
-            _analogInputProviders = new CompoundProviderList<IAnalogInputProvider>("AnalogInputs", this);
-            _quadEncoderProviders = new CompoundProviderList<IQuadEncoderProvider>("QuadEncoders", this);
-            _digitalInputProviders = new CompoundProviderList<IDigitalInputProvider>("DigitalInputs", this);
-            _relayOutputProviders = new CompoundProviderList<IRelayOutputProvider>("RelayOutputs", this);
-            _canTalonProviders = new CompoundProviderList<ICANTalonProvider>("CANTalons", this);
+            _pwmOutputProviders = new CompoundProviderList<IPWMOutputProvider, PWMOutput>("PWMOutputs", this, (PWMOutput modelReference) => { return new PWMOutputViewModel(this) { ModelReference = modelReference }; });
+            _analogInputProviders = new CompoundProviderList<IAnalogInputProvider, AnalogInput>("AnalogInputs", this, (AnalogInput modelReference) => { return new AnalogInputViewModel(this) { ModelReference = modelReference }; });
+            _quadEncoderProviders = new CompoundProviderList<IQuadEncoderProvider, QuadEncoder>("QuadEncoders", this, (QuadEncoder modelReference) => { return new QuadEncoderViewModel(this) { ModelReference = modelReference }; });
+            _digitalInputProviders = new CompoundProviderList<IDigitalInputProvider, DigitalInput>("DigitalInputs", this, (DigitalInput modelReference) => { return new DigitalInputViewModel(this) { ModelReference = modelReference }; });
+            _relayOutputProviders = new CompoundProviderList<IRelayOutputProvider, RelayOutput>("RelayOutputs", this, (RelayOutput modelReference) => { return new RelayOutputViewModel(this) { ModelReference = modelReference }; });
+            _canTalonProviders = new CompoundProviderList<ICANTalonProvider, CANTalon>("CANTalons", this, (CANTalon modelReference) => { return new CANTalonViewModel(this) { ModelReference = modelReference }; });
             PIDController = new PIDControllerSoftwareViewModel(this);
         }
 
-        public void SetSubsystem(Subsystem subsystem)
-        {
-            //cleanup the old providers
-            _pwmOutputProviders.Items.Clear();
-            _analogInputProviders.Items.Clear();
-            _quadEncoderProviders.Items.Clear();
-            _relayOutputProviders.Items.Clear();
-            _canTalonProviders.Items.Clear();
-
-            //setup the new providers
-            _subsystemModel = subsystem;
-            PIDController.SetPIDController(_subsystemModel.PIDController);
-
-            if (null != _subsystemModel.PWMOutput)
-            {
-                foreach (var pwmOutput in _subsystemModel.PWMOutput)
-                {
-                    AddPWMOutput(pwmOutput, false);
-                }
-            }
-            if (null != _subsystemModel.AnalogInput)
-            {
-                foreach (var analogInput in _subsystemModel.AnalogInput)
-                {
-                    AddAnalogInput(analogInput, false);
-                }
-            }
-            if (null != _subsystemModel.QuadEncoder)
-            {
-                foreach (var quadEncoder in _subsystemModel.QuadEncoder)
-                {
-                    AddQuadEncoder(quadEncoder, false);
-                }
-            }
-            if (null != _subsystemModel.RelayOutput)
-            {
-                foreach (var relayOutput in _subsystemModel.RelayOutput)
-                {
-                    AddRelayOutput(relayOutput, false);
-                }
-            }
-            if (null != _subsystemModel.CANTalons)
-            {
-                foreach (var canTalon in _subsystemModel.CANTalons)
-                {
-                    AddCANTalon(canTalon, false);
-                }
-            }
-        }
-
+        #region ISubsystemProvider
         public void UpdateInputValues()
         {
             foreach(var analogInput in _analogInputProviders.Items)
@@ -117,83 +66,10 @@ namespace Team1922.MVVM.ViewModels
             get { return _canTalonProviders.Items; }
         }
         public IPIDControllerSoftwareProvider PIDController { get; }
-        public string Name
-        {
-            get { return _subsystemModel.Name; }
-            set { _subsystemModel.Name = value; }
-        }
         public bool SoftwarePIDEnabled
         {
-            get { return _subsystemModel.SoftwarePIDEnabled; }
-            set { _subsystemModel.SoftwarePIDEnabled = value; }
-        }
-
-        public IEnumerable<IProvider> Children
-        {
-            get
-            {
-                return _children.Values;
-            }
-        }
-
-        public int ID
-        {
-            get
-            {
-                return _subsystemModel.ID;
-            }
-        }
-
-        protected override string GetValue(string key)
-        {
-            switch(key)
-            {
-                case "AnalogInputs":
-                    return AnalogInputs.ToString();
-                case "CANTalons":
-                    return CANTalons.ToString();
-                case "ID":
-                    return ID.ToString();
-                case "Name":
-                    return Name;
-                case "PIDController":
-                    return PIDController.ToString();
-                case "DigitalInputs":
-                    return DigitalInputs.ToString();
-                case "PWMOutputs":
-                    return PWMOutputs.ToString();
-                case "QuadEncoders":
-                    return QuadEncoders.ToString();
-                case "RelayOutputs":
-                    return RelayOutputs.ToString();
-                case "SoftwarePIDEnabled":
-                    return SoftwarePIDEnabled.ToString();
-                default:
-                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-            }
-        }
-        protected override void SetValue(string key, string value)
-        {
-            switch(key)
-            {
-                case "Name":
-                    Name = value;
-                    break;
-                case "SoftwarePIDEnabled":
-                    SoftwarePIDEnabled = SafeCastBool(value);
-                    break;
-                default:
-                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
-            }
-
-        }
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _subsystemModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
+            get { return ModelReference.SoftwarePIDEnabled; }
+            set { ModelReference.SoftwarePIDEnabled = value; }
         }
 
         private void AddPWMOutput(PWMOutput pwmOutput, bool addToModel)
@@ -201,9 +77,9 @@ namespace Team1922.MVVM.ViewModels
             if (pwmOutput == null)
                 throw new ArgumentNullException("pwmOutput");
             if(addToModel)
-                _subsystemModel.PWMOutput.Add(pwmOutput);
+                ModelReference.PWMOutput.Add(pwmOutput);
             var provider = new PWMOutputViewModel(this);
-            provider.SetPWMOutput(pwmOutput);
+            provider.ModelReference = pwmOutput;
             provider.Name = _pwmOutputProviders.GetUnusedKey(provider.Name);
             _pwmOutputProviders.Items.Add(provider);
         }
@@ -213,9 +89,9 @@ namespace Team1922.MVVM.ViewModels
             if (analogInput == null)
                 throw new ArgumentNullException("analogInput");
             if (addToModel)
-                _subsystemModel.AnalogInput.Add(analogInput);
+                ModelReference.AnalogInput.Add(analogInput);
             var provider = new AnalogInputViewModel(this);
-            provider.SetAnalogInput(analogInput);
+            provider.ModelReference = analogInput;
             provider.Name = _analogInputProviders.GetUnusedKey(provider.Name);
             _analogInputProviders.Items.Add(provider);
         }
@@ -225,10 +101,10 @@ namespace Team1922.MVVM.ViewModels
             if (quadEncoder == null)
                 throw new ArgumentNullException("quadEncoder");
             if (addToModel)
-                _subsystemModel.QuadEncoder.Add(quadEncoder);
+                ModelReference.QuadEncoder.Add(quadEncoder);
 
             var provider = new QuadEncoderViewModel(this);
-            provider.SetQuadEncoder(quadEncoder);
+            provider.ModelReference = quadEncoder;
             provider.Name = _quadEncoderProviders.GetUnusedKey(provider.Name);
             _quadEncoderProviders.Items.Add(provider);
         }
@@ -238,9 +114,9 @@ namespace Team1922.MVVM.ViewModels
             if (digitalInput == null)
                 throw new ArgumentNullException("digitalInput");
             if (addToModel)
-                _subsystemModel.DigitalInput.Add(digitalInput);
+                ModelReference.DigitalInput.Add(digitalInput);
             var provider = new DigitalInputViewModel(this);
-            provider.SetDigitalInput(digitalInput);
+            provider.ModelReference = digitalInput;
             provider.Name = _digitalInputProviders.GetUnusedKey(provider.Name);
             _digitalInputProviders.Items.Add(provider);
         }
@@ -250,24 +126,25 @@ namespace Team1922.MVVM.ViewModels
             if (relayOutput == null)
                 throw new ArgumentNullException("relayOutput");
             if (addToModel)
-                _subsystemModel.RelayOutput.Add(relayOutput);
+                ModelReference.RelayOutput.Add(relayOutput);
             var provider = new RelayOutputViewModel(this);
-            provider.SetRelayOutput(relayOutput);
+            provider.ModelReference = relayOutput;
             provider.Name = _relayOutputProviders.GetUnusedKey(provider.Name);
             _relayOutputProviders.Items.Add(provider);
         }
 
-        public void AddCANTalon(CANTalon canTalon, bool addToModel)
+        private void AddCANTalon(CANTalon canTalon, bool addToModel)
         {
             if (canTalon == null)
                 throw new ArgumentNullException("canTalon");
             if (addToModel)
-                _subsystemModel.CANTalons.Add(canTalon);
+                ModelReference.CANTalons.Add(canTalon);
             var provider = new CANTalonViewModel(this);
             provider.SetCANTalon(canTalon);
             provider.Name = _canTalonProviders.GetUnusedKey(provider.Name);
             _canTalonProviders.Items.Add(provider);
         }
+
         public void AddPWMOutput(PWMOutput pwmOutput)
         {
             AddPWMOutput(pwmOutput, true);
@@ -308,7 +185,7 @@ namespace Team1922.MVVM.ViewModels
                     _pwmOutputProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.PWMOutput.RemoveAt(i);
+                    ModelReference.PWMOutput.RemoveAt(i);
                     break;
                 }
             }
@@ -324,7 +201,7 @@ namespace Team1922.MVVM.ViewModels
                     _digitalInputProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.DigitalInput.RemoveAt(i);
+                    ModelReference.DigitalInput.RemoveAt(i);
                     break;
                 }
             }
@@ -340,7 +217,7 @@ namespace Team1922.MVVM.ViewModels
                     _analogInputProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.AnalogInput.RemoveAt(i);
+                    ModelReference.AnalogInput.RemoveAt(i);
                     break;
                 }
             }
@@ -356,7 +233,7 @@ namespace Team1922.MVVM.ViewModels
                     _quadEncoderProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.QuadEncoder.RemoveAt(i);
+                    ModelReference.QuadEncoder.RemoveAt(i);
                     break;
                 }
             }
@@ -372,7 +249,7 @@ namespace Team1922.MVVM.ViewModels
                     _relayOutputProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.RelayOutput.RemoveAt(i);
+                    ModelReference.RelayOutput.RemoveAt(i);
                     break;
                 }
             }
@@ -388,19 +265,140 @@ namespace Team1922.MVVM.ViewModels
                     _canTalonProviders.Items.RemoveAt(i);
 
                     //remove the model instance
-                    _subsystemModel.CANTalons.RemoveAt(i);
+                    ModelReference.CANTalons.RemoveAt(i);
                     break;
                 }
             }
         }
-
-        #region Private Fields
-        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
-        CompoundProviderList<IPWMOutputProvider> _pwmOutputProviders
+        public int ID
         {
             get
             {
-                return _children["_pwmOutputProviders"] as CompoundProviderList<IPWMOutputProvider>;
+                throw new NotImplementedException();
+            }
+        }
+        #endregion
+
+        #region ICompoundProvider
+        public IEnumerable<IProvider> Children
+        {
+            get
+            {
+                return _children.Values;
+            }
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get { return ModelReference.Name; }
+            set { ModelReference.Name = value; }
+        }
+        #endregion
+
+        #region ViewModelBase
+        protected override string GetValue(string key)
+        {
+            switch (key)
+            {
+                case "AnalogInputs":
+                    return _analogInputProviders.GetModelJson();
+                case "CANTalons":
+                    return _canTalonProviders.GetModelJson();
+                case "PIDController":
+                    return PIDController.GetModelJson();
+                case "DigitalInputs":
+                    return _digitalInputProviders.GetModelJson();
+                case "PWMOutputs":
+                    return _pwmOutputProviders.GetModelJson();
+                case "QuadEncoders":
+                    return _quadEncoderProviders.GetModelJson();
+                case "RelayOutputs":
+                    return _relayOutputProviders.GetModelJson();
+
+                case "SoftwarePIDEnabled":
+                    return SoftwarePIDEnabled.ToString();
+                case "ID":
+                    return ID.ToString();
+                case "Name":
+                    return Name;
+                default:
+                    throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            }
+        }
+        protected override void SetValue(string key, string value)
+        {
+            switch (key)
+            {
+                case "AnalogInputs":
+                    _analogInputProviders.SetModelJson(value);
+                    break;
+                case "CANTalons":
+                    _canTalonProviders.SetModelJson(value);
+                    break;
+                case "PIDController":
+                    PIDController.SetModelJson(value);
+                    break;
+                case "DigitalInputs":
+                    _digitalInputProviders.SetModelJson(value);
+                    break;
+                case "PWMOutputs":
+                    _pwmOutputProviders.SetModelJson(value);
+                    break;
+                case "QuadEncoders":
+                    _quadEncoderProviders.SetModelJson(value);
+                    break;
+                case "RelayOutputs":
+                    _relayOutputProviders.SetModelJson(value);
+                    break;
+
+                case "Name":
+                    Name = value;
+                    break;
+                case "SoftwarePIDEnabled":
+                    SoftwarePIDEnabled = SafeCastBool(value);
+                    break;
+                default:
+                    throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
+            }
+
+        }
+        protected override void OnModelChange()
+        {
+            //setup the new providers
+            PIDController.ModelReference = ModelReference.PIDController;
+
+            if (null != ModelReference.PWMOutput)
+            {
+                _pwmOutputProviders.ModelReference = ModelReference.PWMOutput;
+            }
+            if (null != ModelReference.AnalogInput)
+            {
+                _analogInputProviders.ModelReference = ModelReference.AnalogInput;
+            }
+            if (null != ModelReference.QuadEncoder)
+            {
+                _quadEncoderProviders.ModelReference = ModelReference.QuadEncoder;
+            }
+            if (null != ModelReference.RelayOutput)
+            {
+                _relayOutputProviders.ModelReference = ModelReference.RelayOutput;
+            }
+            if (null != ModelReference.CANTalons)
+            {
+                _canTalonProviders.ModelReference = ModelReference.CANTalons;
+            }
+        }
+        #endregion
+
+        #region Private Fields
+        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+        CompoundProviderList<IPWMOutputProvider, PWMOutput> _pwmOutputProviders
+        {
+            get
+            {
+                return _children["_pwmOutputProviders"] as CompoundProviderList<IPWMOutputProvider, PWMOutput>;
             }
 
             set
@@ -408,11 +406,11 @@ namespace Team1922.MVVM.ViewModels
                 _children["_pwmOutputProviders"] = value;
             }
         }
-        CompoundProviderList<IAnalogInputProvider> _analogInputProviders
+        CompoundProviderList<IAnalogInputProvider, AnalogInput> _analogInputProviders
         {
             get
             {
-                return _children["_analogInputProviders"] as CompoundProviderList<IAnalogInputProvider>;
+                return _children["_analogInputProviders"] as CompoundProviderList<IAnalogInputProvider, AnalogInput>;
             }
 
             set
@@ -420,11 +418,11 @@ namespace Team1922.MVVM.ViewModels
                 _children["_analogInputProviders"] = value;
             }
         }
-        CompoundProviderList<IQuadEncoderProvider> _quadEncoderProviders
+        CompoundProviderList<IQuadEncoderProvider, QuadEncoder> _quadEncoderProviders
         {
             get
             {
-                return _children["_quadEncoderProviders"] as CompoundProviderList<IQuadEncoderProvider>;
+                return _children["_quadEncoderProviders"] as CompoundProviderList<IQuadEncoderProvider, QuadEncoder>;
             }
 
             set
@@ -432,11 +430,11 @@ namespace Team1922.MVVM.ViewModels
                 _children["_quadEncoderProviders"] = value;
             }
         }
-        CompoundProviderList<IDigitalInputProvider> _digitalInputProviders
+        CompoundProviderList<IDigitalInputProvider, DigitalInput> _digitalInputProviders
         {
             get
             {
-                return _children["_digitalInputProviders"] as CompoundProviderList<IDigitalInputProvider>;
+                return _children["_digitalInputProviders"] as CompoundProviderList<IDigitalInputProvider, DigitalInput>;
             }
 
             set
@@ -444,11 +442,11 @@ namespace Team1922.MVVM.ViewModels
                 _children["_digitalInputProviders"] = value;
             }
         }
-        CompoundProviderList<IRelayOutputProvider> _relayOutputProviders
+        CompoundProviderList<IRelayOutputProvider, RelayOutput> _relayOutputProviders
         {
             get
             {
-                return _children["_relayOutputProviders"] as CompoundProviderList<IRelayOutputProvider>;
+                return _children["_relayOutputProviders"] as CompoundProviderList<IRelayOutputProvider, RelayOutput>;
             }
 
             set
@@ -456,11 +454,11 @@ namespace Team1922.MVVM.ViewModels
                 _children["_relayOutputProviders"] = value;
             }
         }
-        CompoundProviderList<ICANTalonProvider> _canTalonProviders
+        CompoundProviderList<ICANTalonProvider, CANTalon> _canTalonProviders
         {
             get
             {
-                return _children["_canTalonProviders"] as CompoundProviderList<ICANTalonProvider>;
+                return _children["_canTalonProviders"] as CompoundProviderList<ICANTalonProvider, CANTalon>;
             }
 
             set

@@ -10,13 +10,8 @@ namespace Team1922.MVVM.Contracts
     /// The interface for a robot map viewmodel
     /// The robot map is for additional constants that do not fit into the existing constants in other objects
     /// </summary>
-    public interface IRobotMapProvider : IProvider
+    public interface IRobotMapProvider : IProvider<List<RobotMapEntry>>
     {
-        /// <summary>
-        /// Sets the robot model instance for this robot map
-        /// </summary>
-        /// <param name="robot">the main robot instance</param>
-        void SetRobot(Robot robot);
         /// <summary>
         /// Adds a new entry into the map
         /// </summary>

@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for CANTalon viewmodels
     /// </summary>
-    public interface ICANTalonProvider : IInputProvider, ICompoundProvider
+    public interface ICANTalonProvider : IInputProvider, ICompoundProvider, IProvider<CANTalon>
     {
         /// <summary>
         /// The quadrature encoder
@@ -134,11 +134,6 @@ namespace Team1922.MVVM.Contracts
         /// The state of the reverse soft limit (software)
         /// </summary>
         bool ReverseSoftLimitTripped { get; }
-
-        /// <summary>
-        /// Sets the model instace for this CANTalon provider
-        /// </summary>
-        /// <param name="canTalon">the CANTalon model instance</param>
-        void SetCANTalon(CANTalon canTalon);
+        
     }
 }

@@ -10,30 +10,18 @@ using Team1922.MVVM.Contracts;
 namespace Team1922.MVVM.ViewModels
 {
 
-    class CompoundProviderList<T> : ViewModelBase, IEnumerable<T>, ICompoundProvider where T : IProvider
+    class CompoundProviderList<ProviderType, ModelType> : ViewModelBase<List<ModelType>>, IEnumerable<ProviderType>, ICompoundProvider where ProviderType : IProvider<ModelType>
     {
-        public ObservableCollection<T> Items { get; } = new ObservableCollection<T>();
+        //NOTE: if items here are manually added/removed, make SURE they are added to the model
+        public ObservableCollection<ProviderType> Items { get; } = new ObservableCollection<ProviderType>();
 
-        public CompoundProviderList(string name, IProvider parent) : base(parent)
+        public CompoundProviderList(string name, IProvider parent, Func<ModelType, ProviderType> constructNewItem) : base(parent)
         {
             Name = name;
             Items.CollectionChanged += Items_CollectionChanged;
+            _constructNewItem = constructNewItem;
         }
 
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            UpdateKeyValueList();
-        }
-
-        private T FindByName(string name)
-        {
-            foreach(var item in Items)
-            {
-                if (item.Name == name)
-                    return item;
-            }
-            throw new Exception();
-        }
 
         public IReadOnlyDictionary<string, string> Properties
         {
@@ -91,26 +79,37 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override string GetValue(string key)
         {
-            try
+            var item = FindByName(key);
+            if(null != item)
             {
-                return FindByName(key).ToString();
+                return item.GetModelJson();
             }
-            catch(Exception)
-            {
-                throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
-            }
+            throw new ArgumentException("item not found", "key");
         }
-
         protected override void SetValue(string key, string value)
         {
+            //add a new item if "key" is blank
+            if(key == "")
+            {
+                var newItem = JsonDeserialize<ModelType>(value);
+                if(newItem != null)
+                    ModelReference.Add(newItem);
+            }
+
+            var item = FindByName(key);
+            if(null != item)
+            {
+                item.SetModelJson(value);
+                return;
+            }
             throw new ArgumentException($"\"{key}\" is Read-Only");
         }
-
-        public override string ModelTypeName
+        protected override void OnModelChange()
         {
-            get
+            Items.Clear();
+            foreach(var item in ModelReference)
             {
-                return "";
+                Items.Add(_constructNewItem(item));
             }
         }
         #endregion
@@ -132,8 +131,8 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region IEnumerable<T>
-        public IEnumerator<T> GetEnumerator()
+        #region IEnumerable<ProviderType>
+        public IEnumerator<ProviderType> GetEnumerator()
         {
             return Items.GetEnumerator();
         }
@@ -142,6 +141,27 @@ namespace Team1922.MVVM.ViewModels
         {
             return Items.GetEnumerator();
         }
+        #endregion
+
+        #region Private Methods
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateKeyValueList();
+        }
+
+        private ProviderType FindByName(string name)
+        {
+            foreach (var item in Items)
+            {
+                if (item.Name == name)
+                    return item;
+            }
+            throw new ArgumentException($"\"{name}\" Does Not Exist");
+        }
+        #endregion
+
+        #region Private Fields
+        Func<ModelType, ProviderType> _constructNewItem;
         #endregion
     }
 }

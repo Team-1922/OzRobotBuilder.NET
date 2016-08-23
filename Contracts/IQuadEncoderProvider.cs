@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for quadrature encoder viewmodels
     /// </summary>
-    public interface IQuadEncoderProvider : IInputProvider
+    public interface IQuadEncoderProvider : IInputProvider, IProvider<QuadEncoder>
     {
         /// <summary>
         /// This quadrature encoder's first hardware ID
@@ -43,11 +43,5 @@ namespace Team1922.MVVM.Contracts
         /// This quadrature encoder's velocity (in user units/second)
         /// </summary>
         double Velocity { get; }
-
-        /// <summary>
-        /// Sets the model instance of this quadrature encoder provider
-        /// </summary>
-        /// <param name="quadEncoder">the quadrature encoder model instance</param>
-        void SetQuadEncoder(QuadEncoder quadEncoder);
     }
 }

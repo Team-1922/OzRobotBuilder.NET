@@ -5,7 +5,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The contract for exposing a <see cref="CANTalonAnalogInput"/> in the model
     /// </summary>
-    public interface ICANTalonAnalogInputProvider : IInputProvider
+    public interface ICANTalonAnalogInputProvider : IInputProvider, IProvider<CANTalonAnalogInput>
     {
         /// <summary>
         /// The raw analog input value (in SRX units (0-1023))
@@ -30,11 +30,6 @@ namespace Team1922.MVVM.Contracts
         /// <summary>
         /// The offset applied after the conversion (in user units)
         /// </summary>
-        double SensorOffset { get; set; }
-        /// <summary>
-        /// Sets the CANTalon instance for this provider
-        /// </summary>
-        /// <param name="canTalon">the canTalon to retrieve the AnalogInput from</param>
-        void SetCANTalon(CANTalon canTalon);      
+        double SensorOffset { get; set; }  
     }
 }

@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Models
     /// <summary>
     /// The data for a quadrature encoder
     /// </summary>
-    public partial class QuadEncoder
+    public partial class QuadEncoder : INamedModel
     {
     }
 }

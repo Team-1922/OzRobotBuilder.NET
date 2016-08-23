@@ -6,62 +6,61 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class PWMOutputViewModel : ViewModelBase, IPWMOutputProvider
+    internal class PWMOutputViewModel : ViewModelBase<PWMOutput>, IPWMOutputProvider
     {
-        protected PWMOutput _pwmOutputModel;
-
         public PWMOutputViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 
-        public void SetPWMOutput(PWMOutput pwmOutput)
-        {
-            _pwmOutputModel = pwmOutput;
-        }
-
+        #region IPWMOutputProvider
         public int ID
         {
             get
             {
-                return _pwmOutputModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _pwmOutputModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _pwmOutputModel.ID = temp;
-            }
-        }
-        public string Name
-        {
-            get
-            {
-                return _pwmOutputModel.Name;
-            }
-
-            set
-            {
-                var temp = _pwmOutputModel.Name;
-                SetProperty(ref temp, value);
-                _pwmOutputModel.Name = temp;
+                ModelReference.ID = temp;
             }
         }
         public double Value
         {
             get
             {
-                return _pwmOutputModel.Value;
+                return ModelReference.Value;
             }
 
             set
             {
-                var temp = _pwmOutputModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, IOService.Instance.PWMOutputs[ID].Value = TypeRestrictions.Clamp("PWMOutput.Value", value));
-                _pwmOutputModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
+        #endregion
 
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return ModelReference.Name;
+            }
+
+            set
+            {
+                var temp = ModelReference.Name;
+                SetProperty(ref temp, value);
+                ModelReference.Name = temp;
+            }
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch(key)
@@ -76,7 +75,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -94,15 +92,7 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
 
-        }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _pwmOutputModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
+        }        
+        #endregion
     }
 }

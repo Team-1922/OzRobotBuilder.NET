@@ -9,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for Digital Input viewmodels
     /// </summary>
-    public interface IDigitalInputProvider : IInputProvider
+    public interface IDigitalInputProvider : IInputProvider, IProvider<DigitalInput>
     {
         /// <summary>
         /// The hardware ID of this digital input
@@ -19,11 +19,5 @@ namespace Team1922.MVVM.Contracts
         /// The boolean state value
         /// </summary>
         bool Value { get; }
-
-        /// <summary>
-        /// Sets the model instance of this DigitalInput provider
-        /// </summary>
-        /// <param name="digitalInput">the DigitalInput model instance</param>
-        void SetDigitalInput(DigitalInput digitalInput);
     }
 }

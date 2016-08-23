@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -88,9 +89,11 @@ namespace Team1922.MVVM.ViewModels
         private IProvider _parent;
 
         protected ViewModelBase(IProvider parent)
-        {
+        { 
+            _settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
             _parent = parent;
             UpdateKeyValueList();
+            PropertyChanged += ViewModelBase_PropertyChanged;
         }
 
         protected void UpdateKeyValueList()
@@ -111,6 +114,7 @@ namespace Team1922.MVVM.ViewModels
             return _keyValueList;
         }
 
+        #region IProvider
         public IHierarchialAccess TopParent
         {
             get
@@ -118,7 +122,6 @@ namespace Team1922.MVVM.ViewModels
                 return Parent?.TopParent ?? this;
             }
         }
-
         public IProvider Parent
         {
             get
@@ -126,6 +129,45 @@ namespace Team1922.MVVM.ViewModels
                 return _parent;
             }
         }
+        public string GetModelJson()
+        {
+            return JsonSerialize(ModelReference);
+        }
+        public void SetModelJson(string text)
+        {
+            try
+            {
+                //deserialize the model
+                ModelReference = JsonDeserialize(text);
+            }
+            catch (Exception e)
+            {
+                //this means an exception was thrown while loading (whether bad json, OR type validation)
+                throw new ArgumentException("Invalid Json", "text");
+            }
+        }
+        private object _modelReference;
+        public object ModelReference
+        {
+            get
+            {
+                return _modelReference;
+            }
+
+            set
+            {
+                SetProperty(ref _modelReference, value);
+            }
+        }
+        public string ModelTypeName
+        {
+            get
+            {
+                var brokenName = ModelReference.GetType().ToString().Split('.');
+                return brokenName[brokenName.Length - 1];
+            }
+        }
+        #endregion
 
         #region IHierarchialAccess Methods
         /// <summary>
@@ -197,7 +239,7 @@ namespace Team1922.MVVM.ViewModels
             var thisMember = key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
             if (null == thisMember)
                 throw new ArgumentException($"\"{key}\" Is an Invalid Property");
-            if (thisMember.Length == 1)
+            else if (thisMember.Length == 1)
             {
                 if (read)
                     return GetValue(key) ?? "";
@@ -279,6 +321,18 @@ namespace Team1922.MVVM.ViewModels
             else
                 throw new ArgumentException("Value Entered Not Boolean");
         }
+        protected string JsonSerialize(object obj)
+        {
+            return JsonConvert.SerializeObject(obj, _settings);
+        }
+        protected T JsonDeserialize<T>(string text)
+        {
+            return JsonConvert.DeserializeObject<T>(text, _settings);
+        }
+        protected object JsonDeserialize(string text)
+        {
+            return JsonConvert.DeserializeObject(text, _settings);
+        }
         #endregion
 
         #region Abstract & Virtual Methods
@@ -307,13 +361,14 @@ namespace Team1922.MVVM.ViewModels
                     && x.Name != "ModelTypeName"
                     && x.Name != "TopParent"
                     && x.Name != "Parent"
+                    && x.Name != "ModelReference"
                     select x.Name).ToList();
         }
         /// <summary>
         /// In order for IDataErrorInfo to work correctly, we need the name of model type to lookup in the type restrictions
         /// </summary>
         /// <returns>The name of the model type without the namespace (i.e. "Robot")</returns>
-        public abstract string ModelTypeName { get; }
+        //public abstract string ModelTypeName { get; }
         /// <summary>
         /// This allows the consumer to define custom methods of getting an error string.  If this is not overridden,
         /// then the regular TypeRestriction method is used
@@ -324,6 +379,7 @@ namespace Team1922.MVVM.ViewModels
         {
             return TypeRestrictions.DataErrorString($"{ModelTypeName}.{attribName}", this[attribName]);
         }
+        protected virtual void OnModelChange() { }
         #endregion
 
         #region IDataErrorInfo Support
@@ -341,7 +397,6 @@ namespace Team1922.MVVM.ViewModels
                 return ret;
             }
         }
-
         string IDataErrorInfo.this[string columnName]
         {
             get
@@ -385,5 +440,38 @@ namespace Team1922.MVVM.ViewModels
             // GC.SuppressFinalize(this);
         }
         #endregion
+
+        #region Private Methods
+        private void ViewModelBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ModelReference")
+                OnModelChange();
+        }
+        #endregion
+
+        #region Private Fields
+        JsonSerializerSettings _settings;
+        #endregion
     }
+
+    public abstract class ViewModelBase<ModelType> : ViewModelBase
+    {
+        public ViewModelBase(IProvider parent) : base(parent)
+        {
+        }
+
+        public virtual new ModelType ModelReference
+        {
+            get
+            {
+                return (ModelType)base.ModelReference;
+            }
+
+            set
+            {
+                base.ModelReference = value;
+            }
+        }
+    }
+
 }

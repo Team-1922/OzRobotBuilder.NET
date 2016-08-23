@@ -6,26 +6,25 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class PIDControllerSoftwareViewModel : ViewModelBase, IPIDControllerSoftwareProvider
+    internal class PIDControllerSoftwareViewModel : ViewModelBase<PIDControllerSoftware>, IPIDControllerSoftwareProvider
     {
-        PIDControllerSoftware _pidControllerSoftwareModel;
-
         public PIDControllerSoftwareViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 
+        #region IPIDControllerSoftwareProvider
         public bool Continuous
         {
             get
             {
-                return _pidControllerSoftwareModel.Continuous;
+                return ModelReference.Continuous;
             }
 
             set
             {
-                var temp = _pidControllerSoftwareModel.Continuous;
+                var temp = ModelReference.Continuous;
                 SetProperty(ref temp, value);
-                _pidControllerSoftwareModel.Continuous = temp;
+                ModelReference.Continuous = temp;
             }
         }
 
@@ -33,14 +32,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSoftwareModel.CycleDuration;
+                return ModelReference.CycleDuration;
             }
 
             set
             {
-                var temp = _pidControllerSoftwareModel.CycleDuration;
+                var temp = ModelReference.CycleDuration;
                 SetProperty(ref temp, value);
-                _pidControllerSoftwareModel.CycleDuration = temp;
+                ModelReference.CycleDuration = temp;
             }
         }
 
@@ -48,14 +47,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSoftwareModel.P;
+                return ModelReference.P;
             }
 
             set
             {
-                var temp = _pidControllerSoftwareModel.P;
+                var temp = ModelReference.P;
                 SetProperty(ref temp, value);
-                _pidControllerSoftwareModel.P = temp;
+                ModelReference.P = temp;
             }
         }
 
@@ -63,14 +62,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSoftwareModel.I;
+                return ModelReference.I;
             }
 
             set
             {
-                var temp = _pidControllerSoftwareModel.I;
+                var temp = ModelReference.I;
                 SetProperty(ref temp, value);
-                _pidControllerSoftwareModel.I = temp;
+                ModelReference.I = temp;
             }
         }
 
@@ -78,14 +77,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSoftwareModel.D;
+                return ModelReference.D;
             }
 
             set
             {
-                var temp = _pidControllerSoftwareModel.D;
+                var temp = ModelReference.D;
                 SetProperty(ref temp, value);
-                _pidControllerSoftwareModel.D = temp;
+                ModelReference.D = temp;
             }
         }
 
@@ -93,14 +92,14 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSoftwareModel.F;
+                return ModelReference.F;
             }
 
             set
             {
-                var temp = _pidControllerSoftwareModel.F;
+                var temp = ModelReference.F;
                 SetProperty(ref temp, value);
-                _pidControllerSoftwareModel.F = temp;
+                ModelReference.F = temp;
             }
         }
 
@@ -108,17 +107,19 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _pidControllerSoftwareModel.Tolerance;
+                return ModelReference.Tolerance;
             }
 
             set
             {
-                var temp = _pidControllerSoftwareModel.Tolerance;
+                var temp = ModelReference.Tolerance;
                 SetProperty(ref temp, value);
-                _pidControllerSoftwareModel.Tolerance = temp;
+                ModelReference.Tolerance = temp;
             }
         }
+        #endregion
 
+        #region IProvider
         public string Name
         {
             get
@@ -126,7 +127,9 @@ namespace Team1922.MVVM.ViewModels
                 return "PID Controller";
             }
         }
+        #endregion
 
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
                 switch (key)
@@ -151,7 +154,6 @@ namespace Team1922.MVVM.ViewModels
                         throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
                 }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -182,19 +184,6 @@ namespace Team1922.MVVM.ViewModels
             }
 
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _pidControllerSoftwareModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-
-        public void SetPIDController(PIDControllerSoftware pidController)
-        {
-            _pidControllerSoftwareModel = pidController;
-        }
+        #endregion
     }
 }

@@ -9,59 +9,68 @@ using Team1922.MVVM.Services;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class DigitalInputViewModel : ViewModelBase, IDigitalInputProvider
+    internal class DigitalInputViewModel : ViewModelBase<DigitalInput>, IDigitalInputProvider
     {
-        DigitalInput _digitalInputModel;
-
         public DigitalInputViewModel(ISubsystemProvider parent) : base(parent)
         {
         }
 
+        #region IDigitalInputProvider
         public int ID
         {
             get
             {
-                return _digitalInputModel.ID;
+                return ModelReference.ID;
             }
 
             set
             {
-                var temp = _digitalInputModel.ID;
+                var temp = ModelReference.ID;
                 SetProperty(ref temp, value);
-                _digitalInputModel.ID = temp;
+                ModelReference.ID = temp;
             }
         }
-
-        public string Name
-        {
-            get
-            {
-                return _digitalInputModel.Name;
-            }
-
-            set
-            {
-                var temp = _digitalInputModel.Name;
-                SetProperty(ref temp, value);
-                _digitalInputModel.Name = temp;
-            }
-        }
-
         public bool Value
         {
             get
             {
-                return _digitalInputModel.Value;
+                return ModelReference.Value;
             }
 
             private set
             {
-                var temp = _digitalInputModel.Value;
+                var temp = ModelReference.Value;
                 SetProperty(ref temp, value);
-                _digitalInputModel.Value = temp;
+                ModelReference.Value = temp;
             }
         }
+        #endregion
 
+        #region IInputProvider
+        public void UpdateInputValues()
+        {
+            Value = IOService.Instance.DigitalInputs[ID].ValueAsBool;
+        }
+        #endregion
+
+        #region IProvider
+        public string Name
+        {
+            get
+            {
+                return ModelReference.Name;
+            }
+
+            set
+            {
+                var temp = ModelReference.Name;
+                SetProperty(ref temp, value);
+                ModelReference.Name = temp;
+            }
+        }
+        #endregion
+
+        #region ViewModelBase
         protected override string GetValue(string key)
         {
             switch (key)
@@ -76,7 +85,6 @@ namespace Team1922.MVVM.ViewModels
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
         }
-
         protected override void SetValue(string key, string value)
         {
             switch (key)
@@ -92,24 +100,6 @@ namespace Team1922.MVVM.ViewModels
             }
 
         }
-
-        public override string ModelTypeName
-        {
-            get
-            {
-                var brokenName = _digitalInputModel.GetType().ToString().Split('.');
-                return brokenName[brokenName.Length - 1];
-            }
-        }
-
-        public void SetDigitalInput(DigitalInput digitalInput)
-        {
-            _digitalInputModel = digitalInput;
-        }
-
-        public void UpdateInputValues()
-        {
-            Value = IOService.Instance.DigitalInputs[ID].ValueAsBool;
-        }
+        #endregion
     }
 }
