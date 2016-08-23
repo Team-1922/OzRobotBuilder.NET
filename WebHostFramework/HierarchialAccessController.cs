@@ -34,7 +34,7 @@ namespace Team1922.WebFramework
             }
         }
 
-        [HttpPatch("{key}", Name = "PatchValue")]
+        [HttpPatch("{*key}", Name = "PatchValue")]
         public IActionResult PatchById(string key, [FromBody] string value)
         {
             try
@@ -52,19 +52,19 @@ namespace Team1922.WebFramework
             }
         }
 
-        [HttpPost("{key}", Name = "PostValue")]
+        [HttpPost("{*key}", Name = "PostValue")]
         public IActionResult PostById(string key, [FromBody] string value)
         {
             return new StatusCodeResult(503);
         }
 
-        [HttpPut("{key}", Name = "PutValue")]
+        [HttpPut("{*key}", Name = "PutValue")]
         public IActionResult PutById(string key, [FromBody] string value)
         {
             return new StatusCodeResult(503);
         }
 
-        [HttpDelete("{key}", Name = "DeleteValue")]
+        [HttpDelete("{*key}", Name = "DeleteValue")]
         public IActionResult DeleteById(string key)
         {
             return new StatusCodeResult(503);
