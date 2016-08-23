@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Team1922.MVVM.Models
 {
-    public partial class OnWithinRangeEventHandler
+    public partial class EventHandler : INamedModel
     {
     }
 }

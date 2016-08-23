@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Models
     /// <summary>
     /// Data for a simple PWM motor controller
     /// </summary>
-    public partial class PWMOutput
+    public partial class PWMOutput : INamedModel
     {
     }
 }

@@ -5,13 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace Team1922.MVVM.Models.Deprecated
+namespace Team1922.MVVM.Models
 {
     /// <summary>
     /// A subsystem with all of its possible inputs and outputs
     /// TODO: is it possible to have the collections be readonly, however still be loaded by json/xml serialization?
     /// </summary>
-    public partial class Subsystem
+    public partial class Subsystem : INamedModel
     {
     }
 }

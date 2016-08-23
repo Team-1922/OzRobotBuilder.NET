@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Models
     /// <summary>
     /// The information needed for a simple joystick
     /// </summary>
-    public partial class Joystick
+    public partial class Joystick : INamedModel
     {
     }
 }
