@@ -10,6 +10,11 @@ namespace Team1922.WebFramework
     [Route("api/Robot")]
     public class HierarchialAccessController
     {
+        public static string ConvertPath(string key)
+        {
+            return key.Replace('/', '.');
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -22,7 +27,7 @@ namespace Team1922.WebFramework
         {
             try
             {
-                return new ObjectResult(RobotRepository.Instance[key.Replace('/','.')]);
+                return new ObjectResult(RobotRepository.Instance[ConvertPath(key)]);
             }
             catch(ArgumentException)
             {
@@ -39,6 +44,17 @@ namespace Team1922.WebFramework
         {
             try
             {
+                try
+                {
+                    // TODO: this might be a slow way to do it
+                    var result = RobotRepository.Instance[ConvertPath(key)];
+                }
+                catch(ArgumentException e)
+                {
+                    //not found
+                    return new NotFoundResult();
+                }
+                //only do this operation if it exists already
                 RobotRepository.Instance[key] = value;
                 return new OkResult();
             }
@@ -55,7 +71,33 @@ namespace Team1922.WebFramework
         [HttpPost("{*key}", Name = "PostValue")]
         public IActionResult PostById(string key, [FromBody] string value)
         {
-            return new StatusCodeResult(503);
+            try
+            {
+                // TODO: this might be a slow way to do it
+                var result = RobotRepository.Instance[ConvertPath(key)];
+                return new StatusCodeResult(409);//already exists, therefore don't do it
+            }
+            catch (ArgumentException)
+            {
+                try
+                {
+                    //only do this operation if it does not exists already
+                    RobotRepository.Instance[ConvertPath(key)] = value;
+                    return new CreatedResult(key, value);//TODO: i think this is wrong
+                }
+                catch (ArgumentException)
+                {
+                    return new NotFoundResult();
+                }
+                catch(Exception)
+                {
+                    return new StatusCodeResult(500);
+                }
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(500);
+            }
         }
 
         [HttpPut("{*key}", Name = "PutValue")]

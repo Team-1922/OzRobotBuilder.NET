@@ -79,17 +79,28 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override string GetValue(string key)
         {
-            return FindByName(key).GetModelJson();
+            var item = FindByName(key);
+            if(null != item)
+            {
+                return item.GetModelJson();
+            }
+            throw new ArgumentException("item not found", "key");
         }
         protected override void SetValue(string key, string value)
         {
-            for(int i = 0; i < Items.Count; ++i)
+            //add a new item if "key" is blank
+            if(key == "")
             {
-                if (Items[i].Name == key)
-                {
-                    Items[i].SetModelJson(value);
-                    return;
-                }
+                var newItem = JsonDeserialize<ModelType>(value);
+                if(newItem != null)
+                    ModelReference.Add(newItem);
+            }
+
+            var item = FindByName(key);
+            if(null != item)
+            {
+                item.SetModelJson(value);
+                return;
             }
             throw new ArgumentException($"\"{key}\" is Read-Only");
         }
