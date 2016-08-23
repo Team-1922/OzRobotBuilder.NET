@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Team1922.WebFramework
 {
-    [Route("api/robot")]
+    [Route("api/Robot")]
     public class HierarchialAccessController
     {
         [HttpGet]
@@ -17,12 +17,12 @@ namespace Team1922.WebFramework
         }
 
         // GET api/robot/AnalogInputSampleRate
-        [HttpGet("{key}", Name = "GetValue")]
+        [HttpGet("{*key}", Name = "GetValue")]
         public IActionResult GetById(string key)
         {
             try
             {
-                return new ObjectResult(RobotRepository.Instance[key]);
+                return new ObjectResult(RobotRepository.Instance[key.Replace('/','.')]);
             }
             catch(ArgumentException)
             {
@@ -50,6 +50,24 @@ namespace Team1922.WebFramework
             {
                 return new StatusCodeResult(500);
             }
+        }
+
+        [HttpPost("{key}", Name = "PostValue")]
+        public IActionResult PostById(string key, [FromBody] string value)
+        {
+            return new StatusCodeResult(503);
+        }
+
+        [HttpPut("{key}", Name = "PutValue")]
+        public IActionResult PutById(string key, [FromBody] string value)
+        {
+            return new StatusCodeResult(503);
+        }
+
+        [HttpDelete("{key}", Name = "DeleteValue")]
+        public IActionResult DeleteById(string key)
+        {
+            return new StatusCodeResult(503);
         }
     }
 }
