@@ -172,6 +172,8 @@ namespace Team1922.MVVM.ViewModels
                     return _subsystemProviders.GetModelJson();
                 case "RobotMap":
                     return _robotMapProvider.GetModelJson();
+                case "":
+                    return GetModelJson();
                 default:
                     throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
             }
@@ -199,6 +201,9 @@ namespace Team1922.MVVM.ViewModels
                 case "RobotMap":
                     _robotMapProvider.SetModelJson(value);
                     break;
+                case "":
+                    SetModelJson(value);
+                    break;
                 default:
                     throw new ArgumentException($"\"{key}\" is Read-Only or Does Not Exist");
             }
@@ -206,32 +211,18 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override void OnModelChange()
         {
-            //clear the old providers
-            _subsystemProviders.Items.Clear();
-            _eventHandlerProviders.Items.Clear();
-            _joystickProviders.Items.Clear();
-
             //setup the new providers
             if (null != ModelReference.Subsystem)
             {
-                foreach (var subsystem in ModelReference.Subsystem)
-                {
-                    AddSubsystem(subsystem, false);
-                }
+                _subsystemProviders.ModelReference = ModelReference.Subsystem;
             }
             if (null != ModelReference.EventHandler)
             {
-                foreach (var eventHandler in ModelReference.EventHandler)
-                {
-                    AddEventHandler(eventHandler, false);
-                }
+                _eventHandlerProviders.ModelReference = ModelReference.EventHandler;
             }
             if (null != ModelReference.Joystick)
             {
-                foreach (var joystick in ModelReference.Joystick)
-                {
-                    AddJoystick(joystick, false);
-                }
+                _joystickProviders.ModelReference = ModelReference.Joystick;
             }
             if (null != ModelReference.RobotMap)
             {

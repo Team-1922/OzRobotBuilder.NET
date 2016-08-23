@@ -239,7 +239,11 @@ namespace Team1922.MVVM.ViewModels
             var thisMember = key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
             if (null == thisMember)
                 throw new ArgumentException($"\"{key}\" Is an Invalid Property");
-            if (thisMember.Length == 1)
+            else if(thisMember.Length == 0)
+            {
+                return GetValue("");
+            }
+            else if (thisMember.Length == 1)
             {
                 if (read)
                     return GetValue(key) ?? "";

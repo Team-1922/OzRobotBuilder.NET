@@ -10,6 +10,12 @@ namespace Team1922.WebFramework
     [Route("api/robot")]
     public class HierarchialAccessController
     {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return GetById("");
+        }
+
         // GET api/robot/AnalogInputSampleRate
         [HttpGet("{key}", Name = "GetValue")]
         public IActionResult GetById(string key)

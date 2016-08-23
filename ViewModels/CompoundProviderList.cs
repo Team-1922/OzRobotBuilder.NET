@@ -118,28 +118,6 @@ namespace Team1922.MVVM.ViewModels
         {
             get;
         }
-        public string GetModelJson()
-        {
-            // TODO: this is not entirely correct; it does not actually serialize the list, however it gets close
-            //  perhaps it makes sense for this class to hold a reference to the list of model objects
-            //var ret = new List<string>();
-            //foreach(var item in Items)
-            //{
-            //    ret.Add(item.GetModelJson());
-            //}
-            //return JsonSerialize(ret);
-            throw new InvalidOperationException("Cannot Get Json Representation of CompoundProviderList");
-        }
-        public void SetModelJson(string text)
-        {
-            //Items.Clear();
-            //var items = JsonDeserialize<List<string>>(text);
-            //foreach(var item in items)
-            //{
-            //    Items.Add(JsonDeserialize<ProviderType>(item));
-            //}
-            throw new InvalidOperationException("Cannot Set Json Representation of CompoundProviderList");
-        }
         #endregion
 
         #region IEnumerable<ProviderType>
