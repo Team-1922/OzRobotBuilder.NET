@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,6 +27,7 @@ namespace Team1922.WebFramework
             try
             {
                 response.Body = (RobotRepository.Instance[ConvertPath(path)]);
+                response.StatusCode = 200;
             }
             catch (ArgumentException)
             {
@@ -64,32 +66,28 @@ namespace Team1922.WebFramework
         }
         public async Task ProcessRequest(HttpContext context)
         {
-            byte[] requestBodyBuffer = new byte[context.Request.Body.Length];
-            await context.Request.Body.ReadAsync(requestBodyBuffer, 0, (int)context.Request.Body.Length);
-
-            //TODO: switch this based on context.Request.ContentType
-            string requestBody = System.Text.Encoding.UTF8.GetString(requestBodyBuffer);
-
-            string fullRequestPath = context.Request.Path.Value;
-
             //split the path after "api/Robot"
+            string fullRequestPath = context.Request.Path.Value;
             string requestPath = GetPath(fullRequestPath);
             if(null == requestPath)
             {
                 //this means the path was invalid
-                context.Response.StatusCode = 400;
+                context.Response.StatusCode = 404;
                 return;
             }
 
+            //get the request body
+            var bufferReader = new StreamReader(context.Request.Body);            
+            string requestBody = await bufferReader.ReadToEndAsync();
 
+            //call the correct method for this request
             BasicHttpResponse response = await AggregateMethod(context.Request.Method, requestPath, requestBody);
 
-            //TODO: switch this based on context.Request.ContentType
-            byte[] responseBodyBuffer = System.Text.Encoding.UTF8.GetBytes(response.Body);
-            await context.Response.Body.WriteAsync(responseBodyBuffer, 0, responseBodyBuffer.Length);
+            //set the status code of the response
+            context.Response.StatusCode = response.StatusCode;   
 
-            //TODO: finish this!
-            context.Response.StatusCode = response.StatusCode;            
+            //this needs to go last!
+            await context.Response.WriteAsync(response.Body);
         }
         public async Task<BasicHttpResponse> AggregateMethod(string method, string requestPath, string requestBody)
         {
