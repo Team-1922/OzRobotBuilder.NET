@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,21 +28,60 @@ namespace Team1922.WebFramework
             try
             {
                 response.Body = (RobotRepository.Instance[ConvertPath(path)]);
+
+                //OK
                 response.StatusCode = 200;
             }
             catch (ArgumentException)
             {
+                //not found
                 response.StatusCode = 404;
             }
             catch (Exception e)
             {
+                //internal server error
                 response.StatusCode = 500;
             }
             return response;
         }
         protected async Task<BasicHttpResponse> Post(string path, string body)
         {
-            return new BasicHttpResponse() { StatusCode = 501 };//not implemented
+            BasicHttpResponse response = new BasicHttpResponse();
+            var convertedPath = ConvertPath(path);
+            try
+            {
+                // TODO: this might be a slow way to do it
+                var result = RobotRepository.Instance[convertedPath];
+
+                //Conflict
+                response.StatusCode = 409;
+            }
+            catch (ArgumentException)
+            {
+                try
+                {
+                    //only do this operation if it does not exists already
+                    RobotRepository.Instance[convertedPath] = body;
+                    //created
+                    response.StatusCode = 201;
+                }
+                catch (ArgumentException)
+                {
+                    //not found
+                    response.StatusCode = 404;
+                }
+                catch (Exception)
+                {
+                    //internal server error
+                    response.StatusCode = 500;
+                }
+            }
+            catch (Exception)
+            {
+                //internal server error
+                response.StatusCode = 500;
+            }
+            return response;
         }
         protected async Task<BasicHttpResponse> Put(string path, string body)
         {
@@ -49,7 +89,30 @@ namespace Team1922.WebFramework
         }
         protected async Task<BasicHttpResponse> Patch(string path, string body)
         {
-            return new BasicHttpResponse() { StatusCode = 501 };//not implemented
+            BasicHttpResponse response = new BasicHttpResponse();
+            var convertedPath = ConvertPath(path);
+            try
+            {
+                // TODO: this IS a slow way to do it
+                var result = RobotRepository.Instance[convertedPath];
+
+                //only do this operation if it exists already
+                RobotRepository.Instance[convertedPath] = body;
+
+                //OK
+                response.StatusCode = 200;
+            }
+            catch (ArgumentException)
+            {
+                //not found
+                response.StatusCode = 404;
+            }
+            catch (Exception)
+            {
+                //internal server error
+                response.StatusCode = 500;
+            }
+            return response;
         }
         protected async Task<BasicHttpResponse> Delete(string path)
         {
@@ -87,7 +150,7 @@ namespace Team1922.WebFramework
             context.Response.StatusCode = response.StatusCode;   
 
             //this needs to go last!
-            await context.Response.WriteAsync(response.Body);
+            await context.Response.WriteAsync(response.Body ?? "");
         }
         public async Task<BasicHttpResponse> AggregateMethod(string method, string requestPath, string requestBody)
         {
