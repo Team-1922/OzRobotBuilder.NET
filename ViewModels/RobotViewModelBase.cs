@@ -8,6 +8,8 @@ using System.Windows.Input;
 using System.ComponentModel;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Contracts.Events;
+using System.Collections.Concurrent;
+using System.Threading;
 
 namespace Team1922.MVVM.ViewModels
 {
@@ -18,6 +20,9 @@ namespace Team1922.MVVM.ViewModels
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider, Subsystem>("Subsystems", this, (Subsystem model) => { return new SubsystemViewModel(this) { ModelReference = model }; });
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider, Models.EventHandler>("EventHandlers", this, (Models.EventHandler model) => { return new EventHandlerViewModel(this) { ModelReference = model }; });
             _joystickProviders = new CompoundProviderList<IJoystickProvider, Joystick>("Joysticks", this, (Joystick model) => { return new JoystickViewModel(this) { ModelReference = model }; });
+
+            //start the background thread which processes the access queue
+            _hierarchialAccessTask = Task.Run((Action)WorkerThreadMethod);
         }
 
         #region IRobotProvider
@@ -135,6 +140,88 @@ namespace Team1922.MVVM.ViewModels
             {
                 return _children.Values;
             }
+        }
+        #endregion
+
+        #region IHierarchialAccessRoot
+        public async Task<string> GetAsync(string path)
+        {
+            //wait for the request to complete
+            long ticket = await EnqueueAndWait(path, "", true);
+            //throw any applicable exceptions
+            CheckExceptions(ticket);
+            //get the result
+            var ret = _hierarchialAccessResponses[ticket];
+            //cleanup the ticket
+            CleanupTicket(ticket);
+            return ret;
+        }
+        public async Task SetAsync(string path, string value)
+        {
+            //wait for the request to complete
+            long ticket = await EnqueueAndWait(path, value, false);
+            //throw any applicable exceptions
+            CheckExceptions(ticket);
+            //cleanup the ticket
+            CleanupTicket(ticket);
+        }
+        private async Task<long> EnqueueAndWait(string path, string value, bool read)
+        {
+            //get our ticket number
+            long ticket = GetNextTicketNumber();
+            //queue our request
+            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, ticket));
+            //wait for our ticket to be done
+            await WaitForTicket(ticket, 10);//TODO: what should the timeout be?
+            return ticket;
+        }
+        private void CheckExceptions(long ticket)
+        {
+            //get any exception info
+            if (_hierarchialAccessExceptions.ContainsKey(ticket))
+            {
+                try
+                {
+                    throw _hierarchialAccessExceptions[ticket];
+                }
+                finally
+                {
+                    //if there is an exception, always cleanup the exception
+                    CleanupTicket(ticket);
+                }
+            }
+        }
+        private void CleanupTicket(long ticket)
+        {
+            _hierarchialAccessDeadTickets.Add(ticket);
+        }
+        private async Task WaitForTicket(long ticket, int timeoutMs)
+        {
+            //TODO: how fast is this?
+            int timeoutCycleDuration = timeoutMs / 10;
+            for(int i = 0; i < timeoutMs; i += timeoutCycleDuration)
+            {
+                if (_hierarchialAccessResponses.ContainsKey(ticket))
+                    return;
+                await Task.Delay(timeoutCycleDuration);
+            }
+        }
+        private long GetNextTicketNumber()
+        {
+            return Interlocked.Increment(ref _ticketCounter);
+        }
+        private long _ticketCounter = 0;
+        
+        private ConcurrentQueue<Tuple<string, string, bool, long>> _hierarchialAccessRequests = new ConcurrentQueue<Tuple<string, string, bool, long>>();
+        private ConcurrentDictionary<long, string> _hierarchialAccessResponses = new ConcurrentDictionary<long, string>();
+        private ConcurrentDictionary<long, Exception> _hierarchialAccessExceptions = new ConcurrentDictionary<long, Exception>();
+        private ConcurrentBag<long> _hierarchialAccessDeadTickets = new ConcurrentBag<long>();
+
+        //TODO: how do I make this stop when the object is destroyed; should i use IDisposable?
+        private void WorkerThreadMethod()
+        {
+            //this must not throw any exceptions
+
         }
         #endregion
 
@@ -272,6 +359,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region Private Fields
+        Task _hierarchialAccessTask;
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
         readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "EventHandlers", "Joysticks", "RobotMap", "Name", "OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
         IRobotMapProvider _robotMapProvider

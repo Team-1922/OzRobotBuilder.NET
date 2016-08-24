@@ -56,6 +56,7 @@
     <Compile Include="IExpression.cs" />
     <Compile Include="IExpressionParser.cs" />
     <Compile Include="IHierarchialAccess.cs" />
+    <Compile Include="IHierarchialAccessRoot.cs" />
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IInputService.cs" />
     <Compile Include="IIOService.cs" />
