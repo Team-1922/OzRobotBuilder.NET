@@ -38,7 +38,7 @@ namespace Team1922.WebFramework
                 //not found
                 response.StatusCode = 404;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //internal server error
                 response.StatusCode = 500;
@@ -73,7 +73,7 @@ namespace Team1922.WebFramework
                 response.StatusCode = 400;
                 response.Body = e.Message;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //internal server error
                 response.StatusCode = 500;
@@ -82,7 +82,33 @@ namespace Team1922.WebFramework
         }
         protected async Task<BasicHttpResponse> PutAsync(string path, string body)
         {
-            return new BasicHttpResponse() { StatusCode = 501 };//not implemented
+            BasicHttpResponse response = new BasicHttpResponse();
+            var convertedPath = ConvertPath(path);
+            try
+            {
+                //set whether it exists or not
+                await RobotRepository.Instance.SetAsync(convertedPath, body);
+
+                //created
+                response.StatusCode = 201;
+            }
+            catch (ArgumentException e)
+            {
+                //not found
+                response.StatusCode = 404;
+            }
+            catch (FacetValidationException e)
+            {
+                //Bad Request
+                response.StatusCode = 400;
+                response.Body = e.Message;
+            }
+            catch (Exception)
+            {
+                //internal server error
+                response.StatusCode = 500;
+            }
+            return response;
         }
         protected async Task<BasicHttpResponse> PatchAsync(string path, string body)
         {
@@ -90,7 +116,6 @@ namespace Team1922.WebFramework
             var convertedPath = ConvertPath(path);
             try
             {
-                // TODO: this IS a slow way to do it
                 if (!RobotRepository.Instance.KeyExists(convertedPath))
                     throw new ArgumentException();
 
