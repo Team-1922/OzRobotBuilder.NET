@@ -23,7 +23,7 @@ namespace Team1922.WebFramework
         }
 
         #region CRUD Access Methods
-        protected async Task<BasicHttpResponse> Get(string path)
+        protected async Task<BasicHttpResponse> GetAsync(string path)
         {
             BasicHttpResponse response = new BasicHttpResponse();
             try
@@ -45,7 +45,7 @@ namespace Team1922.WebFramework
             }
             return response;
         }
-        protected async Task<BasicHttpResponse> Post(string path, string body)
+        protected async Task<BasicHttpResponse> PostAsync(string path, string body)
         {
             BasicHttpResponse response = new BasicHttpResponse();
             var convertedPath = ConvertPath(path);
@@ -90,11 +90,11 @@ namespace Team1922.WebFramework
             }
             return response;
         }
-        protected async Task<BasicHttpResponse> Put(string path, string body)
+        protected async Task<BasicHttpResponse> PutAsync(string path, string body)
         {
             return new BasicHttpResponse() { StatusCode = 501 };//not implemented
         }
-        protected async Task<BasicHttpResponse> Patch(string path, string body)
+        protected async Task<BasicHttpResponse> PatchAsync(string path, string body)
         {
             BasicHttpResponse response = new BasicHttpResponse();
             var convertedPath = ConvertPath(path);
@@ -127,7 +127,7 @@ namespace Team1922.WebFramework
             }
             return response;
         }
-        protected async Task<BasicHttpResponse> Delete(string path)
+        protected async Task<BasicHttpResponse> DeleteAsync(string path)
         {
             return new BasicHttpResponse() { StatusCode = 501 };//not implemented
         }
@@ -140,7 +140,7 @@ namespace Team1922.WebFramework
                 return null;
             return split[1];
         }
-        public async Task ProcessRequest(HttpContext context)
+        public async Task ProcessRequestAsync(HttpContext context)
         {
             //split the path after "api/Robot"
             string fullRequestPath = context.Request.Path.Value;
@@ -157,7 +157,7 @@ namespace Team1922.WebFramework
             string requestBody = await bufferReader.ReadToEndAsync();
 
             //call the correct method for this request
-            BasicHttpResponse response = await AggregateMethod(context.Request.Method, requestPath, requestBody);
+            BasicHttpResponse response = await AggregateMethodAsync(context.Request.Method, requestPath, requestBody);
 
             //set the status code of the response
             context.Response.StatusCode = response.StatusCode;   
@@ -165,20 +165,20 @@ namespace Team1922.WebFramework
             //this needs to go last!
             await context.Response.WriteAsync(response.Body ?? "");
         }
-        public async Task<BasicHttpResponse> AggregateMethod(string method, string requestPath, string requestBody)
+        public async Task<BasicHttpResponse> AggregateMethodAsync(string method, string requestPath, string requestBody)
         {
             switch (method)
             {
                 case "GET":
-                    return await Get(requestPath);
+                    return await GetAsync(requestPath);
                 case "POST":
-                    return await Post(requestPath, requestBody);
+                    return await PostAsync(requestPath, requestBody);
                 case "PUT":
-                    return await Put(requestPath, requestBody);
+                    return await PutAsync(requestPath, requestBody);
                 case "PATCH":
-                    return await Patch(requestPath, requestBody);
+                    return await PatchAsync(requestPath, requestBody);
                 case "DELETE":
-                    return await Delete(requestPath);
+                    return await DeleteAsync(requestPath);
                 default:
                     return new BasicHttpResponse() { StatusCode = 503 };//Is this the right status code?
             }
