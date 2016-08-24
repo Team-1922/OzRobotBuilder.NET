@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
+using Team1922.MVVM.Models.XML;
 
 namespace Team1922.MVVM.ViewModels
 {
@@ -87,9 +88,11 @@ namespace Team1922.MVVM.ViewModels
         //private int _enumeratorIndex = -1;
 
         private IProvider _parent;
+        protected IFacet itemNameFacet;
 
         protected ViewModelBase(IProvider parent)
-        { 
+        {
+            itemNameFacet = TypeRestrictions.GetValidationObjectFromTypeName("ItemName");
             _parent = parent;
             UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
@@ -213,6 +216,13 @@ namespace Team1922.MVVM.ViewModels
         /// <returns>whether or not an item exists at <paramref name="key"/></returns>
         public bool KeyExists(string key)
         {
+            //make sure this is a valid path
+            TypeRestrictions.Validate(itemNameFacet, key);
+
+            return _keyExists(key);
+        }
+        private bool _keyExists(string key)
+        {
             //NOTE: this is VERY similar to the behavior of ValueReadWrite
 
             var thisMember = key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
@@ -255,11 +265,15 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
+                //make sure this is a valid path
+                TypeRestrictions.Validate(itemNameFacet, key);
                 return ValueReadWrite(key, true);
             }
 
             set
             {
+                //make sure this is a valid path
+                TypeRestrictions.Validate(itemNameFacet, key);
                 ValueReadWrite(key, false, value);
             }
         }
