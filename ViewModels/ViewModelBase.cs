@@ -90,7 +90,6 @@ namespace Team1922.MVVM.ViewModels
 
         protected ViewModelBase(IProvider parent)
         { 
-            _settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
             _parent = parent;
             UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
@@ -448,10 +447,9 @@ namespace Team1922.MVVM.ViewModels
                 OnModelChange();
         }
         #endregion
+        
 
-        #region Private Fields
-        JsonSerializerSettings _settings;
-        #endregion
+        public static JsonSerializerSettings _settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
     }
 
     public abstract class ViewModelBase<ModelType> : ViewModelBase
