@@ -66,6 +66,7 @@
     <Compile Include="XML\EnumerationFacet.cs" />
     <Compile Include="XML\FacetCollection.cs" />
     <Compile Include="XML\FacetList.cs" />
+    <Compile Include="XML\FacetValidationException.cs" />
     <Compile Include="XML\FractionDigitsFacet.cs" />
     <Compile Include="XML\IFacet.cs" />
     <Compile Include="XML\IntegerNumericFacet.cs" />

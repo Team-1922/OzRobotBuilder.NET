@@ -32,7 +32,7 @@ namespace Team1922.MVVM.Models
                 var facet = GetValidationObject(attributeName);
                 if (!facet.TestValue(value))
                 {
-                    throw new System.ArgumentException(facet.Stringify());
+                    throw new FacetValidationException(facet.Stringify());
                 }
             }
         }

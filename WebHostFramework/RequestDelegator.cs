@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Team1922.MVVM.Models.XML;
 
 namespace Team1922.WebFramework
 {
@@ -65,12 +66,18 @@ namespace Team1922.WebFramework
                     //created
                     response.StatusCode = 201;
                 }
-                catch (ArgumentException)
+                catch (ArgumentException e)
                 {
                     //not found
                     response.StatusCode = 404;
                 }
-                catch (Exception)
+                catch(FacetValidationException e)
+                {
+                    //Bad Request
+                    response.StatusCode = 400;
+                    response.Body = e.Message;
+                }
+                catch (Exception e)
                 {
                     //internal server error
                     response.StatusCode = 500;
@@ -106,6 +113,12 @@ namespace Team1922.WebFramework
             {
                 //not found
                 response.StatusCode = 404;
+            }
+            catch (FacetValidationException e)
+            {
+                //Bad Request
+                response.StatusCode = 400;
+                response.Body = e.Message;
             }
             catch (Exception)
             {
