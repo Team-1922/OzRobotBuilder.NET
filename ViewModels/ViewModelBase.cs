@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
+using Team1922.MVVM.Models.XML;
 
 namespace Team1922.MVVM.ViewModels
 {
@@ -87,10 +88,11 @@ namespace Team1922.MVVM.ViewModels
         //private int _enumeratorIndex = -1;
 
         private IProvider _parent;
+        protected IFacet itemNameFacet;
 
         protected ViewModelBase(IProvider parent)
-        { 
-            _settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+        {
+            itemNameFacet = TypeRestrictions.GetValidationObjectFromTypeName("ItemName");
             _parent = parent;
             UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
@@ -207,6 +209,51 @@ namespace Team1922.MVVM.ViewModels
             }
             return true;
         }
+        /// <summary>
+        /// Checks to see whether a given key exists
+        /// </summary>
+        /// <param name="key">the item to check</param>
+        /// <returns>whether or not an item exists at <paramref name="key"/></returns>
+        public bool KeyExists(string key)
+        {
+            //make sure this is a valid path
+            TypeRestrictions.Validate(itemNameFacet, key);
+
+            return _keyExists(key);
+        }
+        private bool _keyExists(string key)
+        {
+            //NOTE: this is VERY similar to the behavior of ValueReadWrite
+
+            var thisMember = key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
+            if (null == thisMember)
+                throw new ArgumentException($"\"{key}\" Is an Invalid Property");
+            else if (thisMember.Length == 1)
+            {
+                return _keys.Contains(thisMember[0]);
+            }
+
+            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
+            //  and not every time they would be accessed in the other view-models
+
+            //if this is a compound provider, loop through all of its sub-view-models
+            if (this is ICompoundProvider)
+            {
+                var me = this as ICompoundProvider;
+                foreach (var child in me.Children)
+                {
+                    if (child.Name == thisMember[0])
+                    {
+                        //if this is also a hierarchial access, which is almost definitely is, then call the child's function
+                        if (child is IHierarchialAccess)
+                        {
+                            return (child as IHierarchialAccess).KeyExists(key);
+                        }
+                    }
+                }
+            }
+            throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+        }
 
         /// <summary>
         /// This gives read/write access to the viewmodel based on the name of the property;
@@ -218,11 +265,15 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
+                //make sure this is a valid path
+                TypeRestrictions.Validate(itemNameFacet, key);
                 return ValueReadWrite(key, true);
             }
 
             set
             {
+                //make sure this is a valid path
+                TypeRestrictions.Validate(itemNameFacet, key);
                 ValueReadWrite(key, false, value);
             }
         }
@@ -323,15 +374,15 @@ namespace Team1922.MVVM.ViewModels
         }
         protected string JsonSerialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj, _settings);
+            return JsonConvert.SerializeObject(obj, Settings);
         }
         protected T JsonDeserialize<T>(string text)
         {
-            return JsonConvert.DeserializeObject<T>(text, _settings);
+            return JsonConvert.DeserializeObject<T>(text, Settings);
         }
         protected object JsonDeserialize(string text)
         {
-            return JsonConvert.DeserializeObject(text, _settings);
+            return JsonConvert.DeserializeObject(text, Settings);
         }
         #endregion
 
@@ -406,41 +457,6 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~ViewModelBase() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
-
         #region Private Methods
         private void ViewModelBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -448,10 +464,9 @@ namespace Team1922.MVVM.ViewModels
                 OnModelChange();
         }
         #endregion
+        
 
-        #region Private Fields
-        JsonSerializerSettings _settings;
-        #endregion
+        public static JsonSerializerSettings Settings { get; } = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
     }
 
     public abstract class ViewModelBase<ModelType> : ViewModelBase

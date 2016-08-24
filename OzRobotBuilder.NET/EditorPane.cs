@@ -201,6 +201,12 @@ namespace Team1922.OzRobotBuilder.NET
             {
                 RegisterIndependentView(false);
 
+                //make sure to dispose this so the worker thread stops
+                if(_robotDesignerControl.DataContext is ViewModel)
+                {
+                    (_robotDesignerControl.DataContext as ViewModel).Dispose();
+                }
+
                 using (_model)
                 {
                     _model = null;

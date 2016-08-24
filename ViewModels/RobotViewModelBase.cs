@@ -8,16 +8,25 @@ using System.Windows.Input;
 using System.ComponentModel;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Contracts.Events;
+using System.Collections.Concurrent;
+using System.Threading;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class RobotViewModelBase : ViewModelBase<Robot>, IRobotProvider
+    public class RobotViewModelBase : ViewModelBase<Robot>, IRobotProvider, IDisposable
     {
         public RobotViewModelBase() : base(null)
         {
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider, Subsystem>("Subsystems", this, (Subsystem model) => { return new SubsystemViewModel(this) { ModelReference = model }; });
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider, Models.EventHandler>("EventHandlers", this, (Models.EventHandler model) => { return new EventHandlerViewModel(this) { ModelReference = model }; });
             _joystickProviders = new CompoundProviderList<IJoystickProvider, Joystick>("Joysticks", this, (Joystick model) => { return new JoystickViewModel(this) { ModelReference = model }; });
+
+            _hierarchialAccesCTS = new CancellationTokenSource();
+
+            //start the background thread which processes the access queue
+            _hierarchialAccessTask = Task.Run((Action)WorkerThreadMethod);
+            //then start the background thread which removes the dead tickets after the access queue processes them
+            _hierarchailAccessDeadTokenCleanupTask = Task.Run((Action)DeadTicketCleanup);
         }
 
         #region IRobotProvider
@@ -71,50 +80,15 @@ namespace Team1922.MVVM.ViewModels
         }
         public void RemoveSubsystem(string name)
         {
-            for (int i = 0; i < _subsystemProviders.Items.Count; ++i)
-            {
-                if (_subsystemProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _subsystemProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.Subsystem.RemoveAt(i);
-                    break;
-                }
-            }
+            _subsystemProviders.Remove(name);
         }
-
         public void RemoveJoystick(string name)
         {
-            for (int i = 0; i < _joystickProviders.Items.Count; ++i)
-            {
-                if (_joystickProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _joystickProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.Joystick.RemoveAt(i);
-                    break;
-                }
-            }
+            _joystickProviders.Remove(name);
         }
-
         public void RemoveEventHandler(string name)
         {
-            for (int i = 0; i < _eventHandlerProviders.Items.Count; ++i)
-            {
-                if (_eventHandlerProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _eventHandlerProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.EventHandler.RemoveAt(i);
-                    break;
-                }
-            }
+            _eventHandlerProviders.Remove(name);
         }
         #endregion
         
@@ -134,6 +108,157 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 return _children.Values;
+            }
+        }
+        #endregion
+
+        #region IHierarchialAccessRoot
+        /// <summary>
+        /// Retrieves the value at the given key
+        /// </summary>
+        /// <param name="key">the key to look for the value at</param>
+        /// <returns>the value at <paramref name="key"/></returns>
+        public async Task<string> GetAsync(string key)
+        {
+            //wait for the request to complete
+            long ticket = await EnqueueAndWait(key, "", true);
+            //throw any applicable exceptions
+            CheckExceptions(ticket);
+            //get the result
+            var ret = _hierarchialAccessResponses[ticket];
+            //cleanup the ticket
+            CleanupTicket(ticket);
+            return ret;
+        }
+        /// <summary>
+        /// Sets the value at the given key
+        /// </summary>
+        /// <param name="key">where to set <paramref name="value"/> at</param>
+        /// <param name="value">the value to set at location <paramref name="key"/></param>
+        /// <returns></returns>
+        public async Task SetAsync(string key, string value)
+        {
+            //wait for the request to complete
+            long ticket = await EnqueueAndWait(key, value, false);
+            //throw any applicable exceptions
+            CheckExceptions(ticket);
+            //cleanup the ticket
+            CleanupTicket(ticket);
+        }
+        /// <summary>
+        /// Used to determine whether an item exsits at the given key
+        /// </summary>
+        /// <param name="key">the key to check</param>
+        /// <returns>whether or not an item exists at <paramref name="key"/></returns>
+        bool IHierarchialAccessRoot.KeyExists(string key)
+        {
+            return base.KeyExists(key);
+        }
+
+        private async Task<long> EnqueueAndWait(string path, string value, bool read)
+        {
+            //get our ticket number
+            long ticket = GetNextTicketNumber();
+            //queue our request
+            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, ticket));
+            //wait for our ticket to be done
+            await WaitForTicket(ticket, 10);//TODO: what should the timeout be?
+            return ticket;
+        }
+        private void CheckExceptions(long ticket)
+        {
+            //get any exception info
+            if (_hierarchialAccessExceptions.ContainsKey(ticket))
+            {
+                try
+                {
+                    throw _hierarchialAccessExceptions[ticket];
+                }
+                finally
+                {
+                    //if there is an exception, always cleanup the exception
+                    CleanupTicket(ticket);
+                }
+            }
+        }
+        private void CleanupTicket(long ticket)
+        {
+            _hierarchialAccessDeadTickets.Add(ticket);
+        }
+        private async Task WaitForTicket(long ticket, int timeoutMs)
+        {
+            //TODO: how fast is this?
+            int timeoutCycleDuration = timeoutMs / 10;
+            for(int i = 0; i < timeoutMs; i += timeoutCycleDuration)
+            {
+                if (_hierarchialAccessResponses.ContainsKey(ticket))
+                    return;
+                await Task.Delay(timeoutCycleDuration);
+            }
+        }
+        private long GetNextTicketNumber()
+        {
+            return Interlocked.Increment(ref _ticketCounter);
+        }
+        private long _ticketCounter = 0;
+        
+        private ConcurrentQueue<Tuple<string, string, bool, long>> _hierarchialAccessRequests = new ConcurrentQueue<Tuple<string, string, bool, long>>();
+        private ConcurrentDictionary<long, string> _hierarchialAccessResponses = new ConcurrentDictionary<long, string>();
+        private ConcurrentDictionary<long, Exception> _hierarchialAccessExceptions = new ConcurrentDictionary<long, Exception>();
+        private ConcurrentBag<long> _hierarchialAccessDeadTickets = new ConcurrentBag<long>();
+
+        //TODO: how do I make this stop when the object is destroyed; should i use IDisposable?
+        private void WorkerThreadMethod()
+        {
+            //this must not throw any exceptions
+            
+            CancellationToken workerMethodToken = _hierarchialAccesCTS.Token;
+            //process the queue until someone tells us otherwise
+            while (!workerMethodToken.IsCancellationRequested)
+            {
+                //always work unless there are no requests
+                while (_hierarchialAccessRequests.Count != 0)
+                {
+                    //get the next reqeust
+                    Tuple<string, string, bool, long> processItem;
+                    if(_hierarchialAccessRequests.TryDequeue(out processItem))
+                    {
+                        try
+                        {
+                            //is this a read or a write request?
+                            if (processItem.Item3)
+                            {
+                                //read request
+
+                                //TODO: this might be able to be condensed into a single line
+                                var result = this[processItem.Item1];
+                                _hierarchialAccessResponses[processItem.Item4] = result;
+                            }
+                            else
+                            {
+                                //write request
+                                this[processItem.Item1] = processItem.Item2;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            //make sure exceptions are handled
+                            _hierarchialAccessExceptions[processItem.Item4] = e;
+                        }
+                    }
+                }
+            }
+        }
+        private void DeadTicketCleanup()
+        {
+            CancellationToken token = _hierarchialAccesCTS.Token;
+            //every 5 seconds, clear the dead tickets
+            while (!token.IsCancellationRequested)
+            {
+                //this is the way to remove items from the bag, becuas this does not lock up the bag, and how long this runs does not matter
+                _hierarchialAccessDeadTickets.TakeWhile(
+                    (long val) => { return true; });
+                Task.Delay(5000).Wait();//wait 5 seconds
             }
         }
         #endregion
@@ -232,6 +357,42 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    _hierarchialAccesCTS.Cancel();
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~ViewModelBase() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
+
         #region Private Methods
         private void AddSubsystem(Subsystem subsystem, bool addToModel)
         {
@@ -272,6 +433,9 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region Private Fields
+        CancellationTokenSource _hierarchialAccesCTS;
+        Task _hierarchialAccessTask;
+        Task _hierarchailAccessDeadTokenCleanupTask;
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
         readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "EventHandlers", "Joysticks", "RobotMap", "Name", "OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
         IRobotMapProvider _robotMapProvider

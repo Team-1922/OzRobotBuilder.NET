@@ -137,7 +137,7 @@
   </xs:complexType>
 
   <xs:complexType name="RobotMapEntry">
-    <xs:attribute name="Key" use="required"/>
+    <xs:attribute name="Key" type="tns:ItemName" use="required"/>
     <xs:attribute name="Value" use="required"/>
   </xs:complexType>
   <xs:complexType name="RobotMap">

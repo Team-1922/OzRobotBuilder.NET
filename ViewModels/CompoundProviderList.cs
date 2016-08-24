@@ -31,6 +31,23 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void Remove(string name)
+        {
+            for (int i = 0; i < Items.Count; ++i)
+            {
+                if (Items[i].Name == name)
+                {
+                    //remove the provider
+                    Items.RemoveAt(i);
+
+                    //remove the model instance
+                    ModelReference.RemoveAt(i);
+                    break;
+                }
+            }
+            throw new ArgumentException($"Could Not Find {name}", "name");
+        }
+
         /// <summary>
         /// Used internally for adding blank entries; checks if <paramref name="name"/> exists in the map
         /// </summary>
@@ -79,12 +96,7 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override string GetValue(string key)
         {
-            var item = FindByName(key);
-            if(null != item)
-            {
-                return item.GetModelJson();
-            }
-            throw new ArgumentException("item not found", "key");
+            return FindByName(key).GetModelJson();
         }
         protected override void SetValue(string key, string value)
         {
@@ -92,17 +104,22 @@ namespace Team1922.MVVM.ViewModels
             if(key == "")
             {
                 var newItem = JsonDeserialize<ModelType>(value);
-                if(newItem != null)
+                if (newItem != null)
+                {
                     ModelReference.Add(newItem);
+                    Items.Add(_constructNewItem(newItem));
+                    return;
+                }
             }
-
-            var item = FindByName(key);
-            if(null != item)
+            
+            //delete the item if "value" is null
+            if(value == null)
             {
-                item.SetModelJson(value);
+                Remove(key);
                 return;
             }
-            throw new ArgumentException($"\"{key}\" is Read-Only");
+
+            FindByName(key).SetModelJson(value);
         }
         protected override void OnModelChange()
         {

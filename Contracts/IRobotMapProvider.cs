@@ -21,5 +21,10 @@ namespace Team1922.MVVM.Contracts
         /// <param name="key">the name used to reference the value</param>
         /// <param name="value">the value referenced by <paramref name="key"/></param>
         void AddEntry(string key, string value);
+        /// <summary>
+        /// Removes an entry in the map
+        /// </summary>
+        /// <param name="key">the identifier of the entry to remove</param>
+        void RemoveEntry(string key);
     }
 }
