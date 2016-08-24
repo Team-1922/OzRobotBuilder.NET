@@ -8,8 +8,8 @@ namespace Team1922.WebFramework
 {
     public static class RobotRepository
     {
-        private static IHierarchialAccess _instance;
-        public static IHierarchialAccess Instance
+        private static IHierarchialAccessRoot _instance;
+        public static IHierarchialAccessRoot Instance
         {
             get
             {

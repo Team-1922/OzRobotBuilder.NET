@@ -28,7 +28,7 @@ namespace Team1922.WebFramework
             BasicHttpResponse response = new BasicHttpResponse();
             try
             {
-                response.Body = (RobotRepository.Instance[ConvertPath(path)]);
+                response.Body = await RobotRepository.Instance.GetAsync(ConvertPath(path));
 
                 //OK
                 response.StatusCode = 200;
@@ -52,7 +52,7 @@ namespace Team1922.WebFramework
             try
             {
                 // TODO: this might be a slow way to do it
-                var result = RobotRepository.Instance[convertedPath];
+                var result = await RobotRepository.Instance.GetAsync(convertedPath);
 
                 //Conflict
                 response.StatusCode = 409;
@@ -62,7 +62,7 @@ namespace Team1922.WebFramework
                 try
                 {
                     //only do this operation if it does not exists already
-                    RobotRepository.Instance[convertedPath] = body;
+                    await RobotRepository.Instance.SetAsync(convertedPath, body);
                     //created
                     response.StatusCode = 201;
                 }
@@ -101,10 +101,10 @@ namespace Team1922.WebFramework
             try
             {
                 // TODO: this IS a slow way to do it
-                var result = RobotRepository.Instance[convertedPath];
+                var result = await RobotRepository.Instance.GetAsync(convertedPath);
 
                 //only do this operation if it exists already
-                RobotRepository.Instance[convertedPath] = body;
+                await RobotRepository.Instance.SetAsync(convertedPath, body);
 
                 //OK
                 response.StatusCode = 200;

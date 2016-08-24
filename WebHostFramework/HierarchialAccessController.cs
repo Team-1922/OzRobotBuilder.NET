@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Team1922.WebFramework
-{
+{/*
     [Route("api/Robot")]
     public class HierarchialAccessController
     {
@@ -116,5 +116,5 @@ namespace Team1922.WebFramework
         {
             return new StatusCodeResult(503);
         }
-    }
+    }*/
 }

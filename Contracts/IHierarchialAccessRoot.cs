@@ -8,7 +8,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The top-level hierarchial access instance; this provies asynchronous access to the view-model tree
     /// </summary>
-    public interface IHierarchialAccessRoot
+    public interface IHierarchialAccessRoot : IDisposable
     {
         /// <summary>
         /// Retrieves the value at the given path
