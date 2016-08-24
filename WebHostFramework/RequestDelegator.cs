@@ -51,39 +51,29 @@ namespace Team1922.WebFramework
             var convertedPath = ConvertPath(path);
             try
             {
-                // TODO: this might be a slow way to do it
-                var result = await RobotRepository.Instance.GetAsync(convertedPath);
-
-                //Conflict
-                response.StatusCode = 409;
-            }
-            catch (ArgumentException)
-            {
-                try
+                //only do this operation if it does not exists already
+                if (RobotRepository.Instance.KeyExists(convertedPath))
+                    response.StatusCode = 409;
+                else
                 {
-                    //only do this operation if it does not exists already
                     await RobotRepository.Instance.SetAsync(convertedPath, body);
+
                     //created
                     response.StatusCode = 201;
                 }
-                catch (ArgumentException e)
-                {
-                    //not found
-                    response.StatusCode = 404;
-                }
-                catch(FacetValidationException e)
-                {
-                    //Bad Request
-                    response.StatusCode = 400;
-                    response.Body = e.Message;
-                }
-                catch (Exception e)
-                {
-                    //internal server error
-                    response.StatusCode = 500;
-                }
             }
-            catch (Exception)
+            catch (ArgumentException e)
+            {
+                //not found
+                response.StatusCode = 404;
+            }
+            catch(FacetValidationException e)
+            {
+                //Bad Request
+                response.StatusCode = 400;
+                response.Body = e.Message;
+            }
+            catch (Exception e)
             {
                 //internal server error
                 response.StatusCode = 500;
@@ -101,7 +91,8 @@ namespace Team1922.WebFramework
             try
             {
                 // TODO: this IS a slow way to do it
-                var result = await RobotRepository.Instance.GetAsync(convertedPath);
+                if (!RobotRepository.Instance.KeyExists(convertedPath))
+                    throw new ArgumentException();
 
                 //only do this operation if it exists already
                 await RobotRepository.Instance.SetAsync(convertedPath, body);
