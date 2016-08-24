@@ -322,15 +322,15 @@ namespace Team1922.MVVM.ViewModels
         }
         protected string JsonSerialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj, _settings);
+            return JsonConvert.SerializeObject(obj, Settings);
         }
         protected T JsonDeserialize<T>(string text)
         {
-            return JsonConvert.DeserializeObject<T>(text, _settings);
+            return JsonConvert.DeserializeObject<T>(text, Settings);
         }
         protected object JsonDeserialize(string text)
         {
-            return JsonConvert.DeserializeObject(text, _settings);
+            return JsonConvert.DeserializeObject(text, Settings);
         }
         #endregion
 
@@ -449,7 +449,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
         
 
-        public static JsonSerializerSettings _settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+        public static JsonSerializerSettings Settings { get; } = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
     }
 
     public abstract class ViewModelBase<ModelType> : ViewModelBase
