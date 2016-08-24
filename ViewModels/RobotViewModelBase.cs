@@ -21,8 +21,12 @@ namespace Team1922.MVVM.ViewModels
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider, Models.EventHandler>("EventHandlers", this, (Models.EventHandler model) => { return new EventHandlerViewModel(this) { ModelReference = model }; });
             _joystickProviders = new CompoundProviderList<IJoystickProvider, Joystick>("Joysticks", this, (Joystick model) => { return new JoystickViewModel(this) { ModelReference = model }; });
 
+            _hierarchialAccesCTS = new CancellationTokenSource();
+
             //start the background thread which processes the access queue
             _hierarchialAccessTask = Task.Run((Action)WorkerThreadMethod);
+            //then start the background thread which removes the dead tickets after the access queue processes them
+            _hierarchailAccessDeadTokenCleanupTask = Task.Run((Action)DeadTicketCleanup);
         }
 
         #region IRobotProvider
@@ -221,7 +225,55 @@ namespace Team1922.MVVM.ViewModels
         private void WorkerThreadMethod()
         {
             //this must not throw any exceptions
+            
+            CancellationToken workerMethodToken = _hierarchialAccesCTS.Token;
+            //process the queue until someone tells us otherwise
+            while (!workerMethodToken.IsCancellationRequested)
+            {
+                //always work unless there are no requests
+                while (_hierarchialAccessRequests.Count != 0)
+                {
+                    //get the next reqeust
+                    Tuple<string, string, bool, long> processItem;
+                    if(_hierarchialAccessRequests.TryDequeue(out processItem))
+                    {
+                        try
+                        {
+                            //is this a read or a write request?
+                            if (processItem.Item3)
+                            {
+                                //read request
 
+                                //TODO: this might be able to be condensed into a single line
+                                var result = this[processItem.Item1];
+                                _hierarchialAccessResponses[processItem.Item4] = result;
+                            }
+                            else
+                            {
+                                //write request
+                                this[processItem.Item1] = processItem.Item2;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            //make sure exceptions are handled
+                            _hierarchialAccessExceptions[processItem.Item4] = e;
+                        }
+                    }
+                }
+            }
+        }
+        private void DeadTicketCleanup()
+        {
+            CancellationToken token = _hierarchialAccesCTS.Token;
+            //every 5 seconds, clear the dead tickets
+            while (!token.IsCancellationRequested)
+            {
+                //this is the way to remove items from the bag, becuas this does not lock up the bag, and how long this runs does not matter
+                _hierarchialAccessDeadTickets.TakeWhile(
+                    (long val) => { return true; });
+                Task.Delay(5000).Wait();//wait 5 seconds
+            }
         }
         #endregion
 
@@ -359,7 +411,9 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region Private Fields
+        CancellationTokenSource _hierarchialAccesCTS;
         Task _hierarchialAccessTask;
+        Task _hierarchailAccessDeadTokenCleanupTask;
         Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
         readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "EventHandlers", "Joysticks", "RobotMap", "Name", "OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
         IRobotMapProvider _robotMapProvider
