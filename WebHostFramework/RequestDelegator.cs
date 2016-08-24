@@ -28,7 +28,7 @@ namespace Team1922.WebFramework
             BasicHttpResponse response = new BasicHttpResponse();
             try
             {
-                response.Body = await RobotRepository.Instance.GetAsync(ConvertPath(path));
+                response.Body = await RobotRepository.Instance.GetAsync(path);
 
                 //OK
                 response.StatusCode = 200;
@@ -48,15 +48,14 @@ namespace Team1922.WebFramework
         protected async Task<BasicHttpResponse> PostAsync(string path, string body)
         {
             BasicHttpResponse response = new BasicHttpResponse();
-            var convertedPath = ConvertPath(path);
             try
             {
                 //only do this operation if it does not exists already
-                if (RobotRepository.Instance.KeyExists(convertedPath))
+                if (RobotRepository.Instance.KeyExists(path))
                     response.StatusCode = 409;
                 else
                 {
-                    await RobotRepository.Instance.SetAsync(convertedPath, body);
+                    await RobotRepository.Instance.SetAsync(path, body);
 
                     //created
                     response.StatusCode = 201;
@@ -83,11 +82,10 @@ namespace Team1922.WebFramework
         protected async Task<BasicHttpResponse> PutAsync(string path, string body)
         {
             BasicHttpResponse response = new BasicHttpResponse();
-            var convertedPath = ConvertPath(path);
             try
             {
                 //set whether it exists or not
-                await RobotRepository.Instance.SetAsync(convertedPath, body);
+                await RobotRepository.Instance.SetAsync(path, body);
 
                 //created
                 response.StatusCode = 201;
@@ -113,14 +111,13 @@ namespace Team1922.WebFramework
         protected async Task<BasicHttpResponse> PatchAsync(string path, string body)
         {
             BasicHttpResponse response = new BasicHttpResponse();
-            var convertedPath = ConvertPath(path);
             try
             {
-                if (!RobotRepository.Instance.KeyExists(convertedPath))
+                if (!RobotRepository.Instance.KeyExists(path))
                     throw new ArgumentException();
 
                 //only do this operation if it exists already
-                await RobotRepository.Instance.SetAsync(convertedPath, body);
+                await RobotRepository.Instance.SetAsync(path, body);
 
                 //OK
                 response.StatusCode = 200;
@@ -146,7 +143,6 @@ namespace Team1922.WebFramework
         protected async Task<BasicHttpResponse> DeleteAsync(string path)
         {
             BasicHttpResponse response = new BasicHttpResponse();
-            var convertedPath = ConvertPath(path);
             try
             {
                 //null indicates we want this object to be deleted
@@ -198,6 +194,7 @@ namespace Team1922.WebFramework
                 context.Response.StatusCode = 404;
                 return;
             }
+            requestPath = ConvertPath(requestPath);
 
             //get the request body
             var bufferReader = new StreamReader(context.Request.Body);            
