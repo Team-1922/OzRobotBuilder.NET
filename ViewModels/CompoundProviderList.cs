@@ -31,6 +31,23 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void Remove(string name)
+        {
+            for (int i = 0; i < Items.Count; ++i)
+            {
+                if (Items[i].Name == name)
+                {
+                    //remove the provider
+                    Items.RemoveAt(i);
+
+                    //remove the model instance
+                    ModelReference.RemoveAt(i);
+                    break;
+                }
+            }
+            throw new ArgumentException($"Could Not Find {name}", "name");
+        }
+
         /// <summary>
         /// Used internally for adding blank entries; checks if <paramref name="name"/> exists in the map
         /// </summary>
@@ -93,6 +110,13 @@ namespace Team1922.MVVM.ViewModels
                     Items.Add(_constructNewItem(newItem));
                     return;
                 }
+            }
+            
+            //delete the item if "value" is null
+            if(value == null)
+            {
+                Remove(key);
+                return;
             }
 
             FindByName(key).SetModelJson(value);

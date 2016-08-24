@@ -80,50 +80,15 @@ namespace Team1922.MVVM.ViewModels
         }
         public void RemoveSubsystem(string name)
         {
-            for (int i = 0; i < _subsystemProviders.Items.Count; ++i)
-            {
-                if (_subsystemProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _subsystemProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.Subsystem.RemoveAt(i);
-                    break;
-                }
-            }
+            _subsystemProviders.Remove(name);
         }
-
         public void RemoveJoystick(string name)
         {
-            for (int i = 0; i < _joystickProviders.Items.Count; ++i)
-            {
-                if (_joystickProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _joystickProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.Joystick.RemoveAt(i);
-                    break;
-                }
-            }
+            _joystickProviders.Remove(name);
         }
-
         public void RemoveEventHandler(string name)
         {
-            for (int i = 0; i < _eventHandlerProviders.Items.Count; ++i)
-            {
-                if (_eventHandlerProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _eventHandlerProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.EventHandler.RemoveAt(i);
-                    break;
-                }
-            }
+            _eventHandlerProviders.Remove(name);
         }
         #endregion
         

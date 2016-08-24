@@ -145,7 +145,38 @@ namespace Team1922.WebFramework
         }
         protected async Task<BasicHttpResponse> DeleteAsync(string path)
         {
-            return new BasicHttpResponse() { StatusCode = 501 };//not implemented
+            BasicHttpResponse response = new BasicHttpResponse();
+            var convertedPath = ConvertPath(path);
+            try
+            {
+                //null indicates we want this object to be deleted
+                await RobotRepository.Instance.SetAsync(path, null);
+
+                //OK
+                response.StatusCode = 200;
+            }
+            catch (ArgumentException)
+            {
+                //not found
+                response.StatusCode = 404;
+            }
+            catch (FacetValidationException e)
+            {
+                //Bad Request
+                response.StatusCode = 400;
+                response.Body = e.Message;
+            }
+            catch(NullReferenceException)
+            {
+                //not found
+                response.StatusCode = 404;
+            }
+            catch (Exception)
+            {
+                //internal server error
+                response.StatusCode = 500;
+            }
+            return response;
         }
         #endregion
 

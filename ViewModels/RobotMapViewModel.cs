@@ -31,6 +31,17 @@ namespace Team1922.MVVM.ViewModels
             ModelReference.Add(new RobotMapEntry { Key = key, Value = value });
             UpdateKeyValueList();
         }
+        public void RemoveEntry(string key)
+        {
+            for (int i = 0; i < ModelReference.Count; ++i)
+            {
+                if (ModelReference[i].Key == key)
+                {
+                    ModelReference.RemoveAt(i);
+                    break;
+                }
+            }
+        }
         #endregion
 
         #region IProvider
@@ -44,7 +55,6 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ViewModelBase
-
         protected override string GetValue(string key)
         {
             foreach(var item in ModelReference)
@@ -56,6 +66,10 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override void SetValue(string key, string value)
         {
+            //remove the entry if value is null
+            if (value == null)
+                RemoveEntry(key);
+
             for(int i = 0; i < ModelReference.Count; ++i)
             {
                 if (ModelReference[i].Key == key)

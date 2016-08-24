@@ -177,98 +177,32 @@ namespace Team1922.MVVM.ViewModels
 
         public void RemovePWMOutput(string name)
         {
-            for (int i = 0; i < _pwmOutputProviders.Items.Count; ++i)
-            {
-                if (_pwmOutputProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _pwmOutputProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.PWMOutput.RemoveAt(i);
-                    break;
-                }
-            }
+            _pwmOutputProviders.Remove(name);
         }
 
         public void RemoveDigitalInput(string name)
         {
-            for (int i = 0; i < _digitalInputProviders.Items.Count; ++i)
-            {
-                if (_digitalInputProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _digitalInputProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.DigitalInput.RemoveAt(i);
-                    break;
-                }
-            }
+            _digitalInputProviders.Remove(name);
         }
 
         public void RemoveAnalogInput(string name)
         {
-            for (int i = 0; i < _analogInputProviders.Items.Count; ++i)
-            {
-                if (_analogInputProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _analogInputProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.AnalogInput.RemoveAt(i);
-                    break;
-                }
-            }
+            _analogInputProviders.Remove(name);
         }
 
         public void RemoveQuadEncoder(string name)
         {
-            for (int i = 0; i < _quadEncoderProviders.Items.Count; ++i)
-            {
-                if (_quadEncoderProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _quadEncoderProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.QuadEncoder.RemoveAt(i);
-                    break;
-                }
-            }
+            _quadEncoderProviders.Remove(name);
         }
 
         public void RemoveRelayOutput(string name)
         {
-            for (int i = 0; i < _relayOutputProviders.Items.Count; ++i)
-            {
-                if (_relayOutputProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _relayOutputProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.RelayOutput.RemoveAt(i);
-                    break;
-                }
-            }
+            _canTalonProviders.Remove(name);
         }
 
         public void RemoveCANTalon(string name)
         {
-            for (int i = 0; i < _canTalonProviders.Items.Count; ++i)
-            {
-                if (_canTalonProviders.Items[i].Name == name)
-                {
-                    //remove the provider
-                    _canTalonProviders.Items.RemoveAt(i);
-
-                    //remove the model instance
-                    ModelReference.CANTalons.RemoveAt(i);
-                    break;
-                }
-            }
+            _canTalonProviders.Remove(name);
         }
         public int ID
         {
