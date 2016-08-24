@@ -15,6 +15,11 @@ namespace Team1922.WebFramework
             return key.Replace('/', '.');
         }
 
+        public static string JsonObjectToString(object jsonObject)
+        {
+            return "";
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -40,7 +45,7 @@ namespace Team1922.WebFramework
         }
 
         [HttpPatch("{*key}", Name = "PatchValue")]
-        public IActionResult PatchById(string key, [FromBody] string value)
+        public IActionResult PatchById(string key, [FromBody] object value)
         {
             try
             {
@@ -55,7 +60,7 @@ namespace Team1922.WebFramework
                     return new NotFoundResult();
                 }
                 //only do this operation if it exists already
-                RobotRepository.Instance[key] = value;
+                RobotRepository.Instance[key] = JsonConvert.SerializeObject(value, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
                 return new OkResult();
             }
             catch (ArgumentException)
