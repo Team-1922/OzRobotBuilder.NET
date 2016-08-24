@@ -31,5 +31,11 @@ namespace Team1922.MVVM.Contracts
         /// <param name="value">the value to write to<paramref name="key"/></param>
         /// <returns>whether or not the write was successful</returns>
         bool TrySetValue(string key, string value);
+        /// <summary>
+        /// Checks to see whether a given key exists
+        /// </summary>
+        /// <param name="key">the item to check</param>
+        /// <returns>whether or not an item exists at <paramref name="key"/></returns>
+        bool KeyExists(string key);
     }
 }

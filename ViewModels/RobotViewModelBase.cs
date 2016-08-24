@@ -148,10 +148,15 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IHierarchialAccessRoot
-        public async Task<string> GetAsync(string path)
+        /// <summary>
+        /// Retrieves the value at the given key
+        /// </summary>
+        /// <param name="key">the key to look for the value at</param>
+        /// <returns>the value at <paramref name="key"/></returns>
+        public async Task<string> GetAsync(string key)
         {
             //wait for the request to complete
-            long ticket = await EnqueueAndWait(path, "", true);
+            long ticket = await EnqueueAndWait(key, "", true);
             //throw any applicable exceptions
             CheckExceptions(ticket);
             //get the result
@@ -160,15 +165,31 @@ namespace Team1922.MVVM.ViewModels
             CleanupTicket(ticket);
             return ret;
         }
-        public async Task SetAsync(string path, string value)
+        /// <summary>
+        /// Sets the value at the given key
+        /// </summary>
+        /// <param name="key">where to set <paramref name="value"/> at</param>
+        /// <param name="value">the value to set at location <paramref name="key"/></param>
+        /// <returns></returns>
+        public async Task SetAsync(string key, string value)
         {
             //wait for the request to complete
-            long ticket = await EnqueueAndWait(path, value, false);
+            long ticket = await EnqueueAndWait(key, value, false);
             //throw any applicable exceptions
             CheckExceptions(ticket);
             //cleanup the ticket
             CleanupTicket(ticket);
         }
+        /// <summary>
+        /// Used to determine whether an item exsits at the given key
+        /// </summary>
+        /// <param name="key">the key to check</param>
+        /// <returns>whether or not an item exists at <paramref name="key"/></returns>
+        bool IHierarchialAccessRoot.KeyExists(string key)
+        {
+            return base.KeyExists(key);
+        }
+
         private async Task<long> EnqueueAndWait(string path, string value, bool read)
         {
             //get our ticket number

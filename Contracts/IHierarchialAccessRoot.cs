@@ -11,17 +11,23 @@ namespace Team1922.MVVM.Contracts
     public interface IHierarchialAccessRoot : IDisposable
     {
         /// <summary>
-        /// Retrieves the value at the given path
+        /// Retrieves the value at the given key
         /// </summary>
-        /// <param name="path">the path to look for the value at</param>
-        /// <returns>the value at <paramref name="path"/></returns>
-        Task<string> GetAsync(string path);
+        /// <param name="key">the key to look for the value at</param>
+        /// <returns>the value at <paramref name="key"/></returns>
+        Task<string> GetAsync(string key);
         /// <summary>
-        /// Sets the value at the given path
+        /// Sets the value at the given key
         /// </summary>
-        /// <param name="path">where to set <paramref name="value"/> at</param>
-        /// <param name="value">the value to set at location <paramref name="path"/></param>
+        /// <param name="key">where to set <paramref name="value"/> at</param>
+        /// <param name="value">the value to set at location <paramref name="key"/></param>
         /// <returns></returns>
-        Task SetAsync(string path, string value);
+        Task SetAsync(string key, string value);
+        /// <summary>
+        /// Used to determine whether an item exsits at the given key
+        /// </summary>
+        /// <param name="key">the key to check</param>
+        /// <returns>whether or not an item exists at <paramref name="key"/></returns>
+        bool KeyExists(string key);
     }
 }
