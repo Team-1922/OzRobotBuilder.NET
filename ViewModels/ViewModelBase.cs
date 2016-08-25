@@ -486,7 +486,7 @@ namespace Team1922.MVVM.ViewModels
                 return;
 
             //we don't put our name into this, becuase ours gets added at the next level up
-            OnPropertyChanged($"{senderProvider.Name}{e.PropertyName}");
+            OnPropertyChanged($"{senderProvider.Name}.{e.PropertyName}");
         }
         private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
