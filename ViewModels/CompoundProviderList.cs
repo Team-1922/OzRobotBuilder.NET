@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,18 @@ namespace Team1922.MVVM.ViewModels
     class CompoundProviderList<ProviderType, ModelType> : ViewModelBase<List<ModelType>>, IEnumerable<ProviderType>, ICompoundProvider where ProviderType : IProvider<ModelType>
     {
         //NOTE: if items here are manually added/removed, make SURE they are added to the model
-        public ObservableCollection<ProviderType> Items { get; } = new ObservableCollection<ProviderType>();
+        public IObservableCollection<ProviderType> Items
+        {
+            get
+            {
+                return _items;
+            }
+        }
 
         public CompoundProviderList(string name, IProvider parent, Func<ModelType, ProviderType> constructNewItem) : base(parent)
         {
             Name = name;
-            Items.CollectionChanged += Items_CollectionChanged;
+            _items.CollectionChanged += Items_CollectionChanged;
             _constructNewItem = constructNewItem;
         }
 
@@ -31,14 +38,34 @@ namespace Team1922.MVVM.ViewModels
             }
         }
 
+        public void AddOrUpdate(ModelType item)
+        {
+            //TODO: is there a way to do this without constructing the entire ProviderType first?
+            var newProvider = _constructNewItem(item);
+            bool exists = false;
+            for(int i = 0; i < _items.Count; ++i)
+            {
+                if(newProvider.Name == _items[i].Name)
+                {
+                    _items[i] = newProvider;
+                    exists = true;
+                    break;
+                }
+            }
+            if(!exists)
+            {
+                _items.Add(newProvider);
+            }
+            RegisterChildEventPropagation(newProvider);
+        }
         public void Remove(string name)
         {
-            for (int i = 0; i < Items.Count; ++i)
+            for (int i = 0; i < _items.Count; ++i)
             {
-                if (Items[i].Name == name)
+                if (_items[i].Name == name)
                 {
                     //remove the provider
-                    Items.RemoveAt(i);
+                    _items.RemoveAt(i);
 
                     //remove the model instance
                     ModelReference.RemoveAt(i);
@@ -56,7 +83,7 @@ namespace Team1922.MVVM.ViewModels
         private bool ContainsName(string name)
         {
             //loop through each item in the map
-            foreach (var item in Items)
+            foreach (var item in _items)
             {
                 //then compare the keys
                 if (item.Name == name)
@@ -92,7 +119,7 @@ namespace Team1922.MVVM.ViewModels
         #region ViewModelBase
         protected override List<string> GetOverrideKeys()
         {
-            return (from item in Items select item.Name).ToList();
+            return (from item in _items select item.Name).ToList();
         }
         protected override string GetValue(string key)
         {
@@ -107,7 +134,7 @@ namespace Team1922.MVVM.ViewModels
                 if (newItem != null)
                 {
                     ModelReference.Add(newItem);
-                    Items.Add(_constructNewItem(newItem));
+                    _items.Add(_constructNewItem(newItem));
                     return;
                 }
             }
@@ -123,20 +150,27 @@ namespace Team1922.MVVM.ViewModels
         }
         protected override void OnModelChange()
         {
-            Items.Clear();
+            //_items.Clear();
             foreach(var item in ModelReference)
             {
-                Items.Add(_constructNewItem(item));
+                AddOrUpdate(item);
             }
         }
         #endregion
 
         #region ICompoundProvider
-        public IEnumerable<IProvider> Children
+        IObservableCollection ICompoundProvider.Children
         {
             get
             {
-                return Items.Cast<IProvider>();
+                return Children;
+            }
+        }
+        public IObservableCollection<ProviderType> Children
+        {
+            get
+            {
+                return _items;
             }
         }
         #endregion
@@ -156,7 +190,7 @@ namespace Team1922.MVVM.ViewModels
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return Items.GetEnumerator();
+            return GetEnumerator();
         }
         #endregion
 
@@ -164,21 +198,31 @@ namespace Team1922.MVVM.ViewModels
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             UpdateKeyValueList();
+            //RefreshTypedItemsList();
         }
-
-        private ProviderType FindByName(string name)
+        private IProvider FindByName(string name)
         {
-            foreach (var item in Items)
+            foreach (var item in _items)
             {
                 if (item.Name == name)
                     return item;
             }
             throw new ArgumentException($"\"{name}\" Does Not Exist");
         }
+        private bool Contains(string name)
+        {
+            foreach(var item in _items)
+            {
+                if (item.Name == name)
+                    return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Private Fields
         Func<ModelType, ProviderType> _constructNewItem;
+        ObservableCollection<ProviderType> _items = new ObservableCollection<ProviderType>();
         #endregion
     }
 }

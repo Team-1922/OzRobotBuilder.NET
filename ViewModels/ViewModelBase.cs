@@ -96,6 +96,11 @@ namespace Team1922.MVVM.ViewModels
             _parent = parent;
             UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
+            if(this is ICompoundProvider)
+            {
+                (this as ICompoundProvider).Children.CollectionChanged += Children_CollectionChanged;
+                RegisterChildrenEventPropagation();
+            }
         }
 
         protected void UpdateKeyValueList()
@@ -114,6 +119,21 @@ namespace Team1922.MVVM.ViewModels
         public VMKeyValueList GetEditableKeyValueList()
         {
             return _keyValueList;
+        }
+
+        protected void RegisterChildEventPropagation(INotifyPropertyChanged child)
+        {
+            child.PropertyChanged += Child_PropertyChanged;
+        }
+        protected void RegisterChildrenEventPropagation()
+        {
+            var compoundProvider = this as ICompoundProvider;
+            if (null == compoundProvider)
+                return;
+            foreach(INotifyPropertyChanged child in compoundProvider.Children)
+            {
+                RegisterChildEventPropagation(child);
+            }
         }
 
         #region IProvider
@@ -240,7 +260,7 @@ namespace Team1922.MVVM.ViewModels
             if (this is ICompoundProvider)
             {
                 var me = this as ICompoundProvider;
-                foreach (var child in me.Children)
+                foreach (IProvider child in me.Children)
                 {
                     if (child.Name == thisMember[0])
                     {
@@ -306,7 +326,7 @@ namespace Team1922.MVVM.ViewModels
             if (this is ICompoundProvider)
             {
                 var me = this as ICompoundProvider;
-                foreach (var child in me.Children)
+                foreach (IProvider child in me.Children)
                 {
                     if (child.Name == thisMember[0])
                     {
@@ -402,17 +422,7 @@ namespace Team1922.MVVM.ViewModels
         protected virtual List<string> GetOverrideKeys()
         {
             return (from x in GetType().GetProperties()
-                    where x.Name != "Properties"
-                    && x.Name != "Children"
-                    && x.Name != "this[string]"
-                    && x.Name != "Current"
-                    && x.Name != "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
-                    && x.Name != "Count"
-                    && x.Name != "IsReadOnly"
-                    && x.Name != "ModelTypeName"
-                    && x.Name != "TopParent"
-                    && x.Name != "Parent"
-                    && x.Name != "ModelReference"
+                    where !IsOnNameBlacklist(x.Name)
                     select x.Name).ToList();
         }
         /// <summary>
@@ -464,8 +474,45 @@ namespace Team1922.MVVM.ViewModels
                 OnModelChange();
         }
         #endregion
-        
 
+        #region Event Propagaiton
+        private void Child_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var senderProvider = sender as IProvider;
+            if (null == senderProvider)
+                return;
+
+            if (IsOnNameBlacklist(e.PropertyName))
+                return;
+
+            //we don't put our name into this, becuase ours gets added at the next level up
+            OnPropertyChanged($"{senderProvider.Name}{e.PropertyName}");
+        }
+        private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RegisterChildrenEventPropagation();
+        }
+        #endregion
+        
+        /// <summary>
+        /// Checks to see whether the given property name is on the blacklist of internal property names
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool IsOnNameBlacklist(string name)
+        {
+            return name == "Properties"
+                       || name == "Children"
+                       || name == "this[string]"
+                       || name == "Current"
+                       || name == "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
+                       || name == "Count"
+                       || name == "IsReadOnly"
+                       || name == "ModelTypeName"
+                       || name == "TopParent"
+                       || name == "Parent"
+                       || name == "ModelReference";
+        }
     }
 
     public abstract class ViewModelBase<ModelType> : ViewModelBase

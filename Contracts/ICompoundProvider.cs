@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,10 @@ namespace Team1922.MVVM.Contracts
         /// <summary>
         /// The children of this provider; usually not conveniently a list to being with
         /// </summary>
-        IEnumerable<IProvider> Children { get; }
+        IObservableCollection Children { get; }
+    }
+    public interface ICompoundProvider<ProviderType> : ICompoundProvider where ProviderType : IProvider
+    {
+        IObservableCollection<ProviderType> Children { get; }
     }
 }

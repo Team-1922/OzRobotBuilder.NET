@@ -10,6 +10,7 @@ using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Contracts.Events;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Collections.Specialized;
 
 namespace Team1922.MVVM.ViewModels
 {
@@ -41,6 +42,13 @@ namespace Team1922.MVVM.ViewModels
         public IObservableCollection<IJoystickProvider> Joysticks
         {
             get { return _joystickProviders.Items; }
+        }
+        public IRobotMapProvider RobotMap
+        {
+            get
+            {
+                return _robotMapProvider;
+            }
         }
         public void AddSubsystem(Subsystem subsystem)
         {
@@ -103,11 +111,18 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ICompoundProvider
-        public IEnumerable<IProvider> Children
+        IObservableCollection ICompoundProvider.Children
         {
             get
             {
-                return _children.Values;
+                return Children;
+            }
+        }
+        public IObservableCollection<IProvider> Children
+        {
+            get
+            {
+                return _children;
             }
         }
         #endregion
@@ -401,10 +416,11 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 ModelReference.Subsystem.Add(subsystem);
 
-            var provider = new SubsystemViewModel(this);
-            provider.ModelReference = subsystem;
-            provider.Name = _subsystemProviders.GetUnusedKey(provider.Name);
-            _subsystemProviders.Items.Add(provider);
+            //var provider = new SubsystemViewModel(this);
+            //provider.ModelReference = subsystem;
+            //provider.Name = _subsystemProviders.GetUnusedKey(provider.Name);
+            //_subsystemProviders.Items.Add(provider);
+            _subsystemProviders.AddOrUpdate(subsystem);
         }
         private void AddJoystick(Joystick joystick, bool addToModel)
         {
@@ -413,10 +429,11 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 ModelReference.Joystick.Add(joystick);
 
-            var provider = new JoystickViewModel(this);
-            provider.ModelReference = joystick;
-            provider.Name = _joystickProviders.GetUnusedKey(provider.Name);
-            _joystickProviders.Items.Add(provider);
+            //var provider = new JoystickViewModel(this);
+            //provider.ModelReference = joystick;
+            //provider.Name = _joystickProviders.GetUnusedKey(provider.Name);
+            //_joystickProviders.Items.Add(provider);
+            _joystickProviders.AddOrUpdate(joystick);
         }
         private void AddEventHandler(Models.EventHandler eventHandler, bool addToModel)
         {
@@ -425,65 +442,67 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 ModelReference.EventHandler.Add(eventHandler);
 
-            var provider = new EventHandlerViewModel(this);
-            provider.ModelReference = eventHandler;
-            provider.Name = _eventHandlerProviders.GetUnusedKey(provider.Name);
-            _eventHandlerProviders.Items.Add(provider);
+            //var provider = new EventHandlerViewModel(this);
+            //provider.ModelReference = eventHandler;
+            //provider.Name = _eventHandlerProviders.GetUnusedKey(provider.Name);
+            //_eventHandlerProviders.Items.Add(provider);
+            _eventHandlerProviders.AddOrUpdate(eventHandler);
         }
+        
         #endregion
 
         #region Private Fields
         CancellationTokenSource _hierarchialAccesCTS;
         Task _hierarchialAccessTask;
         Task _hierarchailAccessDeadTokenCleanupTask;
-        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+        ObservableCollection<IProvider> _children = new ObservableCollection<IProvider>() { null, null, null, null };
         readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "EventHandlers", "Joysticks", "RobotMap", "Name", "OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
         IRobotMapProvider _robotMapProvider
         {
             get
             {
-                return _children["_robotMapProvider"] as IRobotMapProvider;
+                return _children[0] as IRobotMapProvider;
             }
             
             set
             {
-                _children["_robotMapProvider"] = value;
+                _children[0] = value;
             }
         }
         CompoundProviderList<ISubsystemProvider, Subsystem> _subsystemProviders
         {
             get
             {
-                return _children["_subsystemProviders"] as CompoundProviderList<ISubsystemProvider, Subsystem>;
+                return _children[1] as CompoundProviderList<ISubsystemProvider, Subsystem>;
             }
 
             set
             {
-                _children["_subsystemProviders"] = value;
+                _children[1] = value;
             }
         }
         CompoundProviderList<IEventHandlerProvider, Models.EventHandler> _eventHandlerProviders
         {
             get
             {
-                return _children["_eventHandlerProviders"] as CompoundProviderList<IEventHandlerProvider, Models.EventHandler>;
+                return _children[2] as CompoundProviderList<IEventHandlerProvider, Models.EventHandler>;
             }
 
             set
             {
-                _children["_eventHandlerProviders"] = value;
+                _children[2] = value;
             }
         }
         CompoundProviderList<IJoystickProvider, Joystick> _joystickProviders
         {
             get
             {
-                return _children["_joystickProviders"] as CompoundProviderList<IJoystickProvider, Joystick>;
+                return _children[3] as CompoundProviderList<IJoystickProvider, Joystick>;
             }
 
             set
             {
-                _children["_joystickProviders"] = value;
+                _children[3] = value;
             }
         }
         #endregion

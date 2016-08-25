@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
@@ -78,10 +79,11 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("pwmOutput");
             if(addToModel)
                 ModelReference.PWMOutput.Add(pwmOutput);
-            var provider = new PWMOutputViewModel(this);
-            provider.ModelReference = pwmOutput;
-            provider.Name = _pwmOutputProviders.GetUnusedKey(provider.Name);
-            _pwmOutputProviders.Items.Add(provider);
+            //var provider = new PWMOutputViewModel(this);
+            //provider.ModelReference = pwmOutput;
+            //provider.Name = _pwmOutputProviders.GetUnusedKey(provider.Name);
+            //_pwmOutputProviders.Items.Add(provider);
+            _pwmOutputProviders.AddOrUpdate(pwmOutput);
         }
 
         private void AddAnalogInput(AnalogInput analogInput, bool addToModel)
@@ -90,10 +92,11 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("analogInput");
             if (addToModel)
                 ModelReference.AnalogInput.Add(analogInput);
-            var provider = new AnalogInputViewModel(this);
-            provider.ModelReference = analogInput;
-            provider.Name = _analogInputProviders.GetUnusedKey(provider.Name);
-            _analogInputProviders.Items.Add(provider);
+            //var provider = new AnalogInputViewModel(this);
+            //provider.ModelReference = analogInput;
+            //provider.Name = _analogInputProviders.GetUnusedKey(provider.Name);
+            //_analogInputProviders.Items.Add(provider);
+            _analogInputProviders.AddOrUpdate(analogInput);
         }
 
         private void AddQuadEncoder(QuadEncoder quadEncoder, bool addToModel)
@@ -103,10 +106,11 @@ namespace Team1922.MVVM.ViewModels
             if (addToModel)
                 ModelReference.QuadEncoder.Add(quadEncoder);
 
-            var provider = new QuadEncoderViewModel(this);
-            provider.ModelReference = quadEncoder;
-            provider.Name = _quadEncoderProviders.GetUnusedKey(provider.Name);
-            _quadEncoderProviders.Items.Add(provider);
+            //var provider = new QuadEncoderViewModel(this);
+            //provider.ModelReference = quadEncoder;
+            //provider.Name = _quadEncoderProviders.GetUnusedKey(provider.Name);
+            //_quadEncoderProviders.Items.Add(provider);
+            _quadEncoderProviders.AddOrUpdate(quadEncoder);
         }
 
         private void AddDigitalInput(DigitalInput digitalInput, bool addToModel)
@@ -115,10 +119,10 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("digitalInput");
             if (addToModel)
                 ModelReference.DigitalInput.Add(digitalInput);
-            var provider = new DigitalInputViewModel(this);
-            provider.ModelReference = digitalInput;
-            provider.Name = _digitalInputProviders.GetUnusedKey(provider.Name);
-            _digitalInputProviders.Items.Add(provider);
+            //var provider = new DigitalInputViewModel(this);
+            //provider.ModelReference = digitalInput;
+            //provider.Name = _digitalInputProviders.GetUnusedKey(provider.Name);
+            //_digitalInputProviders.Items.Add(provider);
         }
 
         private void AddRelayOutput(RelayOutput relayOutput, bool addToModel)
@@ -127,10 +131,11 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("relayOutput");
             if (addToModel)
                 ModelReference.RelayOutput.Add(relayOutput);
-            var provider = new RelayOutputViewModel(this);
-            provider.ModelReference = relayOutput;
-            provider.Name = _relayOutputProviders.GetUnusedKey(provider.Name);
-            _relayOutputProviders.Items.Add(provider);
+            //var provider = new RelayOutputViewModel(this);
+            //provider.ModelReference = relayOutput;
+            //provider.Name = _relayOutputProviders.GetUnusedKey(provider.Name);
+            //_relayOutputProviders.Items.Add(provider);
+            _relayOutputProviders.AddOrUpdate(relayOutput);
         }
 
         private void AddCANTalon(CANTalon canTalon, bool addToModel)
@@ -139,10 +144,11 @@ namespace Team1922.MVVM.ViewModels
                 throw new ArgumentNullException("canTalon");
             if (addToModel)
                 ModelReference.CANTalons.Add(canTalon);
-            var provider = new CANTalonViewModel(this);
-            provider.SetCANTalon(canTalon);
-            provider.Name = _canTalonProviders.GetUnusedKey(provider.Name);
-            _canTalonProviders.Items.Add(provider);
+            //var provider = new CANTalonViewModel(this);
+            //provider.SetCANTalon(canTalon);
+            //provider.Name = _canTalonProviders.GetUnusedKey(provider.Name);
+            //_canTalonProviders.Items.Add(provider);
+            _canTalonProviders.AddOrUpdate(canTalon);
         }
 
         public void AddPWMOutput(PWMOutput pwmOutput)
@@ -214,11 +220,11 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ICompoundProvider
-        public IEnumerable<IProvider> Children
+        public IObservableCollection Children
         {
             get
             {
-                return _children.Values;
+                return _children;
             }
         }
         #endregion
@@ -327,77 +333,77 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region Private Fields
-        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
+        ObservableCollection<IProvider> _children = new ObservableCollection<IProvider>() { null, null, null, null, null, null };
         CompoundProviderList<IPWMOutputProvider, PWMOutput> _pwmOutputProviders
         {
             get
             {
-                return _children["_pwmOutputProviders"] as CompoundProviderList<IPWMOutputProvider, PWMOutput>;
+                return _children[0] as CompoundProviderList<IPWMOutputProvider, PWMOutput>;
             }
 
             set
             {
-                _children["_pwmOutputProviders"] = value;
+                _children[0] = value;
             }
         }
         CompoundProviderList<IAnalogInputProvider, AnalogInput> _analogInputProviders
         {
             get
             {
-                return _children["_analogInputProviders"] as CompoundProviderList<IAnalogInputProvider, AnalogInput>;
+                return _children[1] as CompoundProviderList<IAnalogInputProvider, AnalogInput>;
             }
 
             set
             {
-                _children["_analogInputProviders"] = value;
+                _children[1] = value;
             }
         }
         CompoundProviderList<IQuadEncoderProvider, QuadEncoder> _quadEncoderProviders
         {
             get
             {
-                return _children["_quadEncoderProviders"] as CompoundProviderList<IQuadEncoderProvider, QuadEncoder>;
+                return _children[2] as CompoundProviderList<IQuadEncoderProvider, QuadEncoder>;
             }
 
             set
             {
-                _children["_quadEncoderProviders"] = value;
+                _children[2] = value;
             }
         }
         CompoundProviderList<IDigitalInputProvider, DigitalInput> _digitalInputProviders
         {
             get
             {
-                return _children["_digitalInputProviders"] as CompoundProviderList<IDigitalInputProvider, DigitalInput>;
+                return _children[3] as CompoundProviderList<IDigitalInputProvider, DigitalInput>;
             }
 
             set
             {
-                _children["_digitalInputProviders"] = value;
+                _children[3] = value;
             }
         }
         CompoundProviderList<IRelayOutputProvider, RelayOutput> _relayOutputProviders
         {
             get
             {
-                return _children["_relayOutputProviders"] as CompoundProviderList<IRelayOutputProvider, RelayOutput>;
+                return _children[4] as CompoundProviderList<IRelayOutputProvider, RelayOutput>;
             }
 
             set
             {
-                _children["_relayOutputProviders"] = value;
+                _children[4] = value;
             }
         }
         CompoundProviderList<ICANTalonProvider, CANTalon> _canTalonProviders
         {
             get
             {
-                return _children["_canTalonProviders"] as CompoundProviderList<ICANTalonProvider, CANTalon>;
+                return _children[5] as CompoundProviderList<ICANTalonProvider, CANTalon>;
             }
 
             set
             {
-                _children["_canTalonProviders"] = value;
+                _children[5] = value;
             }
         }
         #endregion

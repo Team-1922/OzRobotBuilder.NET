@@ -25,6 +25,10 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         IObservableCollection<IEventHandlerProvider> EventHandlers { get; }
         /// <summary>
+        /// This robot's robot map
+        /// </summary>
+        IRobotMapProvider RobotMap { get; }
+        /// <summary>
         /// This robot's Team Number
         /// </summary>
         int TeamNumber { get; set; }

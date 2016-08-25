@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
@@ -572,11 +573,11 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ICompoundProvider
-        public IEnumerable<IProvider> Children
+        IObservableCollection ICompoundProvider.Children
         {
             get
             {
-                return _children.Values;
+                return _children;
             }
         }
         #endregion
@@ -826,54 +827,53 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region Private Fields
-        Dictionary<string, IProvider> _children = new Dictionary<string, IProvider>();
-
+        ObservableCollection<IProvider> _children = new ObservableCollection<IProvider>() { null, null, null, null };
         ICANTalonQuadEncoderProvider _quadEncoderProvider
         {
             get
             {
-                return _children["_quadEncoderProvider"] as ICANTalonQuadEncoderProvider;
+                return _children[0] as ICANTalonQuadEncoderProvider;
             }
 
             set
             {
-                _children["_quadEncoderProvider"] = value;
+                _children[0] = value;
             }
         }
         ICANTalonAnalogInputProvider _analogInputProvider
         {
             get
             {
-                return _children["_analogInputProvider"] as ICANTalonAnalogInputProvider;
+                return _children[1] as ICANTalonAnalogInputProvider;
             }
 
             set
             {
-                _children["_analogInputProvider"] = value;
+                _children[1] = value;
             }
         }
         IPIDControllerSRXProvider _pidConfig0Provider
         {
             get
             {
-                return _children["_pidConfig0Provider"] as IPIDControllerSRXProvider;
+                return _children[2] as IPIDControllerSRXProvider;
             }
 
             set
             {
-                _children["_pidConfig0Provider"] = value;
+                _children[2] = value;
             }
         }
         IPIDControllerSRXProvider _pidConfig1Provider
         {
             get
             {
-                return _children["_pidConfig1Provider"] as IPIDControllerSRXProvider;
+                return _children[3] as IPIDControllerSRXProvider;
             }
 
             set
             {
-                _children["_pidConfig1Provider"] = value;
+                _children[3] = value;
             }
         }
         #endregion

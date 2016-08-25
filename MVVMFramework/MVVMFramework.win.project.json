@@ -5,5 +5,7 @@
   "frameworks": {
     "net461": {}
   },
-  "dependencies": {}
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1"
+  }
 }
