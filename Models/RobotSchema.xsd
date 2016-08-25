@@ -157,7 +157,6 @@
       <xs:element name="PIDController" type="tns:PIDControllerSoftware" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
-    <xs:attribute name="ID" type="xs:int" use="required"/>
     <xs:attribute name="SoftwarePIDEnabled" type="xs:boolean" default="false"/>
   </xs:complexType>
     

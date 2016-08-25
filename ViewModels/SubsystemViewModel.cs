@@ -210,13 +210,6 @@ namespace Team1922.MVVM.ViewModels
         {
             _canTalonProviders.Remove(name);
         }
-        public int ID
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
         #endregion
 
         #region ICompoundProvider
@@ -259,8 +252,6 @@ namespace Team1922.MVVM.ViewModels
 
                 case "SoftwarePIDEnabled":
                     return SoftwarePIDEnabled.ToString();
-                case "ID":
-                    return ID.ToString();
                 case "Name":
                     return Name;
                 default:
