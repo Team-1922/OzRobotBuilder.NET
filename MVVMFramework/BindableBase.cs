@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 namespace Team1922.MVVM.Framework
 {
@@ -24,5 +25,7 @@ namespace Team1922.MVVM.Framework
             OnPropertyChanged(propertyName);
             return true;
         }
+
+        public static JsonSerializerSettings Settings { get; } = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
     }
 }

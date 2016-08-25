@@ -466,7 +466,6 @@ namespace Team1922.MVVM.ViewModels
         #endregion
         
 
-        public static JsonSerializerSettings Settings { get; } = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
     }
 
     public abstract class ViewModelBase<ModelType> : ViewModelBase
