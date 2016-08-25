@@ -88,11 +88,11 @@ namespace Team1922.MVVM.ViewModels
         //private int _enumeratorIndex = -1;
 
         private IProvider _parent;
-        protected IFacet itemNameFacet;
+        protected IFacet pathNameFacet;
 
         protected ViewModelBase(IProvider parent)
         {
-            itemNameFacet = TypeRestrictions.GetValidationObjectFromTypeName("ItemName");
+            pathNameFacet = TypeRestrictions.GetValidationObjectFromTypeName("PathName");
             _parent = parent;
             UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
@@ -237,7 +237,7 @@ namespace Team1922.MVVM.ViewModels
         public bool KeyExists(string key)
         {
             //make sure this is a valid path
-            TypeRestrictions.Validate(itemNameFacet, key);
+            TypeRestrictions.Validate(pathNameFacet, key);
 
             return _keyExists(key);
         }
@@ -267,7 +267,7 @@ namespace Team1922.MVVM.ViewModels
                         //if this is also a hierarchial access, which is almost definitely is, then call the child's function
                         if (child is IHierarchialAccess)
                         {
-                            return (child as IHierarchialAccess).KeyExists(key);
+                            return (child as IHierarchialAccess).KeyExists(thisMember[1]);
                         }
                     }
                 }
@@ -285,15 +285,11 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                //make sure this is a valid path
-                TypeRestrictions.Validate(itemNameFacet, key);
                 return ValueReadWrite(key, true);
             }
 
             set
             {
-                //make sure this is a valid path
-                TypeRestrictions.Validate(itemNameFacet, key);
                 ValueReadWrite(key, false, value);
             }
         }
@@ -307,6 +303,18 @@ namespace Team1922.MVVM.ViewModels
         /// <returns></returns>
         private string ValueReadWrite(string key, bool read, string value="")
         {
+            //if this is blank, just return this; this only happens on the top-level node
+            if (key == "")
+            {
+                if (read)
+                    return GetModelJson();
+                else
+                    SetModelJson(value);
+            }
+
+            //make sure this is a valid path
+            TypeRestrictions.Validate(pathNameFacet, key);
+
             var thisMember = key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
             if (null == thisMember)
                 throw new ArgumentException($"\"{key}\" Is an Invalid Property");
