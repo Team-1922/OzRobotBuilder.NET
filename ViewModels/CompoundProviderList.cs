@@ -130,13 +130,6 @@ namespace Team1922.MVVM.ViewModels
             //add a new item if "key" is blank
             if(key == "")
             {
-                var newItem = JsonDeserialize<ModelType>(value);
-                if (newItem != null)
-                {
-                    ModelReference.Add(newItem);
-                    _items.Add(_constructNewItem(newItem));
-                    return;
-                }
             }
             
             //delete the item if "value" is null
@@ -146,7 +139,14 @@ namespace Team1922.MVVM.ViewModels
                 return;
             }
 
-            FindByName(key).SetModelJson(value);
+            if (Contains(key))
+            {
+                FindByName(key).SetModelJson(value);
+            }
+            else
+            {
+                AddNew(value);
+            }
         }
         protected override void OnModelChange()
         {
@@ -217,6 +217,15 @@ namespace Team1922.MVVM.ViewModels
                     return true;
             }
             return false;
+        }
+        private void AddNew(string value)
+        {
+            var newItem = JsonDeserialize<ModelType>(value);
+            if (newItem != null)
+            {
+                ModelReference.Add(newItem);
+                AddOrUpdate(newItem);
+            }
         }
         #endregion
 
