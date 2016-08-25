@@ -15,6 +15,10 @@ namespace Team1922.MVVM.ViewModels
     {
         public CANTalonViewModel(ISubsystemProvider parent) : base(parent)
         {
+            _quadEncoderProvider = new CANTalonQuadEncoderViewModel(this);
+            _analogInputProvider = new CANTalonAnalogInputViewModel(this);
+            _pidConfig0Provider = new PIDControllerSRXViewModel(this);
+            _pidConfig1Provider = new PIDControllerSRXViewModel(this);
         }
         
         #region ICANTalonProvider
