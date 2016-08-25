@@ -177,7 +177,7 @@ namespace Team1922.MVVM.ViewModels
             //queue our request
             _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, ticket));
             //wait for our ticket to be done
-            await WaitForTicket(ticket, 10);//TODO: what should the timeout be?
+            await WaitForTicket(ticket, -1);//TODO: what should the timeout be?
             return ticket;
         }
         private void CheckExceptions(long ticket)
@@ -204,7 +204,9 @@ namespace Team1922.MVVM.ViewModels
         {
             //TODO: how fast is this?
             int timeoutCycleDuration = timeoutMs / 10;
-            for(int i = 0; i < timeoutMs; i += timeoutCycleDuration)
+
+            //-1 is indefinite
+            for(int i = 0; i < timeoutMs || timeoutMs == -1; i += timeoutCycleDuration)
             {
                 if (_hierarchialAccessResponses.ContainsKey(ticket))
                     return;
@@ -259,6 +261,7 @@ namespace Team1922.MVVM.ViewModels
                         {
                             //make sure exceptions are handled
                             _hierarchialAccessExceptions[processItem.Item4] = e;
+                            _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
                         }
                     }
                 }
