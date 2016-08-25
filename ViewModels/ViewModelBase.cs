@@ -96,10 +96,9 @@ namespace Team1922.MVVM.ViewModels
             _parent = parent;
             UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
-            if(this is ICompoundProvider)
+            if (this is ICompoundProvider)
             {
                 (this as ICompoundProvider).Children.CollectionChanged += Children_CollectionChanged;
-                RegisterChildrenEventPropagation();
             }
         }
 
@@ -132,7 +131,8 @@ namespace Team1922.MVVM.ViewModels
                 return;
             foreach(INotifyPropertyChanged child in compoundProvider.Children)
             {
-                RegisterChildEventPropagation(child);
+                if(child != null)
+                    RegisterChildEventPropagation(child);
             }
         }
 
