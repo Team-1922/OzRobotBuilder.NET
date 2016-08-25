@@ -255,6 +255,7 @@ namespace Team1922.MVVM.ViewModels
                             {
                                 //write request
                                 this[processItem.Item1] = processItem.Item2;
+                                _hierarchialAccessResponses[processItem.Item4] = "";
                             }
                         }
                         catch (Exception e)
