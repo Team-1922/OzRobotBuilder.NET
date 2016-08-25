@@ -15,6 +15,11 @@
       <xs:pattern value="^([0-9]|[a-z]|[A-Z]|_)+$"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="PathName">
+    <xs:restriction base="xs:token">
+      <xs:pattern value="^([0-9]|[a-z]|[A-Z]|_|\.)+$"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="AnalogInputId">
     <xs:restriction base="xs:int">
       <xs:minInclusive value="-1"/>
