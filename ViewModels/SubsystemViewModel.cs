@@ -123,6 +123,7 @@ namespace Team1922.MVVM.ViewModels
             //provider.ModelReference = digitalInput;
             //provider.Name = _digitalInputProviders.GetUnusedKey(provider.Name);
             //_digitalInputProviders.Items.Add(provider);
+            _digitalInputProviders.AddOrUpdate(digitalInput);
         }
 
         private void AddRelayOutput(RelayOutput relayOutput, bool addToModel)
@@ -307,6 +308,10 @@ namespace Team1922.MVVM.ViewModels
             if (null != ModelReference.AnalogInput)
             {
                 _analogInputProviders.ModelReference = ModelReference.AnalogInput;
+            }
+            if(null != ModelReference.DigitalInput)
+            {
+                _digitalInputProviders.ModelReference = ModelReference.DigitalInput;
             }
             if (null != ModelReference.QuadEncoder)
             {
