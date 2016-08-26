@@ -21,8 +21,9 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="key">where to set <paramref name="value"/> at</param>
         /// <param name="value">the value to set at location <paramref name="key"/></param>
+        /// <param name="safe">if true, then the task waits for the result and throws any exceptions that occured; if false, then just send the request and leave</param>
         /// <returns></returns>
-        Task SetAsync(string key, string value);
+        Task SetAsync(string key, string value, bool safe);
         /// <summary>
         /// Used to determine whether an item exsits at the given key
         /// </summary>

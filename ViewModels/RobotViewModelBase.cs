@@ -136,7 +136,7 @@ namespace Team1922.MVVM.ViewModels
         public async Task<string> GetAsync(string key)
         {
             //wait for the request to complete
-            long ticket = await EnqueueAndWait(key, "", true);
+            long ticket = await EnqueueAndWaitAsync(key, "", true);
             //throw any applicable exceptions
             CheckExceptions(ticket);
             //get the result
@@ -150,15 +150,24 @@ namespace Team1922.MVVM.ViewModels
         /// </summary>
         /// <param name="key">where to set <paramref name="value"/> at</param>
         /// <param name="value">the value to set at location <paramref name="key"/></param>
+        /// <param name="safe">if true, then the task waits for the result and throws any exceptions that occured; if false, then just send the request and leave</param>
         /// <returns></returns>
-        public async Task SetAsync(string key, string value)
+        public async Task SetAsync(string key, string value, bool safe)
         {
-            //wait for the request to complete
-            long ticket = await EnqueueAndWait(key, value, false);
-            //throw any applicable exceptions
-            CheckExceptions(ticket);
-            //cleanup the ticket
-            CleanupTicket(ticket);
+            if(safe)
+            {
+                //wait for the request to complete
+                long ticket = await EnqueueAndWaitAsync(key, value, true);
+                //throw any applicable exceptions
+                CheckExceptions(ticket);
+                //cleanup the ticket
+                CleanupTicket(ticket);
+            }
+            else
+            {
+                //wait for the request to complete
+                Enqueue(key, value, false);
+            }
         }
         /// <summary>
         /// Used to determine whether an item exsits at the given key
@@ -170,15 +179,16 @@ namespace Team1922.MVVM.ViewModels
             return base.KeyExists(key);
         }
 
-        private async Task<long> EnqueueAndWait(string path, string value, bool read)
+        private async Task<long> EnqueueAndWaitAsync(string path, string value, bool read)
         {
-            //get our ticket number
-            long ticket = GetNextTicketNumber();
-            //queue our request
-            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, ticket));
-            //wait for our ticket to be done
-            await WaitForTicket(ticket, -1);//TODO: what should the timeout be?
+            long ticket = Enqueue(path, value, read);
+            await WaitForTicket(ticket, -1);
             return ticket;
+        }
+        private void Enqueue(string path, string value, bool read)
+        {
+            //queue our request; don't bother getting a ticket number because the caller of this method is just going to return
+            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, -1));
         }
         private void CheckExceptions(long ticket)
         {
@@ -249,20 +259,25 @@ namespace Team1922.MVVM.ViewModels
 
                                 //TODO: this might be able to be condensed into a single line
                                 var result = this[processItem.Item1];
-                                _hierarchialAccessResponses[processItem.Item4] = result;
+                                if(processItem.Item4 != -1)
+                                    _hierarchialAccessResponses[processItem.Item4] = result;
                             }
                             else
                             {
                                 //write request
                                 this[processItem.Item1] = processItem.Item2;
-                                _hierarchialAccessResponses[processItem.Item4] = "";
+                                if (processItem.Item4 != -1)
+                                    _hierarchialAccessResponses[processItem.Item4] = "";
                             }
                         }
                         catch (Exception e)
                         {
                             //make sure exceptions are handled
-                            _hierarchialAccessExceptions[processItem.Item4] = e;
-                            _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
+                            if (processItem.Item4 != -1)
+                            {
+                                _hierarchialAccessExceptions[processItem.Item4] = e;
+                                _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
+                            }
                         }
                     }
                 }
