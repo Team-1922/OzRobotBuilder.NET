@@ -181,7 +181,11 @@ namespace Team1922.MVVM.ViewModels
 
         private async Task<long> EnqueueAndWaitAsync(string path, string value, bool read)
         {
-            long ticket = Enqueue(path, value, read);
+            //get the next ticket
+            long ticket = GetNextTicketNumber();
+            //queue the request
+            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, ticket));
+            //wait for it to be done
             await WaitForTicket(ticket, -1);
             return ticket;
         }
@@ -240,48 +244,51 @@ namespace Team1922.MVVM.ViewModels
             //this must not throw any exceptions
             
             CancellationToken workerMethodToken = _hierarchialAccesCTS.Token;
+
+            Tuple<string, string, bool, long> processItem;
+
             //process the queue until someone tells us otherwise
             while (!workerMethodToken.IsCancellationRequested)
             {
                 //always work unless there are no requests
-                while (_hierarchialAccessRequests.Count != 0)
+                //get the next reqeust
+                while (_hierarchialAccessRequests.TryDequeue(out processItem))
                 {
-                    //get the next reqeust
-                    Tuple<string, string, bool, long> processItem;
-                    if(_hierarchialAccessRequests.TryDequeue(out processItem))
+                    try
                     {
-                        try
+                        //is this a read or a write request?
+                        if (processItem.Item3)
                         {
-                            //is this a read or a write request?
-                            if (processItem.Item3)
-                            {
-                                //read request
+                            //read request
 
-                                //TODO: this might be able to be condensed into a single line
-                                var result = this[processItem.Item1];
-                                if(processItem.Item4 != -1)
-                                    _hierarchialAccessResponses[processItem.Item4] = result;
-                            }
-                            else
-                            {
-                                //write request
-                                this[processItem.Item1] = processItem.Item2;
-                                if (processItem.Item4 != -1)
-                                    _hierarchialAccessResponses[processItem.Item4] = "";
-                            }
+
+                            //TODO: this might be able to be condensed into a single line
+                            var result = this[processItem.Item1];
+                                _hierarchialAccessResponses[processItem.Item4] = result;
                         }
-                        catch (Exception e)
+                        else
                         {
-                            //make sure exceptions are handled
+                            //write request
+                            this[processItem.Item1] = processItem.Item2;
                             if (processItem.Item4 != -1)
-                            {
-                                _hierarchialAccessExceptions[processItem.Item4] = e;
-                                _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
-                            }
+                                _hierarchialAccessResponses[processItem.Item4] = "";
                         }
                     }
+                    catch (Exception e)
+                    {
+                        //make sure exceptions are handled
+                        if (processItem.Item4 != -1)
+                        {
+                            _hierarchialAccessExceptions[processItem.Item4] = e;
+                            _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
+                        }
+                    }                    
                 }
             }
+        }
+        private async Task<string> GetWorkerAsync(string path)
+        {
+            return this[path];
         }
         private void DeadTicketCleanup()
         {
