@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
-using Team1922.MVVM.Models.XML;
 
 namespace Team1922.WebFramework
 {

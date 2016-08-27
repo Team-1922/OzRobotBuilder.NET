@@ -66,7 +66,6 @@
     <Compile Include="XML\EnumerationFacet.cs" />
     <Compile Include="XML\FacetCollection.cs" />
     <Compile Include="XML\FacetList.cs" />
-    <Compile Include="XML\FacetValidationException.cs" />
     <Compile Include="XML\FractionDigitsFacet.cs" />
     <Compile Include="XML\IFacet.cs" />
     <Compile Include="XML\IntegerNumericFacet.cs" />
@@ -83,6 +82,12 @@
   <ItemGroup>
     <None Include="Models.win.project.json" />
     <None Include="RobotSchema.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MVVMFramework\MVVMFramework.win.csproj">
+      <Project>{f22008c9-1d99-4bee-93e2-88e2cf5ee938}</Project>
+      <Name>MVVMFramework.win</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
