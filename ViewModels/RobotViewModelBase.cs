@@ -237,6 +237,7 @@ namespace Team1922.MVVM.ViewModels
         private ConcurrentDictionary<long, string> _hierarchialAccessResponses = new ConcurrentDictionary<long, string>();
         private ConcurrentDictionary<long, Exception> _hierarchialAccessExceptions = new ConcurrentDictionary<long, Exception>();
         private ConcurrentBag<long> _hierarchialAccessDeadTickets = new ConcurrentBag<long>();
+        private int _activeGetRequests = 0;
 
         //TODO: how do I make this stop when the object is destroyed; should i use IDisposable?
         private void WorkerThreadMethod()
@@ -246,6 +247,9 @@ namespace Team1922.MVVM.ViewModels
             CancellationToken workerMethodToken = _hierarchialAccesCTS.Token;
 
             Tuple<string, string, bool, long> processItem;
+            Tuple<string, string, bool, long> peakNext;
+            List<Tuple<string, string, bool, long>> itemQueue = new List<Tuple<string, string, bool, long>>();
+            List<Task> processes = new List<Task>();
 
             //process the queue until someone tells us otherwise
             while (!workerMethodToken.IsCancellationRequested)
@@ -260,7 +264,10 @@ namespace Team1922.MVVM.ViewModels
                         if (processItem.Item3)
                         {
                             //read request
-
+                            
+                            //for some reason the first request is 10s
+                            //Interlocked.Increment(ref _activeGetRequests);
+                            //GetWorkerAsync(processItem.Item1, processItem.Item4);
 
                             //TODO: this might be able to be condensed into a single line
                             var result = this[processItem.Item1];
@@ -268,6 +275,8 @@ namespace Team1922.MVVM.ViewModels
                         }
                         else
                         {
+                            //wait for the other requests to be done
+                            while (_activeGetRequests != 0) ;
                             //write request
                             this[processItem.Item1] = processItem.Item2;
                             if (processItem.Item4 != -1)
@@ -286,9 +295,15 @@ namespace Team1922.MVVM.ViewModels
                 }
             }
         }
-        private async Task<string> GetWorkerAsync(string path)
+        private Task GetWorkerAsync(string path, long ticket)
         {
-            return this[path];
+            return Task.Run(() =>
+            {
+                //actually make the get request
+                _hierarchialAccessResponses[ticket] = this[path];
+                //once we are done, decrement the request
+                Interlocked.Decrement(ref _activeGetRequests);
+            });
         }
         private void DeadTicketCleanup()
         {
