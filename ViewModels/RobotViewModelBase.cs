@@ -311,8 +311,26 @@ namespace Team1922.MVVM.ViewModels
                         {
                             //wait for the other requests to be done
                             while (_activeGetRequests != 0) ;
+
+                            IHierarchialAccess accessObject = this;
+                            string accessPath = processItem.Item1;
+                            if (_treeReferenceLookupTable.Count != 0)
+                            {
+                                //get path of the object to lookup
+                                var splitPath = processItem.Item1.Split('.');
+                                var objPath = string.Join(".", (from token in splitPath where token != splitPath.Last() select token));
+                                foreach (var pair in _treeReferenceLookupTable)
+                                {
+                                    if (pair.Key == objPath)
+                                    {
+                                        accessObject = pair.Value;
+                                        accessPath = splitPath.Last();
+                                        break;
+                                    }
+                                }
+                            }
                             //write request
-                            this[processItem.Item1] = processItem.Item2;
+                            accessObject[accessPath] = processItem.Item2;
                             if (processItem.Item4 != -1)
                                 _hierarchialAccessResponses[processItem.Item4] = "";
                         }
@@ -350,11 +368,12 @@ namespace Team1922.MVVM.ViewModels
                         if (pair.Key == objPath)
                         {
                             accessObject = pair.Value;
-                            path = splitPath.Last();
+                            accessPath = splitPath.Last();
+                            break;
                         }
                     }
                 }
-                _hierarchialAccessResponses[ticket] = accessObject[path];
+                _hierarchialAccessResponses[ticket] = accessObject[accessPath];
                 //once we are done, decrement the request
                 Interlocked.Decrement(ref _activeGetRequests);
             });
