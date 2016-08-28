@@ -293,11 +293,15 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
+                //make sure this is a valid path
+                TypeRestrictions.Validate(pathNameFacet, key);
                 return ValueReadWrite(key, true);
             }
 
             set
             {
+                //make sure this is a valid path
+                TypeRestrictions.Validate(pathNameFacet, key);
                 ValueReadWrite(key, false, value);
             }
         }
@@ -319,9 +323,6 @@ namespace Team1922.MVVM.ViewModels
                 else
                     SetModelJson(value);
             }
-
-            //make sure this is a valid path
-            TypeRestrictions.Validate(pathNameFacet, key);
 
             var thisMember = key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
             if (null == thisMember)
@@ -349,11 +350,7 @@ namespace Team1922.MVVM.ViewModels
                         //if this is also a hierarchial access, which is almost definitely is, then call the child's function
                         if (child is IHierarchialAccess)
                         {
-                            if (read)
-                                return (child as IHierarchialAccess)[thisMember[1]];
-                            else
-                                (child as IHierarchialAccess)[thisMember[1]] = value;
-                            return "";
+                             return (child as ViewModelBase).ValueReadWrite(thisMember[1], read, value);
                         }
                     }
                 }
