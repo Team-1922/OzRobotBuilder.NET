@@ -178,6 +178,44 @@ namespace Team1922.MVVM.ViewModels
         {
             return base.KeyExists(key);
         }
+        /// <summary>
+        /// This is called when the tree is updated (viewmodel objects added/deleted) to create a look-up table for the entire tree
+        /// in order to optimize read/write performnace.  This is typically called once at the beginning of a non-debug application run
+        /// </summary>
+        public void PrecomputeTree()
+        {
+            //iterate through the tree
+            if (_lookupTableMutex.WaitOne())
+            {
+                try
+                {
+                    IterateTreeInternal("", this);
+                }
+                finally
+                {
+                    _lookupTableMutex.ReleaseMutex();
+                }
+            }
+        }
+        private void IterateTreeInternal(string path, ICompoundProvider provider)
+        {
+            string name;
+            foreach (IProvider child in provider.Children)
+            {
+                name = path == "" ? $"{child.Name}" : $"{path}.{child.Name}";
+                if (child is ICompoundProvider)
+                {
+                    IterateTreeInternal(name, child as ICompoundProvider);
+                }
+                if (child is IHierarchialAccess)
+                {
+                    _treeReferenceLookupTable.Add(name, child as IHierarchialAccess);
+                }
+            }
+        }
+
+        private Dictionary<string, IHierarchialAccess> _treeReferenceLookupTable = new Dictionary<string, IHierarchialAccess>();
+        private Mutex _lookupTableMutex = new Mutex();
 
         private async Task<long> EnqueueAndWaitAsync(string path, string value, bool read)
         {
@@ -258,20 +296,16 @@ namespace Team1922.MVVM.ViewModels
                 //get the next reqeust
                 while (_hierarchialAccessRequests.TryDequeue(out processItem))
                 {
+                    _lookupTableMutex.WaitOne();
                     try
                     {
                         //is this a read or a write request?
                         if (processItem.Item3)
                         {
                             //read request
-                            
-                            //for some reason the first request is 10s
-                            //Interlocked.Increment(ref _activeGetRequests);
-                            //GetWorkerAsync(processItem.Item1, processItem.Item4);
 
-                            //TODO: this might be able to be condensed into a single line
-                            var result = this[processItem.Item1];
-                                _hierarchialAccessResponses[processItem.Item4] = result;
+                            Interlocked.Increment(ref _activeGetRequests);
+                            GetWorkerAsync(processItem.Item1, processItem.Item4);
                         }
                         else
                         {
@@ -291,7 +325,11 @@ namespace Team1922.MVVM.ViewModels
                             _hierarchialAccessExceptions[processItem.Item4] = e;
                             _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
                         }
-                    }                    
+                    }
+                    finally
+                    {
+                        _lookupTableMutex.ReleaseMutex();
+                    }                
                 }
             }
         }
@@ -300,7 +338,23 @@ namespace Team1922.MVVM.ViewModels
             return Task.Run(() =>
             {
                 //actually make the get request
-                _hierarchialAccessResponses[ticket] = this[path];
+                IHierarchialAccess accessObject = this;
+                string accessPath = path;
+                if (_treeReferenceLookupTable.Count != 0)
+                {
+                    //get path of the object to lookup
+                    var splitPath = path.Split('.');
+                    var objPath = string.Join(".", (from token in splitPath where token != splitPath.Last() select token));
+                    foreach (var pair in _treeReferenceLookupTable)
+                    {
+                        if (pair.Key == objPath)
+                        {
+                            accessObject = pair.Value;
+                            path = splitPath.Last();
+                        }
+                    }
+                }
+                _hierarchialAccessResponses[ticket] = accessObject[path];
                 //once we are done, decrement the request
                 Interlocked.Decrement(ref _activeGetRequests);
             });

@@ -30,5 +30,10 @@ namespace Team1922.MVVM.Contracts
         /// <param name="key">the key to check</param>
         /// <returns>whether or not an item exists at <paramref name="key"/></returns>
         bool KeyExists(string key);
+        /// <summary>
+        /// This is called when the tree is updated (viewmodel objects added/deleted) to create a look-up table for the entire tree
+        /// in order to optimize read/write performnace.  This is typically called once at the beginning of a non-debug application run
+        /// </summary>
+        void PrecomputeTree();
     }
 }
