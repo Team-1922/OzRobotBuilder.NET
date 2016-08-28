@@ -154,7 +154,7 @@ namespace Team1922.MVVM.ViewModels
         /// <returns></returns>
         public async Task SetAsync(string key, string value, bool safe)
         {
-            if(safe)
+            if (safe)
             {
                 //wait for the request to complete
                 long ticket = await EnqueueAndWaitAsync(key, value, true);
@@ -223,6 +223,7 @@ namespace Team1922.MVVM.ViewModels
             long ticket = GetNextTicketNumber();
             //queue the request
             _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, ticket));
+            _containsNewQueueItems = true;
             //wait for it to be done
             await WaitForTicket(ticket, -1);
             return ticket;
@@ -231,6 +232,7 @@ namespace Team1922.MVVM.ViewModels
         {
             //queue our request; don't bother getting a ticket number because the caller of this method is just going to return
             _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, -1));
+            _containsNewQueueItems = true;
         }
         private void CheckExceptions(long ticket)
         {
@@ -275,7 +277,9 @@ namespace Team1922.MVVM.ViewModels
         private ConcurrentDictionary<long, string> _hierarchialAccessResponses = new ConcurrentDictionary<long, string>();
         private ConcurrentDictionary<long, Exception> _hierarchialAccessExceptions = new ConcurrentDictionary<long, Exception>();
         private ConcurrentBag<long> _hierarchialAccessDeadTickets = new ConcurrentBag<long>();
-        private int _activeGetRequests = 0;
+        private volatile int _activeGetRequests = 0;
+
+        private volatile bool _containsNewQueueItems = false;
 
         //TODO: how do I make this stop when the object is destroyed; should i use IDisposable?
         private void WorkerThreadMethod()
@@ -285,69 +289,70 @@ namespace Team1922.MVVM.ViewModels
             CancellationToken workerMethodToken = _hierarchialAccesCTS.Token;
 
             Tuple<string, string, bool, long> processItem;
-            Tuple<string, string, bool, long> peakNext;
-            List<Tuple<string, string, bool, long>> itemQueue = new List<Tuple<string, string, bool, long>>();
-            List<Task> processes = new List<Task>();
 
             //process the queue until someone tells us otherwise
             while (!workerMethodToken.IsCancellationRequested)
             {
-                //always work unless there are no requests
-                //get the next reqeust
-                while (_hierarchialAccessRequests.TryDequeue(out processItem))
+                if (_containsNewQueueItems)
                 {
-                    _lookupTableMutex.WaitOne();
-                    try
+                    _containsNewQueueItems = false;
+                    //always work unless there are no requests
+                    //get the next reqeust
+                    while (_hierarchialAccessRequests.TryDequeue(out processItem))
                     {
-                        //is this a read or a write request?
-                        if (processItem.Item3)
+                        _lookupTableMutex.WaitOne();
+                        try
                         {
-                            //read request
-
-                            Interlocked.Increment(ref _activeGetRequests);
-                            GetWorkerAsync(processItem.Item1, processItem.Item4);
-                        }
-                        else
-                        {
-                            //wait for the other requests to be done
-                            while (_activeGetRequests != 0) ;
-
-                            IHierarchialAccess accessObject = this;
-                            string accessPath = processItem.Item1;
-                            if (_treeReferenceLookupTable.Count != 0)
+                            //is this a read or a write request?
+                            if (processItem.Item3)
                             {
-                                //get path of the object to lookup
-                                var splitPath = processItem.Item1.Split('.');
-                                var objPath = string.Join(".", (from token in splitPath where token != splitPath.Last() select token));
-                                foreach (var pair in _treeReferenceLookupTable)
+                                //read request
+
+                                Interlocked.Increment(ref _activeGetRequests);
+                                GetWorkerAsync(processItem.Item1, processItem.Item4);
+                            }
+                            else
+                            {
+                                //wait for the other requests to be done
+                                while (_activeGetRequests != 0) ;
+
+                                IHierarchialAccess accessObject = this;
+                                string accessPath = processItem.Item1;
+                                if (_treeReferenceLookupTable.Count != 0)
                                 {
-                                    if (pair.Key == objPath)
+                                    //get path of the object to lookup
+                                    var splitPath = processItem.Item1.Split('.');
+                                    var objPath = string.Join(".", (from token in splitPath where token != splitPath.Last() select token));
+                                    foreach (var pair in _treeReferenceLookupTable)
                                     {
-                                        accessObject = pair.Value;
-                                        accessPath = splitPath.Last();
-                                        break;
+                                        if (pair.Key == objPath)
+                                        {
+                                            accessObject = pair.Value;
+                                            accessPath = splitPath.Last();
+                                            break;
+                                        }
                                     }
                                 }
+                                //write request
+                                accessObject[accessPath] = processItem.Item2;
+                                if (processItem.Item4 != -1)
+                                    _hierarchialAccessResponses[processItem.Item4] = "";
                             }
-                            //write request
-                            accessObject[accessPath] = processItem.Item2;
-                            if (processItem.Item4 != -1)
-                                _hierarchialAccessResponses[processItem.Item4] = "";
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        //make sure exceptions are handled
-                        if (processItem.Item4 != -1)
+                        catch (Exception e)
                         {
-                            _hierarchialAccessExceptions[processItem.Item4] = e;
-                            _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
+                            //make sure exceptions are handled
+                            if (processItem.Item4 != -1)
+                            {
+                                _hierarchialAccessExceptions[processItem.Item4] = e;
+                                _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
+                            }
+                        }
+                        finally
+                        {
+                            _lookupTableMutex.ReleaseMutex();
                         }
                     }
-                    finally
-                    {
-                        _lookupTableMutex.ReleaseMutex();
-                    }                
                 }
             }
         }
