@@ -151,9 +151,12 @@ namespace Team1922.MVVM.ViewModels
                 return _parent;
             }
         }
+        private string _modelJson = "";
         public string GetModelJson()
         {
-            return JsonSerialize(ModelReference);
+            if(_modelJson == "")
+                return _modelJson = JsonSerialize(ModelReference);
+            return _modelJson;
         }
         public void SetModelJson(string text)
         {
@@ -161,12 +164,17 @@ namespace Team1922.MVVM.ViewModels
             {
                 //deserialize the model
                 ModelReference = JsonDeserialize(text);
+                _modelJson = text;
             }
             catch (Exception e)
             {
                 //this means an exception was thrown while loading (whether bad json, OR type validation)
                 throw new ArgumentException("Invalid Json", "text");
             }
+        }
+        private void InvalidateModelJson()
+        {
+            _modelJson = "";
         }
         private object _modelReference;
         public object ModelReference
@@ -478,6 +486,7 @@ namespace Team1922.MVVM.ViewModels
         #region Private Methods
         private void ViewModelBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            InvalidateModelJson();
             if (e.PropertyName == "ModelReference")
                 OnModelChange();
         }
