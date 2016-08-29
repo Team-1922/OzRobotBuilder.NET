@@ -87,11 +87,15 @@ namespace Team1922.WebFramework
             BasicHttpResponse response = new BasicHttpResponse();
             try
             {
+                bool existed = Data.KeyExists(path);
+
                 //set whether it exists or not
                 await Data.SetAsync(path, body);
 
-                //created
-                response.StatusCode = 201;
+                if (existed)
+                    response.StatusCode = 200;//OK
+                else                
+                    response.StatusCode = 201;//created
             }
             catch (ArgumentException e)
             {
