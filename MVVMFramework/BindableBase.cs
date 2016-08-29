@@ -9,6 +9,7 @@ namespace Team1922.MVVM.Framework
     public abstract class BindableBase : INotifyPropertyChanged
     {
         private event PropertyChangedEventHandler _propertyChangedNoDuplicates;
+
         public event PropertyChangedEventHandler PropertyChanged
         {
             add

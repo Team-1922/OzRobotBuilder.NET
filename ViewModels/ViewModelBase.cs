@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Contracts.Events;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Models.XML;
@@ -81,7 +82,7 @@ namespace Team1922.MVVM.ViewModels
     /// This wraps the <see cref="BindableBase"/>, and the ability to access values based on a string key along
     /// with enumerate through it with read AND write access to the value
     /// </summary>
-    public abstract class ViewModelBase : BindableBase, IHierarchialAccess, IDataErrorInfo
+    public abstract class ViewModelBase : BindableBase, IHierarchialAccess, IDataErrorInfo, IEventPropagator
     {
         private List<string> _keys = new List<string>();
         VMKeyValueList _keyValueList = new VMKeyValueList();
@@ -120,16 +121,17 @@ namespace Team1922.MVVM.ViewModels
             return _keyValueList;
         }
 
-        protected void RegisterChildEventPropagation(INotifyPropertyChanged child)
+        protected void RegisterChildEventPropagation(IEventPropagator child)
         {
-            child.PropertyChanged += Child_PropertyChanged;
+            child.Propagated += Child_Propagated;
         }
+
         protected void RegisterChildrenEventPropagation()
         {
             var compoundProvider = this as ICompoundProvider;
             if (null == compoundProvider)
                 return;
-            foreach(INotifyPropertyChanged child in compoundProvider.Children)
+            foreach(IEventPropagator child in compoundProvider.Children)
             {
                 if(child != null)
                     RegisterChildEventPropagation(child);
@@ -171,6 +173,10 @@ namespace Team1922.MVVM.ViewModels
                 //this means an exception was thrown while loading (whether bad json, OR type validation)
                 throw new ArgumentException("Invalid Json", "text");
             }
+        }
+        public override string ToString()
+        {
+            return GetModelJson();
         }
         private void InvalidateModelJson()
         {
@@ -419,6 +425,29 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
+        #region Child Helper Methods
+        protected bool ContainsDescendentNamed(string name)
+        {
+            if(this is ICompoundProvider)
+            {
+                var thisCompoundProvider = this as ICompoundProvider;
+                foreach(IProvider child in thisCompoundProvider.Children)
+                {
+                    if (child.Name == name)
+                        return true;
+                    if(child is ICompoundProvider && child is ViewModelBase)
+                    {
+                        var splitName = name.Split(new char[] { '.' }, 2, StringSplitOptions.None);
+                        if (splitName.Length == 1 || splitName.Length == 0)
+                            return false;
+                        return (child as ViewModelBase).ContainsDescendentNamed(splitName[1]);
+                    }
+                }
+            }
+            return false;
+        }
+        #endregion
+
         #region Abstract & Virtual Methods
         /// <summary>
         /// This gives read access to the viewmodel based on the name of the property; this should not give hierarchial access
@@ -480,34 +509,72 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
+        #region IEventPropagator
+        private event EventPropagationEventHandler _propagatedNoDuplicates;
+
+        public event EventPropagationEventHandler Propagated
+        {
+            add
+            {
+                if (null == _propagatedNoDuplicates || !_propagatedNoDuplicates.GetInvocationList().Contains(value))
+                    _propagatedNoDuplicates += value;
+            }
+
+            remove
+            {
+                _propagatedNoDuplicates -= value;
+            }
+        }
+
+        protected void OnEventPropagated(EventPropagationEventArgs e)
+        {
+            InvalidateModelJson();
+            if (!(this is IProvider))
+                return;
+            var thisProvider = this as IProvider;
+            if (null == thisProvider.ModelReference)
+                return;
+
+            //add our name to the name
+            e.PropertyName = e.PropertyName == "" ? thisProvider.Name : $"{thisProvider.Name}.{e.PropertyName}";
+            _propagatedNoDuplicates?.Invoke(e);
+        }
+        #endregion
+
         #region Private Methods
         private void ViewModelBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             InvalidateModelJson();
             if (e.PropertyName == "ModelReference")
-                OnModelChange();
+                OnModelChange();            
         }
         #endregion
 
         #region Event Propagaiton
-        private void Child_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Child_Propagated(EventPropagationEventArgs e)
         {
-            var senderProvider = sender as IProvider;
-            if (null == senderProvider)
-                return;
-
-            if (IsOnNameBlacklist(e.PropertyName))
-                return;
-
-            //we don't put our name into this, becuase ours gets added at the next level up
-            OnPropertyChanged($"{senderProvider.Name}.{e.PropertyName}");
+            OnEventPropagated(e);
         }
         private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             RegisterChildrenEventPropagation();
+
+            //propagate this whole object to be reuploaded (potentially a better way to do this would be with individual delete/post requests
+            OnEventPropagated(new EventPropagationEventArgs("PUT", "", ToString()));
         }
         #endregion
-        
+
+        #region BindableBase        
+        protected override bool SetProperty<T>(ref T item, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(item, value)) return false;
+            item = value;
+            OnPropertyChanged(propertyName);
+            OnEventPropagated(new EventPropagationEventArgs("PUT", propertyName, value.ToString()));
+            return true;
+        }
+        #endregion
+
         /// <summary>
         /// Checks to see whether the given property name is on the blacklist of internal property names
         /// </summary>

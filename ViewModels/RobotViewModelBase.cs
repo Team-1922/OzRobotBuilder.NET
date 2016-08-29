@@ -184,17 +184,18 @@ namespace Team1922.MVVM.ViewModels
         /// </summary>
         public void PrecomputeTree()
         {
+            //if we are precomputing the tree, make sure we re-compute the tree when there is a relevent change
+            Propagated += RobotViewModelBase_Propagated;
             //iterate through the tree
-            if (_lookupTableMutex.WaitOne())
+            _lookupTableMutex.EnterWriteLock();
+            
+            try
             {
-                try
-                {
-                    IterateTreeInternal("", this);
-                }
-                finally
-                {
-                    _lookupTableMutex.ReleaseMutex();
-                }
+                IterateTreeInternal("", this);
+            }
+            finally
+            {
+                _lookupTableMutex.ExitWriteLock();
             }
         }
         private void IterateTreeInternal(string path, ICompoundProvider provider)
@@ -215,7 +216,7 @@ namespace Team1922.MVVM.ViewModels
         }
 
         private Dictionary<string, IHierarchialAccess> _treeReferenceLookupTable = new Dictionary<string, IHierarchialAccess>();
-        private Mutex _lookupTableMutex = new Mutex();
+        private ReaderWriterLockSlim _lookupTableMutex = new ReaderWriterLockSlim();
 
         private async Task<long> EnqueueAndWaitAsync(string path, string value, bool read)
         {
@@ -300,7 +301,7 @@ namespace Team1922.MVVM.ViewModels
                     //get the next reqeust
                     while (_hierarchialAccessRequests.TryDequeue(out processItem))
                     {
-                        _lookupTableMutex.WaitOne();
+                        _lookupTableMutex.EnterReadLock();
                         try
                         {
                             //is this a read or a write request?
@@ -350,7 +351,7 @@ namespace Team1922.MVVM.ViewModels
                         }
                         finally
                         {
-                            _lookupTableMutex.ReleaseMutex();
+                            _lookupTableMutex.ExitReadLock();
                         }
                     }
                 }
@@ -568,6 +569,37 @@ namespace Team1922.MVVM.ViewModels
             _eventHandlerProviders.AddOrUpdate(eventHandler);
         }
         
+        private void RobotViewModelBase_Propagated(EventPropagationEventArgs e)
+        {
+            //run this as a task, becuase this method is called very indirectly from the worker thread, therefore the lookup table will be on read-lock;
+            //  this will result in attempting to enter a write lock while in a read lock which will cause issues
+            Task.Run(() =>
+            {
+                if (e.HTTPMethod == "PUT" || e.HTTPMethod == "POST" || e.HTTPMethod == "PATCH" || e.HTTPMethod == "DELETE")
+                {
+                    bool shouldPrecomputeTree = false;
+                    _lookupTableMutex.EnterReadLock();
+                    try
+                    {
+                        if (_treeReferenceLookupTable.Count != 0)
+                        {
+                            //get path of the object to lookup
+                            var splitPath = e.PropertyName.Split('.');
+                            if (splitPath.Last() == "Name" || ContainsDescendentNamed(e.PropertyName))
+                            {
+                                shouldPrecomputeTree = true;
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        _lookupTableMutex.ExitReadLock();
+                    }
+                    if (shouldPrecomputeTree)
+                        PrecomputeTree();
+                }
+            });
+        }
         #endregion
 
         #region Private Fields

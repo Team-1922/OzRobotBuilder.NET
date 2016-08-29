@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Contracts.Events;
 
 namespace Team1922.WebFramework
 {
@@ -13,6 +14,7 @@ namespace Team1922.WebFramework
         public RequestDelegator(IHierarchialAccessRoot data, string pathRoot) : base(pathRoot)
         {
             _data = data;
+            data.Propagated += Data_Propagated;
         }
 
         public IHierarchialAccessRoot Data
@@ -183,7 +185,7 @@ namespace Team1922.WebFramework
         }
         #endregion
 
-        #region Private Helper Methods
+        #region RequestDelegatorWebHooks
         protected override async Task<BasicHttpResponse> AggregateRequestAsync(string method, string path, string body)
         {
             //convert the path to '.' delimeters and remove the leading and trailing '.'
@@ -208,6 +210,17 @@ namespace Team1922.WebFramework
 
         #region Private Fields
         private IHierarchialAccessRoot _data;
+        #endregion
+
+        #region Private Methods
+        private void Data_Propagated(EventPropagationEventArgs e)
+        {
+            OnPropagatedAsync(e);
+        }
+        private Task OnPropagatedAsync(EventPropagationEventArgs e)
+        {
+            return SendWebHooksCallbackRequest(e.HTTPMethod, e.PropertyName, e.PropertyValue);
+        }
         #endregion
 
         #region IDisposable Support

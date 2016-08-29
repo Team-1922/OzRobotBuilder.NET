@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The top-level hierarchial access instance; this provies asynchronous access to the view-model tree
     /// </summary>
-    public interface IHierarchialAccessRoot : IDisposable
+    public interface IHierarchialAccessRoot : IDisposable, IEventPropagator
     {
         /// <summary>
         /// Retrieves the value at the given key

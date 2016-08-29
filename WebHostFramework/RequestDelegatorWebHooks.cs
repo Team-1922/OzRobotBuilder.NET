@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Team1922.WebFramework
@@ -17,6 +18,21 @@ namespace Team1922.WebFramework
             PathRoot = pathRoot;
         }
         
+        public async Task SendWebHooksCallbackRequest(string method, string path, string body)
+        {
+            string convertedPath = ConvertPathReverse(path);
+            foreach(var subscriber in _webHooksSubscribers)
+            {
+                WebRequest request = WebRequest.Create($"{subscriber.ToString()}{convertedPath}");
+                request.Method = method;
+                using (var sendStream = await request.GetRequestStreamAsync())
+                {
+                    var sendStreamWriter = new StreamWriter(sendStream);
+                    await sendStreamWriter.WriteAsync(body);
+                }
+            }
+        }
+
         #region CRUD WebHooks Methods
         private async Task<BasicHttpResponse> HooksGetAsync()
         {

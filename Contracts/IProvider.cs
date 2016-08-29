@@ -11,7 +11,7 @@ namespace Team1922.MVVM.Contracts
     /// is mostly a helper interface for the WPF designer so the TreeView can be used on 
     /// all of the viewmodels easily
     /// </summary>
-    public interface IProvider : INotifyPropertyChanged
+    public interface IProvider : INotifyPropertyChanged, IEventPropagator
     {
         /// <summary>
         /// The name of this provider; if this provider does have a name
@@ -43,9 +43,14 @@ namespace Team1922.MVVM.Contracts
         /// <param name="text">the json text to deserialize</param>
         void SetModelJson(string text);
         /// <summary>
+        /// Expected to be exactly the same as <see cref="GetModelJson"/>
+        /// </summary>
+        /// <returns></returns>
+        string ToString();
+        /// <summary>
         /// The model instance of this class
         /// </summary>
-        //object ModelReference { get; set; }
+        object ModelReference { get; set; }
     }
     /// <summary>
     /// This gives the provider a strongly-typed model instance associated with it.
