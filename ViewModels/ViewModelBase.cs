@@ -549,14 +549,11 @@ namespace Team1922.MVVM.ViewModels
         protected void OnEventPropagated(EventPropagationEventArgs e)
         {
             InvalidateModelJson();
-            if (!(this is IProvider))
-                return;
-            var thisProvider = this as IProvider;
-            if (null == thisProvider.ModelReference)
+            if (null == ModelReference)
                 return;
 
-            //add our name to the name
-            e.PropertyName = e.PropertyName == "" ? thisProvider.Name : $"{thisProvider.Name}.{e.PropertyName}";
+            //add our name to the name; if this is the top-level, then don't add our name so the IHierarchialAccess works correctly
+            e.PropertyName = Parent != null ? e.PropertyName == "" ? Name : $"{Name}.{e.PropertyName}" : e.PropertyName;
             _propagatedNoDuplicates?.Invoke(e);
         }
         #endregion
