@@ -11,7 +11,7 @@ namespace Team1922.MVVM.ViewModels
     /// <summary>
     /// The viewmodel for each CANTalon instance
     /// </summary>
-    internal class CANTalonViewModel : ViewModelBase<CANTalon>, ICANTalonProvider
+    internal class CANTalonViewModel : CompoundViewModelBase<CANTalon>, ICANTalonProvider
     {
         public CANTalonViewModel(ISubsystemProvider parent) : base(parent)
         {
@@ -577,7 +577,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ICompoundProvider
-        IObservableCollection ICompoundProvider.Children
+        public override IObservableCollection Children
         {
             get
             {

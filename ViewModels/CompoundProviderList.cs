@@ -11,7 +11,7 @@ using Team1922.MVVM.Contracts;
 namespace Team1922.MVVM.ViewModels
 {
 
-    class CompoundProviderList<ProviderType, ModelType> : ViewModelBase<List<ModelType>>, IEnumerable<ProviderType>, ICompoundProvider where ProviderType : IProvider<ModelType>
+    class CompoundProviderList<ProviderType, ModelType> : CompoundViewModelBase<List<ModelType>>, IEnumerable<ProviderType>, ICompoundProvider where ProviderType : IProvider<ModelType>
     {
         //NOTE: if items here are manually added/removed, make SURE they are added to the model
         public IObservableCollection<ProviderType> Items
@@ -34,7 +34,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return (from child in Children select child).ToDictionary(child => child.Name, child => (child.ToString() ?? "null"));
+                return (from child in _items select child).ToDictionary(child => child.Name, child => (child.ToString() ?? "null"));
             }
         }
 
@@ -159,14 +159,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ICompoundProvider
-        IObservableCollection ICompoundProvider.Children
-        {
-            get
-            {
-                return Children;
-            }
-        }
-        public IObservableCollection<ProviderType> Children
+        public override IObservableCollection Children
         {
             get
             {

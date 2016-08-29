@@ -9,7 +9,7 @@ using Team1922.MVVM.Models;
 
 namespace Team1922.MVVM.ViewModels
 {
-    internal class SubsystemViewModel : ViewModelBase<Subsystem>, ISubsystemProvider
+    internal class SubsystemViewModel : CompoundViewModelBase<Subsystem>, ISubsystemProvider
     {        
         public SubsystemViewModel(IRobotProvider parent) : base(parent)
         {
@@ -213,8 +213,8 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region ICompoundProvider
-        public IObservableCollection Children
+        #region CompoundViewModelBase
+        public override IObservableCollection Children
         {
             get
             {

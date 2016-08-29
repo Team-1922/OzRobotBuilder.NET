@@ -14,7 +14,7 @@ using System.Collections.Specialized;
 
 namespace Team1922.MVVM.ViewModels
 {
-    public class RobotViewModelBase : ViewModelBase<Robot>, IRobotProvider, IDisposable
+    public class RobotViewModelBase : CompoundViewModelBase<Robot>, IRobotProvider, IDisposable
     {
         public RobotViewModelBase() : base(null)
         {
@@ -111,14 +111,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region ICompoundProvider
-        IObservableCollection ICompoundProvider.Children
-        {
-            get
-            {
-                return Children;
-            }
-        }
-        public IObservableCollection<IProvider> Children
+        public override IObservableCollection Children
         {
             get
             {

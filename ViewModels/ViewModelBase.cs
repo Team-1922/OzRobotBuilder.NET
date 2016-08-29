@@ -97,10 +97,6 @@ namespace Team1922.MVVM.ViewModels
             _parent = parent;
             UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
-            if (this is ICompoundProvider)
-            {
-                (this as ICompoundProvider).Children.CollectionChanged += Children_CollectionChanged;
-            }
         }
 
         protected void UpdateKeyValueList()
@@ -125,19 +121,7 @@ namespace Team1922.MVVM.ViewModels
         {
             child.Propagated += Child_Propagated;
         }
-
-        protected void RegisterChildrenEventPropagation()
-        {
-            var compoundProvider = this as ICompoundProvider;
-            if (null == compoundProvider)
-                return;
-            foreach(IEventPropagator child in compoundProvider.Children)
-            {
-                if(child != null)
-                    RegisterChildEventPropagation(child);
-            }
-        }
-
+        
         #region IProvider
         public IHierarchialAccess TopParent
         {
@@ -275,26 +259,11 @@ namespace Team1922.MVVM.ViewModels
                 return _keys.Contains(thisMember[0]);
             }
 
-            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
-            //  and not every time they would be accessed in the other view-models
-
-            //if this is a compound provider, loop through all of its sub-view-models
-            if (this is ICompoundProvider)
-            {
-                var me = this as ICompoundProvider;
-                foreach (IProvider child in me.Children)
-                {
-                    if (child.Name == thisMember[0])
-                    {
-                        //if this is also a hierarchial access, which is almost definitely is, then call the child's function
-                        if (child is IHierarchialAccess)
-                        {
-                            return (child as IHierarchialAccess).KeyExists(thisMember[1]);
-                        }
-                    }
-                }
-            }
-            throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            return KeyExistsInternal(thisMember[0], thisMember[1]);
+        }
+        protected virtual bool KeyExistsInternal(string propName, string remainingKey)
+        {
+            return false;
         }
 
         /// <summary>
@@ -327,7 +296,7 @@ namespace Team1922.MVVM.ViewModels
         /// <param name="read"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private string ValueReadWrite(string key, bool read, string value="")
+        protected string ValueReadWrite(string key, bool read, string value="")
         {
             //if this is blank, just return this; this only happens on the top-level node
             if (key == "")
@@ -349,39 +318,11 @@ namespace Team1922.MVVM.ViewModels
                     SetValue(key, value);
                 return "";
             }
-
-            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
-            //  and not every time they would be accessed in the other view-models
-
-            //if this is a compound provider, loop through all of its sub-view-models
-            if (this is ICompoundProvider)
-            {
-                var me = this as ICompoundProvider;
-                foreach (IProvider child in me.Children)
-                {
-                    if (child.Name == thisMember[0])
-                    {
-                        if (child is ViewModelBase)
-                        {
-                            return (child as ViewModelBase).ValueReadWrite(thisMember[1], read, value);
-                        }
-                        else
-                        {
-                            if (read)
-                            {
-                                return child[thisMember[1]];
-                            }
-                            else
-                            {
-                                child[thisMember[1]] = value;
-                                return "";
-                            }
-                        }
-
-                    }
-                }
-            }
-            throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            return ValueReadWriteOverride(thisMember[0], thisMember[1], read, value);
+        }
+        protected virtual string ValueReadWriteOverride(string propName, string remainingKey, bool read, string value)
+        {
+            throw new ArgumentException($"\"{propName}\" Is Inaccessible or Does Not Exist");
         }
         #endregion
 
@@ -442,29 +383,6 @@ namespace Team1922.MVVM.ViewModels
         protected object JsonDeserialize(string text)
         {
             return JsonConvert.DeserializeObject(text, Settings);
-        }
-        #endregion
-
-        #region Child Helper Methods
-        protected bool ContainsDescendentNamed(string name)
-        {
-            if(this is ICompoundProvider)
-            {
-                var thisCompoundProvider = this as ICompoundProvider;
-                foreach(IProvider child in thisCompoundProvider.Children)
-                {
-                    if (child.Name == name)
-                        return true;
-                    if(child is ICompoundProvider && child is ViewModelBase)
-                    {
-                        var splitName = name.Split(new char[] { '.' }, 2, StringSplitOptions.None);
-                        if (splitName.Length == 1 || splitName.Length == 0)
-                            return false;
-                        return (child as ViewModelBase).ContainsDescendentNamed(splitName[1]);
-                    }
-                }
-            }
-            return false;
         }
         #endregion
 
@@ -572,13 +490,6 @@ namespace Team1922.MVVM.ViewModels
         {
             OnEventPropagated(e);
         }
-        private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            RegisterChildrenEventPropagation();
-
-            //propagate this whole object to be reuploaded (potentially a better way to do this would be with individual delete/post requests
-            OnEventPropagated(new EventPropagationEventArgs("PUT", "", ToString()));
-        }
         #endregion
 
         #region BindableBase        
@@ -613,12 +524,13 @@ namespace Team1922.MVVM.ViewModels
         }
     }
 
-    public abstract class ViewModelBase<ModelType> : ViewModelBase
+    public abstract class ViewModelBase<ModelType> : ViewModelBase, IProvider<ModelType>
     {
         public ViewModelBase(IProvider parent) : base(parent)
         {
         }
-
+        
+        #region IProvider<ModelType>
         public virtual new ModelType ModelReference
         {
             get
@@ -631,6 +543,118 @@ namespace Team1922.MVVM.ViewModels
                 base.ModelReference = value;
             }
         }
+        #endregion
     }
 
+    public abstract class CompoundViewModelBase : ViewModelBase, ICompoundProvider
+    {
+        public CompoundViewModelBase(IProvider parent) : base(parent)
+        {
+            Children.CollectionChanged += Children_CollectionChanged;
+        }
+
+        #region ICompoundProvider
+        public abstract IObservableCollection Children { get; }
+        public bool ContainsDescendentNamed(string name)
+        {
+            foreach (IProvider child in Children)
+            {
+                if (child.Name == name)
+                    return true;
+                if (child is ICompoundProvider)
+                {
+                    var splitName = name.Split(new char[] { '.' }, 2, StringSplitOptions.None);
+                    if (splitName.Length == 1 || splitName.Length == 0)
+                        return false;
+                    return (child as ICompoundProvider).ContainsDescendentNamed(splitName[1]);
+                }
+            }
+            return false;
+        }
+        #endregion
+
+        #region EventPropagation
+        protected void RegisterChildrenEventPropagation()
+        {
+            foreach (IEventPropagator child in Children)
+            {
+                if (child != null)
+                    RegisterChildEventPropagation(child);
+            }
+        }
+        #endregion
+
+        #region ViewModelBase
+        protected override bool KeyExistsInternal(string propName, string remainingKey)
+        {
+            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
+            //  and not every time they would be accessed in the other view-models
+            
+            foreach (IProvider child in Children)
+            {
+                if (child.Name == propName)
+                {
+                    return (child as IHierarchialAccess).KeyExists(remainingKey);
+                }
+            }
+            return base.KeyExistsInternal(propName, remainingKey);
+        }
+        protected override string ValueReadWriteOverride(string propName, string remainingKey, bool read, string value)
+        {
+
+            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
+            //  and not every time they would be accessed in the other view-models
+
+            //if this is a compound provider, loop through all of its sub-view-models
+            foreach (IProvider child in Children)
+            {
+                if (child.Name == propName)
+                {
+                    if (read)
+                    {
+                        return child[remainingKey];
+                    }
+                    else
+                    {
+                        child[remainingKey] = value;
+                        return "";
+                    }
+                }
+            }
+            return base.ValueReadWriteOverride(propName, remainingKey, read, value);
+        }
+        #endregion
+        
+        #region Private Methods
+        private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RegisterChildrenEventPropagation();
+
+            //propagate this whole object to be reuploaded (potentially a better way to do this would be with individual delete/post requests
+            OnEventPropagated(new EventPropagationEventArgs("PUT", "", ToString()));
+        }
+        #endregion
+    }
+
+    public abstract class CompoundViewModelBase<ModelType> : CompoundViewModelBase, ICompoundProvider, IProvider<ModelType>
+    {
+        public CompoundViewModelBase(IProvider parent) : base(parent)
+        {
+        }
+
+        #region IProvider<ModelType>
+        public virtual new ModelType ModelReference
+        {
+            get
+            {
+                return (ModelType)base.ModelReference;
+            }
+
+            set
+            {
+                base.ModelReference = value;
+            }
+        }
+        #endregion
+    }
 }
