@@ -520,7 +520,8 @@ namespace Team1922.MVVM.ViewModels
                        || name == "ModelTypeName"
                        || name == "TopParent"
                        || name == "Parent"
-                       || name == "ModelReference";
+                       || name == "ModelReference"
+                       || name == "FullyQualifiedName";
         }
     }
 
