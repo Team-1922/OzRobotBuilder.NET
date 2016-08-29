@@ -141,7 +141,8 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return Parent != null ? $"{Parent.FullyQualifiedName}.{Name}" : $"{Name}";
+                var parentFqn = Parent?.FullyQualifiedName;
+                return Parent != null ? parentFqn == "" ? $"{Name}" : $"{Parent.FullyQualifiedName}.{Name}" : $"";
             }
         }
         public abstract string Name { get; set; }
