@@ -33,6 +33,10 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         IProvider Parent { get; }
         /// <summary>
+        /// The path to this object in the tree
+        /// </summary>
+        string FullyQualifiedName { get; }
+        /// <summary>
         /// Used for json serialization of models
         /// </summary>
         /// <returns>the json text of the model instance</returns>

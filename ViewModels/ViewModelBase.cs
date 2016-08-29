@@ -153,6 +153,14 @@ namespace Team1922.MVVM.ViewModels
                 return _parent;
             }
         }
+        public string FullyQualifiedName
+        {
+            get
+            {
+                return Parent != null ? $"{Parent.FullyQualifiedName}.{Name}" : $"{Name}";
+            }
+        }
+        public abstract string Name { get; set; }
         private string _modelJson = "";
         public string GetModelJson()
         {
