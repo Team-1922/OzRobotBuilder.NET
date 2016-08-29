@@ -8,7 +8,7 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class RelayOutputViewModel : ViewModelBase<RelayOutput>, IRelayOutputProvider
     {
-        public RelayOutputViewModel(ISubsystemProvider parent) : base(parent)
+        public RelayOutputViewModel(IProvider parent) : base(parent)
         {
         }
 

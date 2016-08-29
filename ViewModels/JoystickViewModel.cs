@@ -13,7 +13,7 @@ namespace Team1922.MVVM.ViewModels
 
     internal class JoystickViewModel : ViewModelBase<Joystick>, IJoystickProvider
     {
-        public JoystickViewModel(IRobotProvider parent) : base(parent)
+        public JoystickViewModel(IProvider parent) : base(parent)
         {
             _axes.CollectionChanged += _axes_CollectionChanged;
             _buttons.CollectionChanged += _buttons_CollectionChanged;

@@ -13,7 +13,7 @@ namespace Team1922.MVVM.ViewModels
     /// </summary>
     internal class AnalogInputViewModel : ViewModelBase<AnalogInput>, IAnalogInputProvider
     {
-        public AnalogInputViewModel(ISubsystemProvider parent) : base(parent)
+        public AnalogInputViewModel(IProvider parent) : base(parent)
         {
         }
         

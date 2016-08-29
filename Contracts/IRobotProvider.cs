@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for the robot viewmodel
     /// </summary>
-    public interface IRobotProvider : IInputProvider, ICompoundProvider, IProvider<Robot>, IHierarchialAccessRoot
+    public interface IRobotProvider : IInputProvider, ICompoundProvider, IProvider<Robot>, IProviderRoot
     {
         /// <summary>
         /// This robot's subsystems

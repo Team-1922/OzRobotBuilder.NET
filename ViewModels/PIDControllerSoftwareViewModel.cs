@@ -8,7 +8,7 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class PIDControllerSoftwareViewModel : ViewModelBase<PIDControllerSoftware>, IPIDControllerSoftwareProvider
     {
-        public PIDControllerSoftwareViewModel(ISubsystemProvider parent) : base(parent)
+        public PIDControllerSoftwareViewModel(IProvider parent) : base(parent)
         {
         }
 

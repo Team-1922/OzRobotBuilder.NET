@@ -11,7 +11,7 @@ namespace Team1922.MVVM.ViewModels
     internal class EventHandlerViewModel : ViewModelBase<Models.EventHandler>, IEventHandlerProvider
     {
 
-        public EventHandlerViewModel(IRobotProvider parent) : base(parent)
+        public EventHandlerViewModel(IProvider parent) : base(parent)
         {
         }
 

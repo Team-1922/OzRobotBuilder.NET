@@ -13,7 +13,7 @@ namespace Team1922.MVVM.ViewModels
     /// </summary>
     internal class CANTalonViewModel : CompoundViewModelBase<CANTalon>, ICANTalonProvider
     {
-        public CANTalonViewModel(ISubsystemProvider parent) : base(parent)
+        public CANTalonViewModel(IProvider parent) : base(parent)
         {
             _quadEncoderProvider = new CANTalonQuadEncoderViewModel(this);
             _analogInputProvider = new CANTalonAnalogInputViewModel(this);

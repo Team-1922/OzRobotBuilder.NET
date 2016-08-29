@@ -71,6 +71,7 @@
     <Compile Include="IPIDControllerSoftwareProvider.cs" />
     <Compile Include="IPIDControllerSRXProvider.cs" />
     <Compile Include="IProvider.cs" />
+    <Compile Include="IProviderRoot.cs" />
     <Compile Include="IPWMOutputIOService.cs" />
     <Compile Include="IPWMOutputProvider.cs" />
     <Compile Include="IQuadEncoderIOService.cs" />

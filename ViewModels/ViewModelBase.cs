@@ -21,17 +21,24 @@ namespace Team1922.MVVM.ViewModels
     /// </summary>
     public class VMKeyValuePair : IDataErrorInfo, INotifyPropertyChanged
     {
-        public VMKeyValuePair(string key, ViewModelBase vm)
+        public VMKeyValuePair(string key, IProvider provider)
         {
-            Set(key, vm);
+            Set(key, provider);
         }
-        public void Set(string key, ViewModelBase vm)
+        public void Set(string key, IProvider provider)
         {
-            if (vm == null)
-                throw new ArgumentNullException("vm", "ViewModel on VMKeyValuePair must not be null");
-            _vm = vm;
+            if (provider == null)
+                throw new ArgumentNullException("root", "IProviderRoot on VMKeyValuePair must not be null");
+            _root = provider.TopParent;
             Key = key;
-            _vm.PropertyChanged += _vm_PropertyChanged;
+
+            string fqn = provider.FullyQualifiedName;
+            if (fqn == "")
+                _fullKey = key;
+            else
+                _fullKey = $"{fqn}.{key}";
+
+            _root.PropertyChanged += _vm_PropertyChanged;
         }
 
         private void _vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -40,7 +47,8 @@ namespace Team1922.MVVM.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
         }
 
-        ViewModelBase _vm;
+        IProviderRoot _root;
+        private string _fullKey;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -49,11 +57,11 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _vm[Key];
+                return _root[_fullKey];
             }
             set
             {
-                _vm[Key] = value;
+                _root[_fullKey] = value;
             }
         }
 
@@ -69,7 +77,9 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return (_vm as IDataErrorInfo)[Key];
+                if (_root is IDataErrorInfo)
+                    return (_root as IDataErrorInfo)[Key];
+                return "";
             }
         }
     }
@@ -85,7 +95,23 @@ namespace Team1922.MVVM.ViewModels
     public abstract class ViewModelBase : BindableBase, IHierarchialAccess, IDataErrorInfo, IProvider
     {
         private List<string> _keys = new List<string>();
-        VMKeyValueList _keyValueList = new VMKeyValueList();
+        private VMKeyValueList _keyValueList;
+        private VMKeyValueList KeyValueList
+        {
+            get
+            {
+                if(null == _keyValueList)
+                {
+                    UpdateKeyValueList();
+                }
+                return _keyValueList;
+            }
+
+            set
+            {
+                _keyValueList = value;
+            }
+        }
         //private int _enumeratorIndex = -1;
 
         private IProvider _parent;
@@ -95,14 +121,16 @@ namespace Team1922.MVVM.ViewModels
         {
             pathNameFacet = TypeRestrictions.GetValidationObjectFromTypeName("PathName");
             _parent = parent;
-            UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
         }
 
         protected void UpdateKeyValueList()
         {
             _keys = GetOverrideKeys();
-            _keyValueList.Clear();
+            if (null == _keyValueList)
+                _keyValueList = new VMKeyValueList();
+            else
+                _keyValueList.Clear();
             foreach(var key in _keys)
             {
                 _keyValueList.Add(new VMKeyValuePair(key, this));
@@ -114,7 +142,7 @@ namespace Team1922.MVVM.ViewModels
         }
         public VMKeyValueList GetEditableKeyValueList()
         {
-            return _keyValueList;
+            return KeyValueList;
         }
 
         protected void RegisterChildEventPropagation(IEventPropagator child)
@@ -123,11 +151,11 @@ namespace Team1922.MVVM.ViewModels
         }
         
         #region IProvider
-        public IHierarchialAccess TopParent
+        public IProviderRoot TopParent
         {
             get
             {
-                return Parent?.TopParent ?? this;
+                return Parent?.TopParent ?? this as IProviderRoot;
             }
         }
         public IProvider Parent
