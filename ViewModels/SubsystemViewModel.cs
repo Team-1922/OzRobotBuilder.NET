@@ -224,7 +224,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IProvider
-        public string Name
+        public override string Name
         {
             get { return ModelReference.Name; }
             set { ModelReference.Name = value; }

@@ -176,9 +176,10 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IProvider
-        public string Name
+        public override string Name
         {
             get;
+            set;
         }
         #endregion
 

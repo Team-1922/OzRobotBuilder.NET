@@ -136,11 +136,16 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IProvider
-        public string Name
+        public override string Name
         {
             get
             {
                 return "PID Controller";
+            }
+
+            set
+            {
+                throw new InvalidOperationException("Cannot Set Name of CAN Talon PID Controller");
             }
         }
         #endregion

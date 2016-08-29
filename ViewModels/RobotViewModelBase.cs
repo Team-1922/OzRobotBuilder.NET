@@ -399,11 +399,16 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IProvider
-        public string Name
+        public override string Name
         {
             get
             {
                 return "Robot";
+            }
+
+            set
+            {
+                throw new InvalidOperationException("Cannot Set Name of Robot");//TODO: maybe we should?
             }
         }
         #endregion

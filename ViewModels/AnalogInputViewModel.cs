@@ -305,7 +305,7 @@ namespace Team1922.MVVM.ViewModels
         /// <summary>
         /// The AccumulatorCenter property of the model
         /// </summary>
-        public string Name
+        public override string Name
         {
             get
             {

@@ -607,7 +607,7 @@ namespace Team1922.MVVM.ViewModels
         /// <summary>
         /// The Name property of the CANTalon model
         /// </summary>
-        public string Name
+        public override string Name
         {
             get
             {

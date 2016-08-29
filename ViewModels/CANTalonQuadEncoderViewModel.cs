@@ -105,11 +105,16 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IProvider
-        public string Name
+        public override string Name
         {
             get
             {
                 return "Quadrature Encoder";
+            }
+
+            set
+            {
+                throw new InvalidOperationException("Cannot Set Name of CAN Talon Quad Encoder");
             }
         }
         public string GetModelJson()

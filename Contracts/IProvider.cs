@@ -17,7 +17,7 @@ namespace Team1922.MVVM.Contracts
         /// The name of this provider; if this provider does have a name
         /// in the model, this does not have to conform to the xml schema "Name" restriction
         /// </summary>
-        string Name { get; }
+        string Name { get; set; }
         /// <summary>
         /// Gives read and write access to this provider's properties
         /// </summary>
