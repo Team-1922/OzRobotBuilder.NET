@@ -157,7 +157,7 @@ namespace Team1922.MVVM.ViewModels
             if (safe)
             {
                 //wait for the request to complete
-                long ticket = await EnqueueAndWaitAsync(key, value, true);
+                long ticket = await EnqueueAndWaitAsync(key, value, false);
                 //throw any applicable exceptions
                 CheckExceptions(ticket);
                 //cleanup the ticket
