@@ -361,11 +361,23 @@ namespace Team1922.MVVM.ViewModels
                 {
                     if (child.Name == thisMember[0])
                     {
-                        //if this is also a hierarchial access, which is almost definitely is, then call the child's function
-                        if (child is IHierarchialAccess)
+                        if (child is ViewModelBase)
                         {
-                             return (child as ViewModelBase).ValueReadWrite(thisMember[1], read, value);
+                            return (child as ViewModelBase).ValueReadWrite(thisMember[1], read, value);
                         }
+                        else
+                        {
+                            if (read)
+                            {
+                                return child[thisMember[1]];
+                            }
+                            else
+                            {
+                                child[thisMember[1]] = value;
+                                return "";
+                            }
+                        }
+
                     }
                 }
             }
