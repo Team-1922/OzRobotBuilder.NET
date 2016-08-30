@@ -11,7 +11,7 @@ namespace Team1922.WebFramework
     /// <remarks>
     /// Note the use of no Asp.NET classes here; this is because this set of classes should be used in both .NET core applications and .NET 4.6.1
     /// </remarks>
-    public interface IRequestDelegator
+    public interface IRequestDelegator : IDisposable
     {
         /// <summary>
         /// Processes a given http request and returns the response
@@ -25,5 +25,10 @@ namespace Team1922.WebFramework
         /// The root of this delegator; this typically is in the form "/foo/bar" with a leading, but no trailing forward slash
         /// </summary>
         string PathRoot { get; }
+        /// <summary>
+        /// Starts up a new server with the delegator's pathRoot
+        /// </summary>
+        /// <returns></returns>
+        Task StartupServer();
     }
 }

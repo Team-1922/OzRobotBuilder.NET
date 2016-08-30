@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.Net.Http.Server;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace Team1922.WebFramework
 {
@@ -33,6 +36,8 @@ namespace Team1922.WebFramework
             }
         }
 
+
+
         #region CRUD WebHooks Methods
         private async Task<BasicHttpResponse> HooksGetAsync()
         {
@@ -42,12 +47,12 @@ namespace Team1922.WebFramework
                 response.Body = await _webHooksSubscribers.GetJsonAsync();
 
                 //OK
-                response.StatusCode = 200;
+                response.StatusCode = HttpStatusCode.OK;
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -60,18 +65,18 @@ namespace Team1922.WebFramework
                 if (_webHooksSubscribers.Add(uri))
                 {
                     //created
-                    response.StatusCode = 201;
+                    response.StatusCode = HttpStatusCode.Created;
                 }
                 else
                 {
                     //conflict
-                    response.StatusCode = 409;
+                    response.StatusCode = HttpStatusCode.Conflict;
                 }
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -84,18 +89,18 @@ namespace Team1922.WebFramework
                 if (_webHooksSubscribers.Add(uri))
                 {
                     //created
-                    response.StatusCode = 201;
+                    response.StatusCode = HttpStatusCode.Created;
                 }
                 else
                 {
                     //OK
-                    response.StatusCode = 200;
+                    response.StatusCode = HttpStatusCode.OK;
                 }
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -108,18 +113,18 @@ namespace Team1922.WebFramework
                 if (_webHooksSubscribers.Remove(uri))
                 {
                     //OK
-                    response.StatusCode = 200;
+                    response.StatusCode = HttpStatusCode.OK;
                 }
                 else
                 {
                     //not found
-                    response.StatusCode = 404;
+                    response.StatusCode = HttpStatusCode.NotFound;
                 }
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -132,15 +137,17 @@ namespace Team1922.WebFramework
             //split the path after PathRoot
             string fullRequestPath = path;
             string requestPath = fullRequestPath;
-            if (fullRequestPath != _webHooksPath)
+            
+            //with the new WebListener, this is no longer required
+            /*if (fullRequestPath != _webHooksPath)
             {
                 requestPath = GetPath(fullRequestPath);
                 if (null == requestPath)
                 {
                     //this means the path was invalid
-                    return new BasicHttpResponse() { StatusCode = 404 };
+                    return new BasicHttpResponse() { StatusCode = HttpStatusCode.NotFound };
                 }
-            }
+            }*/
 
             //call the correct method for this request
             if (requestPath == _webHooksPath)
@@ -154,7 +161,7 @@ namespace Team1922.WebFramework
                     }
                     catch (Exception)
                     {
-                        return new BasicHttpResponse() { StatusCode = 400 };
+                        return new BasicHttpResponse() { StatusCode = HttpStatusCode.BadRequest };
                     }
                 }
                 try
@@ -170,17 +177,49 @@ namespace Team1922.WebFramework
                         case "DELETE":
                             return await HookDeleteAsync(subscriberUri);
                         default:
-                            return new BasicHttpResponse() { StatusCode = 405 };//not allowed
+                            return new BasicHttpResponse() { StatusCode = HttpStatusCode.MethodNotAllowed };//not allowed
                     }
                 }
                 catch (Exception)
                 {
-                    return new BasicHttpResponse() { StatusCode = 400 };
+                    return new BasicHttpResponse() { StatusCode = HttpStatusCode.BadRequest };
                 }
             }
             else
             {
                 return await AggregateRequestAsync(method, requestPath, body);
+            }
+        }
+        public async Task StartupServer()
+        {
+            try
+            {
+                var listener = new WebListener();
+                listener.UrlPrefixes.Add($"http://localhost:8082{PathRoot}");
+
+                listener.Start();
+
+                do
+                {
+                    using (RequestContext context = await listener.GetContextAsync())
+                    {
+                        //get the body
+                        var requestBodyStream = new StreamReader(context.Request.Body);
+                        var requestBody = await requestBodyStream.ReadToEndAsync();
+
+                        context.Response.Headers.Add("content-type", new string[] { "application/json" });
+                        var response = await ProcessRequestAsync(context.Request.Method, context.Request.Path, requestBody);
+
+                        context.Response.StatusCode = (int)response.StatusCode;
+
+                        byte[] buffer = Encoding.UTF8.GetBytes(response.Body ?? "");
+                        await context.Response.Body.WriteAsync(buffer, 0, buffer.Length);
+                    }
+                } while (!_webListenerCTS.IsCancellationRequested);
+            }
+            catch(Exception e)
+            {
+                //TODO: do something here
             }
         }
         #endregion
@@ -213,8 +252,46 @@ namespace Team1922.WebFramework
         #endregion
 
         #region Private Fields
+        private CancellationTokenSource _webListenerCTS = new CancellationTokenSource();
+        private WebListener _webListener;
         private const string _webHooksPath = "/_hooks_";
         private WebHooksSubscriberCollection _webHooksSubscribers = new WebHooksSubscriberCollection();
+        #endregion
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    _webListenerCTS.Cancel();
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~RequestDelegatorWebHooks() {
+        //    // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //    Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
         #endregion
     }
 }

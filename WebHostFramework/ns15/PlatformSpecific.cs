@@ -55,7 +55,7 @@ namespace Team1922.WebFramework
             var response = await delegator.ProcessRequestAsync(context.Request.Method, context.Request.Path, requestBody);
 
             //write the response
-            context.Response.StatusCode = response.StatusCode;
+            context.Response.StatusCode = (int)response.StatusCode;
             await context.Response.WriteAsync(response.Body ?? "");
         }
     }

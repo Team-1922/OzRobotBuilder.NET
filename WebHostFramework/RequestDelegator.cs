@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
 using Team1922.MVVM.Contracts.Events;
@@ -36,17 +37,17 @@ namespace Team1922.WebFramework
                 response.Body = await Data.GetAsync(path);
 
                 //OK
-                response.StatusCode = 200;
+                response.StatusCode = HttpStatusCode.OK;
             }
             catch (ArgumentException)
             {
                 //not found
-                response.StatusCode = 404;
+                response.StatusCode = HttpStatusCode.NotFound;
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -57,30 +58,30 @@ namespace Team1922.WebFramework
             {
                 //only do this operation if it does not exists already
                 if (Data.KeyExists(path))
-                    response.StatusCode = 409;
+                    response.StatusCode = HttpStatusCode.Conflict;
                 else
                 {
                     await Data.SetAsync(path, body);
 
                     //created
-                    response.StatusCode = 201;
+                    response.StatusCode = HttpStatusCode.Created;
                 }
             }
             catch (ArgumentException e)
             {
                 //not found
-                response.StatusCode = 404;
+                response.StatusCode = HttpStatusCode.NotFound;
             }
             catch(FacetValidationException e)
             {
                 //Bad Request
-                response.StatusCode = 400;
+                response.StatusCode = HttpStatusCode.BadRequest;
                 response.Body = e.Message;
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -95,25 +96,25 @@ namespace Team1922.WebFramework
                 await Data.SetAsync(path, body);
 
                 if (existed)
-                    response.StatusCode = 200;//OK
+                    response.StatusCode = HttpStatusCode.OK;
                 else                
-                    response.StatusCode = 201;//created
+                    response.StatusCode = HttpStatusCode.Created;//created
             }
             catch (ArgumentException e)
             {
                 //not found
-                response.StatusCode = 404;
+                response.StatusCode = HttpStatusCode.NotFound;
             }
             catch (FacetValidationException e)
             {
                 //Bad Request
-                response.StatusCode = 400;
+                response.StatusCode = HttpStatusCode.BadRequest;
                 response.Body = e.Message;
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -129,23 +130,23 @@ namespace Team1922.WebFramework
                 await Data.SetAsync(path, body);
 
                 //OK
-                response.StatusCode = 200;
+                response.StatusCode = HttpStatusCode.OK;
             }
             catch (ArgumentException)
             {
                 //not found
-                response.StatusCode = 404;
+                response.StatusCode = HttpStatusCode.NotFound;
             }
             catch (FacetValidationException e)
             {
                 //Bad Request
-                response.StatusCode = 400;
+                response.StatusCode = HttpStatusCode.BadRequest;
                 response.Body = e.Message;
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -158,28 +159,28 @@ namespace Team1922.WebFramework
                 await Data.SetAsync(path, null);
 
                 //OK
-                response.StatusCode = 200;
+                response.StatusCode = HttpStatusCode.OK;
             }
             catch (ArgumentException)
             {
                 //not found
-                response.StatusCode = 404;
+                response.StatusCode = HttpStatusCode.NotFound;
             }
             catch (FacetValidationException e)
             {
                 //Bad Request
-                response.StatusCode = 400;
+                response.StatusCode = HttpStatusCode.BadRequest;
                 response.Body = e.Message;
             }
             catch(NullReferenceException)
             {
                 //not found
-                response.StatusCode = 404;
+                response.StatusCode = HttpStatusCode.NotFound;
             }
             catch (Exception)
             {
                 //internal server error
-                response.StatusCode = 500;
+                response.StatusCode = HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -203,7 +204,7 @@ namespace Team1922.WebFramework
                 case "DELETE":
                     return await DeleteAsync(path);
                 default:
-                    return new BasicHttpResponse() { StatusCode = 405 };//not allowed
+                    return new BasicHttpResponse() { StatusCode = HttpStatusCode.MethodNotAllowed };//not allowed
             }
         }
         #endregion

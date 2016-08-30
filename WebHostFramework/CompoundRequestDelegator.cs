@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Net;
 
 namespace Team1922.WebFramework
 {
@@ -14,16 +15,28 @@ namespace Team1922.WebFramework
         
         public void AddDelegator(IRequestDelegator delegator)
         {
-            _delegatorsLock.EnterWriteLock();
-            _delegators.Add(delegator.PathRoot, delegator);
-            _delegatorsLock.ExitWriteLock();
+            try
+            {
+                _delegatorsLock.EnterWriteLock();
+                _delegators.Add(delegator.PathRoot, delegator);
+            }
+            finally
+            {
+                _delegatorsLock.ExitWriteLock();
+            }
         }
 
         public void RemoveDelegator(string pathRoot)
         {
-            _delegatorsLock.EnterWriteLock();
-            _delegators.Remove(pathRoot);
-            _delegatorsLock.ExitWriteLock();
+            try
+            {
+                _delegatorsLock.EnterWriteLock();
+                _delegators.Remove(pathRoot);
+            }
+            finally
+            {
+                _delegatorsLock.ExitWriteLock();
+            }
         }
         
         #region Private Methods
@@ -43,21 +56,27 @@ namespace Team1922.WebFramework
         {
             //try to find a delegator which matches this path
             IRequestDelegator chosenDelegator = null;
-            _delegatorsLock.EnterReadLock();
-            foreach (var delegator in _delegators)
+            try
             {
-                if (IsOnBeginning(path, delegator.Key))
+                _delegatorsLock.EnterReadLock();
+                foreach (var delegator in _delegators)
                 {
-                    chosenDelegator = delegator.Value;
+                    if (IsOnBeginning(path, delegator.Key))
+                    {
+                        chosenDelegator = delegator.Value;
+                    }
                 }
             }
-            _delegatorsLock.ExitReadLock();
+            finally
+            {
+                _delegatorsLock.ExitReadLock();
+            }
 
 
-            //if none is found, then 404
+            //if none is found, then HttpStatusCode.NotFound
             if (null == chosenDelegator)
             {
-                return new BasicHttpResponse() { Body = "Could Not Find Compatable Request Delegator", StatusCode = 404 };
+                return new BasicHttpResponse() { Body = "Could Not Find Compatable Request Delegator", StatusCode = HttpStatusCode.NotFound };
             }
             else
             {
