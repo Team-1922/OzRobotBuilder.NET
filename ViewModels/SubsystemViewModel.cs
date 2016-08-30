@@ -77,8 +77,12 @@ namespace Team1922.MVVM.ViewModels
         {
             if (pwmOutput == null)
                 throw new ArgumentNullException("pwmOutput");
-            if(addToModel)
-                ModelReference.PWMOutput.Add(pwmOutput);
+            if (addToModel)
+            {
+                TopParent.SetAsync($"{FullyQualifiedName}.{_pwmOutputProviders.Name}.{pwmOutput.Name}", JsonSerialize(pwmOutput));
+                return;
+                //ModelReference.PWMOutput.Add(pwmOutput);
+            }
             //var provider = new PWMOutputViewModel(this);
             //provider.ModelReference = pwmOutput;
             //provider.Name = _pwmOutputProviders.GetUnusedKey(provider.Name);
@@ -91,7 +95,11 @@ namespace Team1922.MVVM.ViewModels
             if (analogInput == null)
                 throw new ArgumentNullException("analogInput");
             if (addToModel)
-                ModelReference.AnalogInput.Add(analogInput);
+            {
+                TopParent.SetAsync($"{FullyQualifiedName}.{_analogInputProviders.Name}.{analogInput.Name}", JsonSerialize(analogInput));
+                return;
+                //ModelReference.AnalogInput.Add(analogInput);
+            }
             //var provider = new AnalogInputViewModel(this);
             //provider.ModelReference = analogInput;
             //provider.Name = _analogInputProviders.GetUnusedKey(provider.Name);
@@ -104,7 +112,11 @@ namespace Team1922.MVVM.ViewModels
             if (quadEncoder == null)
                 throw new ArgumentNullException("quadEncoder");
             if (addToModel)
-                ModelReference.QuadEncoder.Add(quadEncoder);
+            {
+                TopParent.SetAsync($"{FullyQualifiedName}.{_quadEncoderProviders.Name}.{quadEncoder.Name}", JsonSerialize(quadEncoder));
+                return;
+                //ModelReference.QuadEncoder.Add(quadEncoder);
+            }
 
             //var provider = new QuadEncoderViewModel(this);
             //provider.ModelReference = quadEncoder;
@@ -118,7 +130,11 @@ namespace Team1922.MVVM.ViewModels
             if (digitalInput == null)
                 throw new ArgumentNullException("digitalInput");
             if (addToModel)
-                ModelReference.DigitalInput.Add(digitalInput);
+            {
+                TopParent.SetAsync($"{FullyQualifiedName}.{_digitalInputProviders.Name}.{digitalInput.Name}", JsonSerialize(digitalInput));
+                return;
+                //ModelReference.DigitalInput.Add(digitalInput);
+            }
             //var provider = new DigitalInputViewModel(this);
             //provider.ModelReference = digitalInput;
             //provider.Name = _digitalInputProviders.GetUnusedKey(provider.Name);
@@ -131,7 +147,11 @@ namespace Team1922.MVVM.ViewModels
             if (relayOutput == null)
                 throw new ArgumentNullException("relayOutput");
             if (addToModel)
-                ModelReference.RelayOutput.Add(relayOutput);
+            {
+                TopParent.SetAsync($"{FullyQualifiedName}.{_relayOutputProviders.Name}.{relayOutput.Name}", JsonSerialize(relayOutput));
+                return;
+                //ModelReference.RelayOutput.Add(relayOutput);
+            }
             //var provider = new RelayOutputViewModel(this);
             //provider.ModelReference = relayOutput;
             //provider.Name = _relayOutputProviders.GetUnusedKey(provider.Name);
@@ -144,7 +164,11 @@ namespace Team1922.MVVM.ViewModels
             if (canTalon == null)
                 throw new ArgumentNullException("canTalon");
             if (addToModel)
-                ModelReference.CANTalons.Add(canTalon);
+            {
+                TopParent.SetAsync($"{FullyQualifiedName}.{_canTalonProviders.Name}.{canTalon.Name}", JsonSerialize(canTalon));
+                return;
+                //ModelReference.CANTalons.Add(canTalon);
+            }
             //var provider = new CANTalonViewModel(this);
             //provider.SetCANTalon(canTalon);
             //provider.Name = _canTalonProviders.GetUnusedKey(provider.Name);
@@ -184,32 +208,38 @@ namespace Team1922.MVVM.ViewModels
 
         public void RemovePWMOutput(string name)
         {
-            _pwmOutputProviders.Remove(name);
+            TopParent.SetAsync($"{FullyQualifiedName}.{_pwmOutputProviders.Name}.name", null).Wait();
+            //_pwmOutputProviders.Remove(name);
         }
 
         public void RemoveDigitalInput(string name)
         {
-            _digitalInputProviders.Remove(name);
+            TopParent.SetAsync($"{FullyQualifiedName}.{_digitalInputProviders.Name}.name", null).Wait();
+            //_digitalInputProviders.Remove(name);
         }
 
         public void RemoveAnalogInput(string name)
         {
-            _analogInputProviders.Remove(name);
+            TopParent.SetAsync($"{FullyQualifiedName}.{_analogInputProviders.Name}.name", null).Wait();
+            //_analogInputProviders.Remove(name);
         }
 
         public void RemoveQuadEncoder(string name)
         {
-            _quadEncoderProviders.Remove(name);
+            TopParent.SetAsync($"{FullyQualifiedName}.{_quadEncoderProviders.Name}.name", null).Wait();
+            //_quadEncoderProviders.Remove(name);
         }
 
         public void RemoveRelayOutput(string name)
         {
-            _canTalonProviders.Remove(name);
+            TopParent.SetAsync($"{FullyQualifiedName}.{_relayOutputProviders.Name}.name", null).Wait();
+            //_canTalonProviders.Remove(name);
         }
 
         public void RemoveCANTalon(string name)
         {
-            _canTalonProviders.Remove(name);
+            TopParent.SetAsync($"{FullyQualifiedName}.{_canTalonProviders.Name}.name", null).Wait();
+            //_canTalonProviders.Remove(name);
         }
         #endregion
 

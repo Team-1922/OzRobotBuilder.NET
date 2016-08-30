@@ -88,15 +88,15 @@ namespace Team1922.MVVM.ViewModels
         }
         public void RemoveSubsystem(string name)
         {
-            _subsystemProviders.Remove(name);
+            TopParent.SetAsync($"{_subsystemProviders.Name}.name", null).Wait();
         }
         public void RemoveJoystick(string name)
         {
-            _joystickProviders.Remove(name);
+            TopParent.SetAsync($"{_joystickProviders.Name}.name", null).Wait();
         }
         public void RemoveEventHandler(string name)
         {
-            _eventHandlerProviders.Remove(name);
+            TopParent.SetAsync($"{_eventHandlerProviders.Name}.name", null).Wait();
         }
         #endregion
         
@@ -145,7 +145,7 @@ namespace Team1922.MVVM.ViewModels
         /// <param name="value">the value to set at location <paramref name="key"/></param>
         /// <param name="safe">if true, then the task waits for the result and throws any exceptions that occured; if false, then just send the request and leave</param>
         /// <returns></returns>
-        public async Task SetAsync(string key, string value, bool safe)
+        public async Task SetAsync(string key, string value, bool safe = true)
         {
             if (safe)
             {
@@ -532,7 +532,11 @@ namespace Team1922.MVVM.ViewModels
             if (subsystem == null)
                 throw new ArgumentNullException("subsystem");
             if (addToModel)
-                ModelReference.Subsystem.Add(subsystem);
+            {
+                TopParent.SetAsync($"{_subsystemProviders.Name}.{subsystem.Name}", JsonSerialize(subsystem));
+                return;
+                //ModelReference.Subsystem.Add(subsystem);
+            }
 
             //var provider = new SubsystemViewModel(this);
             //provider.ModelReference = subsystem;
@@ -545,7 +549,11 @@ namespace Team1922.MVVM.ViewModels
             if (joystick == null)
                 throw new ArgumentNullException("joystick");
             if (addToModel)
-                ModelReference.Joystick.Add(joystick);
+            {
+                TopParent.SetAsync($"{_joystickProviders.Name}.{joystick.Name}", JsonSerialize(joystick));
+                return;
+                //ModelReference.Joystick.Add(joystick);
+            }
 
             //var provider = new JoystickViewModel(this);
             //provider.ModelReference = joystick;
@@ -556,9 +564,13 @@ namespace Team1922.MVVM.ViewModels
         private void AddEventHandler(Models.EventHandler eventHandler, bool addToModel)
         {
             if (eventHandler == null)
-                throw new ArgumentNullException("subsystem");
+                throw new ArgumentNullException("eventHandler");
             if (addToModel)
-                ModelReference.EventHandler.Add(eventHandler);
+            {
+                TopParent.SetAsync($"{_eventHandlerProviders.Name}.{eventHandler.Name}", JsonSerialize(eventHandler));
+                return;
+                //ModelReference.EventHandler.Add(eventHandler);
+            }
 
             //var provider = new EventHandlerViewModel(this);
             //provider.ModelReference = eventHandler;
