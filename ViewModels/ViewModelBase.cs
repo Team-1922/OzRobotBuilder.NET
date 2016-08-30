@@ -57,11 +57,11 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _root[_fullKey];
+                return _root.GetAsync(_fullKey).Result;
             }
             set
             {
-                _root[_fullKey] = value;
+                _root.SetAsync(_fullKey, value).Wait();
             }
         }
 
