@@ -8,6 +8,7 @@
     "Microsoft.Net.Http.Server": "0.1.0",
     "MVVMFramework": "1.0.0-*",
     "NETStandard.Library": "1.6.0",
+    "System.Net.NameResolution": "4.0.0",
     "System.Net.Requests": "4.0.11"
   },
 

@@ -12,9 +12,18 @@ namespace Team1922.WebFramework.Sockets
         {
             get
             {
-                return $"{StatusCode}\n{Body}";
+                return Utils.SerializeResponse(this);
+            }
+
+            set
+            {
+                var response = Utils.ParseResponse(value);
+                StatusCode = response.StatusCode;
+                Body = response.Body;
+                Length = response.Length;
             }
         }
+        public int Length { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public string Body { get; set; }
     }

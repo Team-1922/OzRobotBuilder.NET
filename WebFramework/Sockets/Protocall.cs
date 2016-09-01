@@ -13,6 +13,7 @@ namespace Team1922.WebFramework.Sockets
             Set,
             Add,
             Delete,
+            Close
         }
         public static string MethodToString(Method method)
         {
@@ -26,6 +27,8 @@ namespace Team1922.WebFramework.Sockets
                     return "ADD";
                 case Method.Delete:
                     return "DELETE";
+                case Method.Close:
+                    return "CLOSE";
                 default:
                     throw new ArgumentException($"Given Method \"{method.ToString()}\" Does Not Exist!");
             }
@@ -43,6 +46,8 @@ namespace Team1922.WebFramework.Sockets
                     return Method.Add;
                 case "DELETE":
                     return Method.Delete;
+                case "CLOSE":
+                    return Method.Close;
                 default:
                     throw new ArgumentException($"Given Method \"{method}\" Does Not Exist!");
             }

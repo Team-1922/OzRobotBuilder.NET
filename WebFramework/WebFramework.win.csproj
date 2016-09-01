@@ -46,6 +46,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestDelegator.cs" />
     <Compile Include="RequestDelegatorWebHooks.cs" />
+    <Compile Include="Sockets\ConnectionManager.cs" />
+    <Compile Include="Sockets\IConnectionManager.cs" />
+    <Compile Include="Sockets\IRequestDelegator.cs" />
+    <Compile Include="Sockets\Protocall.cs" />
+    <Compile Include="Sockets\Request.cs" />
+    <Compile Include="Sockets\RequestDelegator.cs" />
+    <Compile Include="Sockets\Response.cs" />
+    <Compile Include="Sockets\Utils.cs" />
     <Compile Include="WebHooksSubscriberCollection.cs" />
   </ItemGroup>
   <ItemGroup>

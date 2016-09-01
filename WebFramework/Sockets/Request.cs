@@ -11,38 +11,21 @@ namespace Team1922.WebFramework.Sockets
         {
             get
             {
-                return _text;
+                return Utils.SerializeRequest(this);
             }
             
             set
             {
-                _text = value;
-                var splitText = _text.Split(new char[] { '\n' }, StringSplitOptions.None);
-                if (splitText.Length != 3)
-                    throw new ArgumentException("Invalid Number of Parameters for Request");
-                if (!Enum.TryParse(splitText[0], out _method))
-                    throw new ArgumentException("Invalid Method");
-                //TODO: make these SAFER
-                Path = splitText[1];
-                Body = splitText[2];
+                var request = Utils.ParseRequest(value);
+                Method = request.Method;
+                Path = request.Path;
+                Body = request.Body;
+                Length = request.Length;
             }
         }
-        public Protocall.Method Method
-        {
-            get
-            {
-                return _method;
-            }
-
-            private set
-            {
-                _method = value;
-            }
-        }
-        public string Path { get; private set; }
-        public string Body { get; private set; }
-
-        private string _text = "";
-        private Protocall.Method _method;
+        public int Length { get; set; }
+        public Protocall.Method Method { get; set; }
+        public string Path { get; set; }
+        public string Body { get; set; }
     }
 }
