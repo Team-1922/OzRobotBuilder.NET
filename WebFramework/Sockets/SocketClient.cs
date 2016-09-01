@@ -11,9 +11,8 @@ namespace Team1922.WebFramework.Sockets
 {
     public class SocketClient : ISocketClient
     {
-        public SocketClient(IRequestDelegator requestDelegator)
+        public SocketClient()
         {
-            _requestDelegator = requestDelegator;
         }
 
         #region ISocketClient
@@ -66,7 +65,6 @@ namespace Team1922.WebFramework.Sockets
         private CancellationTokenSource _cts;
         private Socket _client;
         private NetworkStream _netStream;
-        private IRequestDelegator _requestDelegator;
         #endregion
 
         #region IDisposable Support
