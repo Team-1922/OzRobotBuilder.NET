@@ -80,7 +80,7 @@ namespace Team1922.WebFramework.Sockets
                     }
                     Console.WriteLine($"client connected local address {((IPEndPoint)client.LocalEndPoint).Address} and port {((IPEndPoint)client.LocalEndPoint).Port}, remote address {((IPEndPoint)client.RemoteEndPoint).Address} and port {((IPEndPoint)client.RemoteEndPoint).Port}");
 
-                    Task t = ListenerAsync(client);
+                    _listeners.Add(ListenerAsync(client));
 
                 }
                 listener.Dispose();

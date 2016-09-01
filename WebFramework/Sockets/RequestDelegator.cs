@@ -139,18 +139,18 @@ namespace Team1922.WebFramework.Sockets
         {
             get;
         }
-        public async Task<Response> ProcessRequestAsync(Protocall.Method method, string path, string body)
+        public async Task<Response> ProcessRequestAsync(Request request)
         {
-            switch (method)
+            switch (request.Method)
             {
                 case Protocall.Method.Get:
-                    return await GetAsync(path);
+                    return await GetAsync(request.Path);
                 case Protocall.Method.Set:
-                    return await SetAsync(path, body);
+                    return await SetAsync(request.Path, request.Body);
                 case Protocall.Method.Add:
-                    return await AddAsync(path, body);
+                    return await AddAsync(request.Path, request.Body);
                 case Protocall.Method.Delete:
-                    return await DeleteAsync(path);
+                    return await DeleteAsync(request.Path);
                 default:
                     return new Response() { StatusCode = HttpStatusCode.MethodNotAllowed };//not allowed
             }

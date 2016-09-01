@@ -12,11 +12,11 @@ namespace Team1922.WebFramework.Sockets
     {
         public const int HeaderBytes = 4;
         public static byte[] AddHeader(string writeText)
-        {;
+        {
             byte[] textBuffer = Encoding.UTF8.GetBytes(writeText);
             byte[] writeBuffer = new byte[textBuffer.Length + HeaderBytes];
-            writeBuffer.CopyTo(textBuffer, HeaderBytes);
-            writeBuffer.CopyTo(BitConverter.GetBytes(writeText.Length), 0);
+            BitConverter.GetBytes(writeText.Length).CopyTo(writeBuffer, 0);
+            textBuffer.CopyTo(writeBuffer, HeaderBytes);
             return writeBuffer;
         }
         /// <summary>
@@ -39,9 +39,19 @@ namespace Team1922.WebFramework.Sockets
             //get the body
             int bodyLength = ParseHeader(header);
             byte[] body = new byte[bodyLength];
-            await stream.ReadAsync(body, 0, bodyLength);
+            int cumulativeBytes = 0;
+            DateTime now = DateTime.UtcNow;
+            while ((DateTime.UtcNow - now).TotalMilliseconds < 5000)
+            {
+                cumulativeBytes += await stream.ReadAsync(body, cumulativeBytes, bodyLength - cumulativeBytes);
+                if (cumulativeBytes >= bodyLength)
+                {
+                    break;
+                }
+            }
 
-            return Encoding.UTF8.GetString(body);
+            var str = Encoding.UTF8.GetString(body);
+            return str;
         }
 
         public static async Task<Response> SocketReceiveResponseAsync(NetworkStream stream)
@@ -84,15 +94,18 @@ namespace Team1922.WebFramework.Sockets
 
         public static string[] SplitString(string text, int count)
         {
-            var parts = text.Split(new char[] { ' ' }, count, StringSplitOptions.None);
-            if (parts.Length != count)
-                throw new ArgumentException("Text is invalid format for parsing");
-            return parts;
+            var parts = text.Split(new char[] { ' ' }, count, StringSplitOptions.None).ToList();
+            if (parts.Count < count)
+            {
+                while (parts.Count < count)
+                    parts.Add("");
+            }
+            return parts.ToArray();
         }
 
         public static Response ParseResponse(string text)
         {
-            var parts = SplitString(text, 3);
+            var parts = SplitString(text, 2);
 
             Response response = new Response();
 
@@ -111,7 +124,7 @@ namespace Team1922.WebFramework.Sockets
         }
         public static Request ParseRequest(string text)
         {
-            var parts = SplitString(text, 4);
+            var parts = SplitString(text, 3);
 
             Request request = new Request();
 
@@ -123,7 +136,7 @@ namespace Team1922.WebFramework.Sockets
 
         public static string SerializeResponse(Response response)
         {
-            return $"{response.StatusCode} {response.Body}";
+            return $"{(int)response.StatusCode} {response.Body}";
         }
         public static string SerializeRequest(Request request)
         {
