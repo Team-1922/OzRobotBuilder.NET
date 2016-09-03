@@ -77,7 +77,8 @@ namespace Team1922.WebFramework.Sockets
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    CloseConnectionAsync().Wait();
+                    if(_netStream != null)
+                        CloseConnectionAsync().Wait();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

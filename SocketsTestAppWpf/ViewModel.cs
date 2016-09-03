@@ -38,7 +38,7 @@ namespace SocketsTestApp
             }
             catch (Exception e)
             {
-                nextSession.Dispose();
+                nextSession?.Dispose();
                 MessageBox.Show($"Failed To Connect: {e.Message}");
             }
         }
