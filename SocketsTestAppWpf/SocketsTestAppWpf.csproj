@@ -59,6 +59,7 @@
     <Compile Include="RequestsViewModel.cs" />
     <Compile Include="RequestViewModel.cs" />
     <Compile Include="ResponseViewModel.cs" />
+    <Compile Include="SessionViewModel.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

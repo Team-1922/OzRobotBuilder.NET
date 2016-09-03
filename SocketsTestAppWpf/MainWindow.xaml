@@ -7,76 +7,104 @@
         mc:Ignorable="d"
         Title="Socket Tester" Height="600" Width="525">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" MinWidth="150"/>
-            <ColumnDefinition Width="3"/>
-            <ColumnDefinition Width="*" MinWidth="200"/>
-        </Grid.ColumnDefinitions>
-        <ListBox ItemsSource="{Binding Requests}">
-            <ListBox.ItemTemplate>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Click="ConnectNext"
+                    Name="btnConnect">
+                <TextBlock Text="Connect"/>
+            </Button>
+            <TextBox Grid.Column="1"
+                     Text="{Binding NextConnectionUri}"
+                     Name="tbConnectUri"/>
+        </Grid>
+        <TabControl Grid.Row="1" ItemsSource="{Binding Sessions}">
+            <TabControl.ItemTemplate>
                 <ItemContainerTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="40"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding Request.Method}" />
-                        <TextBlock Grid.Column="1" Text="{Binding Request.Path}"/>
-                    </Grid>
-                </ItemContainerTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="75"/>
-                <RowDefinition Height="3"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0"
+                    <TabItem Header="{Binding ConnectedUri}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" MinWidth="150"/>
+                                <ColumnDefinition Width="3"/>
+                                <ColumnDefinition Width="*" MinWidth="200"/>
+                            </Grid.ColumnDefinitions>
+                            <ListBox ItemsSource="{Binding Requests}">
+                                <ListBox.ItemTemplate>
+                                    <ItemContainerTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="40"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Request.Method}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Request.Path}"/>
+                                        </Grid>
+                                    </ItemContainerTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="75"/>
+                                    <RowDefinition Height="3"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="75"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="75"/>
-                    </Grid.ColumnDefinitions>
-                    <ComboBox 
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="75"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="75"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox 
                         Grid.Column="0" 
                         ItemsSource="{Binding MethodValues}" 
                         SelectedItem="{Binding ActiveRequest.Method}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <TextBox Grid.Column="1"
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <TextBox Grid.Column="1"
                              Text="{Binding ActiveRequest.Path}"/>
-                    <Button Grid.Column="2"
+                                        <Button Grid.Column="2"
                             Click="Button_Click">
-                        <TextBlock Text="Send"/>
-                    </Button>
-                </Grid>
-                <TextBox Grid.Row="1"
+                                            <TextBlock Text="Send"/>
+                                        </Button>
+                                    </Grid>
+                                    <TextBox Grid.Row="1"
                          VerticalAlignment="Stretch"
                          HorizontalAlignment="Stretch"
                          Text="{Binding ActiveRequest.Body}"/>
-            </Grid>
-            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="15"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="{Binding ActiveResponse.StatusCode}"/>
-                <TextBlock Grid.Row="1" Text="{Binding ActiveResponse.Body}"/>
-            </Grid>
-        </Grid>
+                                </Grid>
+                                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
+                                <Grid Grid.Row="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Text="{Binding ActiveResponse.StatusCode}"/>
+                                    <TextBlock Grid.Row="1" Text="{Binding ActiveResponse.Body}"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                </ItemContainerTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
     </Grid>
 </Window>

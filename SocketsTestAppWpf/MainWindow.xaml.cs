@@ -28,7 +28,31 @@ namespace SocketsTestApp
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            await (DataContext as ViewModel).SendActiveRequest();
+        }
+
+        private async void ConnectNext(object sender, RoutedEventArgs e)
+        {
+            DisableConnectionUI();
+            try
+            {
+                await (DataContext as ViewModel).OpenConnection();
+            }
+            finally
+            {
+                EnableConnectionUI();
+            }
+        }
+
+        private void DisableConnectionUI()
+        {
+            tbConnectUri.IsEnabled = false;
+            btnConnect.IsEnabled = false;
+        }
+
+        private void EnableConnectionUI()
+        {
+            tbConnectUri.IsEnabled = true;
+            btnConnect.IsEnabled = true;
         }
     }
 }

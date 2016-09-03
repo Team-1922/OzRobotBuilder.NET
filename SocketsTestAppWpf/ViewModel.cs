@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Team1922.MVVM.Framework;
 using Team1922.WebFramework.Sockets;
 
@@ -11,40 +12,39 @@ namespace SocketsTestApp
 {
     class ViewModel : BindableBase
     {
-        public ObservableCollection<PairViewModel> Requests { get; } = new ObservableCollection<PairViewModel>();
-
-        public RequestViewModel ActiveRequest
+        public ObservableCollection<SessionViewModel> Sessions { get; } = new ObservableCollection<SessionViewModel>();
+        public string NextConnectionUri
         {
             get
             {
-                return _activePair.Request;
+                return _nextConnectionUri;
             }
-        }
 
-        public ResponseViewModel ActiveResponse
-        {
-            get
+            set
             {
-                return _activePair.Response;
+                SetProperty(ref _nextConnectionUri, value);
             }
         }
 
-        public IEnumerable<string> MethodValues
+        public async Task OpenConnection()
         {
-            get
+            SessionViewModel nextSession = null;
+            try
             {
-                return Enum.GetNames(typeof(Protocall.Method));
+                nextSession = new SessionViewModel(NextConnectionUri);                
+                await nextSession.Connect();
+                Sessions.Add(nextSession);
+                
             }
-        }
-
-        public async Task SendActiveRequest()
-        {
-            //TODO: actually make the request
-            Requests.Add(_activePair);
+            catch (Exception e)
+            {
+                nextSession.Dispose();
+                MessageBox.Show($"Failed To Connect: {e.Message}");
+            }
         }
 
         #region Private Fields
-        PairViewModel _activePair = new PairViewModel();
+        private string _nextConnectionUri = "";
         #endregion
     }
 }
