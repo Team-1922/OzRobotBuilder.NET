@@ -11,19 +11,22 @@ namespace SocketsTestApp
 {
     class ResponseViewModel : BindableBase
     {
+        public ResponseViewModel()
+        {
+        }
 
-        public HttpStatusCode StatusCode
+        public void SetResponse(Response response)
+        {
+            _response = response;
+            OnPropertyChanged("StatusCode");
+            OnPropertyChanged("Body");
+        }
+
+        public string StatusCode
         {
             get
             {
-                return _response.StatusCode;
-            }
-
-            set
-            {
-                var temp = StatusCode;
-                SetProperty(ref temp, value);
-                _response.StatusCode = temp;
+                return _response.StatusCode.ToString();
             }
         }
 
@@ -32,13 +35,6 @@ namespace SocketsTestApp
             get
             {
                 return _response.Body;
-            }
-            
-            set
-            {
-                var temp = Body;
-                SetProperty(ref temp, value);
-                _response.Body = temp;
             }
         }
 

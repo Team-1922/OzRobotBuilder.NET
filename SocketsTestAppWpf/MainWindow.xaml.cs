@@ -23,11 +23,13 @@ namespace SocketsTestApp
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ViewModel();
+            DataContext = new ViewModel() { NextConnectionUri = "http://localhost:8082" };
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            //get the selected item
+            await ((sender as Button)?.DataContext as SessionViewModel)?.SendActiveRequest();
         }
 
         private async void ConnectNext(object sender, RoutedEventArgs e)
