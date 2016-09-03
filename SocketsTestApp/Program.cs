@@ -10,8 +10,7 @@ namespace SocketsTestApp
     {
         public static void Main(string[] args)
         {
-            RequestDelegator rd = new RequestDelegator("", null);
-            SocketClient client = new SocketClient(rd);
+            SocketClient client = new SocketClient();
 
             client.OpenConnectionAsync("localhost", 8082).Wait();
 

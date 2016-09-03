@@ -52,6 +52,7 @@
     <Compile Include="Sockets\Protocall.cs" />
     <Compile Include="Sockets\Request.cs" />
     <Compile Include="Sockets\RequestDelegator.cs" />
+    <Compile Include="Sockets\RequestResponsePair.cs" />
     <Compile Include="Sockets\Response.cs" />
     <Compile Include="Sockets\SocketClient.cs" />
     <Compile Include="Sockets\SocketServer.cs" />
