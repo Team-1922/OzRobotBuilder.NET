@@ -83,17 +83,15 @@
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-                                    <TextBox Grid.Column="1"
-                                             Text="{Binding SelectedItem.Request.Path}"/>
+                                    <TextBox Grid.Column="1" Text="{Binding SelectedItem.Request.Path}"/>
                                     <Button Grid.Column="2"
                                             Click="Button_Click">
                                         <TextBlock Text="Send"/>
                                     </Button>
                                 </Grid>
-                                <TextBox Grid.Row="1"
-                                         VerticalAlignment="Stretch"
-                                         HorizontalAlignment="Stretch"
-                                         Text="{Binding SelectedItem.Request.Body}"/>
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <TextBox Text="{Binding SelectedItem.Request.Body}"/>
+                                </ScrollViewer>
                             </Grid>
                             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="DarkGray"/>
                             <Grid Grid.Row="2">
@@ -102,7 +100,9 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" Text="{Binding SelectedItem.Response.StatusCode}"/>
-                                <TextBlock Grid.Row="1" Text="{Binding SelectedItem.Response.Body}"/>
+                                <ScrollViewer Grid.Row="1"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <TextBlock Text="{Binding SelectedItem.Response.Body}"/>
+                                </ScrollViewer>
                             </Grid>
                         </Grid>
                     </Grid>
