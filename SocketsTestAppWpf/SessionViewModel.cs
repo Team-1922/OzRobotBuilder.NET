@@ -85,6 +85,7 @@ namespace SocketsTestApp
         {
             //TODO: actually make the request
             Requests.Add(_activePair);
+            _activePair.Response.SetResponse(await _socketClient.SendAsync(_activePair.Request.Request));
             //this is like a copy-constructor
             SelectedItem = new PairViewModel(_activePair);
         }

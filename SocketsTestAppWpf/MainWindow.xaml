@@ -25,7 +25,7 @@
                      Text="{Binding NextConnectionUri}"
                      Name="tbConnectUri"/>
         </Grid>
-        <TabControl Grid.Row="1" ItemsSource="{Binding Sessions}">
+        <TabControl Name="tvSessions" Grid.Row="1" ItemsSource="{Binding Sessions}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding ConnectedUri}"/>

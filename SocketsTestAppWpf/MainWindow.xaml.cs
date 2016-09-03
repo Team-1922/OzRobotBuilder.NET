@@ -28,8 +28,25 @@ namespace SocketsTestApp
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            //get the selected item
-            await ((sender as Button)?.DataContext as SessionViewModel)?.SendActiveRequest();
+            DisableSessionUI();
+
+            try
+            {
+                //get the selected item
+                await ((sender as Button)?.DataContext as SessionViewModel)?.SendActiveRequest();
+            }
+            finally
+            {
+                EnableSessionUI();
+            }
+        }
+        private void DisableSessionUI()
+        {
+            tvSessions.IsEnabled = false;
+        }
+        private void EnableSessionUI()
+        {
+            tvSessions.IsEnabled = true;
         }
 
         private async void ConnectNext(object sender, RoutedEventArgs e)
@@ -44,13 +61,11 @@ namespace SocketsTestApp
                 EnableConnectionUI();
             }
         }
-
         private void DisableConnectionUI()
         {
             tbConnectUri.IsEnabled = false;
             btnConnect.IsEnabled = false;
         }
-
         private void EnableConnectionUI()
         {
             tbConnectUri.IsEnabled = true;

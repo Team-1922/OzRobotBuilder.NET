@@ -17,7 +17,14 @@ namespace SocketsTestApp
             _request.Body = other._request.Body;
             _request.Path = other._request.Path;
         }
-
+        
+        public Request Request
+        {
+            get
+            {
+                return new Request() { Method = _request.Method, Body = _request.Body, Path = _request.Path };
+            }
+        }
 
         public string Method
         {
