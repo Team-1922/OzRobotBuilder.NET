@@ -15,6 +15,12 @@ namespace SocketsTestApp
         {
         }
 
+        public ResponseViewModel(ResponseViewModel other)
+        {
+            _response.StatusCode = other._response.StatusCode;
+            _response.Body = other._response.Body;
+        }
+
         public void SetResponse(Response response)
         {
             _response = response;

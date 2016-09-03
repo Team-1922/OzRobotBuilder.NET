@@ -10,6 +10,14 @@ namespace SocketsTestApp
 {
     class RequestViewModel : BindableBase
     {
+        public RequestViewModel() { }
+        public RequestViewModel(RequestViewModel other)
+        {
+            _request.Method = other._request.Method;
+            _request.Body = other._request.Body;
+            _request.Path = other._request.Path;
+        }
+
 
         public string Method
         {

@@ -56,5 +56,18 @@ namespace SocketsTestApp
             tbConnectUri.IsEnabled = true;
             btnConnect.IsEnabled = true;
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ListBox)
+            {
+                var lb = sender as ListBox;
+                if (lb.DataContext is SessionViewModel)
+                {
+                    var session = lb.DataContext as SessionViewModel;
+                    session.SelectedItem = e.AddedItems[0] as PairViewModel;
+                }
+            }
+        }
     }
 }

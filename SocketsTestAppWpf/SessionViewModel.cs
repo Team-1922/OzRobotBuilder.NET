@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace SocketsTestApp
 
         public ObservableCollection<PairViewModel> Requests { get; } = new ObservableCollection<PairViewModel>();
 
-        public RequestViewModel ActiveRequest
+        /*public RequestViewModel ActiveRequest
         {
             get
             {
@@ -48,13 +49,27 @@ namespace SocketsTestApp
             {
                 return _activePair.Response;
             }
-        }
+        }*/
 
         public IEnumerable<string> MethodValues
         {
             get
             {
                 return Enum.GetNames(typeof(Protocall.Method));
+            }
+        }
+
+        public PairViewModel SelectedItem
+        {
+            get
+            {
+                return _activePair;
+            }
+
+            set
+            {
+                //make sure that we get a NEW version of the request when we look at the old one so we don't rewrite history
+                SetProperty(ref _activePair, new PairViewModel(value));
             }
         }
 
@@ -70,6 +85,8 @@ namespace SocketsTestApp
         {
             //TODO: actually make the request
             Requests.Add(_activePair);
+            //this is like a copy-constructor
+            SelectedItem = new PairViewModel(_activePair);
         }
 
         #region Private Fields
