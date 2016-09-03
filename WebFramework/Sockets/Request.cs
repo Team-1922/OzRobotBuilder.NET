@@ -23,7 +23,7 @@ namespace Team1922.WebFramework.Sockets
             }
         }
         public Protocall.Method Method { get; set; }
-        public string Path { get; set; }
-        public string Body { get; set; }
+        public string Path { get; set; } = "";
+        public string Body { get; set; } = "";
     }
 }

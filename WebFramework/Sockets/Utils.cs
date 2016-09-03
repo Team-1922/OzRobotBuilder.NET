@@ -39,16 +39,7 @@ namespace Team1922.WebFramework.Sockets
             //get the body
             int bodyLength = ParseHeader(header);
             byte[] body = new byte[bodyLength];
-            int cumulativeBytes = 0;
-            DateTime now = DateTime.UtcNow;
-            while ((DateTime.UtcNow - now).TotalMilliseconds < 5000)
-            {
-                cumulativeBytes += await stream.ReadAsync(body, cumulativeBytes, bodyLength - cumulativeBytes);
-                if (cumulativeBytes >= bodyLength)
-                {
-                    break;
-                }
-            }
+            await stream.ReadAsync(body, 0, bodyLength);
 
             var str = Encoding.UTF8.GetString(body);
             return str;
