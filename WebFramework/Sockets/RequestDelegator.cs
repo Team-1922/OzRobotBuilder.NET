@@ -9,9 +9,8 @@ namespace Team1922.WebFramework.Sockets
 {
     public class RequestDelegator : IRequestDelegator
     {
-        public RequestDelegator(string pathRoot, IHierarchialAccessRoot data)
+        public RequestDelegator(IHierarchialAccessRoot data)
         {
-            PathRoot = pathRoot;
             Data = data;
         }
 
@@ -135,10 +134,6 @@ namespace Team1922.WebFramework.Sockets
         #endregion
 
         #region IRequestDelegator
-        public string PathRoot
-        {
-            get;
-        }
         public async Task<Response> ProcessRequestAsync(Request request)
         {
             switch (request.Method)
