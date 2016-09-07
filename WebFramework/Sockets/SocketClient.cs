@@ -11,27 +11,58 @@ namespace Team1922.WebFramework.Sockets
 {
     public class SocketClient : ISocketClient
     {
-        public SocketClient()
+        public SocketClient(bool sendOnly = false)
         {
+            SendOnly = sendOnly;
         }
 
         #region ISocketClient
+        public bool SendOnly { get; }
+
+        public IPEndPoint LocalEndPoint
+        {
+            get
+            {
+                return (IPEndPoint)_client?.LocalEndPoint;
+            }
+        }
+
+        public IPEndPoint RemoteEndPoint
+        {
+            get
+            {
+                return (IPEndPoint)_client?.RemoteEndPoint;
+            }
+        }
+
         public async Task CloseConnectionAsync()
         {
+            if (null == _clientNetStream)
+                return;
+
             await SendAsync(new Request() { Method = Protocall.Method.Close });
 
             _cts.Cancel();
-            _netStream.Dispose();
-            _client.Dispose();
+            _clientNetStream.Dispose();
+            _client?.Dispose();
+
+            _server?.Dispose();
 
             _client = null;
-            _netStream = null;
+            _clientNetStream = null;
+            _server = null;
             _cts = null;
         }
         public async Task OpenConnectionAsync(string hostName, int port)
         {
             if (_client != null)
                 throw new Exception("Client Already Connected!");
+
+            //before even setting up this socket, make sure we have a server which can be connected to
+            if(!SendOnly)
+            {
+                _server = new SocketServer()//TODO: should the server be given to us?  SHould the request delegator be given to us?
+            }
 
             IPHostEntry ipHost = await Dns.GetHostEntryAsync(hostName);
             IPAddress ipAddress = ipHost.AddressList.Where(address => address.AddressFamily == AddressFamily.InterNetwork).First();
@@ -41,11 +72,14 @@ namespace Team1922.WebFramework.Sockets
                 return;
             }
             _cts = new CancellationTokenSource();
-            _client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _client = Utils.MakeSocket();
             _client.Connect(ipAddress, port);
-            _netStream = new NetworkStream(_client);
-            _netStream.ReadTimeout = 5000;
-            _netStream.WriteTimeout = 5000;
+            _clientNetStream = new NetworkStream(_client);
+
+            if(!SendOnly)
+            {
+                //tell the connecting server what our path is
+            }
         }
 
         //NOTE: this should ONLY BE CALLED BY ONE THREAD AT A TIME
@@ -56,15 +90,16 @@ namespace Team1922.WebFramework.Sockets
             if (null == request)
                 throw new ArgumentException("request", "Given Request was Null");
 
-            var senderTask = Utils.SocketSendAsync(_netStream, request);
-            return await Utils.SocketReceiveResponseAsync(_netStream);
+            var senderTask = Utils.SocketSendAsync(_clientNetStream, request);
+            return await Utils.SocketReceiveResponseAsync(_clientNetStream);
         }
         #endregion
 
         #region Private Fields
         private CancellationTokenSource _cts;
         private Socket _client;
-        private NetworkStream _netStream;
+        private NetworkStream _clientNetStream;
+        private SocketServer _server;
         #endregion
 
         #region IDisposable Support
@@ -77,7 +112,7 @@ namespace Team1922.WebFramework.Sockets
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    if(_netStream != null)
+                    if(_clientNetStream != null)
                         CloseConnectionAsync().Wait();
                 }
 
@@ -101,6 +136,11 @@ namespace Team1922.WebFramework.Sockets
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
+        }
+
+        public Task OpenConnectionAsync(string hostName, string path, int port)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

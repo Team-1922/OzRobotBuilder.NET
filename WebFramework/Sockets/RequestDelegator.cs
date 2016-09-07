@@ -134,6 +134,7 @@ namespace Team1922.WebFramework.Sockets
         #endregion
 
         #region IRequestDelegator
+        public IHierarchialAccessRoot Data { get; }
         public async Task<Response> ProcessRequestAsync(Request request)
         {
             switch (request.Method)
@@ -150,9 +151,6 @@ namespace Team1922.WebFramework.Sockets
                     return new Response() { StatusCode = HttpStatusCode.MethodNotAllowed };//not allowed
             }
         }
-        #endregion
-
-        public IHierarchialAccessRoot Data { get; }
-        
+        #endregion        
     }
 }

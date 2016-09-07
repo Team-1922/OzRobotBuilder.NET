@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Team1922.MVVM.Contracts;
 
 namespace Team1922.WebFramework.Sockets
 {
@@ -26,6 +27,14 @@ namespace Team1922.WebFramework.Sockets
         public async Task<Response> ProcessRequestAsync(Request request)
         {
             return await GetDelegatorFromRequest(ref request)?.ProcessRequestAsync(request);
+        }
+        public IHierarchialAccessRoot Data
+        {
+            get
+            {
+                //TODO: something else?
+                return null;
+            }
         }
         #endregion
 

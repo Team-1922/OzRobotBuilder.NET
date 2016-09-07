@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace Team1922.WebFramework.Sockets
 {
-    public interface ISocketServer : IDisposable
+    public interface ISocketServer : ISocket
     {
         void StartListener();
         void StopListener();
-        ushort Port { get; }
+        IRequestDelegator RequestDelegator { get; }
+        
+        string Path { get; }
     }
 }

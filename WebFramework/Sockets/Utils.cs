@@ -133,5 +133,19 @@ namespace Team1922.WebFramework.Sockets
         {
             return $"{request.Method} {request.Path} {request.Body}";
         }
+
+        /// <summary>
+        /// This makes a socket based on the given port using reasonable settings
+        /// </summary>
+        /// <returns>a new socket instance</returns>
+        public static Socket MakeSocket()
+        {
+            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.ReceiveTimeout = 5000; // receive timout 5 seconds
+            socket.SendTimeout = 5000; // send timeout 5 seconds 
+            return socket;
+        }
+
+
     }
 }

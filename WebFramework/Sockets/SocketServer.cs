@@ -9,13 +9,27 @@ using System.Threading.Tasks;
 
 namespace Team1922.WebFramework.Sockets
 {
+    public class PrimativeConnectionInfo : IEquatable<PrimativeConnectionInfo>
+    {
+        public string IpAddress = "";
+        public int Port = -1;
+
+        public bool Equals(PrimativeConnectionInfo other)
+        {
+            return (other.IpAddress == IpAddress && other.Port == Port);
+        }
+    }
+    public delegate void SocketConnectEvent(PrimativeConnectionInfo connectionInfo);
+
     public class SocketServer : ISocketServer
     {
-        public SocketServer(ushort port, IRequestDelegator delegator)
+        public SocketServer(IRequestDelegator delegator, ushort port, int maxClients = 9001)
         {
             _port = port;
             _requestDelegator = delegator;
+            _maxClients = maxClients;
         }
+
 
         #region Private Helper Methods
         private async Task ListenerAsync(Socket socket)
@@ -50,12 +64,21 @@ namespace Team1922.WebFramework.Sockets
         #endregion
 
         #region ISocketServer
+        public IRequestDelegator RequestDelegator
+        {
+            get
+            {
+                return _requestDelegator;
+            }
+        }
+        public event SocketConnectEvent SocketConnectEvent;
         public void StartListener()
         {
-            var listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            listener.ReceiveTimeout = 5000; // receive timout 5 seconds
-            listener.SendTimeout = 5000; // send timeout 5 seconds 
+            //avoid multiple starts
+            if (null != _connectionDispatcherTask)
+                return;
 
+            var listener = Utils.MakeSocket();
             listener.Bind(new IPEndPoint(IPAddress.Any, _port));
             listener.Listen(backlog: 15);
 
@@ -64,7 +87,7 @@ namespace Team1922.WebFramework.Sockets
             _connectionDispatcherTask = Task.Run(() =>
             {
                 Console.WriteLine("listener task started");
-                while (true)
+                while (_listeners.Count < _maxClients)
                 {
                     if (_cts.Token.IsCancellationRequested)
                     {
@@ -81,7 +104,7 @@ namespace Team1922.WebFramework.Sockets
                     Console.WriteLine($"client connected local address {((IPEndPoint)client.LocalEndPoint).Address} and port {((IPEndPoint)client.LocalEndPoint).Port}, remote address {((IPEndPoint)client.RemoteEndPoint).Address} and port {((IPEndPoint)client.RemoteEndPoint).Port}");
 
                     _listeners.Add(ListenerAsync(client));
-
+                    SocketConnectEvent?.Invoke(new PrimativeConnectionInfo() { IpAddress = ((IPEndPoint)client.RemoteEndPoint).Address.ToString(), Port = ((IPEndPoint)client.RemoteEndPoint).Port });
                 }
                 listener.Dispose();
                 Console.WriteLine("Listener task closing");
@@ -102,6 +125,7 @@ namespace Team1922.WebFramework.Sockets
         private Task _connectionDispatcherTask;
         private ushort _port;
         private IRequestDelegator _requestDelegator;
+        private int _maxClients;
         #endregion
 
         #region IDisposable Support

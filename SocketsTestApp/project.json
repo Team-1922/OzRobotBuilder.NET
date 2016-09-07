@@ -9,6 +9,7 @@
       "type": "platform",
       "version": "1.0.0"
     },
+    "ViewModels": "1.0.0-*",
     "WebFramework": "1.0.0-*"
   },
 
