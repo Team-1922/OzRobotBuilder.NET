@@ -116,7 +116,17 @@ namespace Team1922.Logging
 
             _streamWriter = new StreamWriter(_stream);
         }
-        
+
+        /// <summary>
+        /// Logs a caught exception and optionally rethrows it
+        /// </summary>
+        /// <typeparam name="T">the type of the exception which was caught</typeparam>
+        /// <param name="exception">the exception which was caught</param>
+        /// <param name="severity">the severity of this entry</param>
+        /// <param name="rethrow">whether or not to throw the exception again</param>
+        /// <param name="callerName">the name of the caller of this method</param>
+        /// <param name="filePath">the name of the file this method is being called from</param>
+        /// <param name="lineNumber">the line number of the aforementioned file this method is being called from</param>
         public void CaughtException<T>(T exception, LogSeverity severity, bool rethrow, [CallerMemberName] string callerName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0) where T : Exception
         {
             WriteLine(new LogEntryData($"{exception.ToString()}", severity, callerName, filePath, lineNumber)).Wait();
@@ -137,11 +147,11 @@ namespace Team1922.Logging
         /// <summary>
         /// Writes a log with the given log data as parameters
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="severity"></param>
-        /// <param name="callerName"></param>
-        /// <param name="filePath"></param>
-        /// <param name="lineNumber"></param>
+        /// <param name="message">the message being logged</param>
+        /// <param name="severity">the severity of this entry</param>
+        /// <param name="callerName">the name of the caller of this method</param>
+        /// <param name="filePath">the name of the file this method is being called from</param>
+        /// <param name="lineNumber">the line number of the aforementioned file this method is being called from</param>
         /// <returns></returns>
         public async Task WriteLine(string message, LogSeverity severity, [CallerMemberName] string callerName = "", [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
