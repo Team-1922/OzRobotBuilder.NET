@@ -10,75 +10,50 @@ namespace Team1922.WebFramework.Sockets
 {
     public static class Utils
     {
-        public const int HeaderBytes = 4;
-        public static byte[] AddHeader(string writeText)
-        {
-            byte[] textBuffer = Encoding.UTF8.GetBytes(writeText);
-            byte[] writeBuffer = new byte[textBuffer.Length + HeaderBytes];
-            BitConverter.GetBytes(writeText.Length).CopyTo(writeBuffer, 0);
-            textBuffer.CopyTo(writeBuffer, HeaderBytes);
-            return writeBuffer;
-        }
         /// <summary>
         /// Gets the length of the request from the header
         /// </summary>
         /// <param name="header">the first bytes of the header <see cref="HeaderBytes"/></param>
         /// <returns></returns>
-        public static int ParseHeader(byte[] header)
+        public static HeaderContent ParseHeader(byte[] header)
         {
-            if (header.Length != HeaderBytes)
-                throw new ArgumentException("header", "Header Must be Exactly 4 Bytes");
-            return BitConverter.ToInt32(header, 0);
+            return new HeaderContent(header);
         }
-        public static async Task<string> SocketReceiveAsync(NetworkStream stream)
+        public static async Task<HeaderContent> SocketReadHeader(NetworkStream stream)
+        {
+            byte[] headerBytes = new byte[HeaderContent.HeaderSize];
+            await stream.ReadAsync(headerBytes, 0, headerBytes.Length);
+
+            return ParseHeader(headerBytes);
+        }
+        public static async Task<SocketMessage> SocketReceiveAsync(NetworkStream stream)
         {
             //get the header
-            byte[] header = new byte[4];
-            await stream.ReadAsync(header, 0, 4);
+            var header = await SocketReadHeader(stream);
 
             //get the body
-            int bodyLength = ParseHeader(header);
-            byte[] body = new byte[bodyLength];
-            await stream.ReadAsync(body, 0, bodyLength);
+            byte[] body = new byte[header.ContentSize];
+            await stream.ReadAsync(body, 0, body.Length);
 
-            var str = Encoding.UTF8.GetString(body);
-            return str;
+            return new SocketMessage(header, body);
         }
 
         public static async Task<Response> SocketReceiveResponseAsync(NetworkStream stream)
         {
-            return ParseResponse(await SocketReceiveAsync(stream));
+            return ParseResponse((await SocketReceiveAsync(stream)).Body);
         }
         public static async Task<Request> SocketReceiveRequestAsync(NetworkStream stream)
         {
-            return ParseRequest(await SocketReceiveAsync(stream));
+            return ParseRequest((await SocketReceiveAsync(stream)).Body);
         }
-        public static async Task SocketSendAsync(NetworkStream stream, Response response)
+        public static async Task SocketSendAsync(NetworkStream stream, SocketMessage message)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream", "Network Stream was Null!");
-            if (response == null)
-                throw new ArgumentNullException("response", "Response Was Null");
-            if (null == response.Body)
-                throw new ArgumentNullException("response.Body", "Response Body was Null");
+            if (message == null)
+                throw new ArgumentNullException("message", "Message Was Null");
 
-            var writeBuffer = AddHeader(response.Text);
-            await stream.WriteAsync(writeBuffer, 0, writeBuffer.Length);
-            await stream.FlushAsync();
-        }
-        public static async Task SocketSendAsync(NetworkStream stream, Request request)
-        {
-            if (stream == null)
-                throw new ArgumentNullException("stream", "Network Stream was Null!");
-            if (request == null)
-                throw new ArgumentNullException("request", "Request Was Null");
-            if (request.Body == null)
-                throw new ArgumentNullException("requset.Body", "Request Body was Null");
-            if (request.Path == null)
-                throw new ArgumentNullException("request.Body", "Request Path was Null");
-
-            var writeBuffer = AddHeader(request.Text);
-
+            var writeBuffer = message.Bytes;
             await stream.WriteAsync(writeBuffer, 0, writeBuffer.Length);
             await stream.FlushAsync();
         }
