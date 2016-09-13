@@ -8,21 +8,12 @@ namespace Team1922.WebFramework.Sockets
 {
     public class Response
     {
-        public string Text
-        {
-            get
-            {
-                return Utils.SerializeResponse(this);
-            }
-
-            set
-            {
-                var response = Utils.ParseResponse(value);
-                StatusCode = response.StatusCode;
-                Body = response.Body;
-            }
-        }
         public HttpStatusCode StatusCode { get; set; }
         public string Body { get; set; } = "";
+
+        public override string ToString()
+        {
+            return $"{(int)StatusCode} {Body}";
+        }
     }
 }

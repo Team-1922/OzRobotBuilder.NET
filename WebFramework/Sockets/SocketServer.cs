@@ -23,8 +23,9 @@ namespace Team1922.WebFramework.Sockets
 
     public class SocketServer : ISocketServer
     {
-        public SocketServer(IRequestDelegator delegator, ushort port, int maxClients = 9001)
+        public SocketServer(IRequestDelegator delegator, string path, int port = 0, int maxClients = 9001)
         {
+            Path = path;
             _port = port;
             _requestDelegator = delegator;
             _maxClients = maxClients;
@@ -41,12 +42,25 @@ namespace Team1922.WebFramework.Sockets
                     bool completed = false;
                     do
                     {
-                        var request = await Utils.SocketReceiveRequestAsync(stream);
-                        if(request.Method == Protocall.Method.Close)
+                        var message = await Utils.SocketReceiveAsync(stream);
+                        var request = message.ToRequest();
+                        if (request.Method == Protocall.Method.Close)
                         {
                             completed = true;
                         }
-                        await Utils.SocketSendAsync(stream, await _requestDelegator.ProcessRequestAsync(request));
+
+                        Response response = null;
+                        try
+                        {
+                            response = await RouteMessageAsync(message);
+                        }
+                        catch (Exception)
+                        {
+                            response = new Response();
+                            response.StatusCode = HttpStatusCode.NotFound;
+                        }
+                        await Utils.SocketSendAsync(stream,
+                            new SocketMessage("", response));
 
                     } while (!completed);
                 }
@@ -60,10 +74,18 @@ namespace Team1922.WebFramework.Sockets
             {
                 Console.WriteLine(ex.Message);
             }
-        }        
+        }
+        #endregion
+
+        #region Virtual Methods
+        protected virtual async Task<Response> RouteMessageAsync(SocketMessage message)
+        {
+            return await _requestDelegator.ProcessRequestAsync(message.ToRequest());
+        }
         #endregion
 
         #region ISocketServer
+        public string Path { get; } = "";
         public IRequestDelegator RequestDelegator
         {
             get
@@ -81,6 +103,9 @@ namespace Team1922.WebFramework.Sockets
             var listener = Utils.MakeSocket();
             listener.Bind(new IPEndPoint(IPAddress.Any, _port));
             listener.Listen(backlog: 15);
+
+            //reset the port just in case the port was assigned to something different
+            _port = ((IPEndPoint)listener.LocalEndPoint).Port;
 
             if (_connectionDispatcherTask != null)
                 return;
@@ -116,14 +141,14 @@ namespace Team1922.WebFramework.Sockets
         {
             _cts.Cancel();
         }
-        public ushort Port { get { return _port; } }
+        public int Port { get { return _port; } }
         #endregion
 
         #region Private Fields
         private CancellationTokenSource _cts = new CancellationTokenSource();
         private List<Task> _listeners = new List<Task>();
         private Task _connectionDispatcherTask;
-        private ushort _port;
+        private int _port;
         private IRequestDelegator _requestDelegator;
         private int _maxClients;
         #endregion

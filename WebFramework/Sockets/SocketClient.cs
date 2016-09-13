@@ -6,14 +6,16 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Team1922.MVVM.Contracts;
 
 namespace Team1922.WebFramework.Sockets
 {
     public class SocketClient : ISocketClient
     {
-        public SocketClient(bool sendOnly = false)
+        public SocketClient(IHierarchialAccessRoot data = null, bool sendOnly = false)
         {
             SendOnly = sendOnly;
+            _data = data;
         }
 
         #region ISocketClient
@@ -61,7 +63,7 @@ namespace Team1922.WebFramework.Sockets
             //before even setting up this socket, make sure we have a server which can be connected to
             if(!SendOnly)
             {
-                _server = new SocketServer()//TODO: should the server be given to us?  SHould the request delegator be given to us?
+                _server = new SocketServer(new RequestDelegator(_data), "");//TODO: should the server be given to us?  SHould the request delegator be given to us?
             }
 
             IPHostEntry ipHost = await Dns.GetHostEntryAsync(hostName);
@@ -76,9 +78,12 @@ namespace Team1922.WebFramework.Sockets
             _client.Connect(ipAddress, port);
             _clientNetStream = new NetworkStream(_client);
 
+            //TODO: listen for their path
+
             if(!SendOnly)
             {
                 //tell the connecting server what our path is
+                await Utils.SocketSendAsync(_clientNetStream, new SocketMessage())
             }
         }
 
@@ -100,6 +105,7 @@ namespace Team1922.WebFramework.Sockets
         private Socket _client;
         private NetworkStream _clientNetStream;
         private SocketServer _server;
+        private IHierarchialAccessRoot _data;
         #endregion
 
         #region IDisposable Support

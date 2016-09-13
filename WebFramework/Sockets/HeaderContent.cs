@@ -20,20 +20,20 @@ namespace Team1922.WebFramework.Sockets
             _socketPath = socketPath;
             _size = size;
 
-            _content = new byte[HeaderSize];
-            Encoding.UTF8.GetBytes(_socketPath).CopyTo(_content, 0);
-            BitConverter.GetBytes(size).CopyTo(_content, 12);
+            //_content = new byte[HeaderSize];
+            //Encoding.UTF8.GetBytes(_socketPath).CopyTo(_content, 0);
+            //BitConverter.GetBytes(size).CopyTo(_content, 12);
         }
 
-        public HeaderContent(byte[] bytes)
+        public static HeaderContent FromBytes(byte[] bytes)
         {
-            if (bytes.Length != HeaderSize)
-                throw new ArgumentException($"Header Must Be Exactly {HeaderSize} Bytes!");
-            _content = new byte[HeaderSize];
-            bytes.CopyTo(_content, 0);
+            if (bytes.Length < HeaderSize)
+                throw new ArgumentException($"Header Must Be {HeaderSize} Bytes!");
 
-            _socketPath = Encoding.UTF8.GetString(bytes, 0, SocketPathMaxSize);
-            _size = BitConverter.ToInt32(bytes, SocketPathMaxSize);
+            var socketPath = Encoding.UTF8.GetString(bytes, 0, SocketPathMaxSize);
+            var size = BitConverter.ToInt32(bytes, SocketPathMaxSize);
+            
+            return new HeaderContent(socketPath, size);
         }
 
         public string SocketPath
@@ -54,14 +54,17 @@ namespace Team1922.WebFramework.Sockets
         {
             get
             {
-                return _content;
+                var content = new byte[HeaderSize];
+                Encoding.UTF8.GetBytes(_socketPath).CopyTo(content, 0);
+                BitConverter.GetBytes(_size).CopyTo(content, SocketPathMaxSize);
+
+                return content;
             }
         }
 
         #region Private Fields
         private string _socketPath;
         private int _size;
-        private byte[] _content;
         #endregion
     }
 }
