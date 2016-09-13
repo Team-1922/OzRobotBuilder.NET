@@ -10,21 +10,12 @@ namespace Team1922.WebFramework.Sockets
 {
     public static class Utils
     {
-        /// <summary>
-        /// Gets the length of the request from the header
-        /// </summary>
-        /// <param name="header">the first bytes of the header <see cref="HeaderBytes"/></param>
-        /// <returns></returns>
-        public static HeaderContent ParseHeader(byte[] header)
-        {
-            return new HeaderContent(header);
-        }
         public static async Task<HeaderContent> SocketReadHeader(NetworkStream stream)
         {
             byte[] headerBytes = new byte[HeaderContent.HeaderSize];
             await stream.ReadAsync(headerBytes, 0, headerBytes.Length);
 
-            return ParseHeader(headerBytes);
+            return HeaderContent.FromBytes(headerBytes);
         }
         public static async Task<SocketMessage> SocketReceiveAsync(NetworkStream stream)
         {
@@ -40,11 +31,11 @@ namespace Team1922.WebFramework.Sockets
 
         public static async Task<Response> SocketReceiveResponseAsync(NetworkStream stream)
         {
-            return ParseResponse((await SocketReceiveAsync(stream)).Body);
+            return (await SocketReceiveAsync(stream)).ToResponse();
         }
         public static async Task<Request> SocketReceiveRequestAsync(NetworkStream stream)
         {
-            return ParseRequest((await SocketReceiveAsync(stream)).Body);
+            return (await SocketReceiveAsync(stream)).ToRequest();
         }
         public static async Task SocketSendAsync(NetworkStream stream, SocketMessage message)
         {
@@ -53,7 +44,7 @@ namespace Team1922.WebFramework.Sockets
             if (message == null)
                 throw new ArgumentNullException("message", "Message Was Null");
 
-            var writeBuffer = message.Bytes;
+            var writeBuffer = message.ToBytes();
             await stream.WriteAsync(writeBuffer, 0, writeBuffer.Length);
             await stream.FlushAsync();
         }
@@ -69,46 +60,6 @@ namespace Team1922.WebFramework.Sockets
             return parts.ToArray();
         }
 
-        public static Response ParseResponse(string text)
-        {
-            var parts = SplitString(text, 2);
-
-            Response response = new Response();
-
-            int statusCode;
-            if (int.TryParse(parts[0], out statusCode))
-            {
-                response.StatusCode = (HttpStatusCode)statusCode;
-            }
-            else
-            {
-                throw new Exception("Invalid Status Code in Response");
-            }
-
-            response.Body = parts[1];
-            return response;
-        }
-        public static Request ParseRequest(string text)
-        {
-            var parts = SplitString(text, 3);
-
-            Request request = new Request();
-
-            request.Method = Protocall.StringToMethod(parts[0]);
-            request.Path = parts[1];
-            request.Body = parts[2];
-            return request;
-        }
-
-        public static string SerializeResponse(Response response)
-        {
-            return $"{(int)response.StatusCode} {response.Body}";
-        }
-        public static string SerializeRequest(Request request)
-        {
-            return $"{request.Method} {request.Path} {request.Body}";
-        }
-
         /// <summary>
         /// This makes a socket based on the given port using reasonable settings
         /// </summary>
@@ -121,6 +72,17 @@ namespace Team1922.WebFramework.Sockets
             return socket;
         }
 
-
+        public static string DecodeString(byte[] str, int index, int count)
+        {
+            return Encoding.UTF8.GetString(str, index, count);
+        }
+        public static string DecodeString(byte[] str)
+        {
+            return Encoding.UTF8.GetString(str);
+        }
+        public static byte[] EncodeString(string str)
+        {
+            return Encoding.UTF8.GetBytes(str);
+        }
     }
 }
