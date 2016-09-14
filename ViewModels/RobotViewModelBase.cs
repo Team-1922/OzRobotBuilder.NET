@@ -121,6 +121,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IHierarchialAccessRoot
+        #region Public Methods
         /// <summary>
         /// Retrieves the value at the given key
         /// </summary>
@@ -129,7 +130,7 @@ namespace Team1922.MVVM.ViewModels
         public async Task<string> GetAsync(string key)
         {
             //wait for the request to complete
-            long ticket = await EnqueueAndWaitAsync(key, "", true);
+            long ticket = await EnqueueAndWaitAsync(key, "", AccessType.Get);
             //throw any applicable exceptions
             CheckExceptions(ticket);
             //get the result
@@ -150,7 +151,7 @@ namespace Team1922.MVVM.ViewModels
             if (safe)
             {
                 //wait for the request to complete
-                long ticket = await EnqueueAndWaitAsync(key, value, false);
+                long ticket = await EnqueueAndWaitAsync(key, value, AccessType.Set);
                 //throw any applicable exceptions
                 CheckExceptions(ticket);
                 //cleanup the ticket
@@ -159,8 +160,32 @@ namespace Team1922.MVVM.ViewModels
             else
             {
                 //wait for the request to complete
-                Enqueue(key, value, false);
+                Enqueue(key, value, AccessType.Set);
             }
+        }
+        public async Task<bool> DeleteAsync(string key)
+        {
+            //wait for the request to complete
+            long ticket = await EnqueueAndWaitAsync(key, "", AccessType.Delete);
+            //throw any applicable exceptions
+            CheckExceptions(ticket);
+            //get the result
+            var ret = _hierarchialAccessResponses[ticket];
+            //cleanup the ticket
+            CleanupTicket(ticket);
+            return ret == "deleted";
+        }
+        public async Task<bool> AddAsync(string key, string value)
+        {
+            //wait for the request to complete
+            long ticket = await EnqueueAndWaitAsync(key, "", AccessType.Add);
+            //throw any applicable exceptions
+            CheckExceptions(ticket);
+            //get the result
+            var ret = _hierarchialAccessResponses[ticket];
+            //cleanup the ticket
+            CleanupTicket(ticket);
+            return ret == "added";
         }
         /// <summary>
         /// Used to determine whether an item exsits at the given key
@@ -169,6 +194,7 @@ namespace Team1922.MVVM.ViewModels
         /// <returns>whether or not an item exists at <paramref name="key"/></returns>
         bool IHierarchialAccessRoot.KeyExists(string key)
         {
+            //TODO: optimize using our lookup table
             return base.KeyExists(key);
         }
         /// <summary>
@@ -207,25 +233,24 @@ namespace Team1922.MVVM.ViewModels
                 }
             }
         }
+        #endregion
 
-        private Dictionary<string, IHierarchialAccess> _treeReferenceLookupTable = new Dictionary<string, IHierarchialAccess>();
-        private ReaderWriterLockSlim _lookupTableMutex = new ReaderWriterLockSlim();
-
-        private async Task<long> EnqueueAndWaitAsync(string path, string value, bool read)
+        #region Helper Methods to Public Methods
+        private async Task<long> EnqueueAndWaitAsync(string path, string value, AccessType method)
         {
             //get the next ticket
             long ticket = GetNextTicketNumber();
             //queue the request
-            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, ticket));
+            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, AccessType, long>(path, value, method, ticket));
             _containsNewQueueItems = true;
             //wait for it to be done
             await WaitForTicket(ticket, -1);
             return ticket;
         }
-        private void Enqueue(string path, string value, bool read)
+        private void Enqueue(string path, string value, AccessType method)
         {
             //queue our request; don't bother getting a ticket number because the caller of this method is just going to return
-            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, bool, long>(path, value, read, -1));
+            _hierarchialAccessRequests.Enqueue(new Tuple<string, string, AccessType, long>(path, value, method, -1));
             _containsNewQueueItems = true;
         }
         private void CheckExceptions(long ticket)
@@ -265,16 +290,83 @@ namespace Team1922.MVVM.ViewModels
         {
             return Interlocked.Increment(ref _ticketCounter);
         }
-        private long _ticketCounter = 0;
-        
-        private ConcurrentQueue<Tuple<string, string, bool, long>> _hierarchialAccessRequests = new ConcurrentQueue<Tuple<string, string, bool, long>>();
+        #endregion
+
+        #region Fields
+        private ConcurrentQueue<Tuple<string, string, AccessType, long>> _hierarchialAccessRequests = new ConcurrentQueue<Tuple<string, string, AccessType, long>>();
         private ConcurrentDictionary<long, string> _hierarchialAccessResponses = new ConcurrentDictionary<long, string>();
         private ConcurrentDictionary<long, Exception> _hierarchialAccessExceptions = new ConcurrentDictionary<long, Exception>();
         private ConcurrentBag<long> _hierarchialAccessDeadTickets = new ConcurrentBag<long>();
+        private Dictionary<string, IHierarchialAccess> _treeReferenceLookupTable = new Dictionary<string, IHierarchialAccess>();
+        private ReaderWriterLockSlim _lookupTableMutex = new ReaderWriterLockSlim();
         private volatile int _activeGetRequests = 0;
-
+        private long _ticketCounter = 0;
         private volatile bool _containsNewQueueItems = false;
+        #endregion
 
+        #region Utilities
+        private enum AccessType
+        {
+            Get,
+            Set,
+            Add,
+            Delete
+        }
+        private class AccessPair
+        {
+            public AccessPair(IHierarchialAccess access, string path)
+            {
+                _path = path;
+                _object = access;
+            }
+            private string _path;
+            private IHierarchialAccess _object;
+            public void Set(string value)
+            {
+                _object[_path] = value;
+            }
+            public string Get()
+            {
+                return _object[_path];
+            }
+        }
+        private AccessPair GetAccessPair(string key)
+        {
+            IHierarchialAccess accessObject = this;
+            string accessPath = key;
+            _lookupTableMutex.EnterReadLock();
+            try
+            {
+                if (_treeReferenceLookupTable.Count != 0)
+                {
+                    //get path of the object to lookup
+                    var splitPath = key.Split('.');
+                    var objPath = string.Join(".", (from token in splitPath where token != splitPath.Last() select token));
+                    foreach (var pair in _treeReferenceLookupTable)
+                    {
+                        if (pair.Key == objPath)
+                        {
+                            accessObject = pair.Value;
+                            accessPath = splitPath.Last();
+                            break;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                _lookupTableMutex.ExitReadLock();
+            }
+            return new AccessPair(accessObject, accessPath);
+        }
+        private void WaitWriteAccess()
+        {
+            //wait for the other requests to be done
+            while (_activeGetRequests != 0) ;
+        }
+        #endregion
+
+        #region Worker Methods
         //TODO: how do I make this stop when the object is destroyed; should i use IDisposable?
         private void WorkerThreadMethod()
         {
@@ -282,7 +374,7 @@ namespace Team1922.MVVM.ViewModels
             
             CancellationToken workerMethodToken = _hierarchialAccesCTS.Token;
 
-            Tuple<string, string, bool, long> processItem;
+            Tuple<string, string, AccessType, long> processItem;
 
             //process the queue until someone tells us otherwise
             while (!workerMethodToken.IsCancellationRequested)
@@ -297,40 +389,22 @@ namespace Team1922.MVVM.ViewModels
                         _lookupTableMutex.EnterReadLock();
                         try
                         {
-                            //is this a read or a write request?
-                            if (processItem.Item3)
+                            switch (processItem.Item3)
                             {
-                                //read request
-
-                                Interlocked.Increment(ref _activeGetRequests);
-                                GetWorkerAsync(processItem.Item1, processItem.Item4);
-                            }
-                            else
-                            {
-                                //wait for the other requests to be done
-                                while (_activeGetRequests != 0) ;
-
-                                IHierarchialAccess accessObject = this;
-                                string accessPath = processItem.Item1;
-                                if (_treeReferenceLookupTable.Count != 0)
-                                {
-                                    //get path of the object to lookup
-                                    var splitPath = processItem.Item1.Split('.');
-                                    var objPath = string.Join(".", (from token in splitPath where token != splitPath.Last() select token));
-                                    foreach (var pair in _treeReferenceLookupTable)
-                                    {
-                                        if (pair.Key == objPath)
-                                        {
-                                            accessObject = pair.Value;
-                                            accessPath = splitPath.Last();
-                                            break;
-                                        }
-                                    }
-                                }
-                                //write request
-                                accessObject[accessPath] = processItem.Item2;
-                                if (processItem.Item4 != -1)
-                                    _hierarchialAccessResponses[processItem.Item4] = "";
+                                case AccessType.Get:
+                                    GetOperation(processItem.Item1, processItem.Item4);
+                                    break;
+                                case AccessType.Set:
+                                    SetOperation(processItem.Item1, processItem.Item2, processItem.Item4);
+                                    break;
+                                case AccessType.Add:
+                                    AddOperation(processItem.Item1, processItem.Item2, processItem.Item4);
+                                    break;
+                                case AccessType.Delete:
+                                    DeleteOperation(processItem.Item1, processItem.Item4);
+                                    break;
+                                default:
+                                    break;
                             }
                         }
                         catch (Exception e)
@@ -350,33 +424,6 @@ namespace Team1922.MVVM.ViewModels
                 }
             }
         }
-        private Task GetWorkerAsync(string path, long ticket)
-        {
-            return Task.Run(() =>
-            {
-                //actually make the get request
-                IHierarchialAccess accessObject = this;
-                string accessPath = path;
-                if (_treeReferenceLookupTable.Count != 0)
-                {
-                    //get path of the object to lookup
-                    var splitPath = path.Split('.');
-                    var objPath = string.Join(".", (from token in splitPath where token != splitPath.Last() select token));
-                    foreach (var pair in _treeReferenceLookupTable)
-                    {
-                        if (pair.Key == objPath)
-                        {
-                            accessObject = pair.Value;
-                            accessPath = splitPath.Last();
-                            break;
-                        }
-                    }
-                }
-                _hierarchialAccessResponses[ticket] = accessObject[accessPath];
-                //once we are done, decrement the request
-                Interlocked.Decrement(ref _activeGetRequests);
-            });
-        }
         private void DeadTicketCleanup()
         {
             CancellationToken token = _hierarchialAccesCTS.Token;
@@ -389,6 +436,83 @@ namespace Team1922.MVVM.ViewModels
                 Task.Delay(5000).Wait();//wait 5 seconds
             }
         }
+        private Task GetWorkerAsync(string path, long ticket)
+        {
+            return Task.Run(() =>
+            {
+                //actually make the get request
+                var accessObject = GetAccessPair(path);
+
+                _hierarchialAccessResponses[ticket] = accessObject.Get();
+                //once we are done, decrement the request
+                Interlocked.Decrement(ref _activeGetRequests);
+            });
+        }
+        #endregion
+
+        #region AccessOperations
+        private void GetOperation(string key, long ticket)
+        {
+            //read request
+
+            Interlocked.Increment(ref _activeGetRequests);
+            GetWorkerAsync(key, ticket);
+        }
+        private void SetOperation(string key, string value, long ticket)
+        {
+            //wait for the other requests to be done
+            WaitWriteAccess();
+
+            var accessObject = GetAccessPair(key);
+
+            //write request
+            accessObject.Set(value);
+            if (ticket != -1)
+                _hierarchialAccessResponses[ticket] = "";
+        }
+        private void AddOperation(string key, string value, long ticket)
+        {
+            //wait for the other requests to be done
+            WaitWriteAccess();
+
+            var accessObject = GetAccessPair(key);
+
+            string message = "added";
+            try
+            {
+                var result = accessObject.Get();
+            }
+            catch (Exception)
+            {
+                message = "";
+            }
+
+            //add request
+            accessObject.Set(value);
+
+            _hierarchialAccessResponses[ticket] = message;
+        }
+        private void DeleteOperation(string key, long ticket)
+        {
+            //wait for the other requests to be done
+            WaitWriteAccess();
+
+            var accessObject = GetAccessPair(key);
+
+            //delete request
+            accessObject.Set(null);
+
+            try
+            {
+                var result = accessObject.Get();
+            }
+            catch(Exception)
+            {
+                _hierarchialAccessResponses[ticket] = "deleted";
+            }
+            _hierarchialAccessResponses[ticket] = "";
+        }
+        #endregion
         #endregion
 
         #region IProvider

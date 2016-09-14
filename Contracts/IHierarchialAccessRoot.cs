@@ -18,7 +18,7 @@ namespace Team1922.MVVM.Contracts
         /// <returns>the value at <paramref name="key"/></returns>
         Task<string> GetAsync(string key);
         /// <summary>
-        /// Sets the value at the given key
+        /// Sets the value at the given key; NOTE: this will add an item if it does not exist or delete an item if the string is null, but will give no indication of whether it does or does not
         /// </summary>
         /// <param name="key">where to set <paramref name="value"/> at</param>
         /// <param name="value">the value to set at location <paramref name="key"/></param>
@@ -26,8 +26,23 @@ namespace Team1922.MVVM.Contracts
         /// <returns></returns>
         Task SetAsync(string key, string value, bool safe = true);
         /// <summary>
+        /// Deletes the value at the given key
+        /// </summary>
+        /// <param name="key">which item to delete</param>
+        /// <returns>the success of the deletion</returns>
+        Task<bool> DeleteAsync(string key);
+        /// <summary>
+        /// Adds the value at the given key
+        /// </summary>
+        /// <param name="key">where to add <paramref name="value"/></param>
+        /// <param name="value">the value to set at location <paramref name="key"/></param>
+        /// <returns>the success of the addition</returns>
+        Task<bool> AddAsync(string key, string value);
+        /// <summary>
         /// Used to determine whether an item exsits at the given key
         /// </summary>
+        /// <remarks>
+        /// This is similar to <see cref="SetAsync(string, string, bool)"/>, except this takes a little longer and gives indication as to whether an item was added or removed</remarks>
         /// <param name="key">the key to check</param>
         /// <returns>whether or not an item exists at <paramref name="key"/></returns>
         bool KeyExists(string key);
