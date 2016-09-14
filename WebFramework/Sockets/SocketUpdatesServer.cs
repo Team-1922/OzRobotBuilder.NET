@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
 
@@ -20,7 +21,15 @@ namespace Team1922.WebFramework.Sockets
             //open a new client to connect to the server of the newly connected client
             var nextClient = new SocketClient();
             await nextClient.OpenConnectionAsync(connectionInfo.IpAddress, connectionInfo.Port);
-            _clients.Add(connectionInfo, nextClient);//TODO: thread-saftey
+            try
+            {
+                _clientsLock.EnterWriteLock();
+                _clients.Add(connectionInfo, nextClient);//TODO: thread-saftey
+            }
+            finally
+            {
+                _clientsLock.ExitWriteLock();
+            }
 
             // TODO: this should not be forced upon the client, but rather it should be requested by it.
             //when we connect to the other server, since they started the connection, give them our data
@@ -41,9 +50,17 @@ namespace Team1922.WebFramework.Sockets
         public override async Task<IEnumerable<Response>> SendAsync(Request request)
         {
             List<Task<Response>> senders = new List<Task<Response>>();
-            foreach(var clientPair in _clients)
+            try
             {
-                senders.Add(clientPair.Value.SendAsync(request));
+                _clientsLock.EnterReadLock();
+                foreach (var clientPair in _clients)
+                {
+                    senders.Add(clientPair.Value.SendAsync(request));
+                }
+            }
+            finally
+            {
+                _clientsLock.ExitReadLock();
             }
             List<Response> responses = new List<Response>();
             foreach(var sender in senders)
@@ -56,12 +73,21 @@ namespace Team1922.WebFramework.Sockets
         #region Private Helper Methods
         private bool ContainsConnection(PrimativeConnectionInfo connectionInfo)
         {
-            return _clients.ContainsKey(connectionInfo);
+            try
+            {
+                _clientsLock.EnterReadLock();
+                return _clients.ContainsKey(connectionInfo);
+            }
+            finally
+            {
+                _clientsLock.ExitReadLock();
+            }
         }
         #endregion
 
         #region Private Fields
         Dictionary<PrimativeConnectionInfo, SocketClient> _clients = new Dictionary<PrimativeConnectionInfo, SocketClient>();
+        public ReaderWriterLockSlim _clientsLock = new ReaderWriterLockSlim();
         #endregion
 
         #region IDisposable
