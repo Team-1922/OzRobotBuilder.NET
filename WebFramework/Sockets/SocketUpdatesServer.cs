@@ -15,19 +15,24 @@ namespace Team1922.WebFramework.Sockets
         protected override async Task AddConnectionAsync(PrimativeConnectionInfo connectionInfo)
         {
             if (ContainsConnection(connectionInfo))
-                return;//if the connection info is the SAME, the do not reconnect
+                return;//if the connection info is the SAME, then do not reconnect
 
             //open a new client to connect to the server of the newly connected client
             var nextClient = new SocketClient();
             await nextClient.OpenConnectionAsync(connectionInfo.IpAddress, connectionInfo.Port);
-            _clients.Add(connectionInfo, nextClient);
+            _clients.Add(connectionInfo, nextClient);//TODO: thread-saftey
 
             //when we connect to the other server, since they started the connection, give them our data
             await SendAsync(
                 new Request()
                 {
                     Method = Protocall.Method.Set,
-                    Body = await _socketServer.RequestDelegator. //TODO: HOW DO WE USE A GENERAL FORM TO ACCOUNT FOR THE CompoundRequestDelegator?
+                    Body = (await _socketServer.RequestDelegator.ProcessRequestAsync(
+                        new Request()
+                        {
+                            Method = Protocall.Method.Get,
+                            Body = ""
+                        })).ToString(),
                     Path = ""
                 });
         }

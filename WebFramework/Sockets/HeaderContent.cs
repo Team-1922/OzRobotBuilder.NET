@@ -8,16 +8,11 @@ namespace Team1922.WebFramework.Sockets
 {
     public class HeaderContent
     {
-        public static int HeaderSize { get { return SocketPathMaxSize + ContentSizeSize; } }
-        public static int SocketPathMaxSize { get { return 12; } }
+        public static int HeaderSize { get { return ContentSizeSize; } }
         public static int ContentSizeSize { get { return 4; } }
 
-        public HeaderContent(string socketPath, int size)
+        public HeaderContent(int size)
         {
-            if (socketPath.Length > SocketPathMaxSize)
-                throw new Exception("Socket Path is Too Long");
-
-            _socketPath = socketPath;
             _size = size;
 
             //_content = new byte[HeaderSize];
@@ -29,11 +24,10 @@ namespace Team1922.WebFramework.Sockets
         {
             if (bytes.Length < HeaderSize)
                 throw new ArgumentException($"Header Must Be {HeaderSize} Bytes!");
-
-            var socketPath = Encoding.UTF8.GetString(bytes, 0, SocketPathMaxSize);
-            var size = BitConverter.ToInt32(bytes, SocketPathMaxSize);
             
-            return new HeaderContent(socketPath, size);
+            var size = BitConverter.ToInt32(bytes, 0);
+            
+            return new HeaderContent(size);
         }
 
         public string SocketPath
@@ -56,7 +50,6 @@ namespace Team1922.WebFramework.Sockets
             {
                 var content = new byte[HeaderSize];
                 Encoding.UTF8.GetBytes(_socketPath).CopyTo(content, 0);
-                BitConverter.GetBytes(_size).CopyTo(content, SocketPathMaxSize);
 
                 return content;
             }

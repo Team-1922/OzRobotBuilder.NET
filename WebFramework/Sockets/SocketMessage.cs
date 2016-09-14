@@ -13,15 +13,15 @@ namespace Team1922.WebFramework.Sockets
             _headerContent = header;
             _content = Utils.DecodeString(bodyBytes);
         }
-        public SocketMessage(string socketPath, string content)
+        public SocketMessage(string content)
         {
             _content = content;
-            _headerContent = new HeaderContent(socketPath, _content.Length);
+            _headerContent = new HeaderContent(_content.Length);
         }
-        public SocketMessage(string socketPath, Request request) : this(socketPath, request.Body)
+        public SocketMessage(Request request) : this(request.Body)
         {
         }
-        public SocketMessage(string socketPath, Response response) : this(socketPath, response.Body)
+        public SocketMessage(Response response) : this(response.Body)
         {
         }
 

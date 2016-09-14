@@ -12,12 +12,6 @@ namespace Team1922.WebFramework.Sockets
 {
     public class SocketClient : ISocketClient
     {
-        public SocketClient(IHierarchialAccessRoot data = null, bool sendOnly = false)
-        {
-            SendOnly = sendOnly;
-            _data = data;
-        }
-
         #region ISocketClient
         public bool SendOnly { get; }
 
@@ -48,23 +42,14 @@ namespace Team1922.WebFramework.Sockets
             _clientNetStream.Dispose();
             _client?.Dispose();
 
-            _server?.Dispose();
-
             _client = null;
             _clientNetStream = null;
-            _server = null;
             _cts = null;
         }
         public async Task OpenConnectionAsync(string hostName, int port)
         {
             if (_client != null)
                 throw new Exception("Client Already Connected!");
-
-            //before even setting up this socket, make sure we have a server which can be connected to
-            if(!SendOnly)
-            {
-                _server = new SocketServer(new RequestDelegator(_data), "");//TODO: should the server be given to us?  SHould the request delegator be given to us?
-            }
 
             IPHostEntry ipHost = await Dns.GetHostEntryAsync(hostName);
             IPAddress ipAddress = ipHost.AddressList.Where(address => address.AddressFamily == AddressFamily.InterNetwork).First();
@@ -77,14 +62,6 @@ namespace Team1922.WebFramework.Sockets
             _client = Utils.MakeSocket();
             _client.Connect(ipAddress, port);
             _clientNetStream = new NetworkStream(_client);
-
-            //TODO: listen for their path
-
-            if(!SendOnly)
-            {
-                //tell the connecting server what our path is
-                await Utils.SocketSendAsync(_clientNetStream, new SocketMessage())
-            }
         }
 
         //NOTE: this should ONLY BE CALLED BY ONE THREAD AT A TIME
@@ -95,8 +72,8 @@ namespace Team1922.WebFramework.Sockets
             if (null == request)
                 throw new ArgumentException("request", "Given Request was Null");
 
-            var senderTask = Utils.SocketSendAsync(_clientNetStream, request);
-            return await Utils.SocketReceiveResponseAsync(_clientNetStream);
+            var senderTask = Utils.SocketSendAsync(_clientNetStream, new SocketMessage(request), _cts.Token);
+            return await Utils.SocketReceiveResponseAsync(_clientNetStream, _cts.Token);
         }
         #endregion
 
@@ -104,8 +81,6 @@ namespace Team1922.WebFramework.Sockets
         private CancellationTokenSource _cts;
         private Socket _client;
         private NetworkStream _clientNetStream;
-        private SocketServer _server;
-        private IHierarchialAccessRoot _data;
         #endregion
 
         #region IDisposable Support

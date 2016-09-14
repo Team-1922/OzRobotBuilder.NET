@@ -10,8 +10,8 @@ namespace Team1922.WebFramework.Sockets
         void StartListener();
         void StopListener();
         IRequestDelegator RequestDelegator { get; }
-        
-        string Path { get; }
+        event SocketConnectEvent SocketConnectEvent;
+
         int Port { get; }
     }
 }

@@ -4,40 +4,41 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Team1922.WebFramework.Sockets
 {
     public static class Utils
     {
-        public static async Task<HeaderContent> SocketReadHeader(NetworkStream stream)
+        public static async Task<HeaderContent> SocketReadHeaderAsync(NetworkStream stream, CancellationToken cancellationToken)
         {
             byte[] headerBytes = new byte[HeaderContent.HeaderSize];
-            await stream.ReadAsync(headerBytes, 0, headerBytes.Length);
+            await stream.ReadAsync(headerBytes, 0, headerBytes.Length, cancellationToken);
 
             return HeaderContent.FromBytes(headerBytes);
         }
-        public static async Task<SocketMessage> SocketReceiveAsync(NetworkStream stream)
+        public static async Task<SocketMessage> SocketReceiveAsync(NetworkStream stream, CancellationToken cancellationToken)
         {
             //get the header
-            var header = await SocketReadHeader(stream);
+            var header = await SocketReadHeaderAsync(stream, cancellationToken);
 
             //get the body
             byte[] body = new byte[header.ContentSize];
-            await stream.ReadAsync(body, 0, body.Length);
+            await stream.ReadAsync(body, 0, body.Length, cancellationToken);
 
             return new SocketMessage(header, body);
         }
 
-        public static async Task<Response> SocketReceiveResponseAsync(NetworkStream stream)
+        public static async Task<Response> SocketReceiveResponseAsync(NetworkStream stream, CancellationToken cancellationToken)
         {
-            return (await SocketReceiveAsync(stream)).ToResponse();
+            return (await SocketReceiveAsync(stream, cancellationToken)).ToResponse();
         }
-        public static async Task<Request> SocketReceiveRequestAsync(NetworkStream stream)
+        public static async Task<Request> SocketReceiveRequestAsync(NetworkStream stream, CancellationToken cancellationToken)
         {
-            return (await SocketReceiveAsync(stream)).ToRequest();
+            return (await SocketReceiveAsync(stream, cancellationToken)).ToRequest();
         }
-        public static async Task SocketSendAsync(NetworkStream stream, SocketMessage message)
+        public static async Task SocketSendAsync(NetworkStream stream, SocketMessage message, CancellationToken cancellationToken)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream", "Network Stream was Null!");
@@ -45,8 +46,8 @@ namespace Team1922.WebFramework.Sockets
                 throw new ArgumentNullException("message", "Message Was Null");
 
             var writeBuffer = message.ToBytes();
-            await stream.WriteAsync(writeBuffer, 0, writeBuffer.Length);
-            await stream.FlushAsync();
+            await stream.WriteAsync(writeBuffer, 0, writeBuffer.Length, cancellationToken);
+            await stream.FlushAsync(cancellationToken);
         }
 
         public static string[] SplitString(string text, int count)

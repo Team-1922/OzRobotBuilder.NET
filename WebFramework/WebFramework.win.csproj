@@ -47,18 +47,21 @@
     <Compile Include="RequestDelegator.cs" />
     <Compile Include="RequestDelegatorWebHooks.cs" />
     <Compile Include="Sockets\CompoundRequestDelegator.cs" />
+    <Compile Include="Sockets\HeaderContent.cs" />
     <Compile Include="Sockets\IRequestDelegator.cs" />
     <Compile Include="Sockets\ISocketClient.cs" />
     <Compile Include="Sockets\ISocketServer.cs" />
-    <Compile Include="Sockets\ISocketUpdatesReceivable.cs" />
     <Compile Include="Sockets\Protocall.cs" />
     <Compile Include="Sockets\Request.cs" />
     <Compile Include="Sockets\RequestDelegator.cs" />
     <Compile Include="Sockets\RequestResponsePair.cs" />
     <Compile Include="Sockets\Response.cs" />
     <Compile Include="Sockets\SocketClient.cs" />
+    <Compile Include="Sockets\SocketMessage.cs" />
     <Compile Include="Sockets\SocketServer.cs" />
-    <Compile Include="Sockets\SocketUpdatesReceivable.cs" />
+    <Compile Include="Sockets\SocketUpdatesBase.cs" />
+    <Compile Include="Sockets\SocketUpdatesClient.cs" />
+    <Compile Include="Sockets\SocketUpdatesServer.cs" />
     <Compile Include="Sockets\Utils.cs" />
     <Compile Include="WebHooksSubscriberCollection.cs" />
   </ItemGroup>
