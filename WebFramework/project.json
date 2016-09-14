@@ -3,6 +3,7 @@
 
   "dependencies": {
     "Contracts": "1.0.0-*",
+    "Logging": "1.0.0-*",
     "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
     "Microsoft.AspNetCore.Mvc.Core": "1.0.0",
     "Microsoft.Net.Http.Server": "0.1.0",

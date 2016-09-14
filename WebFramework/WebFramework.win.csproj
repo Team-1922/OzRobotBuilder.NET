@@ -63,6 +63,10 @@
       <Project>{3112a258-4d51-4c9f-8acb-640ae351ee01}</Project>
       <Name>Contracts.win</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.win.csproj">
+      <Project>{8466ce76-e0e1-4afb-888e-f9d62ec9ee07}</Project>
+      <Name>Logging.win</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MVVMFramework\MVVMFramework.win.csproj">
       <Project>{f22008c9-1d99-4bee-93e2-88e2cf5ee938}</Project>
       <Name>MVVMFramework.win</Name>
