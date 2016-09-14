@@ -22,8 +22,9 @@ namespace Team1922.WebFramework.Sockets
             await nextClient.OpenConnectionAsync(connectionInfo.IpAddress, connectionInfo.Port);
             _clients.Add(connectionInfo, nextClient);//TODO: thread-saftey
 
+            // TODO: this should not be forced upon the client, but rather it should be requested by it.
             //when we connect to the other server, since they started the connection, give them our data
-            await SendAsync(
+            /*await SendAsync(
                 new Request()
                 {
                     Method = Protocall.Method.Set,
@@ -34,7 +35,7 @@ namespace Team1922.WebFramework.Sockets
                             Body = ""
                         })).ToString(),
                     Path = ""
-                });
+                });*/
         }
 
         protected override async Task<IEnumerable<Response>> SendAsync(Request request)
