@@ -55,34 +55,11 @@ namespace Team1922.WebFramework.Sockets
         }
         public Request ToRequest()
         {
-            Request ret = new Request();
-            var split = Utils.SplitString(Content, 3);
-
-            Protocall.Method method;
-            if(!Enum.TryParse(split[0], out method))
-            {
-                return null;//TODO: exception?
-            }
-            ret.Method = method;
-
-            ret.Path = split[1];
-            ret.Body = split[2];
-            return ret;
+            return new Request(Content);
         }
         public Response ToResponse()
         {
-            Response ret = new Response();
-            var split = Utils.SplitString(Content, 2);
-
-            int statusCode;
-            if(!int.TryParse(split[0], out statusCode))
-            {
-                return null;
-            }
-            ret.StatusCode = (System.Net.HttpStatusCode)statusCode;
-
-            ret.Body = split[1];
-            return ret;
+            return new Response(Content);
         }
 
 
