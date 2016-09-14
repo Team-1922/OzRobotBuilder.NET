@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Team1922.MVVM.Contracts;
 
 namespace Team1922.WebFramework.Sockets
 {
