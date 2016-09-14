@@ -22,7 +22,7 @@ namespace Team1922.WebFramework.Sockets
             await _client.OpenConnectionAsync(connectionInfo.IpAddress, connectionInfo.Port);
         }
 
-        protected override async Task<IEnumerable<Response>> SendAsync(Request request)
+        public override async Task<IEnumerable<Response>> SendAsync(Request request)
         {
             return new List<Response>() { await _client.SendAsync(request) };
         }

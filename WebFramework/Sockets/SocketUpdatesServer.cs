@@ -38,7 +38,7 @@ namespace Team1922.WebFramework.Sockets
                 });*/
         }
 
-        protected override async Task<IEnumerable<Response>> SendAsync(Request request)
+        public override async Task<IEnumerable<Response>> SendAsync(Request request)
         {
             List<Task<Response>> senders = new List<Task<Response>>();
             foreach(var clientPair in _clients)

@@ -18,6 +18,12 @@ namespace Team1922.WebFramework.Sockets
             server = null;
 
             _socketServer.SocketConnectEvent += _socketServer_SocketConnectEvent;
+            server.RequestDelegator.Data.Propagated += Data_Propagated;
+        }
+
+        private async void Data_Propagated(MVVM.Contracts.Events.EventPropagationEventArgs e)
+        {
+            await SendAsync(new Request() { Method = e.Method, Body = e.PropertyValue, Path = e.PropertyName });
         }
 
         private async void _socketServer_SocketConnectEvent(PrimativeConnectionInfo connectionInfo)
@@ -26,7 +32,7 @@ namespace Team1922.WebFramework.Sockets
         }
         
         protected abstract Task AddConnectionAsync(PrimativeConnectionInfo connectionInfo);
-        protected abstract Task<IEnumerable<Response>> SendAsync(Request request);
+        public abstract Task<IEnumerable<Response>> SendAsync(Request request);
         
         #region Private Fields
         protected ISocketServer _socketServer;
