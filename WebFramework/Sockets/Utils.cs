@@ -38,6 +38,10 @@ namespace Team1922.WebFramework.Sockets
         {
             return (await SocketReceiveAsync(stream, cancellationToken)).ToRequest();
         }
+        public static async Task<string> SocketReceiveStringAsync(NetworkStream stream, CancellationToken cancellationToken)
+        {
+            return (await SocketReceiveAsync(stream, cancellationToken)).Content;
+        }
         public static async Task SocketSendAsync(NetworkStream stream, SocketMessage message, CancellationToken cancellationToken)
         {
             if (stream == null)
