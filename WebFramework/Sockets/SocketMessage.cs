@@ -18,10 +18,7 @@ namespace Team1922.WebFramework.Sockets
             _content = content;
             _headerContent = new HeaderContent(_content.Length);
         }
-        public SocketMessage(Request request) : this(request.Body)
-        {
-        }
-        public SocketMessage(Response response) : this(response.Body)
+        public SocketMessage(object obj) : this(obj.ToString())
         {
         }
 
