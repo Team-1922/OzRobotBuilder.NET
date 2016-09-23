@@ -11,6 +11,7 @@ namespace Team1922.WebFramework.Sockets
         void StopListener();
         IRequestDelegator RequestDelegator { get; }
         event SocketConnectEvent SocketConnectEvent;
+        IDataSocketFactory SocketFactory { get; }
 
         int Port { get; }
     }

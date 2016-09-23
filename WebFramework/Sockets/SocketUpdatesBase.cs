@@ -14,28 +14,45 @@ namespace Team1922.WebFramework.Sockets
     {
         public SocketUpdatesBase(ISocketServer server)
         {
-            _socketServer = server;
-            server = null;
-
-            _socketServer.SocketConnectEvent += _socketServer_SocketConnectEvent;
-            server.RequestDelegator.Data.Propagated += Data_Propagated;
+            SocketServer = server;
         }
 
+        public abstract Task<IEnumerable<Response>> SendAsync(Request request);
+        
+        protected ISocketServer SocketServer
+        {
+            get
+            {
+                return _socketServer;
+            }
+
+            set
+            {
+                if (ValidateSocketServer(_socketServer))
+                {
+                    _socketServer.RequestDelegator.Data.Propagated -= Data_Propagated;
+                }
+                _socketServer = value;
+                if(ValidateSocketServer(value))
+                {
+                    _socketServer.RequestDelegator.Data.Propagated += Data_Propagated;
+                }
+            }
+        }
+
+        #region Private Fields
+        protected ISocketServer _socketServer = null;
+        #endregion
+
+        #region Private Methods
         private async void Data_Propagated(MVVM.Contracts.Events.EventPropagationEventArgs e)
         {
             await SendAsync(new Request() { Method = e.Method, Body = e.PropertyValue, Path = e.PropertyName });
         }
-
-        private async void _socketServer_SocketConnectEvent(PrimativeConnectionInfo connectionInfo)
+        private static bool ValidateSocketServer(ISocketServer server)
         {
-            await AddConnectionAsync(connectionInfo);
+            return null != server && null != server?.RequestDelegator && null != server?.RequestDelegator?.Data;
         }
-        
-        protected abstract Task AddConnectionAsync(PrimativeConnectionInfo connectionInfo);
-        public abstract Task<IEnumerable<Response>> SendAsync(Request request);
-        
-        #region Private Fields
-        protected ISocketServer _socketServer;
         #endregion
 
         #region IDisposable Support

@@ -30,50 +30,16 @@ namespace Team1922.WebFramework.Sockets
             _port = port;
             _maxClients = maxClients;
         }
+
+        public SocketServer(RequestDelegator delegator, IDataSocketFactory socketFactory, int port = 0, int maxClients = 9001) : this(delegator, port, maxClients)
+        {
+            if (socketFactory == null)
+                throw new ArgumentNullException("socketFactory", "Socket Factory Must Not Be Null");
+            SocketFactory = socketFactory;
+        }
         
         #region Private Helper Methods
-        private async Task ListenerAsync(Socket socket)
-        {
-            try
-            {
-                using (var stream = new NetworkStream(socket, ownsSocket: true))
-                {
-                    bool completed = false;
-                    do
-                    {
-                        var message = await Utils.SocketReceiveAsync(stream, _cts.Token);
-                        var request = message.ToRequest();
-                        if (request.Method == Protocall.Method.Close)
-                        {
-                            completed = true;
-                        }
 
-                        Response response = null;
-                        try
-                        {
-                            response = await _requestDelegator.ProcessRequestAsync(message.ToRequest());
-                        }
-                        catch (Exception)
-                        {
-                            response = new Response();
-                            response.StatusCode = HttpStatusCode.NotFound;
-                        }
-                        await Utils.SocketSendAsync(stream,
-                            new SocketMessage(response), _cts.Token);
-
-                    } while (!completed);
-                }
-                Console.WriteLine("closed stream and client socket");
-            }
-            catch (SocketException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
         #endregion
 
         #region ISocketServer
@@ -118,9 +84,9 @@ namespace Team1922.WebFramework.Sockets
                         continue;
                     }
                     Console.WriteLine($"client connected local address {((IPEndPoint)client.LocalEndPoint).Address} and port {((IPEndPoint)client.LocalEndPoint).Port}, remote address {((IPEndPoint)client.RemoteEndPoint).Address} and port {((IPEndPoint)client.RemoteEndPoint).Port}");
-
-                    _listeners.Add(ListenerAsync(client));
-                    SocketConnectEvent?.Invoke(new PrimativeConnectionInfo() { IpAddress = ((IPEndPoint)client.RemoteEndPoint).Address.ToString(), Port = ((IPEndPoint)client.RemoteEndPoint).Port });
+                    
+                    _listeners.Add(SocketFactory.StartSocket(client, _requestDelegator, _cts.Token));
+                    //SocketConnectEvent?.Invoke(new PrimativeConnectionInfo() { IpAddress = ((IPEndPoint)client.RemoteEndPoint).Address.ToString(), Port = ((IPEndPoint)client.RemoteEndPoint).Port });
                 }
                 listener.Dispose();
                 Console.WriteLine("Listener task closing");
@@ -133,6 +99,7 @@ namespace Team1922.WebFramework.Sockets
             _cts.Cancel();
         }
         public int Port { get { return _port; } }
+        public IDataSocketFactory SocketFactory { get; }
         #endregion
 
         #region Private Fields

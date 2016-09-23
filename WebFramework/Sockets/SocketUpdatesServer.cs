@@ -9,11 +9,17 @@ namespace Team1922.WebFramework.Sockets
 {
     public class SocketUpdatesServer : SocketUpdatesBase
     {
-        public SocketUpdatesServer(ISocketServer server) : base(server)
+        public SocketUpdatesServer(ISocketServer receiver, ISocketServer senderDelegator) : base(receiver)
         {
+            //server.SocketConnectEvent += _socketServer_SocketConnectEvent;
         }
 
-        protected override async Task AddConnectionAsync(PrimativeConnectionInfo connectionInfo)
+        private async void _socketServer_SocketConnectEvent(PrimativeConnectionInfo connectionInfo)
+        {
+            await AddConnectionAsync(connectionInfo);
+        }
+
+        protected async Task AddConnectionAsync(PrimativeConnectionInfo connectionInfo)
         {
             if (ContainsConnection(connectionInfo))
                 return;//if the connection info is the SAME, then do not reconnect

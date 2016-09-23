@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
 
@@ -8,18 +10,21 @@ namespace Team1922.WebFramework.Sockets
 {
     public class SocketUpdatesClient : SocketUpdatesBase
     {
-        public SocketUpdatesClient(ISocketServer server) : base(server)
+        public SocketUpdatesClient(IRequestDelegator requestDelegator) : base(null)
         {
+            _requestDelegator = requestDelegator;
         }
 
-        protected override async Task AddConnectionAsync(PrimativeConnectionInfo connectionInfo)
+        public async Task OpenConnectionAsync(string hostName, int receivingPort, int sendingPort)
         {
-            //don't connect if we are already connected to one; more than one client should not be connecting to our server
-            if (null != _client)
-                throw new Exception("Multiple Connections To SocketUpdatesClient");
-
             _client = new SocketClient();
-            await _client.OpenConnectionAsync(connectionInfo.IpAddress, connectionInfo.Port);
+            await _client.OpenConnectionAsync(hostName, receivingPort);
+
+            _cts = new CancellationTokenSource();
+            var listenerSocket = Utils.MakeSocket();
+            listenerSocket.Connect(ipAddress, port);
+            _clientNetStream = new NetworkStream(_client);
+            var server = new SocketServer(_requestDelegator, )
         }
 
         public override async Task<IEnumerable<Response>> SendAsync(Request request)
@@ -29,6 +34,7 @@ namespace Team1922.WebFramework.Sockets
 
         #region Private Fields
         private SocketClient _client = null;
+        IRequestDelegator _requestDelegator = null;
         #endregion
 
         #region IDisposable
