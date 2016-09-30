@@ -21,7 +21,7 @@ namespace Team1922.WebFramework.Sockets
                         Utils.SocketReceiveResponseAsync(stream, token); //TODO: how to allow for better handilng of this event handler
                     };
                     //TODO: how to handle these event handlers without closing the socket in the mean time.
-                    while (socket.Connected) ;
+                    while (socket.Connected && !token.IsCancellationRequested) ;
                 }
                 Console.WriteLine("closed stream and client socket");
             }
