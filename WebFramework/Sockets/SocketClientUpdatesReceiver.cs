@@ -34,7 +34,9 @@ namespace Team1922.WebFramework.Sockets
         /// <param name="data">the data to update upon request</param>
         public SocketClientUpdatesReceiver(IHierarchialAccessRoot data)
         {
-            _requestDelegator = new RequestDelegator(data);
+            // do not propagate incoming requests, becuase they are being sent from a server and we do not
+            //      want to send the same requests back
+            _requestDelegator = new RequestDelegator(data, false);
         }
 
         #region ISocketClient

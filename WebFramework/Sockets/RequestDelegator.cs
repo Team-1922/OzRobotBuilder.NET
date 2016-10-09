@@ -16,10 +16,17 @@ namespace Team1922.WebFramework.Sockets
         /// creates a request delegator with the given data
         /// </summary>
         /// <param name="data">the data to modify/acces with each request</param>
-        public RequestDelegator(IHierarchialAccessRoot data)
+        /// <param name="propagateRequests">Whether or not to propagate incoming requests</param>
+        public RequestDelegator(IHierarchialAccessRoot data, bool propagateRequests)
         {
             Data = data;
+            PropagateRequests = propagateRequests;
         }
+
+        /// <summary>
+        /// Whether or not incoming requests are propagated using <see cref="IEventPropagator.Propagated"/>
+        /// </summary>
+        public bool PropagateRequests { get; }
 
         #region Protocall Methods
         /// <summary>
@@ -62,7 +69,7 @@ namespace Team1922.WebFramework.Sockets
             Response response = new Response();
             try
             {
-                await Data.SetAsync(path, body);
+                await Data.SetAsync(path, body, PropagateRequests);
 
                 //OK
                 response.StatusCode = HttpStatusCode.OK;
@@ -96,7 +103,7 @@ namespace Team1922.WebFramework.Sockets
             Response response = new Response();
             try
             {
-                bool result = await Data.AddAsync(path, body);
+                bool result = await Data.AddAsync(path, body, PropagateRequests);
 
                 if (result)
                     response.StatusCode = HttpStatusCode.Created;
@@ -133,7 +140,7 @@ namespace Team1922.WebFramework.Sockets
             Response response = new Response();
             try
             {
-                bool result = await Data.DeleteAsync(path);
+                bool result = await Data.DeleteAsync(path, PropagateRequests);
 
                 if (result)
                     response.StatusCode = HttpStatusCode.OK;
@@ -188,6 +195,6 @@ namespace Team1922.WebFramework.Sockets
                     return new Response() { StatusCode = HttpStatusCode.MethodNotAllowed };//not allowed
             }
         }
-        #endregion        
+        #endregion      
     }
 }
