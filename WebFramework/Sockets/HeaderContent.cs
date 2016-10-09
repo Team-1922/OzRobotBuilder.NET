@@ -29,14 +29,7 @@ namespace Team1922.WebFramework.Sockets
             
             return new HeaderContent(size);
         }
-
-        public string SocketPath
-        {
-            get
-            {
-                return _socketPath;
-            }
-        }
+        
         public int ContentSize
         {
             get
@@ -49,14 +42,12 @@ namespace Team1922.WebFramework.Sockets
             get
             {
                 var content = new byte[HeaderSize];
-                Encoding.UTF8.GetBytes(_socketPath).CopyTo(content, 0);
-
+                BitConverter.GetBytes(ContentSize).CopyTo(content, 0);
                 return content;
             }
         }
 
         #region Private Fields
-        private string _socketPath;
         private int _size;
         #endregion
     }

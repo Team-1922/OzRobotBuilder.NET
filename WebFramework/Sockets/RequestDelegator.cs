@@ -7,14 +7,26 @@ using Team1922.MVVM.Contracts;
 
 namespace Team1922.WebFramework.Sockets
 {
+    /// <summary>
+    /// An implenetation of the request delegator which uses the <see cref="Protocall.Method"/> protocall
+    /// </summary>
     public class RequestDelegator : IRequestDelegator
     {
+        /// <summary>
+        /// creates a request delegator with the given data
+        /// </summary>
+        /// <param name="data">the data to modify/acces with each request</param>
         public RequestDelegator(IHierarchialAccessRoot data)
         {
             Data = data;
         }
 
         #region Protocall Methods
+        /// <summary>
+        /// The <see cref="Protocall.Method.Get"/> Method
+        /// </summary>
+        /// <param name="path">The path to get data at</param>
+        /// <returns>the data retrieved from <paramref name="path"/> </returns>
         public async Task<Response> GetAsync(string path)
         {
             Response response = new Response();
@@ -39,6 +51,12 @@ namespace Team1922.WebFramework.Sockets
             }
             return response;
         }
+        /// <summary>
+        /// The <see cref="Protocall.Method.Set"/> Method
+        /// </summary>
+        /// <param name="path">The path to set the data to</param>
+        /// <param name="body">The data to set</param>
+        /// <returns></returns>
         public async Task<Response> SetAsync(string path, string body)
         {
             Response response = new Response();
@@ -67,6 +85,12 @@ namespace Team1922.WebFramework.Sockets
             }
             return response;
         }
+        /// <summary>
+        /// The <see cref="Protocall.Method.Add"/> Method
+        /// </summary>
+        /// <param name="path">the path to create new data at</param>
+        /// <param name="body">the value of this new entry</param>
+        /// <returns></returns>
         public async Task<Response> AddAsync(string path, string body)
         {
             Response response = new Response();
@@ -99,6 +123,11 @@ namespace Team1922.WebFramework.Sockets
             }
             return response;
         }
+        /// <summary>
+        /// he <see cref="Protocall.Method.Delete"/>  Method
+        /// </summary>
+        /// <param name="path">the path of the data to delete</param>
+        /// <returns></returns>
         public async Task<Response> DeleteAsync(string path)
         {
             Response response = new Response();
@@ -134,7 +163,15 @@ namespace Team1922.WebFramework.Sockets
         #endregion
 
         #region IRequestDelegator
+        /// <summary>
+        /// The data which this request delegator acts upon
+        /// </summary>
         public IHierarchialAccessRoot Data { get; }
+        /// <summary>
+        /// Processes a given according to the <see cref="Protocall.Method"/> protocall
+        /// </summary>
+        /// <param name="request">the request to process</param>
+        /// <returns>the result of the processed request</returns>
         public async Task<Response> ProcessRequestAsync(Request request)
         {
             switch (request.Method)

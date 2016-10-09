@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Team1922.MVVM.Contracts;
@@ -11,19 +10,47 @@ using Team1922.MVVM.Contracts;
 namespace Team1922.WebFramework.Sockets
 {
     /// <summary>
-    /// A socket client which connects to a server and sends requests to update its data
+    /// A Socket client which connects to a socket updates server and leaves the connection
+    /// open to receive socket updates from
     /// </summary>
-    public class SocketClient : ISocketClient
+    /// <remarks>
+    /// This is still considered a client, becuase this class must initiate the connection, however afterwards
+    /// no longer initiates any requests
+    /// </remarks>
+    public class SocketClientUpdatesReceiver : ISocketClient
     {
+        /// <summary>
+        /// Initializes a SocketCLientUpdatesReceiver from a <see cref="IRequestDelegator"/>
+        /// </summary>
+        /// <param name="requestDelegator">the request delegator to delegate incoming requests</param>
+        public SocketClientUpdatesReceiver(IRequestDelegator requestDelegator)
+        {
+            _requestDelegator = requestDelegator;
+        }
+        
+        /// <summary>
+        /// Initializes a SocketClientUpdatesReceiver from a <see cref="IHierarchialAccessRoot"/> using the <see cref="RequestDelegator"/> class
+        /// </summary>
+        /// <param name="data">the data to update upon request</param>
+        public SocketClientUpdatesReceiver(IHierarchialAccessRoot data)
+        {
+            _requestDelegator = new RequestDelegator(data);
+        }
+
         #region ISocketClient
         /// <summary>
-        /// The local endpoint of the connection
+        /// This data member is irrelevent for this class, for this class is receive only
+        /// </summary>
+        public bool SendOnly { get { return false; } }
+
+        /// <summary>
+        /// The local end point of the connection
         /// </summary>
         public IPEndPoint LocalEndPoint
         {
             get
             {
-                return (IPEndPoint)_client?.LocalEndPoint;
+                return (IPEndPoint)_listenerSocket?.LocalEndPoint;
             }
         }
 
@@ -34,38 +61,31 @@ namespace Team1922.WebFramework.Sockets
         {
             get
             {
-                return (IPEndPoint)_client?.RemoteEndPoint;
+                return (IPEndPoint)_listenerSocket?.RemoteEndPoint;
             }
         }
 
         /// <summary>
-        /// Closes the connection to the server
+        /// Closes the connection to the updates server
         /// </summary>
         /// <returns></returns>
         public async Task CloseConnectionAsync()
         {
-            if (null == _clientNetStream)
-                return;
-
-            await SendAsync(new Request() { Method = Protocall.Method.Close });
-
             _cts.Cancel();
-            _clientNetStream.Dispose();
-            _client?.Dispose();
+            _listenerSocket?.Dispose();
 
-            _client = null;
-            _clientNetStream = null;
+            _listenerSocket = null;
             _cts = null;
         }
         /// <summary>
-        /// Opens the connection to the server to send requests to
+        /// Initiates the connection to the updates server
         /// </summary>
-        /// <param name="hostName">the host name of the server</param>
-        /// <param name="port">the port of the server to connect to</param>
+        /// <param name="hostName">the host name of the updates server</param>
+        /// <param name="port">the port of the updates server</param>
         /// <returns></returns>
         public async Task OpenConnectionAsync(string hostName, int port)
         {
-            if (_client != null)
+            if (_listenerSocket != null)
                 throw new Exception("Client Already Connected!");
 
             IPHostEntry ipHost = await Dns.GetHostEntryAsync(hostName);
@@ -76,36 +96,29 @@ namespace Team1922.WebFramework.Sockets
                 return;
             }
             _cts = new CancellationTokenSource();
-            _client = Utils.MakeSocket();
-            _client.Connect(ipAddress, port);
-            _clientNetStream = new NetworkStream(_client);
+            _listenerSocket = Utils.MakeSocket();
+            _listenerSocket.Connect(ipAddress, port);
+
+            //start the listener task
+            _listenerTask = SocketListenerFactory.Instance.StartSocket(_listenerSocket, _requestDelegator, _cts.Token);
         }
-        #endregion
 
         /// <summary>
-        /// Sends a given request to the server
+        /// This should never be called becuase this client only receives requests
         /// </summary>
-        /// <remarks>
-        /// This should only be called by one thread at a time
-        /// </remarks>
-        /// <param name="request">the request to send</param>
-        /// <returns>a response from the server of the given request</returns>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<Response> SendAsync(Request request)
         {
-            if (null == _client)
-                throw new Exception("Client Must Be Connected Before Sending");
-            if (null == request)
-                throw new ArgumentException("request", "Given Request was Null");
-
-            var senderTask = Utils.SocketSendAsync(_clientNetStream, new SocketMessage(request), _cts.Token);
-            return await Utils.SocketReceiveResponseAsync(_clientNetStream, _cts.Token);
+            throw new InvalidOperationException("Sending Requests is Not Supported by SocketClientUpdpatesReceiver; you may want to use SocketClient instead!");
         }
+        #endregion
 
         #region Private Fields
         private CancellationTokenSource _cts;
-        private Socket _client;
-        private NetworkStream _clientNetStream;
-        #endregion
+        private Socket _listenerSocket;
+        private Task _listenerTask;
+        private IRequestDelegator _requestDelegator;
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -117,8 +130,7 @@ namespace Team1922.WebFramework.Sockets
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    if(_clientNetStream != null)
-                        CloseConnectionAsync().Wait();
+                    CloseConnectionAsync().Wait();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -129,7 +141,7 @@ namespace Team1922.WebFramework.Sockets
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~SocketClient() {
+        // ~SocketClientUpdatesReceiver() {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
         // }
@@ -142,6 +154,7 @@ namespace Team1922.WebFramework.Sockets
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
+        #endregion
         #endregion
     }
 }

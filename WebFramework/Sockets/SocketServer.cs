@@ -10,39 +10,51 @@ using Team1922.MVVM.Contracts;
 
 namespace Team1922.WebFramework.Sockets
 {
+    /// <summary>
+    /// This was previously used, however is pending deletion
+    /// </summary>
+    [Obsolete]
     public class PrimativeConnectionInfo : IEquatable<PrimativeConnectionInfo>
     {
+        /// 
         public string IpAddress = "";
+        /// 
         public int Port = -1;
 
+        /// 
         public bool Equals(PrimativeConnectionInfo other)
         {
             return (other.IpAddress == IpAddress && other.Port == Port);
         }
     }
-    public delegate void SocketConnectEvent(PrimativeConnectionInfo connectionInfo);
 
+    /// <summary>
+    /// A Socket Server which listens to a given port and branches off each connection request to a new task
+    /// </summary>
     public class SocketServer : ISocketServer
     {
-        public SocketServer(IRequestDelegator delegator, int port = 0, int maxClients = 9001)
+        /// <summary>
+        /// Creates a new socket server
+        /// </summary>
+        /// <param name="delegator">the delegator to use for handling requests</param>
+        /// <param name="socketFactory">the factory to use for branching connections to their own tasks</param>
+        /// <param name="port">the port to listen on</param>
+        /// <param name="maxClients">the maximum number of clients which can connect</param>
+        public SocketServer(IRequestDelegator delegator, IDataSocketFactory socketFactory, int port = 0, int maxClients = 9001)
         {
+            if (socketFactory == null)
+                throw new ArgumentNullException("socketFactory", "Socket Factory Must Not Be Null");
+            SocketFactory = socketFactory;
+
             _requestDelegator = delegator;
             _port = port;
             _maxClients = maxClients;
         }
 
-        public SocketServer(RequestDelegator delegator, IDataSocketFactory socketFactory, int port = 0, int maxClients = 9001) : this(delegator, port, maxClients)
-        {
-            if (socketFactory == null)
-                throw new ArgumentNullException("socketFactory", "Socket Factory Must Not Be Null");
-            SocketFactory = socketFactory;
-        }
-        
-        #region Private Helper Methods
-
-        #endregion
-
         #region ISocketServer
+        /// <summary>
+        /// The request delegator to handle the requests
+        /// </summary>
         public IRequestDelegator RequestDelegator
         {
             get
@@ -50,7 +62,9 @@ namespace Team1922.WebFramework.Sockets
                 return _requestDelegator;
             }
         }
-        public event SocketConnectEvent SocketConnectEvent;
+        /// <summary>
+        /// starts the connection listener
+        /// </summary>
         public void StartListener()
         {
             //avoid multiple starts
@@ -86,7 +100,6 @@ namespace Team1922.WebFramework.Sockets
                     Console.WriteLine($"client connected local address {((IPEndPoint)client.LocalEndPoint).Address} and port {((IPEndPoint)client.LocalEndPoint).Port}, remote address {((IPEndPoint)client.RemoteEndPoint).Address} and port {((IPEndPoint)client.RemoteEndPoint).Port}");
                     
                     _listeners.Add(SocketFactory.StartSocket(client, _requestDelegator, _cts.Token));
-                    //SocketConnectEvent?.Invoke(new PrimativeConnectionInfo() { IpAddress = ((IPEndPoint)client.RemoteEndPoint).Address.ToString(), Port = ((IPEndPoint)client.RemoteEndPoint).Port });
                 }
                 listener.Dispose();
                 Console.WriteLine("Listener task closing");
@@ -94,11 +107,20 @@ namespace Team1922.WebFramework.Sockets
             }, _cts.Token);
 
         }
+        /// <summary>
+        /// stop the connection listener; this also should terminate any open connections
+        /// </summary>
         public void StopListener()
         {
             _cts.Cancel();
         }
+        /// <summary>
+        /// the port the listener is on
+        /// </summary>
         public int Port { get { return _port; } }
+        /// <summary>
+        /// The class which branches off a new task for each connection
+        /// </summary>
         public IDataSocketFactory SocketFactory { get; }
         #endregion
 
