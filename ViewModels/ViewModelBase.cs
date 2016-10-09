@@ -527,7 +527,7 @@ namespace Team1922.MVVM.ViewModels
             if (EqualityComparer<T>.Default.Equals(item, value)) return false;
             item = value;
             OnPropertyChanged(propertyName);
-            OnEventPropagated(new EventPropagationEventArgs("PUT", propertyName, value.ToString()));
+            OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Set, propertyName, value.ToString()));
             return true;
         }
         #endregion
@@ -661,7 +661,7 @@ namespace Team1922.MVVM.ViewModels
             RegisterChildrenEventPropagation();
 
             //propagate this whole object to be reuploaded (potentially a better way to do this would be with individual delete/post requests
-            OnEventPropagated(new EventPropagationEventArgs("PUT", "", ToString()));
+            OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Set, "", ToString()));
         }
         #endregion
     }

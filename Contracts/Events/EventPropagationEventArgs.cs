@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Contracts.Events
     /// </summary>
     public class EventPropagationEventArgs
     {
-        public EventPropagationEventArgs(Protocall.Method method, string propertyName, string propertyValue, string updateSource)
+        public EventPropagationEventArgs(Protocall.Method method, string propertyName, string propertyValue/*, string updateSource*/)
         {
             Method = method;
             PropertyName = propertyName;
@@ -34,6 +34,6 @@ namespace Team1922.MVVM.Contracts.Events
         /// <remarks>
         /// This is primarily used for networking to prevent infinite update loops accross the network
         /// </remarks>
-        public string UpdateSource { get; }
+        //public string UpdateSource { get; }
     }
 }

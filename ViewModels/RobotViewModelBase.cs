@@ -709,7 +709,7 @@ namespace Team1922.MVVM.ViewModels
             //  this will result in attempting to enter a write lock while in a read lock which will cause issues
             Task.Run(() =>
             {
-                if (e.HTTPMethod == "PUT" || e.HTTPMethod == "POST" || e.HTTPMethod == "PATCH" || e.HTTPMethod == "DELETE")
+                if (e.Method == Protocall.Method.Set || e.Method == Protocall.Method.Add || e.Method == Protocall.Method.Delete)
                 {
                     bool shouldPrecomputeTree = false;
                     _lookupTableMutex.EnterReadLock();
