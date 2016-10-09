@@ -11,7 +11,7 @@ namespace Team1922.MVVM.Contracts
     /// is mostly a helper interface for the WPF designer so the TreeView can be used on 
     /// all of the viewmodels easily
     /// </summary>
-    public interface IProvider : INotifyPropertyChanged, IEventPropagator, IHierarchialAccess
+    public interface IProvider : INotifyPropertyChanged, IHierarchialAccess
     {
         /// <summary>
         /// The name of this provider; if this provider does have a name

@@ -22,27 +22,30 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="key">where to set <paramref name="value"/> at</param>
         /// <param name="value">the value to set at location <paramref name="key"/></param>
+        /// <param name="propagate">whether or not to propagate this request</param>
         /// <param name="safe">if true, then the task waits for the result and throws any exceptions that occured; if false, then just send the request and leave</param>
         /// <returns></returns>
-        Task SetAsync(string key, string value, bool safe = true);
+        Task SetAsync(string key, string value, bool safe = true, bool propagate = true);
         /// <summary>
         /// Deletes the value at the given key
         /// </summary>
         /// <param name="key">which item to delete</param>
+        /// <param name="propagate">whether or not to propagate this request</param>
         /// <returns>the success of the deletion</returns>
-        Task<bool> DeleteAsync(string key);
+        Task<bool> DeleteAsync(string key, bool propagate = true);
         /// <summary>
         /// Adds the value at the given key
         /// </summary>
         /// <param name="key">where to add <paramref name="value"/></param>
         /// <param name="value">the value to set at location <paramref name="key"/></param>
+        /// <param name="propagate">whether or not to propagate this request</param>
         /// <returns>the success of the addition</returns>
-        Task<bool> AddAsync(string key, string value);
+        Task<bool> AddAsync(string key, string value, bool propagate = true);
         /// <summary>
         /// Used to determine whether an item exsits at the given key
         /// </summary>
         /// <remarks>
-        /// This is similar to <see cref="SetAsync(string, string, bool)"/>, except this takes a little longer and gives indication as to whether an item was added or removed</remarks>
+        /// This is similar to <see cref="SetAsync(string, string, bool, bool)"/>, except this takes a little longer and gives indication as to whether an item was added or removed</remarks>
         /// <param name="key">the key to check</param>
         /// <returns>whether or not an item exists at <paramref name="key"/></returns>
         bool KeyExists(string key);

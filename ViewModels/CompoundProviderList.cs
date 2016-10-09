@@ -56,7 +56,7 @@ namespace Team1922.MVVM.ViewModels
             {
                 _items.Add(newProvider);
             }
-            RegisterChildEventPropagation(newProvider);
+            //RegisterChildEventPropagation(newProvider);
         }
         public void Remove(string name)
         {

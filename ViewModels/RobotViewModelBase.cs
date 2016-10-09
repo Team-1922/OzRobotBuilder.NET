@@ -145,8 +145,9 @@ namespace Team1922.MVVM.ViewModels
         /// <param name="key">where to set <paramref name="value"/> at</param>
         /// <param name="value">the value to set at location <paramref name="key"/></param>
         /// <param name="safe">if true, then the task waits for the result and throws any exceptions that occured; if false, then just send the request and leave</param>
+        /// <param name="propagate">whether or not to propagate this request</param>
         /// <returns></returns>
-        public async Task SetAsync(string key, string value, bool safe = true)
+        public async Task SetAsync(string key, string value, bool safe = true, bool propagate = true)
         {
             if (safe)
             {
@@ -156,14 +157,17 @@ namespace Team1922.MVVM.ViewModels
                 CheckExceptions(ticket);
                 //cleanup the ticket
                 CleanupTicket(ticket);
+                //propagate this event if enabled
+                if (propagate)
+                    OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Set, key, value));
             }
             else
             {
-                //wait for the request to complete
+                //don't wait for the request to complete (also don't propagate)
                 Enqueue(key, value, AccessType.Set);
             }
         }
-        public async Task<bool> DeleteAsync(string key)
+        public async Task<bool> DeleteAsync(string key, bool propagate = true)
         {
             //wait for the request to complete
             long ticket = await EnqueueAndWaitAsync(key, "", AccessType.Delete);
@@ -173,9 +177,12 @@ namespace Team1922.MVVM.ViewModels
             var ret = _hierarchialAccessResponses[ticket];
             //cleanup the ticket
             CleanupTicket(ticket);
+            //propagate this event if enabled
+            if (propagate)
+                OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Delete, key, ""));
             return ret == "deleted";
         }
-        public async Task<bool> AddAsync(string key, string value)
+        public async Task<bool> AddAsync(string key, string value, bool propagate = true)
         {
             //wait for the request to complete
             long ticket = await EnqueueAndWaitAsync(key, "", AccessType.Add);
@@ -185,6 +192,9 @@ namespace Team1922.MVVM.ViewModels
             var ret = _hierarchialAccessResponses[ticket];
             //cleanup the ticket
             CleanupTicket(ticket);
+            //propagate this event if enabled
+            if (propagate)
+                OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Add, key, value));
             return ret == "added";
         }
         /// <summary>
@@ -611,6 +621,35 @@ namespace Team1922.MVVM.ViewModels
                 _robotMapProvider = new RobotMapViewModel(this);
                 _robotMapProvider.ModelReference = ModelReference.RobotMap;
             }
+        }
+        #endregion
+        
+        #region IEventPropagator
+        private event EventPropagationEventHandler _propagatedNoDuplicates;
+
+        public event EventPropagationEventHandler Propagated
+        {
+            add
+            {
+                if (null == _propagatedNoDuplicates || !_propagatedNoDuplicates.GetInvocationList().Contains(value))
+                    _propagatedNoDuplicates += value;
+            }
+
+            remove
+            {
+                _propagatedNoDuplicates -= value;
+            }
+        }
+
+        protected void OnEventPropagated(EventPropagationEventArgs e)
+        {
+            //InvalidateModelJson();
+            if (null == ModelReference)
+                return;
+
+            //add our name to the name; if this is the top-level, then don't add our name so the IHierarchialAccess works correctly
+            //e.PropertyName = Parent != null ? e.PropertyName == "" ? Name : $"{Name}.{e.PropertyName}" : e.PropertyName;
+            _propagatedNoDuplicates?.Invoke(e);
         }
         #endregion
 

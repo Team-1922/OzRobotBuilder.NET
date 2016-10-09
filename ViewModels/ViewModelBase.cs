@@ -145,10 +145,10 @@ namespace Team1922.MVVM.ViewModels
             return KeyValueList;
         }
 
-        protected void RegisterChildEventPropagation(IEventPropagator child)
+        /*protected void RegisterChildEventPropagation(IEventPropagator child)
         {
             child.Propagated += Child_Propagated;
-        }
+        }*/
         
         #region IProvider
         public IProviderRoot TopParent
@@ -177,9 +177,10 @@ namespace Team1922.MVVM.ViewModels
         private string _modelJson = "";
         public string GetModelJson()
         {
-            if(_modelJson == "")
-                return _modelJson = JsonSerialize(ModelReference);
-            return _modelJson;
+            // if(_modelJson == "")
+            //     return _modelJson = JsonSerialize(ModelReference);
+            // return _modelJson;
+            return JsonSerialize(ModelReference);// TODO: how can I utilize the InvalidateModelJson method now that Event Propagation is only done by the RobotViewModelBase?
         }
         public void SetModelJson(string text)
         {
@@ -476,7 +477,7 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region IEventPropagator
+        /*#region IEventPropagator
         private event EventPropagationEventHandler _propagatedNoDuplicates;
 
         public event EventPropagationEventHandler Propagated
@@ -503,7 +504,7 @@ namespace Team1922.MVVM.ViewModels
             e.PropertyName = Parent != null ? e.PropertyName == "" ? Name : $"{Name}.{e.PropertyName}" : e.PropertyName;
             _propagatedNoDuplicates?.Invoke(e);
         }
-        #endregion
+        #endregion*/
 
         #region Private Methods
         private void ViewModelBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -514,12 +515,12 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region Event Propagaiton
+        /*#region Event Propagaiton
         private void Child_Propagated(EventPropagationEventArgs e)
         {
             OnEventPropagated(e);
         }
-        #endregion
+        #endregion*/
 
         #region BindableBase        
         protected override bool SetProperty<T>(ref T item, T value, [CallerMemberName] string propertyName = null)
@@ -527,7 +528,7 @@ namespace Team1922.MVVM.ViewModels
             if (EqualityComparer<T>.Default.Equals(item, value)) return false;
             item = value;
             OnPropertyChanged(propertyName);
-            OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Set, propertyName, value.ToString()));
+            //OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Set, propertyName, value.ToString()));
             return true;
         }
         #endregion
@@ -580,7 +581,7 @@ namespace Team1922.MVVM.ViewModels
     {
         public CompoundViewModelBase(IProvider parent) : base(parent)
         {
-            Children.CollectionChanged += Children_CollectionChanged;
+            //Children.CollectionChanged += Children_CollectionChanged;
         }
 
         #region ICompoundProvider
@@ -603,7 +604,7 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
-        #region EventPropagation
+        /*#region EventPropagation
         protected void RegisterChildrenEventPropagation()
         {
             foreach (IEventPropagator child in Children)
@@ -612,7 +613,7 @@ namespace Team1922.MVVM.ViewModels
                     RegisterChildEventPropagation(child);
             }
         }
-        #endregion
+        #endregion*/
 
         #region ViewModelBase
         protected override bool KeyExistsInternal(string propName, string remainingKey)
@@ -655,7 +656,7 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
         
-        #region Private Methods
+       /* #region Private Methods
         private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             RegisterChildrenEventPropagation();
@@ -663,7 +664,7 @@ namespace Team1922.MVVM.ViewModels
             //propagate this whole object to be reuploaded (potentially a better way to do this would be with individual delete/post requests
             OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Set, "", ToString()));
         }
-        #endregion
+        #endregion*/
     }
 
     public abstract class CompoundViewModelBase<ModelType> : CompoundViewModelBase, ICompoundProvider, IProvider<ModelType>
