@@ -71,12 +71,7 @@ namespace Team1922.WebFramework.Sockets
             if (null != _connectionDispatcherTask)
                 return;
 
-            var listener = Utils.MakeSocket();
-            listener.Bind(new IPEndPoint(IPAddress.Any, _port));
-            listener.Listen(backlog: 15);
-
-            //reset the port just in case the port was assigned to something different
-            _port = ((IPEndPoint)listener.LocalEndPoint).Port;
+            var listener = MakeNewListenerSocket();
 
             if (_connectionDispatcherTask != null)
                 return;
@@ -131,6 +126,20 @@ namespace Team1922.WebFramework.Sockets
         private IRequestDelegator _requestDelegator;
         private int _port;
         private int _maxClients;
+        #endregion
+
+        #region Private Methods
+        private Socket MakeNewListenerSocket()
+        {
+            var listener = Utils.MakeSocket();
+            listener.Bind(new IPEndPoint(IPAddress.Any, _port));
+            listener.Listen(backlog: 15);
+
+            //reset the port just in case the port was assigned to something different
+            _port = ((IPEndPoint)listener.LocalEndPoint).Port;
+
+            return listener;
+        }
         #endregion
 
         #region IDisposable Support
