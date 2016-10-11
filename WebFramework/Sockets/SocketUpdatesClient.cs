@@ -12,7 +12,7 @@ namespace Team1922.WebFramework.Sockets
     /// The branch of socket updates which connects to a socket server and sends updates from
     /// its clients to the server
     /// </summary>
-    public class SocketUpdatesClient
+    public class SocketUpdatesClient : IDisposable
     {
         /// <summary>
         /// Creates a socket updates client with the given request delegator

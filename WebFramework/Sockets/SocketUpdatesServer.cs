@@ -11,7 +11,7 @@ namespace Team1922.WebFramework.Sockets
     /// The part of the socket updates system which receives requests from clients for updates, but also sends out 
     /// propagated events from the <see cref="ISocketServer.RequestDelegator.Data"/> to all of the connected clients
     /// </summary>
-    public class SocketUpdatesServer
+    public class SocketUpdatesServer : IDisposable
     {
         /// <summary>
         /// Starts a socket updates server from a <see cref="ISocketServer"/> to handle clients connecting for read/write access
