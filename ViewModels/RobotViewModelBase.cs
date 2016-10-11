@@ -428,7 +428,8 @@ namespace Team1922.MVVM.ViewModels
                     //get the next reqeust
                     while (_hierarchialAccessRequests.TryDequeue(out processItem))
                     {
-                        _lookupTableMutex.EnterReadLock();
+                        // TODO: is there any reason why this line is necessary
+                        // _lookupTableMutex.EnterReadLock();
                         try
                         {
                             switch (processItem.Item3)
@@ -460,7 +461,8 @@ namespace Team1922.MVVM.ViewModels
                         }
                         finally
                         {
-                            _lookupTableMutex.ExitReadLock();
+                            // TODO: is there any reason why this line is necessary
+                            // _lookupTableMutex.ExitReadLock();
                         }
                     }
                 }
