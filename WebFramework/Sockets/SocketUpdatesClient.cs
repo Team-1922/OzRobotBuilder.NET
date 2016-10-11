@@ -43,7 +43,7 @@ namespace Team1922.WebFramework.Sockets
             await _client.OpenConnectionAsync(hostName, receivingPort);
 
             //open the client connection to the sending port
-            await _client.OpenConnectionAsync(hostName, sendingPort);
+            await _clientReceiver.OpenConnectionAsync(hostName, sendingPort);
 
             /*_cts = new CancellationTokenSource();
             var listenerSocket = Utils.MakeSocket();
