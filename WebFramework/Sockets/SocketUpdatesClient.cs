@@ -52,6 +52,14 @@ namespace Team1922.WebFramework.Sockets
             var server = new SocketServer(_requestDelegator, )*/
         }
 
+        public bool Connected
+        {
+            get
+            {
+                return _client?.RemoteEndPoint != null && _clientReceiver?.RemoteEndPoint != null;
+            }
+        }
+
         #region Private Fields
         private SocketClient _client = null;
         private SocketClientUpdatesReceiver _clientReceiver = null;

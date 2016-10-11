@@ -71,7 +71,9 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                ModelReference.TeamNumber = value;
+                var temp = ModelReference.TeamNumber;
+                SetProperty(ref temp, value);
+                ModelReference.TeamNumber = temp;
             }
         }
         public int AnalogInputSampleRate
@@ -83,7 +85,37 @@ namespace Team1922.MVVM.ViewModels
 
             set
             {
-                ModelReference.AnalogInputSampleRate = value;
+                var temp = ModelReference.AnalogInputSampleRate;
+                SetProperty(ref temp, value);
+                ModelReference.AnalogInputSampleRate = temp;
+            }
+        }
+        public int ModifyingPortNumber
+        {
+            get
+            {
+                return ModelReference.ModifyPortNumber;
+            }
+
+            set
+            {
+                var temp = ModelReference.ModifyPortNumber;
+                SetProperty(ref temp, value);
+                ModelReference.ModifyPortNumber = temp;
+            }
+        }
+        public int UpdatesPortNumber
+        {
+            get
+            {
+                return ModelReference.UpdatesPortNumber;
+            }
+
+            set
+            {
+                var temp = ModelReference.UpdatesPortNumber;
+                SetProperty(ref temp, value);
+                ModelReference.UpdatesPortNumber = temp;
             }
         }
         public void RemoveSubsystem(string name)
@@ -553,6 +585,10 @@ namespace Team1922.MVVM.ViewModels
                     return AnalogInputSampleRate.ToString();
                 case "TeamNumber":
                     return TeamNumber.ToString();
+                case "ModifyingPortNumber":
+                    return ModifyingPortNumber.ToString();
+                case "UpdatesPortNumber":
+                    return UpdatesPortNumber.ToString();
 
                 case "Joysticks":
                     return _joystickProviders.GetModelJson();
@@ -579,6 +615,12 @@ namespace Team1922.MVVM.ViewModels
                     break;
                 case "TeamNumber":
                     TeamNumber = SafeCastInt(value);
+                    break;
+                case "ModifyingPortNumber":
+                    ModifyingPortNumber = SafeCastInt(value);
+                    break;
+                case "UpdatesPortNumber":
+                    ModifyingPortNumber = SafeCastInt(value);
                     break;
 
                 case "Joysticks":

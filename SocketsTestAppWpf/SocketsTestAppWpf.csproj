@@ -102,6 +102,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.win.csproj">
+      <Project>{3112A258-4D51-4C9F-8ACB-640AE351EE01}</Project>
+      <Name>Contracts.win</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MVVMFramework\MVVMFramework.win.csproj">
       <Project>{F22008C9-1D99-4BEE-93E2-88E2CF5EE938}</Project>
       <Name>MVVMFramework.win</Name>

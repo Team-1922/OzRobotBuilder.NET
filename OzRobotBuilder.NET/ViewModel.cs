@@ -37,6 +37,8 @@ using System.Windows;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Services;
 using Team1922.MVVM.Contracts.Events;
+using Team1922.WebFramework.Sockets;
+using System.Threading;
 
 namespace Team1922.OzRobotBuilder.NET
 {
@@ -58,6 +60,7 @@ namespace Team1922.OzRobotBuilder.NET
     /// </summary>
     public class ViewModel : RobotViewModelBase
     {
+        #region Private Fields
         XmlModel _xmlModel;
         XmlStore _xmlStore;
 
@@ -71,6 +74,43 @@ namespace Team1922.OzRobotBuilder.NET
         System.EventHandler _bufferReloadedHandler;
 
         LanguageService _xmlLanguageService;
+
+        CancellationTokenSource _cts = new CancellationTokenSource();
+        #endregion
+
+        #region Web
+        private SocketUpdatesClient _socketUpdatesClient;
+        private void WaitNetConnectionAsync(CancellationToken token)
+        {
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                while(!token.IsCancellationRequested)
+                {
+                    if (!_socketUpdatesClient.Connected)
+                    {
+                        try
+                        {
+                            // TODO: this isn't working; the execution of this task stops here, why?
+                            _socketUpdatesClient?.OpenConnectionAsync("localhost",  //TODO: make this configurable
+                                SafeCastInt(GetAsync("ModifyingPortNumber").Result), //TODO: this would be a REALLY great place to just be able to access properties
+                                SafeCastInt(GetAsync("UpdatesPortNumber").Result)).Wait(); //          but since this is being run asynchronously, it is the only option
+
+                        }
+                        catch (TimeoutException e)
+                        {
+                            //this is normal, don't mind this
+                        }
+                        catch (Exception e)
+                        {
+                            //TODO: log
+                        }
+                    }
+                    //wait some time so we aren't overloading the network
+                    System.Threading.Tasks.Task.Delay(5000, token);
+                }
+            });
+        }
+        #endregion
 
         private INotifyPropertyChanged _selectedElement;
         public INotifyPropertyChanged SelectedElement
@@ -120,9 +160,13 @@ namespace Team1922.OzRobotBuilder.NET
             TypeRestrictions.ThrowsExceptionsOnValidationFailure = false;
 
             ModelReference = LoadModelFromXmlModel();
-            IOService.Instance.SetRobot(ModelReference);          
+            IOService.Instance.SetRobot(ModelReference);
 
             //EventAggregator<ItemSelectEvent>.Instance.Event += MyItemSelectEvent;
+
+            //start the method which attempts to connect to the server
+            _socketUpdatesClient = new SocketUpdatesClient(new RequestDelegator(this, false));
+            WaitNetConnectionAsync(_cts.Token);
         }
 
         public void Close()
@@ -504,5 +548,28 @@ namespace Team1922.OzRobotBuilder.NET
 
         #endregion
 
-    }    
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                    _cts.Cancel();
+                    _socketUpdatesClient?.Dispose();
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+        #endregion
+
+    }
 }
