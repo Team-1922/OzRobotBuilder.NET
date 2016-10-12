@@ -17,8 +17,8 @@ namespace Team1922.MVVM.ViewModels
         {
             _quadEncoderProvider = new CANTalonQuadEncoderViewModel(this);
             _analogInputProvider = new CANTalonAnalogInputViewModel(this);
-            _pidConfig0Provider = new PIDControllerSRXViewModel(this);
-            _pidConfig1Provider = new PIDControllerSRXViewModel(this);
+            _pidConfig0Provider = new PIDControllerSRXViewModel(this, false);
+            _pidConfig1Provider = new PIDControllerSRXViewModel(this, true);
         }
         
         #region ICANTalonProvider
@@ -819,12 +819,12 @@ namespace Team1922.MVVM.ViewModels
             }
             if (null != ModelReference.PIDConfig0)
             {
-                _pidConfig0Provider = new PIDControllerSRXViewModel(this);
+                _pidConfig0Provider = new PIDControllerSRXViewModel(this, false);
                 _pidConfig0Provider.ModelReference = ModelReference.PIDConfig0;
             }
             if (null != ModelReference.PIDConfig1)
             {
-                _pidConfig1Provider = new PIDControllerSRXViewModel(this);
+                _pidConfig1Provider = new PIDControllerSRXViewModel(this, false);
                 _pidConfig1Provider.ModelReference = ModelReference.PIDConfig1;
             }
         }
