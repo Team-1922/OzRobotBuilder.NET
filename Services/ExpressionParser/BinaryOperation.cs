@@ -21,16 +21,16 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
 
-        public T Perform(List<T> param)
+        public async Task<T> PerformAsync(List<T> param)
         {
             if(param.Count != ParamCount)
                 throw new ArgumentException("param count not equal to 2");
-            return Perform(param[0], param[1]);
+            return await PerformAsync(param[0], param[1]);
         }
 
         #region Abstract Methods
         public abstract OperationPriority Priority { get; }
-        public abstract T Perform(T input1, T input2);
+        public abstract Task<T> PerformAsync(T input1, T input2);
         public abstract string Name { get; }
         #endregion
     }

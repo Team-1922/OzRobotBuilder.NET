@@ -17,22 +17,32 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// Returns the result of the evaluated expression
         /// </summary>
         /// <returns></returns>
-        public override double Evaluate()
+        public override async Task<double> EvaluateAsync()
         {
             if (Operation is IOperationDouble)
-                return EvaluateDouble();
+                return await EvaluateDoubleAsync();
             else if (Operation is IOperationBool)
-                return EvaluateBool();
+                return await EvaluateBoolAsync();
             else
                 throw new Exception("Unknown Operation Type");
         }
-        private double EvaluateDouble()
+        private async Task<double> EvaluateDoubleAsync()
         {
-            return (Operation as IOperationDouble).Perform((from child in Children select child.Evaluate()).ToList());
+            List<double> param = new List<double>();
+            foreach(var child in Children)
+            {
+                param.Add(await child.EvaluateAsync());
+            }
+            return await (Operation as IOperationDouble).PerformAsync(param);
         }
-        private double EvaluateBool()
+        private async Task<double> EvaluateBoolAsync()
         {
-            return (Operation as IOperationBool).Perform((from child in Children select (child.Evaluate() >= 1.0)).ToList()) ? 1 : 0;
+            List<bool> param = new List<bool>();
+            foreach (var child in Children)
+            {
+                param.Add((await child.EvaluateAsync()) >= 1.0);
+            }
+            return (await (Operation as IOperationBool).PerformAsync(param)) ? 1 : 0;
         }
     }
 }

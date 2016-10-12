@@ -8,10 +8,10 @@ namespace Team1922.MVVM.Services.ExpressionParser
 {
     interface IBinaryOperationDouble : IOperationDouble
     {        
-        double Perform(double input1, double input2);
+        Task<double> PerformAsync(double input1, double input2);
     }
     interface IBinaryOperationBool : IOperationBool
     {
-        bool Perform(bool input1, bool input2);
+        Task<bool> PerformAsync(bool input1, bool input2);
     }
 }

@@ -33,7 +33,7 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="param">the params passed to this operation</param>
         /// <returns>the result of this operation</returns>
-        double Perform(List<double> param);
+        Task<double> PerformAsync(List<double> param);
     }
     /// <summary>
     /// represents a function-style operation: Name(op1,op2,op3,...) with boolean parameters/return type
@@ -45,7 +45,7 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         /// <param name="param">the params passed to this operation</param>
         /// <returns>the result of this operation</returns>
-        bool Perform(List<bool> param);
+        Task<bool> PerformAsync(List<bool> param);
     }
     public enum OperationPriority
     {

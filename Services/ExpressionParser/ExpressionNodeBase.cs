@@ -19,6 +19,6 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// Returns the result of the evaluated expression
         /// </summary>
         /// <returns></returns>
-        public abstract double Evaluate();
+        public abstract Task<double> EvaluateAsync();
     }
 }

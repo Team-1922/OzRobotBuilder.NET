@@ -15,13 +15,13 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 return OperationPriority.GroupingSymbols;
             }
         }
-        public double Perform(List<double> param)
+        public async Task<double> PerformAsync(List<double> param)
         {
             if (param.Count != ParamCount)
                 throw new ArgumentException($"Incorrect Number of Parameters for Function: \"{Name}\"");
-            return PerformInternal(param);
+            return await PerformInternalAsync(param);
         }
-        protected abstract double PerformInternal(List<double> param);
+        protected abstract Task<double> PerformInternalAsync(List<double> param);
 
         #region Abstract Methods
         public abstract uint ParamCount { get; }

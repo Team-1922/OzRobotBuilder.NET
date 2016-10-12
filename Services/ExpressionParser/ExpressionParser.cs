@@ -370,7 +370,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             if (ContainsDataAccessNodes(tree))
                 OptimizeExpressionTree(tree);
             else
-                tree = new ExpressionToken(tree.Evaluate());
+                tree = new ExpressionToken(tree.EvaluateAsync().Result);
         }
         /// <summary>
         /// This traverses the expression node tree to compress any nodes which are constant (i.e. do not access the model)
@@ -386,7 +386,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
                 if (ContainsDataAccessNodes(tree.Children[i]))
                     OptimizeExpressionTree(tree.Children[i]);
                 else//if it does not contain any of these nodes, evaluate the child and insert a token in its place
-                    tree.Children[i] = new ExpressionToken(tree.Children[i].Evaluate());
+                    tree.Children[i] = new ExpressionToken(tree.Children[i].EvaluateAsync().Result);
             }
         }
         /// <summary>
@@ -418,7 +418,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         {
             try
             {
-                expression.Evaluate();
+                expression.EvaluateAsync().Wait();
                 return true;
             }
             catch(Exception)

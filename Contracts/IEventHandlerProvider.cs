@@ -31,6 +31,6 @@ namespace Team1922.MVVM.Contracts
         /// Executes expression if the condition is met.
         /// </summary>
         /// <param name="force">whether or not to force the expression to execute regardless of if the condition is met</param>
-        void Execute(bool force);
+        Task ExecuteAsync(bool force);
     }
 }

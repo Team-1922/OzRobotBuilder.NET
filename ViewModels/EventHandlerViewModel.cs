@@ -58,7 +58,7 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _conditionExpression?.Evaluate() ?? double.NaN;
+                return _conditionExpression?.EvaluateAsync().Result ?? double.NaN;
             }
         }
 
@@ -66,15 +66,15 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _conditionExpression != null ? _conditionExpression.Evaluate() > 1 : false;
+                return _conditionExpression != null ? _conditionExpression.EvaluateAsync().Result > 1 : false;
             }
         }
 
-        public void Execute(bool force)
+        public async Task ExecuteAsync(bool force)
         {
             if(force || ConditionMet)
             {
-                _expression?.Evaluate();
+                await _expression?.EvaluateAsync();
             }
         }
         #endregion

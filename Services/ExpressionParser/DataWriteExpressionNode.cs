@@ -21,12 +21,12 @@ namespace Team1922.MVVM.Services.ExpressionParser
             _data = data;
         }
 
-        public override double Evaluate()
+        public override async Task<double> EvaluateAsync()
         {
             if (Children[0] is DataAccessExpressionNode)
             {
-                _writeOperation.Perform((Children[0] as DataAccessExpressionNode).Path, Children[1].Evaluate(), _data);
-                return Children[1].Evaluate();
+                await _writeOperation.PerformAsync((Children[0] as DataAccessExpressionNode).Path, await Children[1].EvaluateAsync(), _data);
+                return await Children[1].EvaluateAsync();
             }
             else
                 throw new Exception("First Operand of \"=\" Operation Is ReadOnly!");

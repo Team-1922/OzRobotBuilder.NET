@@ -32,9 +32,9 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// Instead of executing an operation, this accesses a given set of data
         /// </summary>
         /// <returns>the data at <see cref="_path"/> in <see cref="_dataRoot"/></returns>
-        public override double Evaluate()
+        public override async Task<double> EvaluateAsync()
         {
-            return _operation.Perform(Path, _data);
+            return await _operation.PerformAsync(Path, _data);
         }
     }
 }

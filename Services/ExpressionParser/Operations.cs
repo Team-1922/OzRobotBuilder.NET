@@ -52,7 +52,7 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
             }
         }
 
-        protected override double PerformInternal(List<double> param)
+        protected override async Task<double> PerformInternalAsync(List<double> param)
         {
             return Math.Min(Math.Max(param[0], param[1]),param[2]);
         }
@@ -62,12 +62,12 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
     internal class BooleanOr : BinaryOperationBool
     {
         public override string Name => "||";
-        public override bool Perform(bool input1, bool input2) => input1 || input2;
+        public override async Task<bool> PerformAsync(bool input1, bool input2) => input1 || input2;
     }
     internal class BooleanAnd : BinaryOperationBool
     {
         public override string Name => "&&";
-        public override bool Perform(bool input1, bool input2) => input1 && input2;
+        public override async Task<bool> PerformAsync(bool input1, bool input2) => input1 && input2;
     }
 
     #endregion
@@ -80,73 +80,73 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
     {
         public override string Name => "-";
         public override OperationPriority Priority => OperationPriority.MultDiv;
-        public override double Perform(double input1, double input2) => -1 * input2;
+        public override async Task<double> PerformAsync(double input1, double input2) => -1 * input2;
     }
     internal class Addition : BinaryOperationDouble
     {
         public override string Name => "+";
         public override OperationPriority Priority => OperationPriority.AddSub;
-        public override double Perform(double input1, double input2) => input1 + input2;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 + input2;
     }
     internal class Subtraction : BinaryOperationDouble
     {
         public override string Name => "-";
         public override OperationPriority Priority => OperationPriority.AddSub;
-        public override double Perform(double input1, double input2) => input1 - input2;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 - input2;
     }
     internal class Multiplication : BinaryOperationDouble
     {
         public override string Name => "*";
         public override OperationPriority Priority => OperationPriority.MultDiv;
-        public override double Perform(double input1, double input2) => input1 * input2;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 * input2;
     }
     internal class Division : BinaryOperationDouble
     {
         public override string Name => "/";
         public override OperationPriority Priority => OperationPriority.MultDiv;
-        public override double Perform(double input1, double input2) => input1 / input2;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 / input2;
     }
     internal class Modulus : BinaryOperationDouble
     {
         public override string Name => "%";
         public override OperationPriority Priority => OperationPriority.MultDiv;
-        public override double Perform(double input1, double input2) => input1 % input2;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 % input2;
     }
     internal class Power : BinaryOperationDouble
     {
         public override string Name => "^";
         public override OperationPriority Priority => OperationPriority.Exponent;
-        public override double Perform(double input1, double input2) => Math.Pow(input1, input2);
+        public override async Task<double> PerformAsync(double input1, double input2) => Math.Pow(input1, input2);
     }
     internal class Greater : BinaryOperationDouble
     {
         public override string Name => ">";
         public override OperationPriority Priority => OperationPriority.Boolean;
-        public override double Perform(double input1, double input2) => input1 > input2 ? 1 : 0;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 > input2 ? 1 : 0;
     }
     internal class GreaterOrEqual : BinaryOperationDouble
     {
         public override string Name => ">=";
         public override OperationPriority Priority => OperationPriority.Boolean;
-        public override double Perform(double input1, double input2) => input1 >= input2 ? 1 : 0;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 >= input2 ? 1 : 0;
     }
     internal class Less : BinaryOperationDouble
     {
         public override string Name => "<";
         public override OperationPriority Priority => OperationPriority.Boolean;
-        public override double Perform(double input1, double input2) => input1 < input2 ? 1 : 0;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 < input2 ? 1 : 0;
     }
     internal class LessOrEqual : BinaryOperationDouble
     {
         public override string Name => "<=";
         public override OperationPriority Priority => OperationPriority.Boolean;
-        public override double Perform(double input1, double input2) => input1 <= input2 ? 1 : 0;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 <= input2 ? 1 : 0;
     }
     internal class IsEqual : BinaryOperationDouble
     {
         public override string Name => "==";
         public override OperationPriority Priority => OperationPriority.Boolean;
-        public override double Perform(double input1, double input2) => input1 == input2 ? 1 : 0;
+        public override async Task<double> PerformAsync(double input1, double input2) => input1 == input2 ? 1 : 0;
     }
     #endregion
 
@@ -158,11 +158,11 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
     {
         public override string Name => "=";
         public override OperationPriority Priority => OperationPriority.Lowest;
-        public override double Perform(double input1, double input2)
+        public override Task<double> PerformAsync(double input1, double input2)
         {
             throw new Exception("Perform Should Not Be Called on DataAccessWriteOperation");
         }
-        public void Perform(string dataPath, double value, IHierarchialAccessRoot data)
+        public async Task PerformAsync(string dataPath, double value, IHierarchialAccessRoot data)
         {
             data.SetAsync(dataPath, value.ToString());
         }
@@ -172,12 +172,12 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
         public string Name => "[]";
         public uint ParamCount => 1;
         public OperationPriority Priority => OperationPriority.Lowest;
-        public double Perform(List<double> param)
+        public Task<double> PerformAsync(List<double> param)
         {
             throw new Exception("Perform Should Not Be Called on DataAccessOperation");
         }
         //TODO: maybe support more than just doubles in the future?
-        public double Perform(string dataPath, IHierarchialAccessRoot data)
+        public async Task<double> PerformAsync(string dataPath, IHierarchialAccessRoot data)
         {
             double ret;
             if (double.TryParse(data.GetAsync(dataPath).Result, out ret))

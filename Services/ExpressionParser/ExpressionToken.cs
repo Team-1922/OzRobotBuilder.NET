@@ -21,7 +21,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             Value = value;
         }
 
-        public override double Evaluate()
+        public override async Task<double> EvaluateAsync()
         {
             return Value;
         }

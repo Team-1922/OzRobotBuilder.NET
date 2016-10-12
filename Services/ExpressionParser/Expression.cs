@@ -16,9 +16,11 @@ namespace Team1922.MVVM.Services.ExpressionParser
             _rootNode = rootNode;
         }
 
-        public double Evaluate()
+        public async Task<double> EvaluateAsync()
         {
-            return _rootNode?.Evaluate() ?? 0;
+            if (null == _rootNode)
+                return 0.0;
+            return await _rootNode.EvaluateAsync();
         }
 
         public string GetString()
