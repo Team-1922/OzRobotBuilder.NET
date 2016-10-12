@@ -66,7 +66,14 @@ namespace Team1922.OzRobotBuilder.NET
             }
             // wait until we're initialized to handle events
             viewModel.ViewModelChanged += new System.EventHandler(ViewModelChanged);
+            viewModel.PropertyChanged += ViewModel_PropertyChanged;
             EventAggregator<ItemSelectEvent>.Instance.Event += OnItemSelect;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName.Contains('.'))
+                MessageBox.Show(e.PropertyName);
         }
 
         internal struct TestStruct

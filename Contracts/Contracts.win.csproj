@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\AddRobotMapEntryEvent.cs" />
+    <Compile Include="Events\EventPropagationEventArgs.cs" />
+    <Compile Include="Events\EventPropagationEventHandler.cs" />
     <Compile Include="IAnalogInputIOService.cs" />
     <Compile Include="IAnalogInputProvider.cs" />
     <Compile Include="ICANTalonAnalogInputProvider.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="IDigitalInputIOService.cs" />
     <Compile Include="IDigitalInputProvider.cs" />
     <Compile Include="IEventHandlerProvider.cs" />
+    <Compile Include="IEventPropagator.cs" />
     <Compile Include="IExpression.cs" />
     <Compile Include="IExpressionParser.cs" />
     <Compile Include="IHierarchialAccess.cs" />
@@ -68,6 +71,7 @@
     <Compile Include="IPIDControllerSoftwareProvider.cs" />
     <Compile Include="IPIDControllerSRXProvider.cs" />
     <Compile Include="IProvider.cs" />
+    <Compile Include="IProviderRoot.cs" />
     <Compile Include="IPWMOutputIOService.cs" />
     <Compile Include="IPWMOutputProvider.cs" />
     <Compile Include="IQuadEncoderIOService.cs" />
@@ -79,6 +83,7 @@
     <Compile Include="IRobotProvider.cs" />
     <Compile Include="ISubsystemProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocall.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Contracts.win.project.json" />

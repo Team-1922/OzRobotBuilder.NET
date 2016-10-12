@@ -8,7 +8,7 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class PWMOutputViewModel : ViewModelBase<PWMOutput>, IPWMOutputProvider
     {
-        public PWMOutputViewModel(ISubsystemProvider parent) : base(parent)
+        public PWMOutputViewModel(IProvider parent) : base(parent)
         {
         }
 
@@ -44,7 +44,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IProvider
-        public string Name
+        public override string Name
         {
             get
             {

@@ -8,7 +8,7 @@ namespace Team1922.MVVM.ViewModels
 {
     internal class QuadEncoderViewModel : ViewModelBase<QuadEncoder>, IQuadEncoderProvider
     {
-        public QuadEncoderViewModel(ISubsystemProvider parent) : base(parent)
+        public QuadEncoderViewModel(IProvider parent) : base(parent)
         {
         }
 
@@ -136,7 +136,7 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region IProvider
-        public string Name
+        public override string Name
         {
             get
             {

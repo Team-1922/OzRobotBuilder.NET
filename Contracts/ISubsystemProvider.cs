@@ -40,10 +40,6 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         IPIDControllerSoftwareProvider PIDController { get; }
         /// <summary>
-        /// The unique identifier for this subsystem
-        /// </summary>
-        int ID { get; }
-        /// <summary>
         /// Whether this subsystem has a software PID controller.  This is not recommended, but is supported
         /// </summary>
         bool SoftwarePIDEnabled { get; set; }

@@ -10,7 +10,7 @@ namespace Team1922.MVVM.Contracts
     /// <summary>
     /// The interface for the robot viewmodel
     /// </summary>
-    public interface IRobotProvider : IInputProvider, ICompoundProvider, IProvider<Robot>, IHierarchialAccessRoot
+    public interface IRobotProvider : IInputProvider, ICompoundProvider, IProvider<Robot>, IProviderRoot
     {
         /// <summary>
         /// This robot's subsystems
@@ -24,6 +24,10 @@ namespace Team1922.MVVM.Contracts
         /// This robot's event handlers
         /// </summary>
         IObservableCollection<IEventHandlerProvider> EventHandlers { get; }
+        /// <summary>
+        /// This robot's robot map
+        /// </summary>
+        IRobotMapProvider RobotMap { get; }
         /// <summary>
         /// This robot's Team Number
         /// </summary>

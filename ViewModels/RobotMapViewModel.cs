@@ -13,7 +13,7 @@ namespace Team1922.MVVM.ViewModels
     {
         public RobotMapViewModel(IRobotProvider parent) : base(parent)
         {
-            EventAggregator<AddRobotMapEntryEvent>.Instance.Event += OnAddNewEntry;
+            //EventAggregator<AddRobotMapEntryEvent>.Instance.Event += OnAddNewEntry;
         }
 
         #region IRobotMapProvider
@@ -29,6 +29,7 @@ namespace Team1922.MVVM.ViewModels
                 key = GetUnusedKey();
             }
             ModelReference.Add(new RobotMapEntry { Key = key, Value = value });
+            OnPropertyChanged(key);
             UpdateKeyValueList();
         }
         public void RemoveEntry(string key)
@@ -41,15 +42,21 @@ namespace Team1922.MVVM.ViewModels
                     break;
                 }
             }
+            OnPropertyChanged(key);
         }
         #endregion
 
         #region IProvider
-        public string Name
+        public override string Name
         {
             get
             {
                 return "RobotMap";
+            }
+
+            set
+            {
+                throw new InvalidOperationException("Cannot Set Name of Robot Map");
             }
         }
         #endregion
@@ -102,11 +109,11 @@ namespace Team1922.MVVM.ViewModels
         #endregion
 
         #region Private Methods
-        private void OnAddNewEntry(object arg1, AddRobotMapEntryEvent arg2)
+        /*private void OnAddNewEntry(object arg1, AddRobotMapEntryEvent arg2)
         {
             //update the key value list every time a new value is added to keep the datagrid up to date
             UpdateKeyValueList();
-        }
+        }*/
         #endregion
 
         #region Private Members

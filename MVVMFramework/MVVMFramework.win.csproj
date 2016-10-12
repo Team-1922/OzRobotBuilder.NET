@@ -44,6 +44,7 @@
     <Compile Include="BindableBase.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="EventAggregator.cs" />
+    <Compile Include="FacetValidationException.cs" />
     <Compile Include="INamedEnumerable.cs" />
     <Compile Include="NamedList.cs" />
     <Compile Include="ObservableDictionary.cs" />

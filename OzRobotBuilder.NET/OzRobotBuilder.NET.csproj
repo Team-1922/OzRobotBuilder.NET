@@ -79,6 +79,10 @@
     <None Include="TestRobotFiles\TestingFile.robot" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Package.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -179,6 +183,10 @@
       <Project>{a84eb028-205d-414b-b331-39ace0ea6b01}</Project>
       <Name>FakeIOService.win</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.xproj">
+      <Project>{128A4279-F7FA-4E09-AFF6-8CC927E82F3A}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Models.win.csproj">
       <Project>{47b66599-e6f8-46a1-9731-05a099a04fc3}</Project>
       <Name>Models.win</Name>
@@ -198,6 +206,10 @@
     <ProjectReference Include="..\ViewModels\ViewModels.win.csproj">
       <Project>{1727067d-84cc-460f-b301-31356f699ef4}</Project>
       <Name>ViewModels.win</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebFramework\WebFramework.win.csproj">
+      <Project>{ACCD4549-399C-449F-8E88-4BBF3F347D13}</Project>
+      <Name>WebFramework.win</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

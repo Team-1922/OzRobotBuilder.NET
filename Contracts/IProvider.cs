@@ -11,27 +11,25 @@ namespace Team1922.MVVM.Contracts
     /// is mostly a helper interface for the WPF designer so the TreeView can be used on 
     /// all of the viewmodels easily
     /// </summary>
-    public interface IProvider : INotifyPropertyChanged
+    public interface IProvider : INotifyPropertyChanged, IHierarchialAccess
     {
         /// <summary>
         /// The name of this provider; if this provider does have a name
         /// in the model, this does not have to conform to the xml schema "Name" restriction
         /// </summary>
-        string Name { get; }
-        /// <summary>
-        /// Gives read and write access to this provider's properties
-        /// </summary>
-        /// <param name="key">the name of the property to update</param>
-        /// <returns>the value of the property</returns>
-        string this[string key] { get; set; }
+        string Name { get; set; }
         /// <summary>
         /// This is the top-level parent this class belongs to
         /// </summary>
-        IHierarchialAccess TopParent { get; }
+        IProviderRoot TopParent { get; }
         /// <summary>
         /// The parent this provider belongs to
         /// </summary>
         IProvider Parent { get; }
+        /// <summary>
+        /// The path to this object in the tree
+        /// </summary>
+        string FullyQualifiedName { get; }
         /// <summary>
         /// Used for json serialization of models
         /// </summary>
@@ -43,9 +41,14 @@ namespace Team1922.MVVM.Contracts
         /// <param name="text">the json text to deserialize</param>
         void SetModelJson(string text);
         /// <summary>
+        /// Expected to be exactly the same as <see cref="GetModelJson"/>
+        /// </summary>
+        /// <returns></returns>
+        string ToString();
+        /// <summary>
         /// The model instance of this class
         /// </summary>
-        //object ModelReference { get; set; }
+        object ModelReference { get; set; }
     }
     /// <summary>
     /// This gives the provider a strongly-typed model instance associated with it.

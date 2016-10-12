@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Team1922.MVVM.Contracts;
+using Team1922.MVVM.Contracts.Events;
 using Team1922.MVVM.Framework;
 using Team1922.MVVM.Models;
 using Team1922.MVVM.Models.XML;
@@ -20,17 +21,24 @@ namespace Team1922.MVVM.ViewModels
     /// </summary>
     public class VMKeyValuePair : IDataErrorInfo, INotifyPropertyChanged
     {
-        public VMKeyValuePair(string key, ViewModelBase vm)
+        public VMKeyValuePair(string key, IProvider provider)
         {
-            Set(key, vm);
+            Set(key, provider);
         }
-        public void Set(string key, ViewModelBase vm)
+        public void Set(string key, IProvider provider)
         {
-            if (vm == null)
-                throw new ArgumentNullException("vm", "ViewModel on VMKeyValuePair must not be null");
-            _vm = vm;
+            if (provider == null)
+                throw new ArgumentNullException("root", "IProviderRoot on VMKeyValuePair must not be null");
+            _root = provider.TopParent;
             Key = key;
-            _vm.PropertyChanged += _vm_PropertyChanged;
+
+            string fqn = provider.FullyQualifiedName;
+            if (fqn == "")
+                _fullKey = key;
+            else
+                _fullKey = $"{fqn}.{key}";
+
+            _root.PropertyChanged += _vm_PropertyChanged;
         }
 
         private void _vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -39,7 +47,8 @@ namespace Team1922.MVVM.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
         }
 
-        ViewModelBase _vm;
+        IProviderRoot _root;
+        private string _fullKey;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -48,11 +57,11 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return _vm[Key];
+                return _root.GetAsync(_fullKey).Result;
             }
             set
             {
-                _vm[Key] = value;
+                _root.SetAsync(_fullKey, value).Wait();
             }
         }
 
@@ -68,7 +77,9 @@ namespace Team1922.MVVM.ViewModels
         {
             get
             {
-                return (_vm as IDataErrorInfo)[Key];
+                if (_root is IDataErrorInfo)
+                    return (_root as IDataErrorInfo)[Key];
+                return "";
             }
         }
     }
@@ -81,27 +92,45 @@ namespace Team1922.MVVM.ViewModels
     /// This wraps the <see cref="BindableBase"/>, and the ability to access values based on a string key along
     /// with enumerate through it with read AND write access to the value
     /// </summary>
-    public abstract class ViewModelBase : BindableBase, IHierarchialAccess, IDataErrorInfo
+    public abstract class ViewModelBase : BindableBase, IHierarchialAccess, IDataErrorInfo, IProvider
     {
         private List<string> _keys = new List<string>();
-        VMKeyValueList _keyValueList = new VMKeyValueList();
+        private VMKeyValueList _keyValueList;
+        private VMKeyValueList KeyValueList
+        {
+            get
+            {
+                if(null == _keyValueList)
+                {
+                    UpdateKeyValueList();
+                }
+                return _keyValueList;
+            }
+
+            set
+            {
+                _keyValueList = value;
+            }
+        }
         //private int _enumeratorIndex = -1;
 
         private IProvider _parent;
-        protected IFacet itemNameFacet;
+        protected IFacet pathNameFacet;
 
         protected ViewModelBase(IProvider parent)
         {
-            itemNameFacet = TypeRestrictions.GetValidationObjectFromTypeName("ItemName");
+            pathNameFacet = TypeRestrictions.GetValidationObjectFromTypeName("PathName");
             _parent = parent;
-            UpdateKeyValueList();
             PropertyChanged += ViewModelBase_PropertyChanged;
         }
 
         protected void UpdateKeyValueList()
         {
             _keys = GetOverrideKeys();
-            _keyValueList.Clear();
+            if (null == _keyValueList)
+                _keyValueList = new VMKeyValueList();
+            else
+                _keyValueList.Clear();
             foreach(var key in _keys)
             {
                 _keyValueList.Add(new VMKeyValuePair(key, this));
@@ -113,15 +142,20 @@ namespace Team1922.MVVM.ViewModels
         }
         public VMKeyValueList GetEditableKeyValueList()
         {
-            return _keyValueList;
+            return KeyValueList;
         }
 
+        /*protected void RegisterChildEventPropagation(IEventPropagator child)
+        {
+            child.Propagated += Child_Propagated;
+        }*/
+        
         #region IProvider
-        public IHierarchialAccess TopParent
+        public IProviderRoot TopParent
         {
             get
             {
-                return Parent?.TopParent ?? this;
+                return Parent?.TopParent ?? this as IProviderRoot;
             }
         }
         public IProvider Parent
@@ -131,9 +165,22 @@ namespace Team1922.MVVM.ViewModels
                 return _parent;
             }
         }
+        public string FullyQualifiedName
+        {
+            get
+            {
+                var parentFqn = Parent?.FullyQualifiedName;
+                return Parent != null ? parentFqn == "" ? $"{Name}" : $"{Parent.FullyQualifiedName}.{Name}" : $"";
+            }
+        }
+        public abstract string Name { get; set; }
+        private string _modelJson = "";
         public string GetModelJson()
         {
-            return JsonSerialize(ModelReference);
+            // if(_modelJson == "")
+            //     return _modelJson = JsonSerialize(ModelReference);
+            // return _modelJson;
+            return JsonSerialize(ModelReference);// TODO: how can I utilize the InvalidateModelJson method now that Event Propagation is only done by the RobotViewModelBase?
         }
         public void SetModelJson(string text)
         {
@@ -141,12 +188,21 @@ namespace Team1922.MVVM.ViewModels
             {
                 //deserialize the model
                 ModelReference = JsonDeserialize(text);
+                _modelJson = text;
             }
             catch (Exception e)
             {
                 //this means an exception was thrown while loading (whether bad json, OR type validation)
                 throw new ArgumentException("Invalid Json", "text");
             }
+        }
+        public override string ToString()
+        {
+            return GetModelJson();
+        }
+        private void InvalidateModelJson()
+        {
+            _modelJson = "";
         }
         private object _modelReference;
         public object ModelReference
@@ -217,7 +273,7 @@ namespace Team1922.MVVM.ViewModels
         public bool KeyExists(string key)
         {
             //make sure this is a valid path
-            TypeRestrictions.Validate(itemNameFacet, key);
+            TypeRestrictions.Validate(pathNameFacet, key);
 
             return _keyExists(key);
         }
@@ -233,26 +289,11 @@ namespace Team1922.MVVM.ViewModels
                 return _keys.Contains(thisMember[0]);
             }
 
-            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
-            //  and not every time they would be accessed in the other view-models
-
-            //if this is a compound provider, loop through all of its sub-view-models
-            if (this is ICompoundProvider)
-            {
-                var me = this as ICompoundProvider;
-                foreach (var child in me.Children)
-                {
-                    if (child.Name == thisMember[0])
-                    {
-                        //if this is also a hierarchial access, which is almost definitely is, then call the child's function
-                        if (child is IHierarchialAccess)
-                        {
-                            return (child as IHierarchialAccess).KeyExists(key);
-                        }
-                    }
-                }
-            }
-            throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            return KeyExistsInternal(thisMember[0], thisMember[1]);
+        }
+        protected virtual bool KeyExistsInternal(string propName, string remainingKey)
+        {
+            return false;
         }
 
         /// <summary>
@@ -266,14 +307,14 @@ namespace Team1922.MVVM.ViewModels
             get
             {
                 //make sure this is a valid path
-                TypeRestrictions.Validate(itemNameFacet, key);
+                TypeRestrictions.Validate(pathNameFacet, key);
                 return ValueReadWrite(key, true);
             }
 
             set
             {
                 //make sure this is a valid path
-                TypeRestrictions.Validate(itemNameFacet, key);
+                TypeRestrictions.Validate(pathNameFacet, key);
                 ValueReadWrite(key, false, value);
             }
         }
@@ -285,8 +326,17 @@ namespace Team1922.MVVM.ViewModels
         /// <param name="read"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private string ValueReadWrite(string key, bool read, string value="")
+        protected string ValueReadWrite(string key, bool read, string value="")
         {
+            //if this is blank, just return this; this only happens on the top-level node
+            if (key == "")
+            {
+                if (read)
+                    return GetModelJson();
+                else
+                    SetModelJson(value);
+            }
+
             var thisMember = key.Split(new char[] { '.' }, 2, StringSplitOptions.None);
             if (null == thisMember)
                 throw new ArgumentException($"\"{key}\" Is an Invalid Property");
@@ -298,31 +348,11 @@ namespace Team1922.MVVM.ViewModels
                     SetValue(key, value);
                 return "";
             }
-
-            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
-            //  and not every time they would be accessed in the other view-models
-
-            //if this is a compound provider, loop through all of its sub-view-models
-            if (this is ICompoundProvider)
-            {
-                var me = this as ICompoundProvider;
-                foreach (var child in me.Children)
-                {
-                    if (child.Name == thisMember[0])
-                    {
-                        //if this is also a hierarchial access, which is almost definitely is, then call the child's function
-                        if (child is IHierarchialAccess)
-                        {
-                            if (read)
-                                return (child as IHierarchialAccess)[thisMember[1]];
-                            else
-                                (child as IHierarchialAccess)[thisMember[1]] = value;
-                            return "";
-                        }
-                    }
-                }
-            }
-            throw new ArgumentException($"\"{key}\" Is Inaccessible or Does Not Exist");
+            return ValueReadWriteOverride(thisMember[0], thisMember[1], read, value);
+        }
+        protected virtual string ValueReadWriteOverride(string propName, string remainingKey, bool read, string value)
+        {
+            throw new ArgumentException($"\"{propName}\" Is Inaccessible or Does Not Exist");
         }
         #endregion
 
@@ -402,17 +432,7 @@ namespace Team1922.MVVM.ViewModels
         protected virtual List<string> GetOverrideKeys()
         {
             return (from x in GetType().GetProperties()
-                    where x.Name != "Properties"
-                    && x.Name != "Children"
-                    && x.Name != "this[string]"
-                    && x.Name != "Current"
-                    && x.Name != "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
-                    && x.Name != "Count"
-                    && x.Name != "IsReadOnly"
-                    && x.Name != "ModelTypeName"
-                    && x.Name != "TopParent"
-                    && x.Name != "Parent"
-                    && x.Name != "ModelReference"
+                    where !IsOnNameBlacklist(x.Name)
                     select x.Name).ToList();
         }
         /// <summary>
@@ -457,24 +477,91 @@ namespace Team1922.MVVM.ViewModels
         }
         #endregion
 
+        /*#region IEventPropagator
+        private event EventPropagationEventHandler _propagatedNoDuplicates;
+
+        public event EventPropagationEventHandler Propagated
+        {
+            add
+            {
+                if (null == _propagatedNoDuplicates || !_propagatedNoDuplicates.GetInvocationList().Contains(value))
+                    _propagatedNoDuplicates += value;
+            }
+
+            remove
+            {
+                _propagatedNoDuplicates -= value;
+            }
+        }
+
+        protected void OnEventPropagated(EventPropagationEventArgs e)
+        {
+            InvalidateModelJson();
+            if (null == ModelReference)
+                return;
+
+            //add our name to the name; if this is the top-level, then don't add our name so the IHierarchialAccess works correctly
+            e.PropertyName = Parent != null ? e.PropertyName == "" ? Name : $"{Name}.{e.PropertyName}" : e.PropertyName;
+            _propagatedNoDuplicates?.Invoke(e);
+        }
+        #endregion*/
+
         #region Private Methods
         private void ViewModelBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            InvalidateModelJson();
             if (e.PropertyName == "ModelReference")
-                OnModelChange();
+                OnModelChange();            
         }
         #endregion
-        
 
-        public static JsonSerializerSettings Settings { get; } = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
+        /*#region Event Propagaiton
+        private void Child_Propagated(EventPropagationEventArgs e)
+        {
+            OnEventPropagated(e);
+        }
+        #endregion*/
+
+        #region BindableBase        
+        protected override bool SetProperty<T>(ref T item, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(item, value)) return false;
+            item = value;
+            OnPropertyChanged(propertyName);
+            //OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Set, propertyName, value.ToString()));
+            return true;
+        }
+        #endregion
+
+        /// <summary>
+        /// Checks to see whether the given property name is on the blacklist of internal property names
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool IsOnNameBlacklist(string name)
+        {
+            return name == "Properties"
+                       || name == "Children"
+                       || name == "this[string]"
+                       || name == "Current"
+                       || name == "Item" //This is a weird one.  All of them seem to have it with the one exception of the "RobotViewModelBase"
+                       || name == "Count"
+                       || name == "IsReadOnly"
+                       || name == "ModelTypeName"
+                       || name == "TopParent"
+                       || name == "Parent"
+                       || name == "ModelReference"
+                       || name == "FullyQualifiedName";
+        }
     }
 
-    public abstract class ViewModelBase<ModelType> : ViewModelBase
+    public abstract class ViewModelBase<ModelType> : ViewModelBase, IProvider<ModelType>
     {
         public ViewModelBase(IProvider parent) : base(parent)
         {
         }
-
+        
+        #region IProvider<ModelType>
         public virtual new ModelType ModelReference
         {
             get
@@ -487,6 +574,118 @@ namespace Team1922.MVVM.ViewModels
                 base.ModelReference = value;
             }
         }
+        #endregion
     }
 
+    public abstract class CompoundViewModelBase : ViewModelBase, ICompoundProvider
+    {
+        public CompoundViewModelBase(IProvider parent) : base(parent)
+        {
+            //Children.CollectionChanged += Children_CollectionChanged;
+        }
+
+        #region ICompoundProvider
+        public abstract IObservableCollection Children { get; }
+        public bool ContainsDescendentNamed(string name)
+        {
+            foreach (IProvider child in Children)
+            {
+                if (child.Name == name)
+                    return true;
+                if (child is ICompoundProvider)
+                {
+                    var splitName = name.Split(new char[] { '.' }, 2, StringSplitOptions.None);
+                    if (splitName.Length == 1 || splitName.Length == 0)
+                        return false;
+                    return (child as ICompoundProvider).ContainsDescendentNamed(splitName[1]);
+                }
+            }
+            return false;
+        }
+        #endregion
+
+        /*#region EventPropagation
+        protected void RegisterChildrenEventPropagation()
+        {
+            foreach (IEventPropagator child in Children)
+            {
+                if (child != null)
+                    RegisterChildEventPropagation(child);
+            }
+        }
+        #endregion*/
+
+        #region ViewModelBase
+        protected override bool KeyExistsInternal(string propName, string remainingKey)
+        {
+            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
+            //  and not every time they would be accessed in the other view-models
+            
+            foreach (IProvider child in Children)
+            {
+                if (child.Name == propName)
+                {
+                    return (child as IHierarchialAccess).KeyExists(remainingKey);
+                }
+            }
+            return base.KeyExistsInternal(propName, remainingKey);
+        }
+        protected override string ValueReadWriteOverride(string propName, string remainingKey, bool read, string value)
+        {
+
+            //while it might make sense to do this hierarchially, putting this code here means any new additions to provider interfaces only need to change here
+            //  and not every time they would be accessed in the other view-models
+
+            //if this is a compound provider, loop through all of its sub-view-models
+            foreach (IProvider child in Children)
+            {
+                if (child.Name == propName)
+                {
+                    if (read)
+                    {
+                        return child[remainingKey];
+                    }
+                    else
+                    {
+                        child[remainingKey] = value;
+                        return "";
+                    }
+                }
+            }
+            return base.ValueReadWriteOverride(propName, remainingKey, read, value);
+        }
+        #endregion
+        
+       /* #region Private Methods
+        private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RegisterChildrenEventPropagation();
+
+            //propagate this whole object to be reuploaded (potentially a better way to do this would be with individual delete/post requests
+            OnEventPropagated(new EventPropagationEventArgs(Protocall.Method.Set, "", ToString()));
+        }
+        #endregion*/
+    }
+
+    public abstract class CompoundViewModelBase<ModelType> : CompoundViewModelBase, ICompoundProvider, IProvider<ModelType>
+    {
+        public CompoundViewModelBase(IProvider parent) : base(parent)
+        {
+        }
+
+        #region IProvider<ModelType>
+        public virtual new ModelType ModelReference
+        {
+            get
+            {
+                return (ModelType)base.ModelReference;
+            }
+
+            set
+            {
+                base.ModelReference = value;
+            }
+        }
+        #endregion
+    }
 }

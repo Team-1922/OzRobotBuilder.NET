@@ -1,0 +1,13 @@
+﻿{
+  "runtimes": {
+    "win": {}
+  },
+  "frameworks": {
+    "net461": {}
+  },
+  "dependencies": {
+    "Microsoft.AspNet.WebApi": "5.2.3",
+    "Microsoft.Net.Http": "2.2.29",
+    "Microsoft.Net.Http.Server": "0.1.0"
+  }
+}
