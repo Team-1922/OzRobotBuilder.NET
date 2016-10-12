@@ -39,6 +39,17 @@ namespace Team1922.WebFramework.Sockets
         }
 
         /// <summary>
+        /// Whether or not the client is connected
+        /// </summary>
+        public bool Connected
+        {
+            get
+            {
+                return _client.Connected;
+            }
+        }
+
+        /// <summary>
         /// Closes the connection to the server
         /// </summary>
         /// <returns></returns>

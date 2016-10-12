@@ -32,5 +32,10 @@ namespace Team1922.WebFramework.Sockets
         /// The remote endpoint of the connection
         /// </summary>
         IPEndPoint RemoteEndPoint { get; }
+
+        /// <summary>
+        /// Whether or not the client is connected
+        /// </summary>
+        bool Connected { get; }
     }
 }
