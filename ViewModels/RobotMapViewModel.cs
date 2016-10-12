@@ -81,7 +81,9 @@ namespace Team1922.MVVM.ViewModels
             {
                 if (ModelReference[i].Key == key)
                 {
-                    ModelReference[i].Value = value;
+                    var temp = ModelReference[i].Value;
+                    SetProperty(ref temp, value, key);
+                    ModelReference[i].Value = temp;
                     return;
                 }
             }
