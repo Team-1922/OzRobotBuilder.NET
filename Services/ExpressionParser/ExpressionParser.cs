@@ -80,10 +80,10 @@ namespace Team1922.MVVM.Services.ExpressionParser
             //is this data-access?
             else if(expression[i] == '[')
             {
-                if(!ExpressionParserService.DataAccessEnabled)
+                /*if(!ExpressionParserService.DataAccessEnabled)
                 {
                     throw new Exception("Attempt to Access Data From Expression Parser when Data Access is Not Enabled; Set \"ExpressionParserService.DataAccessEnabled\" to \"true\"!");
-                }
+                }*/
 
                 //get the path within the brackets
                 var path = GetGroupStatement(expression, ref i, '[', ']');
