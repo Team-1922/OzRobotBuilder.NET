@@ -26,7 +26,8 @@ namespace Team1922.WebFramework.Sockets
 
         private async void Data_Propagated(MVVM.Contracts.Events.EventPropagationEventArgs e)
         {
-            await _client.SendAsync(new Request() { Body = e.PropertyValue, Method = e.Method, Path = e.PropertyName });
+            if(_client.Connected)
+                await _client.SendAsync(new Request() { Body = e.PropertyValue, Method = e.Method, Path = e.PropertyName });
         }
 
         /// <summary>
