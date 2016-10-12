@@ -24,14 +24,14 @@ namespace Team1922.MVVM.Contracts
         /// <param name="data">the instance of the data to use when using data-references</param>
         /// <param name="compiledExpression">the compiled expression; null if failed</param>
         /// <returns>the success of the conversion</returns>
-        bool TryParseExpression(string expression, IHierarchialAccess data, out IExpression compiledExpression);
+        bool TryParseExpression(string expression, IHierarchialAccessRoot data, out IExpression compiledExpression);
         /// <summary>
         /// Parses a given string into a compiled expression, throws exception upon error
         /// </summary>
         /// <param name="expression">the expression to parse</param>
         /// <param name="data">the instance of the data to use when using data-references</param>
         /// <returns>a compiled expression</returns>
-        IExpression ParseExpression(string expression, IHierarchialAccess data);
+        IExpression ParseExpression(string expression, IHierarchialAccessRoot data);
         /// <summary>
         /// Checks to make sure this expression is still valid if the model changed in a significant way
         /// </summary>

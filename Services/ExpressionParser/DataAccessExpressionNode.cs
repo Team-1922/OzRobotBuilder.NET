@@ -8,12 +8,12 @@ using Team1922.MVVM.Services.ExpressionParser.Operations;
 namespace Team1922.MVVM.Services.ExpressionParser
 {
     /// <summary>
-    /// Represents an expression node which accesses data derived from <see cref="IHierarchialAccess"/>
+    /// Represents an expression node which accesses data derived from <see cref="IHierarchialAccessRoot"/>
     /// </summary>
     internal class DataAccessExpressionNode : ExpressionNodeBase
     {
         private DataAccessOperation _operation;
-        IHierarchialAccess _data;
+        IHierarchialAccessRoot _data;
 
         public string Path { get; }
 
@@ -21,7 +21,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// Constructs a new instance with the given data and path
         /// </summary>
         /// <param name="path">the location (path) of that data to access</param>
-        public DataAccessExpressionNode(string path, DataAccessOperation operation, IHierarchialAccess data)
+        public DataAccessExpressionNode(string path, DataAccessOperation operation, IHierarchialAccessRoot data)
         {
             _operation = operation;
             Path = path;

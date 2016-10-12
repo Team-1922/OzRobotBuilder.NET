@@ -13,9 +13,9 @@ namespace Team1922.MVVM.Services.ExpressionParser
     internal class DataWriteExpressionNode : ExpressionNodeBase
     {
         DataAccessWriteOperation _writeOperation;
-        IHierarchialAccess _data;
+        IHierarchialAccessRoot _data;
 
-        public DataWriteExpressionNode(DataAccessWriteOperation operation, IHierarchialAccess data)
+        public DataWriteExpressionNode(DataAccessWriteOperation operation, IHierarchialAccessRoot data)
         {
             _writeOperation = operation;
             _data = data;

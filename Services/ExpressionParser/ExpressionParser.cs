@@ -53,7 +53,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// <param name="expression">the expression to loop through</param>
         /// <param name="i">the current index of <paramref name="expression"/></param>
         /// <returns>a node representing the operand</returns>
-        private ExpressionNodeBase GetOperand(string expression, IHierarchialAccess data, ref int i)
+        private ExpressionNodeBase GetOperand(string expression, IHierarchialAccessRoot data, ref int i)
         {
             //if this starts with unary "-" operator
             if(expression[i] == '-')
@@ -254,7 +254,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
         /// </summary>
         /// <param name="expression">the expression to convert</param>
         /// <returns>the converted expression</returns>
-        private ExpressionNodeBase Group(string expression, IHierarchialAccess data)
+        private ExpressionNodeBase Group(string expression, IHierarchialAccessRoot data)
         {
             //create the root node
             ExpressionNodeBase tree = null;
@@ -434,7 +434,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             _operations.Add(operation);
         }
 
-        public bool TryParseExpression(string expression, IHierarchialAccess data, out IExpression compiledExpression)
+        public bool TryParseExpression(string expression, IHierarchialAccessRoot data, out IExpression compiledExpression)
         {
             try
             {
@@ -448,7 +448,7 @@ namespace Team1922.MVVM.Services.ExpressionParser
             }
         }
         
-        public IExpression ParseExpression(string expression, IHierarchialAccess data)
+        public IExpression ParseExpression(string expression, IHierarchialAccessRoot data)
         {
             //start by removing all of the spaces
             string condensed = new string((from ch in expression.Trim() where ch != ' ' select ch).ToArray());

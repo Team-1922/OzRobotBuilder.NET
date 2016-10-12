@@ -162,9 +162,9 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
         {
             throw new Exception("Perform Should Not Be Called on DataAccessWriteOperation");
         }
-        public void Perform(string dataPath, double value, IHierarchialAccess data)
+        public void Perform(string dataPath, double value, IHierarchialAccessRoot data)
         {
-            data[dataPath] = value.ToString();
+            data.SetAsync(dataPath, value.ToString());
         }
     }
     internal class DataAccessOperation : IOperationDouble
@@ -177,10 +177,10 @@ namespace Team1922.MVVM.Services.ExpressionParser.Operations
             throw new Exception("Perform Should Not Be Called on DataAccessOperation");
         }
         //TODO: maybe support more than just doubles in the future?
-        public double Perform(string dataPath, IHierarchialAccess data)
+        public double Perform(string dataPath, IHierarchialAccessRoot data)
         {
             double ret;
-            if (double.TryParse(data[dataPath], out ret))
+            if (double.TryParse(data.GetAsync(dataPath).Result, out ret))
                 return ret;
             throw new Exception($"DataAccessExpressionNode({dataPath}) Does Not Contain Numerical Value!");
         }
