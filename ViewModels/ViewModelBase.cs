@@ -38,7 +38,7 @@ namespace Team1922.MVVM.ViewModels
             else
                 _fullKey = $"{fqn}.{key}";
 
-            _root.PropertyChanged += _vm_PropertyChanged;
+            provider.PropertyChanged += _vm_PropertyChanged;
         }
 
         private void _vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
