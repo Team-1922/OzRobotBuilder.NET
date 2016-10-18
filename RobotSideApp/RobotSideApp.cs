@@ -76,6 +76,9 @@ namespace RobotSideApp
         {
             while (IsOperatorControl && IsEnabled)
             {
+                //update the input providers
+                _viewModel.UpdateInputValues();
+
                 //loop the viewmodel update thingy
                 _viewModel.RunBackgroundThread(false);
             }

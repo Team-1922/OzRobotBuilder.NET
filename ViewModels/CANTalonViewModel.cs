@@ -205,8 +205,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.ForwardLimitSwitchEnabled;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ForwardLimitSwitchEnabled = value);
+                SetProperty(ref temp, value);
                 ModelReference.ForwardLimitSwitchEnabled = temp;
+                IOService.Instance.CANTalons[ID].EnableLimitSwitches(value, ReverseLimitSwitchEnabled);
             }
         }
 
@@ -305,8 +306,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.NominalForwardVoltage;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].NominalForwardVoltage = value);
+                SetProperty(ref temp, value);
                 ModelReference.NominalForwardVoltage = temp;
+                IOService.Instance.CANTalons[ID].ConfigureNominalVoltage(value, NominalReverseVoltage);
             }
         }
 
@@ -323,8 +325,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.NominalReverseVoltage;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].NominalReverseVoltage = value);
+                SetProperty(ref temp, value);
                 ModelReference.NominalReverseVoltage = temp;
+                IOService.Instance.CANTalons[ID].ConfigureNominalVoltage(NominalForwardVoltage, value);
             }
         }
 
@@ -341,8 +344,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.PeakForwardVoltage;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].PeakForwardVoltage = value);
+                SetProperty(ref temp, value);
                 ModelReference.PeakForwardVoltage = temp;
+                IOService.Instance.CANTalons[ID].ConfigurePeakVoltage(value, PeakReverseVoltage);
             }
         }
 
@@ -359,8 +363,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.PeakReverseVoltage;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].PeakReverseVoltage = value);
+                SetProperty(ref temp, value);
                 ModelReference.PeakReverseVoltage = temp;
+                IOService.Instance.CANTalons[ID].ConfigurePeakVoltage(PeakForwardVoltage, value);
             }
         }
 
@@ -377,8 +382,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.ReverseClosedLoopOutput;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseClosedLoopOutput = value);
+                SetProperty(ref temp, value);
                 ModelReference.ReverseClosedLoopOutput = temp;
+                IOService.Instance.CANTalons[ID].ReverseCloseLoopOutput = value;
             }
         }
 
@@ -395,8 +401,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.ReverseLimitSwitchEnabled;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ReverseLimitSwitchEnabled = value);
+                SetProperty(ref temp, value);
                 ModelReference.ReverseLimitSwitchEnabled = temp;
+                IOService.Instance.CANTalons[ID].EnableLimitSwitches(ForwardLimitSwitchEnabled, value);
             }
         }
 
@@ -544,8 +551,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.ZeroSensorPositionOnIndexEnabled;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ZeroSensorPositionOnIndexEnabled = value);
+                SetProperty(ref temp, value);
                 ModelReference.ZeroSensorPositionOnIndexEnabled = temp;
+                IOService.Instance.CANTalons[ID].EnableZeroSensorPositionOnIndex(value, ZeroSensorPositionOnRisingEdge);
             }
         }
 
@@ -562,8 +570,9 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.ZeroSensorPositionOnRisingEdge;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].ZeroSensorPositionOnRisingEdge = value);
+                SetProperty(ref temp, value);
                 ModelReference.ZeroSensorPositionOnRisingEdge = temp;
+                IOService.Instance.CANTalons[ID].EnableZeroSensorPositionOnIndex(ZeroSensorPositionOnIndexEnabled, value);
             }
         }
 

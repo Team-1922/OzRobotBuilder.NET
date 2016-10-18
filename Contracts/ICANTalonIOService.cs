@@ -12,19 +12,22 @@ namespace Team1922.MVVM.Contracts
     public interface ICANTalonIOService : IOutputService
     {
         /// <summary>
-        /// The 0th PID config 
+        /// The enabled PID config 
         /// </summary>
-        PIDControllerSRX PIDConfig0 { get; }
-        /// <summary>
-        /// The 1st PID config
-        /// </summary>
-        PIDControllerSRX PIDConfig1 { get; }
+        double P { get; set; }
+        double I { get; set; }
+        double D { get; set; }
+        double F { get; set; }
+        int IZone { get; set; }
+        double CloseLoopRampRate { get; set; }
+        int AllowableCloseLoopError { set; }
+        CANTalonDifferentiationLevel SourceType { get; set; }
         /// <summary>
         /// The enabled PID profile (0=false;1=true)
         /// </summary>
         bool EnabledPIDProfile { get; set; }
         /// <summary>
-        /// The closed-loop feedback device
+        /// The close-loop feedback device
         /// </summary>
         CANTalonFeedbackDevice FeedbackDevice { get; set; }
         /// <summary>
@@ -36,34 +39,21 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         CANTalonNeutralMode NeutralMode { get; set; }
         /// <summary>
-        /// Enables Talon SRX to automatically zero the Sensor Position whenever an edge
-        /// is detected on the index signal.
-        /// </summary>
-        bool ZeroSensorPositionOnIndexEnabled { get; set; }
-        /// <summary>
-        /// if <see cref="ZeroSensorPositionOnIndexEnabled"/> is true, then this is whether or not to zero the sensor on the rising edge or the falling edge
-        /// </summary>
-        bool ZeroSensorPositionOnRisingEdge { get; set; }
-        /// <summary>
         /// whether or not to reverse the input sensor (effectively multiplies the sensor input by -1)
         /// </summary>
-        bool ReverseSensor { get; set; }
+        bool ReverseSensor { set; }
         /// <summary>
-        /// Whether or not to reverse the output in closed-loop mode
+        /// Whether or not to reverse the output in close-loop mode
         /// </summary>
-        bool ReverseClosedLoopOutput { get; set; }
+        bool ReverseCloseLoopOutput { set; }
         /// <summary>
         /// Whether or not to reverse the ouput in Percent VBus mode
         /// </summary>
         bool ReversePercentVBusOutput { get; set; }
         /// <summary>
-        /// Whether the forward limit switch (hardware) is enabled
+        /// Whether the limit switches (hardware) are enabled
         /// </summary>
-        bool ForwardLimitSwitchEnabled { get; set; }
-        /// <summary>
-        /// Whether to reverse limit switch (hardware) is enabled
-        /// </summary>
-        bool ReverseLimitSwitchEnabled { get; set; }
+        void EnableLimitSwitches(bool forward, bool reverse);
         /// <summary>
         /// Whether the forward limit (software) is enabled
         /// </summary>
@@ -81,21 +71,25 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         double ReverseSoftLimit { get; set; }
         /// <summary>
-        /// The nominal forward voltage (typically 0V)
+        /// Sets the nominal voltages
         /// </summary>
-        double NominalForwardVoltage { get; set; }
+        /// <param name="forward">the nominal forward voltage (typically +0)</param>
+        /// <param name="reverse">the nominal reverse voltage (typically +0)</param>
+        void ConfigureNominalVoltage(double forward, double reverse);
         /// <summary>
-        /// The nominal reverse voltage (typicall 0V)
+        /// Sets the peak voltages
         /// </summary>
-        double NominalReverseVoltage { get; set; }
+        /// <param name="forward">the peak forward voltage (typically +12)</param>
+        /// <param name="reverse">the peak reverse voltage (typically -12)</param>
+        void ConfigurePeakVoltage(double forward, double reverse);
+
         /// <summary>
-        /// The peak forward voltage (typically 12V)
+        /// Enables Talon SRX to automatically zero the Sensor Position whenever an edge
+        /// is detected on the index signal.
         /// </summary>
-        double PeakForwardVoltage { get; set; }
-        /// <summary>
-        /// The peak reverse voltage (typically -12V)
-        /// </summary>
-        double PeakReverseVoltage { get; set; }
+        /// <param name="enable">whether to enable this feature</param>
+        /// <param name="risingEdge">whether or not to zero the sensor on the rising edge or the falling edge</param>
+        void EnableZeroSensorPositionOnIndex(bool enable, bool risingEdge);
 
         /// <summary>
         /// The state of the forward limit switch (hardware)
@@ -105,15 +99,6 @@ namespace Team1922.MVVM.Contracts
         /// The state of the reverse limit switch (hardware)
         /// </summary>
         bool ReverseLimitSwitch { get; }
-
-        /// <summary>
-        /// The state of the forward soft limit (software)
-        /// </summary>
-        bool ForwardSoftLimitTripped { get; }
-        /// <summary>
-        /// The state of the reverse soft limit (software)
-        /// </summary>
-        bool ReverseSoftLimitTripped { get; }
 
         /// <summary>
         /// The encoder value (in encoder units)

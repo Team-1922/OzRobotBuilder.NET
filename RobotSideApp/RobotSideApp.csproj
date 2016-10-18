@@ -64,6 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOService\CANTalonIOService.cs" />
+    <Compile Include="IOService\RobotIOService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="RobotSideApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +75,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.win.csproj">
+      <Project>{3112A258-4D51-4C9F-8ACB-640AE351EE01}</Project>
+      <Name>Contracts.win</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Models\Models.win.csproj">
       <Project>{47B66599-E6F8-46A1-9731-05A099A04FC3}</Project>
       <Name>Models.win</Name>
