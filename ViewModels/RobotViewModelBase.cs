@@ -11,12 +11,19 @@ using Team1922.MVVM.Contracts.Events;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Collections.Specialized;
+using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace Team1922.MVVM.ViewModels
 {
     public class RobotViewModelBase : CompoundViewModelBase<Robot>, IRobotProvider, IDisposable
     {
-        public RobotViewModelBase() : base(null)
+        /// <summary>
+        /// Constructs a new RobotViewModelbase instance
+        /// </summary>
+        /// <param name="runBackgroundAccessThreads">whether or not to start the background threads for <see cref="IHierarchialAccessRoot"/></param>
+        public RobotViewModelBase(bool runBackgroundAccessThreads = true) : base(null)
         {
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider, Subsystem>("Subsystems", this, (Subsystem model) => { return new SubsystemViewModel(_subsystemProviders) { ModelReference = model }; });
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider, Models.EventHandler>("EventHandlers", this, (Models.EventHandler model) => { return new EventHandlerViewModel(_eventHandlerProviders) { ModelReference = model }; });
@@ -24,10 +31,35 @@ namespace Team1922.MVVM.ViewModels
 
             _hierarchialAccesCTS = new CancellationTokenSource();
 
-            //start the background thread which processes the access queue
-            _hierarchialAccessTask = Task.Run((Action)WorkerThreadMethod);
-            //then start the background thread which removes the dead tickets after the access queue processes them
-            _hierarchailAccessDeadTokenCleanupTask = Task.Run((Action)DeadTicketCleanup);
+            if (runBackgroundAccessThreads)
+            {
+                RunBackgroundThread(true);
+            }
+        }
+
+        /// <summary>
+        /// Runs the background tasks which update the model from incoming requests
+        /// </summary>
+        /// <param name="split">if true, runs the tasks asynchronously, if false, runs synchronously</param>
+        public void RunBackgroundThread(bool split)
+        {
+            if (split)
+            {
+                //prevent redundant calls
+                if (_hierarchialAccessTask != null || _hierarchailAccessDeadTokenCleanupTask != null)
+                    return;
+
+                //start the background thread which processes the access queue
+                _hierarchialAccessTask = WorkerThreadMethodAsync(false, _hierarchialAccesCTS.Token);
+                //then start the background thread which removes the dead tickets after the access queue processes them
+                _hierarchailAccessDeadTokenCleanupTask = DeadTicketCleanupAsync(false, _hierarchialAccesCTS.Token);
+            }
+            else
+            {
+                //run sequentually if not splitting
+                WorkerThreadMethodAsync(true, _hierarchialAccesCTS.Token).Wait();
+                DeadTicketCleanupAsync(true, _hierarchialAccesCTS.Token).Wait();
+            }
         }
 
         #region IRobotProvider
@@ -410,16 +442,14 @@ namespace Team1922.MVVM.ViewModels
 
         #region Worker Methods
         //TODO: how do I make this stop when the object is destroyed; should i use IDisposable?
-        private void WorkerThreadMethod()
+        private async Task WorkerThreadMethodAsync(bool once, CancellationToken cancellationToken)
         {
             //this must not throw any exceptions
             
-            CancellationToken workerMethodToken = _hierarchialAccesCTS.Token;
-
             Tuple<string, string, AccessType, long> processItem;
 
             //process the queue until someone tells us otherwise
-            while (!workerMethodToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 if (_containsNewQueueItems)
                 {
@@ -466,18 +496,23 @@ namespace Team1922.MVVM.ViewModels
                         }
                     }
                 }
+
+                if (once)
+                    break;
             }
         }
-        private void DeadTicketCleanup()
+        private async Task DeadTicketCleanupAsync(bool once, CancellationToken cancellationToken)
         {
-            CancellationToken token = _hierarchialAccesCTS.Token;
             //every 5 seconds, clear the dead tickets
-            while (!token.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 //this is the way to remove items from the bag, becuas this does not lock up the bag, and how long this runs does not matter
                 _hierarchialAccessDeadTickets.TakeWhile(
                     (long val) => { return true; });
-                Task.Delay(5000).Wait();//wait 5 seconds
+                Task.Delay(5000).Wait();//wait 5 seconds      
+
+                if (once)
+                    break;          
             }
         }
         private Task GetWorkerAsync(string path, long ticket)
