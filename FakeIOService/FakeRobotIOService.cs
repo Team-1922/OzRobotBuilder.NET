@@ -68,7 +68,7 @@ namespace Team1922.FakeIOService
                 {
                     AddAnalogInput(analogInput);
                 }
-                foreach (var canTalon in subsystem.CANTalons)
+                foreach (var canTalon in subsystem.CANTalon)
                 {
                     AddCANTalon(canTalon);
                 }

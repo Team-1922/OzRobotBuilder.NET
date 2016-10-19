@@ -166,7 +166,7 @@
       <xs:element name="QuadEncoder" type="tns:QuadEncoder" minOccurs="0" maxOccurs="5"/>
       <xs:element name="DigitalInput" type="tns:DigitalInput" minOccurs="0" maxOccurs="10"/>
       <xs:element name="RelayOutput" type="tns:RelayOutput" minOccurs="0" maxOccurs="4"/>
-      <xs:element name="CANTalons" type="tns:CANTalon" minOccurs="0" maxOccurs="unbounded"/><!--realistically this won't be that large-->
+      <xs:element name="CANTalon" type="tns:CANTalon" minOccurs="0" maxOccurs="unbounded"/><!--realistically this won't be that large-->
       <xs:element name="PIDController" type="tns:PIDControllerSoftware" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
@@ -334,14 +334,13 @@
     
   <xs:complexType name="CANTalon">
     <xs:all>
+      <xs:element name="PIDConfig" type="tns:PIDControllerSRX" minOccurs="0" maxOccurs="1"/>
       <xs:element name="AnalogInput" type="tns:CANTalonAnalogInput" minOccurs="0" maxOccurs="1"/>
       <xs:element name="QuadEncoder" type="tns:CANTalonQuadEncoder" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="PIDConfig0" type="tns:PIDControllerSRX" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="PIDConfig1" type="tns:PIDControllerSRX" minOccurs="0" maxOccurs="1"/>
     </xs:all>
     <xs:attribute name="ID" type="tns:CANId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
-    <xs:attribute name="EnabledPIDProfile" type="xs:boolean" default="0"/>
+    <!--<xs:attribute name="EnabledPIDProfile" type="xs:boolean" default="0"/>-->
     <xs:attribute name="FeedbackDevice" type="tns:CANTalonFeedbackDevice" default="QuadEncoder"/>
     <xs:attribute name="ControlMode" type="tns:CANTalonControlMode" default="PercentVbus"/>
     <xs:attribute name="NeutralMode" type="tns:CANTalonNeutralMode" default="Coast"/>

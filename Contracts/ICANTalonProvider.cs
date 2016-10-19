@@ -20,21 +20,13 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         ICANTalonAnalogInputProvider AnalogInput { get; }
         /// <summary>
-        /// The 0th PID config 
+        /// The PID config 
         /// </summary>
-        IPIDControllerSRXProvider PIDConfig0 { get; }
-        /// <summary>
-        /// The 1st PID config
-        /// </summary>
-        IPIDControllerSRXProvider PIDConfig1 { get; }
+        IPIDControllerSRXProvider PIDConfig { get; }
         /// <summary>
         /// The CAN ID
         /// </summary>
         int ID { get; set; }
-        /// <summary>
-        /// The enabled PID profile (0=false;1=true)
-        /// </summary>
-        bool EnabledPIDProfile { get; set; }
         /// <summary>
         /// The closed-loop feedback device
         /// </summary>

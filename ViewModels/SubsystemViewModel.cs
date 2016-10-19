@@ -351,9 +351,9 @@ namespace Team1922.MVVM.ViewModels
             {
                 _relayOutputProviders.ModelReference = ModelReference.RelayOutput;
             }
-            if (null != ModelReference.CANTalons)
+            if (null != ModelReference.CANTalon)
             {
-                _canTalonProviders.ModelReference = ModelReference.CANTalons;
+                _canTalonProviders.ModelReference = ModelReference.CANTalon;
             }
         }
         #endregion

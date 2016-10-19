@@ -442,78 +442,84 @@ namespace Team1922.MVVM.ViewModels
 
         #region Worker Methods
         //TODO: how do I make this stop when the object is destroyed; should i use IDisposable?
-        private async Task WorkerThreadMethodAsync(bool once, CancellationToken cancellationToken)
+        private Task WorkerThreadMethodAsync(bool once, CancellationToken cancellationToken)
         {
-            //this must not throw any exceptions
-            
-            Tuple<string, string, AccessType, long> processItem;
+            return Task.Run(() =>
+           {
+               //this must not throw any exceptions
 
-            //process the queue until someone tells us otherwise
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                if (_containsNewQueueItems)
-                {
-                    _containsNewQueueItems = false;
-                    //always work unless there are no requests
-                    //get the next reqeust
-                    while (_hierarchialAccessRequests.TryDequeue(out processItem))
-                    {
-                        // TODO: is there any reason why this line is necessary
-                        // _lookupTableMutex.EnterReadLock();
-                        try
-                        {
-                            switch (processItem.Item3)
-                            {
-                                case AccessType.Get:
-                                    GetOperation(processItem.Item1, processItem.Item4);
-                                    break;
-                                case AccessType.Set:
-                                    SetOperation(processItem.Item1, processItem.Item2, processItem.Item4);
-                                    break;
-                                case AccessType.Add:
-                                    AddOperation(processItem.Item1, processItem.Item2, processItem.Item4);
-                                    break;
-                                case AccessType.Delete:
-                                    DeleteOperation(processItem.Item1, processItem.Item4);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            //make sure exceptions are handled
-                            if (processItem.Item4 != -1)
-                            {
-                                _hierarchialAccessExceptions[processItem.Item4] = e;
-                                _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
-                            }
-                        }
-                        finally
-                        {
-                            // TODO: is there any reason why this line is necessary
-                            // _lookupTableMutex.ExitReadLock();
-                        }
-                    }
-                }
+               Tuple<string, string, AccessType, long> processItem;
 
-                if (once)
-                    break;
-            }
+               //process the queue until someone tells us otherwise
+               while (!cancellationToken.IsCancellationRequested)
+               {
+                   if (_containsNewQueueItems)
+                   {
+                       _containsNewQueueItems = false;
+                       //always work unless there are no requests
+                       //get the next reqeust
+                       while (_hierarchialAccessRequests.TryDequeue(out processItem))
+                       {
+                           // TODO: is there any reason why this line is necessary
+                           // _lookupTableMutex.EnterReadLock();
+                           try
+                           {
+                               switch (processItem.Item3)
+                               {
+                                   case AccessType.Get:
+                                       GetOperation(processItem.Item1, processItem.Item4);
+                                       break;
+                                   case AccessType.Set:
+                                       SetOperation(processItem.Item1, processItem.Item2, processItem.Item4);
+                                       break;
+                                   case AccessType.Add:
+                                       AddOperation(processItem.Item1, processItem.Item2, processItem.Item4);
+                                       break;
+                                   case AccessType.Delete:
+                                       DeleteOperation(processItem.Item1, processItem.Item4);
+                                       break;
+                                   default:
+                                       break;
+                               }
+                           }
+                           catch (Exception e)
+                           {
+                               //make sure exceptions are handled
+                               if (processItem.Item4 != -1)
+                               {
+                                   _hierarchialAccessExceptions[processItem.Item4] = e;
+                                   _hierarchialAccessResponses[processItem.Item4] = "";//make sure this is created so we don't get hung up waiting for something that will never happen
+                               }
+                           }
+                           finally
+                           {
+                               // TODO: is there any reason why this line is necessary
+                               // _lookupTableMutex.ExitReadLock();
+                           }
+                       }
+                   }
+
+                   if (once)
+                       break;
+               }
+           });
         }
-        private async Task DeadTicketCleanupAsync(bool once, CancellationToken cancellationToken)
+        private Task DeadTicketCleanupAsync(bool once, CancellationToken cancellationToken)
         {
-            //every 5 seconds, clear the dead tickets
-            while (!cancellationToken.IsCancellationRequested)
+            return Task.Run(() =>
             {
-                //this is the way to remove items from the bag, becuas this does not lock up the bag, and how long this runs does not matter
-                _hierarchialAccessDeadTickets.TakeWhile(
-                    (long val) => { return true; });
-                Task.Delay(5000).Wait();//wait 5 seconds      
+               //every 5 seconds, clear the dead tickets
+               while (!cancellationToken.IsCancellationRequested)
+                {
+                   //this is the way to remove items from the bag, becuas this does not lock up the bag, and how long this runs does not matter
+                   _hierarchialAccessDeadTickets.TakeWhile(
+                      (long val) => { return true; });
+                    Task.Delay(5000).Wait();//wait 5 seconds      
 
-                if (once)
-                    break;          
-            }
+                    if (once)
+                        break;
+                }
+            });
         }
         private Task GetWorkerAsync(string path, long ticket)
         {

@@ -14,11 +14,9 @@ namespace Team1922.MVVM.ViewModels
         /// Construct a new PIDControllerSRXViewModel
         /// </summary>
         /// <param name="parent">The ICANTalonProvider Associated with this PIDController</param>
-        /// <param name="pidConfig">whether this is the 0th PID Controller configuration or the 1st</param>
-        public PIDControllerSRXViewModel(ICANTalonProvider parent, bool pidConfig) : base(parent)
+        public PIDControllerSRXViewModel(ICANTalonProvider parent) : base(parent)
         {
             _parent = parent;
-            _pidConfig = pidConfig;
         }
 
         #region IPIDControllerSRXProvider
@@ -32,10 +30,7 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.AllowableCloseLoopError;
-                SetProperty(ref temp, 
-                    _pidConfig ? 
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig0.AllowableCloseLoopError = value : 
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig1.AllowableCloseLoopError = value);
+                SetProperty(ref temp, IOService.Instance.CANTalons[_parent.ID].AllowableCloseLoopError = value);
                 ModelReference.AllowableCloseLoopError = temp;
             }
         }
@@ -50,10 +45,7 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.CloseLoopRampRate;
-                SetProperty(ref temp,
-                    _pidConfig ?
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig0.CloseLoopRampRate = value :
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig1.CloseLoopRampRate = value);
+                SetProperty(ref temp, IOService.Instance.CANTalons[_parent.ID].CloseLoopRampRate = value);
                 ModelReference.CloseLoopRampRate = temp;
             }
         }
@@ -68,10 +60,7 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.P;
-                SetProperty(ref temp,
-                    _pidConfig ?
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig0.P = value :
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig1.P = value);
+                SetProperty(ref temp, IOService.Instance.CANTalons[_parent.ID].P = value);
                 ModelReference.P = temp;
             }
         }
@@ -86,10 +75,7 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.I;
-                SetProperty(ref temp,
-                    _pidConfig ?
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig0.I = value :
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig1.I = value);
+                SetProperty(ref temp, IOService.Instance.CANTalons[_parent.ID].I = value);
                 ModelReference.I = temp;
             }
         }
@@ -104,10 +90,7 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.D;
-                SetProperty(ref temp,
-                    _pidConfig ?
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig0.D = value :
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig1.D = value);
+                SetProperty(ref temp, IOService.Instance.CANTalons[_parent.ID].D = value);
                 ModelReference.D = temp;
             }
         }
@@ -122,10 +105,7 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.F;
-                SetProperty(ref temp,
-                    _pidConfig ?
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig0.F = value :
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig1.F = value);
+                SetProperty(ref temp, IOService.Instance.CANTalons[_parent.ID].F = value);
                 ModelReference.F = temp;
             }
         }
@@ -140,10 +120,7 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.IZone;
-                SetProperty(ref temp,
-                    _pidConfig ?
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig0.IZone = value :
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig1.IZone = value);
+                SetProperty(ref temp, IOService.Instance.CANTalons[_parent.ID].IZone = value);
                 ModelReference.IZone = temp;
             }
         }
@@ -158,10 +135,7 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 var temp = ModelReference.SourceType;
-                SetProperty(ref temp,
-                    _pidConfig ?
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig0.SourceType = value :
-                    IOService.Instance.CANTalons[_parent.ID].PIDConfig1.SourceType = value);
+                SetProperty(ref temp, IOService.Instance.CANTalons[_parent.ID].SourceType = value);
                 ModelReference.SourceType = temp;
             }
         }
@@ -184,7 +158,6 @@ namespace Team1922.MVVM.ViewModels
 
         #region Private Fields
         private ICANTalonProvider _parent;
-        private bool _pidConfig;
         #endregion
 
         #region ViewModelBase

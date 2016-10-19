@@ -17,8 +17,7 @@ namespace Team1922.MVVM.ViewModels
         {
             _quadEncoderProvider = new CANTalonQuadEncoderViewModel(this);
             _analogInputProvider = new CANTalonAnalogInputViewModel(this);
-            _pidConfig0Provider = new PIDControllerSRXViewModel(this, false);
-            _pidConfig1Provider = new PIDControllerSRXViewModel(this, true);
+            _pidConfigProvider = new PIDControllerSRXViewModel(this);
         }
         
         #region ICANTalonProvider
@@ -44,25 +43,14 @@ namespace Team1922.MVVM.ViewModels
             }
         }
         /// <summary>
-        /// The PIDConfig0 property of the CANTalon model
+        /// The PIDConfig property of the CANTalon model
         /// </summary>
 
-        public IPIDControllerSRXProvider PIDConfig0
+        public IPIDControllerSRXProvider PIDConfig
         {
             get
             {
-                return _pidConfig0Provider;
-            }
-        }
-
-        /// <summary>
-        /// The PIDConfig1 property of the CANTalon model
-        /// </summary>
-        public IPIDControllerSRXProvider PIDConfig1
-        {
-            get
-            {
-                return _pidConfig1Provider;
+                return _pidConfigProvider;
             }
         }
 
@@ -153,24 +141,6 @@ namespace Team1922.MVVM.ViewModels
                 var temp = ModelReference.ControlMode;
                 SetProperty(ref temp, IOService.Instance.CANTalons[ID].ControlMode = value);
                 ModelReference.ControlMode = temp;
-            }
-        }
-
-        /// <summary>
-        /// The EnabledPIDProfile property of the CANTalon model
-        /// </summary>
-        public bool EnabledPIDProfile
-        {
-            get
-            {
-                return ModelReference.EnabledPIDProfile;
-            }
-
-            set
-            {
-                var temp = ModelReference.EnabledPIDProfile;
-                SetProperty(ref temp, IOService.Instance.CANTalons[ID].EnabledPIDProfile = value);
-                ModelReference.EnabledPIDProfile = temp;
             }
         }
 
@@ -645,10 +615,8 @@ namespace Team1922.MVVM.ViewModels
         {
             switch (key)
             {
-                case "PIDConfig0":
-                    return _pidConfig0Provider.GetModelJson();
-                case "PIDConfig1":
-                    return _pidConfig1Provider.GetModelJson();
+                case "PIDConfig":
+                    return _pidConfigProvider.GetModelJson();
                 case "QuadEncoder":
                     return _quadEncoderProvider.GetModelJson();
                 case "AnalogInput":
@@ -656,8 +624,6 @@ namespace Team1922.MVVM.ViewModels
 
                 case "ControlMode":
                     return ControlMode.ToString();
-                case "EnabledPIDProfile":
-                    return EnabledPIDProfile.ToString();
                 case "FeedbackDevice":
                     return FeedbackDevice.ToString();
                 case "ForwardLimitSwitch":
@@ -714,11 +680,8 @@ namespace Team1922.MVVM.ViewModels
         {
             switch (key)
             {
-                case "PIDConfig0":
-                    _pidConfig0Provider.SetModelJson(value);
-                    break;
-                case "PIDConfig1":
-                    _pidConfig1Provider.SetModelJson(value);
+                case "PIDConfig":
+                    _pidConfigProvider.SetModelJson(value);
                     break;
                 case "QuadEncoder":
                     _quadEncoderProvider.SetModelJson(value);
@@ -729,9 +692,6 @@ namespace Team1922.MVVM.ViewModels
 
                 case "ControlMode":
                     ControlMode = SafeCastEnum<CANTalonControlMode>(value);
-                    break;
-                case "EnabledPIDProfile":
-                    EnabledPIDProfile = SafeCastBool(value);
                     break;
                 case "FeedbackDevice":
                     FeedbackDevice = SafeCastEnum<CANTalonFeedbackDevice>(value);
@@ -813,8 +773,7 @@ namespace Team1922.MVVM.ViewModels
         {
             _quadEncoderProvider = null;
             _analogInputProvider = null;
-            _pidConfig0Provider = null;
-            _pidConfig1Provider = null;
+            _pidConfigProvider = null;
 
             if (null != ModelReference.QuadEncoder)
             {
@@ -826,21 +785,16 @@ namespace Team1922.MVVM.ViewModels
                 _analogInputProvider = new CANTalonAnalogInputViewModel(this);
                 _analogInputProvider.ModelReference = ModelReference.AnalogInput;
             }
-            if (null != ModelReference.PIDConfig0)
+            if (null != ModelReference.PIDConfig)
             {
-                _pidConfig0Provider = new PIDControllerSRXViewModel(this, false);
-                _pidConfig0Provider.ModelReference = ModelReference.PIDConfig0;
-            }
-            if (null != ModelReference.PIDConfig1)
-            {
-                _pidConfig1Provider = new PIDControllerSRXViewModel(this, false);
-                _pidConfig1Provider.ModelReference = ModelReference.PIDConfig1;
+                _pidConfigProvider = new PIDControllerSRXViewModel(this);
+                _pidConfigProvider.ModelReference = ModelReference.PIDConfig;
             }
         }
         #endregion
 
         #region Private Fields
-        ObservableCollection<IProvider> _children = new ObservableCollection<IProvider>() { null, null, null, null };
+        ObservableCollection<IProvider> _children = new ObservableCollection<IProvider>() { null, null, null };
         ICANTalonQuadEncoderProvider _quadEncoderProvider
         {
             get
@@ -865,7 +819,7 @@ namespace Team1922.MVVM.ViewModels
                 _children[1] = value;
             }
         }
-        IPIDControllerSRXProvider _pidConfig0Provider
+        IPIDControllerSRXProvider _pidConfigProvider
         {
             get
             {
@@ -875,18 +829,6 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 _children[2] = value;
-            }
-        }
-        IPIDControllerSRXProvider _pidConfig1Provider
-        {
-            get
-            {
-                return _children[3] as IPIDControllerSRXProvider;
-            }
-
-            set
-            {
-                _children[3] = value;
             }
         }
         #endregion

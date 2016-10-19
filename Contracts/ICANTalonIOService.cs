@@ -12,15 +12,36 @@ namespace Team1922.MVVM.Contracts
     public interface ICANTalonIOService : IOutputService
     {
         /// <summary>
-        /// The enabled PID config 
+        /// The Proportinal constant
         /// </summary>
         double P { get; set; }
+        /// <summary>
+        /// The Integration constant
+        /// </summary>
         double I { get; set; }
+        /// <summary>
+        /// The Differential Constant
+        /// </summary>
         double D { get; set; }
+        /// <summary>
+        /// The feed-forward constant
+        /// </summary>
         double F { get; set; }
+        /// <summary>
+        /// The integration zone
+        /// </summary>
         int IZone { get; set; }
+        /// <summary>
+        /// The closed loop ramp in V/S
+        /// </summary>
         double CloseLoopRampRate { get; set; }
+        /// <summary>
+        /// Similar to the <see cref="PIDControllerSoftware.Tolerance"/>
+        /// </summary>
         int AllowableCloseLoopError { set; }
+        /// <summary>
+        /// The source type of the controller (i.e. speed or displacement)
+        /// </summary>
         CANTalonDifferentiationLevel SourceType { get; set; }
         /// <summary>
         /// The enabled PID profile (0=false;1=true)

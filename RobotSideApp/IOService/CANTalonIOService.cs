@@ -170,7 +170,7 @@ namespace RobotSideApp.IOService
             //AnalogValue = canTalon.AnalogInput.RawValue;
             //AnalogVelocity = canTalon.AnalogInput.RawVelocity;
             ControlMode = canTalon.ControlMode;
-            EnabledPIDProfile = canTalon.EnabledPIDProfile;
+            //EnabledPIDProfile = canTalon.EnabledPIDProfile;
             //EncoderValue = canTalon.QuadEncoder.RawValue;
             //EncoderVelocity = canTalon.QuadEncoder.RawVelocity;
             FeedbackDevice = canTalon.FeedbackDevice;
@@ -198,7 +198,7 @@ namespace RobotSideApp.IOService
             ReverseSoftLimit = canTalon.ReverseSoftLimit;
             ReverseSoftLimitEnabled = canTalon.ReverseSoftLimitEnabled;
             //ReverseSoftLimitTripped = canTalon.ReverseSoftLimitTripped;
-            Value = canTalon.Value;
+            Value = canTalon.Value; //TODO: should this be removed becuase of safety reasons?
             //ZeroSensorPositionOnIndexEnabled = canTalon.ZeroSensorPositionOnIndexEnabled;
             //ZeroSensorPositionOnRisingEdge = canTalon.ZeroSensorPositionOnRisingEdge;
             EnableZeroSensorPositionOnIndex(canTalon.ZeroSensorPositionOnIndexEnabled, canTalon.ZeroSensorPositionOnRisingEdge);
