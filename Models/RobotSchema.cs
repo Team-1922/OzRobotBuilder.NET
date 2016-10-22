@@ -34,6 +34,10 @@ namespace Team1922.MVVM.Models {
         
         private System.Collections.Generic.List<EventHandler> eventHandlerField; 
         
+        private System.Collections.Generic.List<Command> commandField; 
+        
+        private System.Collections.Generic.List<CommandGroup> commandGroupField; 
+        
         private System.Collections.Generic.List<RobotMapEntry> robotMapField; 
         
         private int teamNumberField;
@@ -80,6 +84,28 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.eventHandlerField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Command")]
+        public System.Collections.Generic.List<Command> Command { 
+            get {
+                return this.commandField;
+            }
+            set {
+                this.commandField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("CommandGroup")]
+        public System.Collections.Generic.List<CommandGroup> CommandGroup { 
+            get {
+                return this.commandGroupField;
+            }
+            set {
+                this.commandGroupField = value;
             }
         }
         
@@ -170,6 +196,10 @@ namespace Team1922.MVVM.Models {
         
         private PIDControllerSoftware pIDControllerField;
         
+        private System.Collections.Generic.List<Solenoid> solenoidField; 
+        
+        private System.Collections.Generic.List<DoubleSolenoid> doubleSolenoidField; 
+        
         private string nameField;
         
         private bool softwarePIDEnabledField;
@@ -251,6 +281,28 @@ namespace Team1922.MVVM.Models {
             }
             set {
                 this.pIDControllerField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Solenoid")]
+        public System.Collections.Generic.List<Solenoid> Solenoid { 
+            get {
+                return this.solenoidField;
+            }
+            set {
+                this.solenoidField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("DoubleSolenoid")]
+        public System.Collections.Generic.List<DoubleSolenoid> DoubleSolenoid { 
+            get {
+                return this.doubleSolenoidField;
+            }
+            set {
+                this.doubleSolenoidField = value;
             }
         }
         
@@ -375,6 +427,220 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("RobotMapEntry.Value", value);
                 this.valueField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class CommandGroupItem {
+        
+        private CommandGroupMethod callTypeField;
+        
+        private string commandField;
+        
+        private string parametersField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public CommandGroupMethod CallType {
+            get {
+                return this.callTypeField;
+            }
+            set {
+				TypeRestrictions.Validate("CommandGroupItem.CallType", value);
+                this.callTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string Command {
+            get {
+                return this.commandField;
+            }
+            set {
+				TypeRestrictions.Validate("CommandGroupItem.Command", value);
+                this.commandField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Parameters {
+            get {
+                return this.parametersField;
+            }
+            set {
+				TypeRestrictions.Validate("CommandGroupItem.Parameters", value);
+                this.parametersField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public enum CommandGroupMethod {
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("0")]
+        Item0,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("1")]
+        Item1,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class CommandGroup {
+        
+        private System.Collections.Generic.List<CommandGroupItem> commandField; 
+        
+        private string nameField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Command")]
+        public System.Collections.Generic.List<CommandGroupItem> Command { 
+            get {
+                return this.commandField;
+            }
+            set {
+                this.commandField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+				TypeRestrictions.Validate("CommandGroup.Name", value);
+                this.nameField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class Command {
+        
+        private string nameField;
+        
+        private string onStartField;
+        
+        private string onUpdateField;
+        
+        private string isFinishedField;
+        
+        private string onEndField;
+        
+        private uint paramCountField;
+        
+        public Command() {
+            this.onStartField = "";
+            this.onUpdateField = "";
+            this.isFinishedField = "";
+            this.onEndField = "";
+            this.paramCountField = ((uint)(0));
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+				TypeRestrictions.Validate("Command.Name", value);
+                this.nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute("")]
+        public string OnStart {
+            get {
+                return this.onStartField;
+            }
+            set {
+				TypeRestrictions.Validate("Command.OnStart", value);
+                this.onStartField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute("")]
+        public string OnUpdate {
+            get {
+                return this.onUpdateField;
+            }
+            set {
+				TypeRestrictions.Validate("Command.OnUpdate", value);
+                this.onUpdateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute("")]
+        public string IsFinished {
+            get {
+                return this.isFinishedField;
+            }
+            set {
+				TypeRestrictions.Validate("Command.IsFinished", value);
+                this.isFinishedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute("")]
+        public string OnEnd {
+            get {
+                return this.onEndField;
+            }
+            set {
+				TypeRestrictions.Validate("Command.OnEnd", value);
+                this.onEndField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
+        public uint ParamCount {
+            get {
+                return this.paramCountField;
+            }
+            set {
+				TypeRestrictions.Validate("Command.ParamCount", value);
+                this.paramCountField = value;
             }
         }
     }
@@ -605,6 +871,182 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Joystick.ID", value);
                 this.idField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class DoubleSolenoid {
+        
+        private int idField;
+        
+        private bool idFieldSpecified;
+        
+        private int iD1Field;
+        
+        private bool iD1FieldSpecified;
+        
+        private DoubleSolenoidState valueField;
+        
+        private bool valueFieldSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+				TypeRestrictions.Validate("DoubleSolenoid.ID", value);
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool IDSpecified {
+            get {
+                return this.idFieldSpecified;
+            }
+            set {
+                this.idFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int ID1 {
+            get {
+                return this.iD1Field;
+            }
+            set {
+				TypeRestrictions.Validate("DoubleSolenoid.ID1", value);
+                this.iD1Field = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ID1Specified {
+            get {
+                return this.iD1FieldSpecified;
+            }
+            set {
+                this.iD1FieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public DoubleSolenoidState Value {
+            get {
+                return this.valueField;
+            }
+            set {
+				TypeRestrictions.Validate("DoubleSolenoid.Value", value);
+                this.valueField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ValueSpecified {
+            get {
+                return this.valueFieldSpecified;
+            }
+            set {
+                this.valueFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public enum DoubleSolenoidState {
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("0")]
+        Item0,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("1")]
+        Item1,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("2")]
+        Item2,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+#if NET461
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+#endif
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://github.com/Team-1922/OzRobotBuilder.NET/blob/master/Models/RobotSchema.xsd" +
+        "")]
+    public partial class Solenoid {
+        
+        private int idField;
+        
+        private bool idFieldSpecified;
+        
+        private bool valueField;
+        
+        private bool valueFieldSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+				TypeRestrictions.Validate("Solenoid.ID", value);
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool IDSpecified {
+            get {
+                return this.idFieldSpecified;
+            }
+            set {
+                this.idFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public bool Value {
+            get {
+                return this.valueField;
+            }
+            set {
+				TypeRestrictions.Validate("Solenoid.Value", value);
+                this.valueField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ValueSpecified {
+            get {
+                return this.valueFieldSpecified;
+            }
+            set {
+                this.valueFieldSpecified = value;
             }
         }
     }

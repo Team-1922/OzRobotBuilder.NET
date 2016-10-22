@@ -106,6 +106,19 @@
       <xs:maxInclusive value="65536"/>
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="SolenoidId">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="7"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DoubleSolenoidState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration id="Forward" value="0"/>
+      <xs:enumeration id="Off" value="1"/>
+      <xs:enumeration id="Reverse" value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
   
   <xs:element name="Robot" type="tns:Robot"/>
   
@@ -114,6 +127,8 @@
       <xs:element name="Subsystem" type="tns:Subsystem" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="Joystick" type="tns:Joystick" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="EventHandler" type="tns:EventHandler" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Command" type="tns:Command" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="CommandGroup" type="tns:CommandGroup" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="RobotMap" type="tns:RobotMap" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="TeamNumber" type="tns:TeamNumber" use="required"/>
@@ -149,6 +164,33 @@
     <xs:attribute name="ConditionMet" type="xs:boolean" default="false"/>
   </xs:complexType>
 
+  <xs:complexType name="Command">
+    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
+    <xs:attribute name="OnStart" type="xs:string" default=""/>
+    <xs:attribute name="OnUpdate" type="xs:string" default=""/>
+    <xs:attribute name="IsFinished" type="xs:string" default=""/>
+    <xs:attribute name="OnEnd" type="xs:string" default=""/>
+    <xs:attribute name="ParamCount" type="xs:unsignedInt" default="0"/>
+  </xs:complexType>
+
+  <xs:simpleType name="CommandGroupMethod">
+    <xs:restriction base="xs:string">
+      <xs:enumeration id="AddSequential" value="0"/>
+      <xs:enumeration id="AddParallel" value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="CommandGroupItem">
+    <xs:attribute name="CallType" type="tns:CommandGroupMethod" use="required"/>
+    <xs:attribute name="Command" type="tns:ItemName" use="required"/>
+    <xs:attribute name="Parameters" type="xs:string"/><!--TODO: make parameters and fix the whole command thingy-->
+  </xs:complexType>
+  <xs:complexType name="CommandGroup">
+    <xs:sequence minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="Command" type="tns:CommandGroupItem" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="Name" type="tns:ItemName"/>
+  </xs:complexType>
+
   <xs:complexType name="RobotMapEntry">
     <xs:attribute name="Key" type="tns:ItemName" use="required"/>
     <xs:attribute name="Value" use="required"/>
@@ -168,6 +210,8 @@
       <xs:element name="RelayOutput" type="tns:RelayOutput" minOccurs="0" maxOccurs="4"/>
       <xs:element name="CANTalon" type="tns:CANTalon" minOccurs="0" maxOccurs="unbounded"/><!--realistically this won't be that large-->
       <xs:element name="PIDController" type="tns:PIDControllerSoftware" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Solenoid" type="tns:Solenoid" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DoubleSolenoid" type="tns:DoubleSolenoid" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="SoftwarePIDEnabled" type="xs:boolean" default="false"/>
@@ -193,7 +237,20 @@
     <xs:attribute name="AccumulatorCount" type="xs:long" default="0"/>
     <xs:attribute name="AccumulatorValue" type="xs:double" default="0"/><!--NOTE: this is post-conversion-->
   </xs:complexType>
-      
+
+  <xs:complexType name="Solenoid">
+    <xs:attribute name="ID" type="tns:SolenoidId"/>
+    <!--State Values-->
+    <xs:attribute name="Value" type="xs:boolean"/>
+  </xs:complexType>
+
+  <xs:complexType name="DoubleSolenoid">
+    <xs:attribute name="ID" type="tns:SolenoidId"/>
+    <xs:attribute name="ID1" type="tns:SolenoidId"/>
+    <!--State Values-->
+    <xs:attribute name="Value" type="tns:DoubleSolenoidState"/>
+  </xs:complexType>
+  
   <xs:complexType name="PWMOutput">
     <xs:attribute name="ID" type="tns:PWMOutputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName"/>
@@ -219,8 +276,8 @@
   <xs:complexType name="RelayOutput">
     <xs:attribute name="ID" type="tns:RelayOutputId" default="-1"/>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
-    <!--State Values-->
     <xs:attribute name="Direction" type="tns:RelayDirection" default="ForwardOnly"/>
+    <!--State Values-->
     <xs:attribute name="Value" type="tns:RelayValue" default="Off"/>
   </xs:complexType>
   
@@ -316,20 +373,22 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="CANTalonAnalogInput">
+    <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--user units/Native units-->
+    <xs:attribute name="SensorOffset" type="xs:double" default="0"/>
+    <!--State Values-->
     <xs:attribute name="RawValue" type="tns:CANTalonNativeUnits" default="0"/>
     <xs:attribute name="RawVelocity" type="xs:double" default="0"/>
     <xs:attribute name="Value" type="xs:double" default="0"/>
     <xs:attribute name="Velocity" type="xs:double" default="0"/>
-    <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--user units/Native units-->
-    <xs:attribute name="SensorOffset" type="xs:double" default="0"/>
   </xs:complexType>
   <xs:complexType name="CANTalonQuadEncoder">
+    <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--user units/encoder units-->
+    <xs:attribute name="SensorOffset" type="xs:double" default="0"/>
+    <!--State Value-->
     <xs:attribute name="RawValue" type="xs:long" default="0"/>
     <xs:attribute name="RawVelocity" type="xs:double" default="0"/>
     <xs:attribute name="Value" type="xs:double" default="0"/>
     <xs:attribute name="Velocity" type="xs:double" default="0"/>
-    <xs:attribute name="ConversionRatio" type="xs:double" default="1"/><!--user units/encoder units-->
-    <xs:attribute name="SensorOffset" type="xs:double" default="0"/>
   </xs:complexType>
     
   <xs:complexType name="CANTalon">

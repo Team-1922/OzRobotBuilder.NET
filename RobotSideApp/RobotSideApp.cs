@@ -45,6 +45,11 @@ namespace RobotSideApp
             chooser.AddObject("My Auto", customAuto);
             SmartDashboard.PutData("Chooser", chooser);
 
+
+            XmlAttributeOverrides overrides = new XmlAttributeOverrides();
+            XmlAttributes attribs = new XmlAttributes();
+            attribs.XmlIgnore = true;
+            attribs.XmlElements.Add(new XmlElementAttribute(""))
             //load the robot file
             XmlSerializer serializer = new XmlSerializer(typeof(Robot));
             Robot robot;
