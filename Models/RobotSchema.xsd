@@ -170,7 +170,7 @@
     <xs:attribute name="OnUpdate" type="xs:string" default=""/>
     <xs:attribute name="IsFinished" type="xs:string" default=""/>
     <xs:attribute name="OnEnd" type="xs:string" default=""/>
-    <xs:attribute name="ParamCount" type="xs:unsignedInt" default="0"/>
+    <xs:attribute name="ParamNames" type="xs:string" default=""/>
   </xs:complexType>
 
   <xs:simpleType name="CommandGroupMethod">
@@ -182,13 +182,13 @@
   <xs:complexType name="CommandGroupItem">
     <xs:attribute name="CallType" type="tns:CommandGroupMethod" use="required"/>
     <xs:attribute name="Command" type="tns:ItemName" use="required"/>
-    <xs:attribute name="Parameters" type="xs:string"/><!--TODO: make parameters and fix the whole command thingy-->
+    <xs:attribute name="Parameters" type="xs:string" default=""/><!--TODO: make parameters and fix the whole command thingy-->
   </xs:complexType>
   <xs:complexType name="CommandGroup">
     <xs:sequence minOccurs="1" maxOccurs="unbounded">
       <xs:element name="Command" type="tns:CommandGroupItem" minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="Name" type="tns:ItemName"/>
+    <xs:attribute name="Name" type="tns:ItemName" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="RobotMapEntry">
@@ -210,8 +210,8 @@
       <xs:element name="RelayOutput" type="tns:RelayOutput" minOccurs="0" maxOccurs="4"/>
       <xs:element name="CANTalon" type="tns:CANTalon" minOccurs="0" maxOccurs="unbounded"/><!--realistically this won't be that large-->
       <xs:element name="PIDController" type="tns:PIDControllerSoftware" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="Solenoid" type="tns:Solenoid" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="DoubleSolenoid" type="tns:DoubleSolenoid" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="Solenoid" type="tns:Solenoid" minOccurs="0" maxOccurs="8"/>
+      <xs:element name="DoubleSolenoid" type="tns:DoubleSolenoid" minOccurs="0" maxOccurs="4"/>
     </xs:sequence>
     <xs:attribute name="Name" type="tns:ItemName" use="required"/>
     <xs:attribute name="SoftwarePIDEnabled" type="xs:boolean" default="false"/>
@@ -239,16 +239,16 @@
   </xs:complexType>
 
   <xs:complexType name="Solenoid">
-    <xs:attribute name="ID" type="tns:SolenoidId"/>
+    <xs:attribute name="ID" type="tns:SolenoidId" use="required"/>
     <!--State Values-->
-    <xs:attribute name="Value" type="xs:boolean"/>
+    <xs:attribute name="Value" type="xs:boolean" default="0"/>
   </xs:complexType>
 
   <xs:complexType name="DoubleSolenoid">
-    <xs:attribute name="ID" type="tns:SolenoidId"/>
-    <xs:attribute name="ID1" type="tns:SolenoidId"/>
+    <xs:attribute name="ID" type="tns:SolenoidId" use="required"/>
+    <xs:attribute name="ID1" type="tns:SolenoidId" use="required"/>
     <!--State Values-->
-    <xs:attribute name="Value" type="tns:DoubleSolenoidState"/>
+    <xs:attribute name="Value" type="tns:DoubleSolenoidState" default="0"/>
   </xs:complexType>
   
   <xs:complexType name="PWMOutput">

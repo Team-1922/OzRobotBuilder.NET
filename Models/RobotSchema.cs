@@ -447,6 +447,10 @@ namespace Team1922.MVVM.Models {
         
         private string parametersField;
         
+        public CommandGroupItem() {
+            this.parametersField = "";
+        }
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public CommandGroupMethod CallType {
@@ -473,6 +477,7 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute("")]
         public string Parameters {
             get {
                 return this.parametersField;
@@ -887,15 +892,13 @@ namespace Team1922.MVVM.Models {
         
         private int idField;
         
-        private bool idFieldSpecified;
-        
         private int iD1Field;
-        
-        private bool iD1FieldSpecified;
         
         private DoubleSolenoidState valueField;
         
-        private bool valueFieldSpecified;
+        public DoubleSolenoid() {
+            this.valueField = DoubleSolenoidState.Item0;
+        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -906,17 +909,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("DoubleSolenoid.ID", value);
                 this.idField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IDSpecified {
-            get {
-                return this.idFieldSpecified;
-            }
-            set {
-                this.idFieldSpecified = value;
             }
         }
         
@@ -933,18 +925,8 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ID1Specified {
-            get {
-                return this.iD1FieldSpecified;
-            }
-            set {
-                this.iD1FieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(DoubleSolenoidState.Item0)]
         public DoubleSolenoidState Value {
             get {
                 return this.valueField;
@@ -952,17 +934,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("DoubleSolenoid.Value", value);
                 this.valueField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ValueSpecified {
-            get {
-                return this.valueFieldSpecified;
-            }
-            set {
-                this.valueFieldSpecified = value;
             }
         }
     }
@@ -998,11 +969,11 @@ namespace Team1922.MVVM.Models {
         
         private int idField;
         
-        private bool idFieldSpecified;
-        
         private bool valueField;
         
-        private bool valueFieldSpecified;
+        public Solenoid() {
+            this.valueField = false;
+        }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -1017,18 +988,8 @@ namespace Team1922.MVVM.Models {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IDSpecified {
-            get {
-                return this.idFieldSpecified;
-            }
-            set {
-                this.idFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(false)]
         public bool Value {
             get {
                 return this.valueField;
@@ -1036,17 +997,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("Solenoid.Value", value);
                 this.valueField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ValueSpecified {
-            get {
-                return this.valueFieldSpecified;
-            }
-            set {
-                this.valueFieldSpecified = value;
             }
         }
     }
@@ -1179,6 +1129,10 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class CANTalonQuadEncoder {
         
+        private double conversionRatioField;
+        
+        private double sensorOffsetField;
+        
         private long rawValueField;
         
         private double rawVelocityField;
@@ -1187,17 +1141,39 @@ namespace Team1922.MVVM.Models {
         
         private double velocityField;
         
-        private double conversionRatioField;
-        
-        private double sensorOffsetField;
-        
         public CANTalonQuadEncoder() {
+            this.conversionRatioField = 1D;
+            this.sensorOffsetField = 0D;
             this.rawValueField = ((long)(0));
             this.rawVelocityField = 0D;
             this.valueField = 0D;
             this.velocityField = 0D;
-            this.conversionRatioField = 1D;
-            this.sensorOffsetField = 0D;
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(1D)]
+        public double ConversionRatio {
+            get {
+                return this.conversionRatioField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonQuadEncoder.ConversionRatio", value);
+                this.conversionRatioField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double SensorOffset {
+            get {
+                return this.sensorOffsetField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonQuadEncoder.SensorOffset", value);
+                this.sensorOffsetField = value;
+            }
         }
         
         /// <remarks/>
@@ -1251,32 +1227,6 @@ namespace Team1922.MVVM.Models {
                 this.velocityField = value;
             }
         }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(1D)]
-        public double ConversionRatio {
-            get {
-                return this.conversionRatioField;
-            }
-            set {
-				TypeRestrictions.Validate("CANTalonQuadEncoder.ConversionRatio", value);
-                this.conversionRatioField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double SensorOffset {
-            get {
-                return this.sensorOffsetField;
-            }
-            set {
-				TypeRestrictions.Validate("CANTalonQuadEncoder.SensorOffset", value);
-                this.sensorOffsetField = value;
-            }
-        }
     }
     
     /// <remarks/>
@@ -1289,6 +1239,10 @@ namespace Team1922.MVVM.Models {
         "")]
     public partial class CANTalonAnalogInput {
         
+        private double conversionRatioField;
+        
+        private double sensorOffsetField;
+        
         private int rawValueField;
         
         private double rawVelocityField;
@@ -1297,17 +1251,39 @@ namespace Team1922.MVVM.Models {
         
         private double velocityField;
         
-        private double conversionRatioField;
-        
-        private double sensorOffsetField;
-        
         public CANTalonAnalogInput() {
+            this.conversionRatioField = 1D;
+            this.sensorOffsetField = 0D;
             this.rawValueField = 0;
             this.rawVelocityField = 0D;
             this.valueField = 0D;
             this.velocityField = 0D;
-            this.conversionRatioField = 1D;
-            this.sensorOffsetField = 0D;
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(1D)]
+        public double ConversionRatio {
+            get {
+                return this.conversionRatioField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonAnalogInput.ConversionRatio", value);
+                this.conversionRatioField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double SensorOffset {
+            get {
+                return this.sensorOffsetField;
+            }
+            set {
+				TypeRestrictions.Validate("CANTalonAnalogInput.SensorOffset", value);
+                this.sensorOffsetField = value;
+            }
         }
         
         /// <remarks/>
@@ -1359,32 +1335,6 @@ namespace Team1922.MVVM.Models {
             set {
 				TypeRestrictions.Validate("CANTalonAnalogInput.Velocity", value);
                 this.velocityField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(1D)]
-        public double ConversionRatio {
-            get {
-                return this.conversionRatioField;
-            }
-            set {
-				TypeRestrictions.Validate("CANTalonAnalogInput.ConversionRatio", value);
-                this.conversionRatioField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(0D)]
-        public double SensorOffset {
-            get {
-                return this.sensorOffsetField;
-            }
-            set {
-				TypeRestrictions.Validate("CANTalonAnalogInput.SensorOffset", value);
-                this.sensorOffsetField = value;
             }
         }
     }

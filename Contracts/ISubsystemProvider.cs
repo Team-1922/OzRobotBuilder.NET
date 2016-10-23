@@ -36,6 +36,14 @@ namespace Team1922.MVVM.Contracts
         /// </summary>
         IObservableCollection<ICANTalonProvider> CANTalons { get; }
         /// <summary>
+        /// This subsystem's Double Solenoids
+        /// </summary>
+        IObservableCollection<IDoubleSolenoidProvider> DoubleSolenoids { get; }
+        /// <summary>
+        /// This subsystem's Solenoids
+        /// </summary>
+        IObservableCollection<ISolenoidProvider> Solenoids { get; }
+        /// <summary>
         /// This subsystem's PID Controller (if enabled)
         /// </summary>
         IPIDControllerSoftwareProvider PIDController { get; }

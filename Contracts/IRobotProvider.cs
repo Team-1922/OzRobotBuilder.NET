@@ -24,6 +24,8 @@ namespace Team1922.MVVM.Contracts
         /// This robot's event handlers
         /// </summary>
         IObservableCollection<IEventHandlerProvider> EventHandlers { get; }
+        IObservableCollection<ICommandProvider> Commands { get; }
+        IObservableCollection<ICommandGroupProvider> CommandGroups { get; }
         /// <summary>
         /// This robot's robot map
         /// </summary>
