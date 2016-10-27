@@ -24,7 +24,13 @@ namespace Team1922.MVVM.Contracts
         /// This robot's event handlers
         /// </summary>
         IObservableCollection<IEventHandlerProvider> EventHandlers { get; }
+        /// <summary>
+        /// This robot's commands
+        /// </summary>
         IObservableCollection<ICommandProvider> Commands { get; }
+        /// <summary>
+        /// This robot's command groups
+        /// </summary>
         IObservableCollection<ICommandGroupProvider> CommandGroups { get; }
         /// <summary>
         /// This robot's robot map
@@ -57,5 +63,17 @@ namespace Team1922.MVVM.Contracts
         /// <param name="eventHandler">the EventHandler model instance</param>
         void AddEventHandler(Models.EventHandler eventHandler);
         void RemoveEventHandler(string name);
+        /// <summary>
+        /// Adds a model instance of a command
+        /// </summary>
+        /// <param name="command">The Command model instance</param>
+        void AddCommand(Command command);
+        void RemoveCommand(string name);
+        /// <summary>
+        /// Adds a model instance of a command group
+        /// </summary>
+        /// <param name="commandGroup">The CommandGroup model instance</param>
+        void AddCommandGroup(CommandGroup commandGroup);
+        void RemoveCommandGroup(string name);
     }
 }

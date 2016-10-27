@@ -88,5 +88,17 @@ namespace Team1922.MVVM.Contracts
         /// <param name="canTalon">the CANTalon model instance</param>
         void AddCANTalon(CANTalon canTalon);
         void RemoveCANTalon(string name);
+        /// <summary>
+        /// Adds a model instance of a solenoid
+        /// </summary>
+        /// <param name="solenoid">the Solenoid model instance</param>
+        void AddSolenoid(Solenoid solenoid);
+        void RemoveSolenoid(string name);
+        /// <summary>
+        /// Adds a model instance of a double solenoid
+        /// </summary>
+        /// <param name="doubleSolenoid">the DoubleSolenoid model instance</param>
+        void AddDoubleSolenoid(DoubleSolenoid doubleSolenoid);
+        void RemoveDoubleSolenoid(string name);
     }
 }
