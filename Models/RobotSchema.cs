@@ -562,14 +562,14 @@ namespace Team1922.MVVM.Models {
         
         private string onEndField;
         
-        private uint paramCountField;
+        private string paramNamesField;
         
         public Command() {
             this.onStartField = "";
             this.onUpdateField = "";
             this.isFinishedField = "";
             this.onEndField = "";
-            this.paramCountField = ((uint)(0));
+            this.paramNamesField = "";
         }
         
         /// <remarks/>
@@ -638,14 +638,14 @@ namespace Team1922.MVVM.Models {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(typeof(uint), "0")]
-        public uint ParamCount {
+        [System.ComponentModel.DefaultValueAttribute("")]
+        public string ParamNames {
             get {
-                return this.paramCountField;
+                return this.paramNamesField;
             }
             set {
-				TypeRestrictions.Validate("Command.ParamCount", value);
-                this.paramCountField = value;
+				TypeRestrictions.Validate("Command.ParamNames", value);
+                this.paramNamesField = value;
             }
         }
     }

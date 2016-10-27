@@ -28,6 +28,7 @@ namespace Team1922.MVVM.ViewModels
             _subsystemProviders = new CompoundProviderList<ISubsystemProvider, Subsystem>("Subsystems", this, (Subsystem model) => { return new SubsystemViewModel(_subsystemProviders) { ModelReference = model }; });
             _eventHandlerProviders = new CompoundProviderList<IEventHandlerProvider, Models.EventHandler>("EventHandlers", this, (Models.EventHandler model) => { return new EventHandlerViewModel(_eventHandlerProviders) { ModelReference = model }; });
             _joystickProviders = new CompoundProviderList<IJoystickProvider, Joystick>("Joysticks", this, (Joystick model) => { return new JoystickViewModel(_joystickProviders) { ModelReference = model }; });
+            _commandProviders = new CompoundProviderList<ICommandProvider, Command>("Commands", this, (Command model) => {return new CommandViewModel)
 
             _hierarchialAccesCTS = new CancellationTokenSource();
 
@@ -864,8 +865,8 @@ namespace Team1922.MVVM.ViewModels
         CancellationTokenSource _hierarchialAccesCTS;
         Task _hierarchialAccessTask;
         Task _hierarchailAccessDeadTokenCleanupTask;
-        ObservableCollection<IProvider> _children = new ObservableCollection<IProvider>() { null, null, null, null };
-        readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "EventHandlers", "Joysticks", "RobotMap", "Name", "OnChangeEventHandlers","OnWithinRangeEventHandlers","Subsystems","TeamNumber" };
+        ObservableCollection<IProvider> _children = new ObservableCollection<IProvider>() { null, null, null, null, null, null };
+        readonly List<string> _keys = new List<string>(){ "AnalogInputSampleRate", "EventHandlers", "Joysticks", "RobotMap", "Name", "Commands", "CommandGroups","Subsystems","TeamNumber" };
         IRobotMapProvider _robotMapProvider
         {
             get
@@ -912,6 +913,30 @@ namespace Team1922.MVVM.ViewModels
             set
             {
                 _children[3] = value;
+            }
+        }
+        CompoundProviderList<ICommandProvider, Command> _commandProviders
+        {
+            get
+            {
+                return _children[4] as CompoundProviderList<ICommandProvider, Command>;
+            }
+
+            set
+            {
+                _children[4] = value;
+            }
+        }
+        CompoundProviderList<ICommandGroupProvider, CommandGroup> _commandGroupProviders
+        {
+            get
+            {
+                return _children[5] as CompoundProviderList<ICommandGroupProvider, CommandGroup>;
+            }
+
+            set
+            {
+                _children[5] = value;
             }
         }
         #endregion

@@ -30,6 +30,6 @@ namespace Team1922.MVVM.Contracts
         /// <summary>
         /// A comma-separated list of names of the parameters used
         /// </summary>
-        uint Paramnames { get; set; }
+        string ParamNames { get; set; }
     }
 }
